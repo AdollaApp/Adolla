@@ -4,6 +4,7 @@ import fetch from "node-fetch";
 import Fuse from 'fuse.js'
 import updateManga from "../util/updateManga";
 
+/** This is a chapter in mangasee API */
 interface ChapterResponse {
 	/** For example, 102280 */
 	Chapter: string;
@@ -22,25 +23,36 @@ interface ChapterResponse {
 
 
 interface SearchOptions {
-	resultCount?: number;
+	resultCount: number;
+	bThing: number;
 }
 
 class MangaseeClass {
 
-	public async search(query: string, { resultCount = 40 }: SearchOptions = {}): Promise<(ScraperResponse)[]> {
+	public async search(query: string, options?: Partial<SearchOptions>): Promise<(ScraperResponse)[]> {
+
+		// This is a better way of destructuring with default values
+		// than doing it at the top. This took... many hours. Thanks Pandawan!
+		const { resultCount } = {
+			resultCount: 40,
+			...options,
+		}
 
 		// Fetch search results
 		const searchUrl = `https://mangasee123.com/search/?sort=vm&desc=true&name=${encodeURIComponent(query)}`;
 		let searchRes = await fetch(searchUrl);
 		let html = await searchRes.text();
 
+		// Parse directory
 		let directory = JSON.parse(html.split("vm.Directory = ")[1].split("];")[0] + "]");
 		
 		let matchedResults = [];
+		// If the query is empty, sort by popular
 		if(query === "") {
 			// @ts-ignore You can totally substract strings.
-			matchedResults = directory.sort((a: DirectoryItem, b: DirectoryItem) => b.v - a.v).slice(0, 40);
+			matchedResults = directory.sort((a: DirectoryItem, b: DirectoryItem) => b.v - a.v).slice(0, resultCount);
 		} else {
+			// If query is not empty, use fuse to search
 			const fuse = new Fuse(directory, {
 				keys: [Directory.Title]
 			});
@@ -50,46 +62,59 @@ class MangaseeClass {
 		}
 
 		
-
+		// Get details for each search result
 		let searchResultData: ScraperResponse[] = await Promise.all(matchedResults.map((item: DirectoryItem) => updateManga(item[Directory.Slug])))
 
+		// Return all successfull data requests
 		return searchResultData.filter(v => v.success);
 	}
 
+	/**
+	 * The scrape function. This returns data for an anime
+	 * @param slug The manga's slug.  
+	 * @param chapter 
+	 * @param season 
+	 */
 	public async scrape(slug: string, chapter: number = -1, season: number = -1): Promise<ScraperResponse> {
 
-		function error(status = -1, err = "Unknown"): ScraperError {
-			return {
-				status,
-				err,
-				success: false
-			}
-		}
-
-		let html = "";
-
 		try {
+			// Generate URL and fetch page
 			let url = `https://mangasee123.com/manga/${slug}`;
-			
 			let pageRes = await fetch(url);
-			
-			html = await pageRes.text();
+			let html = await pageRes.text();
 
+			// Check if response is valid.
+			// Throw error if not
 			if(!pageRes.ok || pageRes.url.endsWith("undefined") || html.includes(`<title>404 Page Not Found</title>`)) {
 				console.error(`Throwing error for ${slug}`);
 				return error(pageRes.status, html);
 			}
 		
-			let title = html.split("<h1>")[1].split("</h1>")[0];
-			let posterUrl = html.split(`<meta property="og:image" content="`)[1].split(`"`)[0];
+			// Shittily extract values from page.
+			// I could be using JSDoc but I'm not.
+			let title = html.split("<h1>")[1].split("</h1>")[0]; // You can tell what this does
+			let posterUrl = html.split(`<meta property="og:image" content="`)[1].split(`"`)[0]; // Get poster url from og:image
 			let alternateTitles = [];
-			if(html.includes("Alternate Name(s):")) alternateTitles = html.split(`<span class="mlabel">Alternate Name(s):</span>`)[1].split("<")[0].trim().split(", ").filter(Boolean);
+			if(html.includes("Alternate Name(s):")) alternateTitles = html
+			  .split(`<span class="mlabel">Alternate Name(s):</span>`)[1] // Find starting point of alternate names
+			  .split("<")[0] // Find closing HMTL tag
+			  .trim() // Remove trailing stuff
+			  .split(", ") // Seperate names on comma
+			  .filter(Boolean); // Remove empty strings
 		
-			let descriptionParagraphs = html.split(`<span class="mlabel">Description:</span>`)[1].split(">")[1].split("</")[0].trim().split("\n").filter(Boolean);
+			let descriptionParagraphs = html
+			  .split(`<span class="mlabel">Description:</span>`)[1] // Find start of div of descriptions (it's a bit weird)
+			  .split(">")[1] // Find closing of opening paragraph
+			  .split("</")[0] // Find closing paragraph
+			  .trim() // Remove start & end trim
+			  .split("\n") // Get seperate paragraphs
+			  .filter(Boolean); // filter out empty strings
 		
+			// Extract chapter data from script tag in DOM
+			// Then `map` it into a Chapter type
 			let chapterData = JSON.parse(html.split(`vm.Chapters = `)[1].split(";")[0]);
 			let chapters: Chapter[] = chapterData.map((ch: ChapterResponse) => {
-				
+
 				let season = Number(ch.Chapter[0]);
 				let chapter = normalizeNumber(ch.Chapter.slice(1, -1))
 				let label = `${ch.Type} ${chapter}`;
@@ -106,8 +131,10 @@ class MangaseeClass {
 		
 			});
 
+			// Extract genere array from dom
 			let genres = JSON.parse(html.split(`"genre": `)[1].split("],")[0] + "]");
 		
+			// Now we return it
 			return {
 				constant: {
 					title,
@@ -123,6 +150,7 @@ class MangaseeClass {
 				success: true
 			}
 		} catch(err) {
+			//  OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!
 			console.log(err.stack);
 			return error(-1, err);
 		}
@@ -131,53 +159,33 @@ class MangaseeClass {
 	}
 }
 
+/** 
+ * Generate function object easily 
+ * @param status The HTTP status code
+ * @param err A string describing the error
+ */
+function error(status = -1, err = "Unknown"): ScraperError {
+	return {
+		status,
+		err,
+		success: false
+	}
+}
+
+// Generate mangasee object and export it
 const Mangasee = new MangaseeClass();
 export default Mangasee;
 
+/** 
+ * Normalize a number string.
+ * Many strings are 0-padded, if you do `Number("00005")` weird stuff happens.
+ * 
+ * Returns a normal number
+ * @param input a zero-padded number string, like `0003`
+ * 
+ */
 function normalizeNumber(input: string): number {
 	let str = input;
 	while(str.startsWith("0")) str = str.slice(1);
 	return Number(str);
 }
-
-// I stole this. Will refactor later
-function similarity(s1, s2) {
-	var longer = s1;
-	var shorter = s2;
-	if (s1.length < s2.length) {
-	  longer = s2;
-	  shorter = s1;
-	}
-	var longerLength = longer.length;
-	if (longerLength == 0) {
-	  return 1.0;
-	}
-	return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
-  }
-
-  function editDistance(s1, s2) {
-	s1 = s1.toLowerCase();
-	s2 = s2.toLowerCase();
-  
-	var costs = new Array();
-	for (var i = 0; i <= s1.length; i++) {
-	  var lastValue = i;
-	  for (var j = 0; j <= s2.length; j++) {
-		if (i == 0)
-		  costs[j] = j;
-		else {
-		  if (j > 0) {
-			var newValue = costs[j - 1];
-			if (s1.charAt(i - 1) != s2.charAt(j - 1))
-			  newValue = Math.min(Math.min(newValue, lastValue),
-				costs[j]) + 1;
-			costs[j - 1] = lastValue;
-			lastValue = newValue;
-		  }
-		}
-	  }
-	  if (i > 0)
-		costs[s2.length] = lastValue;
-	}
-	return costs[s2.length];
-  }
