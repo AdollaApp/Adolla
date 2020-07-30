@@ -131,7 +131,7 @@ class MangaseeClass {
 		
 			});
 
-			// Extract genere array from dom
+			// Extract genre array from dom
 			let genres = JSON.parse(html.split(`"genre": `)[1].split("],")[0] + "]");
 		
 			// Now we return it
@@ -160,7 +160,7 @@ class MangaseeClass {
 }
 
 /** 
- * Generate function object easily 
+ * Generate error object easily 
  * @param status The HTTP status code
  * @param err A string describing the error
  */
