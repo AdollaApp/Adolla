@@ -37,6 +37,32 @@ export interface ScraperData {
 }
 export interface ScraperError {
 	status: number;
-	res: string;
+	err: string;
 	success: boolean;
+}
+
+// Search interfaces
+export enum Directory {
+	Genres = "g",
+	Slug = "i",
+	Title = "s",
+	OngoingPublish = "ps", // Maybe?
+	OngoingPrint = "ss", // Maybe?
+}
+export interface DirectoryItem {
+	s: string;
+	i: string;
+	o: string;
+	ss: string;
+	ps: string;
+	t: string;
+	v: string;
+	vm: string;
+	y: string;
+	a: string[];
+	al: string[]
+	l: string;
+	lt: number;
+	g: string[];
+	h: boolean;
 }

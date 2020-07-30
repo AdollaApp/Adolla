@@ -6,6 +6,7 @@
 	--text-secondary: #7D7D7D;
 
 	--border: rgba(0, 0, 10, 0.05);
+	--border-dark: rgba(0, 0, 10, 0.1);
 
 }
 
@@ -53,6 +54,8 @@ aside.main-sidebar {
 	background: var(--body-offset);
 	position: sticky;
 	top: 0;
+	box-sizing: border-box;
+	padding: 20px;
 }
 
 /* Util */
@@ -63,6 +66,18 @@ aside.main-sidebar {
 .sub-title {
 	color: var(--text);
 	margin-top: 0;
+}
+
+label ~ input {
+	margin-top: 5px;
+}
+input, textarea {
+	font-size: 1rem;
+	box-sizing: border-box;
+	width: 100%;
+	border: 1px solid var(--border-dark);
+	border-radius: 4px;
+	padding: 5px 8px;
 }
 
 /* Manga grid layout */
@@ -79,6 +94,14 @@ aside.main-sidebar {
 	grid-template-columns: 100%;
 	grid-gap: 15px;
 	grid-template-rows: auto 1fr;
+}
+.manga-card .to-manga {
+	/* Href */
+	color: var(--color);
+	text-decoration: none;
+}
+.manga-card .to-manga:hover {
+	text-decoration: underline;
 }
 .manga-card .poster {
 	width: 100%;

@@ -22,7 +22,7 @@ router.get("/:slug", async (req, res, next) => {
 			data
 		});
 	} else {
-		console.log("No data found");
+		console.log("No data found for", param);
 		next();
 	}
 

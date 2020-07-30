@@ -5,7 +5,11 @@ import routers from "./routers"
 const app = express();
 
 // Set up view engine
-app.engine("handlebars", handlebars());
+app.engine("handlebars", handlebars({
+	helpers: {
+		stringify: v => JSON.stringify(v)
+	}
+}));
 app.set("view engine", "handlebars");
 app.set("view options", {
 	layout: "main"
@@ -13,6 +17,7 @@ app.set("view options", {
 
 // Routers
 app.use("/", routers.home);
+app.use("/search", routers.search);
 
 // Static assets
 app.use(express.static("public"));

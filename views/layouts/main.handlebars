@@ -7,11 +7,15 @@
 	<body>
 		<div class="wrapper-all">
 			<aside class="sidebar main-sidebar">
-				
+				<div class="section search">
+					<label for="search">Search</label>
+					<input type="text" placeholder="Fire Force" id="search" value="{{query}}">
+				</div>
 			</aside>
 			<div class="content-wrapper">
 				{{{ body }}}
 			</div>
 		</div>
+		<script src="/universal.js"></script>
 	</body>
 </html>
