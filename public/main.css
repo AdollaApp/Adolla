@@ -1,0 +1,19 @@
+:root {
+	--body-0: #F9F9F9;
+	--body-1: #F1F1F1;
+	--text: #191919;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--body-0: #191919;
+		--body-1: #242424;
+		--text: #fcfcfc;
+	}
+}
+
+body {
+	margin: 0;
+	color: var(--text);
+	background: var(--body-0);
+}
