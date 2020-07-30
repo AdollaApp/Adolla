@@ -14,7 +14,7 @@ router.get("/:slug", async (req, res, next) => {
 	// await updateManga("Yokohama-Kaidashi-Kikou");
 	// await updateManga("Tower-Of-God");
 
-	await updateManga(param);
+	await updateManga(param, true);
 
 	let data = db.get(`manga_cache.${param}`).value();
 	if(data) {

@@ -1,5 +1,30 @@
 <div class="content-inner">
 	<div class="manga-content">
-		{{!-- Work on this in a bit --}}
+		<div class="manga-top">
+			<div class="image">
+				<img class="poster" alt="Poster" src="{{data.constant.posterUrl}}">
+			</div>
+			<div class="top-content">
+				<h1 class="sub-title">{{data.constant.title}}</h1>
+				<div class="badges">
+					{{#each data.constant.genres}}
+					<span class="badge">{{this}}</span>
+					{{/each}}
+				</div>
+				<div class="description">
+					{{#each data.constant.descriptionParagraphs}}
+					<p class="description">{{this}}</p>
+					{{/each}}
+				</div>
+				<div class="chapter-list">
+					<h3 class="sub-title">Chapters</h3>
+					<div class="chapters">
+						{{#each data.data.chapters}}
+						<a class="chapter" href="{{this.href}}">{{this.label}}</a>
+						{{/each}}
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>

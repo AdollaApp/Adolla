@@ -13,6 +13,7 @@ export interface MangaMeta {
 	title: string;
 	alternateTitles: string[];
 	descriptionParagraphs: string[];
+	genres: string[];
 }
 export interface MangaData {
 	chapters: Chapter[];
@@ -26,15 +27,20 @@ export interface Database {
 }
 
 // Scraper interfaces
+export type ScraperResponse = StoredData | ScraperError;
 export interface ScraperData {
 	constant: MangaMeta;
 	data: MangaData;
-	success: boolean;
+	success: true; // Always true
 }
 export interface ScraperError {
 	status: number;
 	err: string;
-	success: boolean;
+	success: false; // Always fale
+}
+
+export interface StoredData extends ScraperData {
+	savedAt?: number;
 }
 
 // Search interfaces

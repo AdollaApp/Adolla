@@ -6,7 +6,9 @@ import Mangasee from "../scrapers/mangasee";
 
 router.get("/", async (req, res) => {
 
-	let popular = await Mangasee.search(""); // Empty search sorts by popular
+	let popular = await Mangasee.search("", {
+		resultCount: 10
+	}); // Empty search sorts by popular
 
 	res.render("home", {
 		popular

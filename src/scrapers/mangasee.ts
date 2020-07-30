@@ -1,7 +1,8 @@
 
-import { ScraperData, ScraperError, Chapter, Directory, DirectoryItem } from "../types";
+import { ScraperData, ScraperError, Chapter, Directory, DirectoryItem, ScraperResponse } from "../types";
 import fetch from "node-fetch";
 import Fuse from 'fuse.js'
+import updateManga from "../util/updateManga";
 
 interface ChapterResponse {
 	/** For example, 102280 */
@@ -20,44 +21,47 @@ interface ChapterResponse {
 
 
 
+interface SearchOptions {
+	resultCount?: number;
+	bThing?: number;
+}
+
 class MangaseeClass {
-	constructor() {
 
-	}
+	public async search(query: string, { resultCount = 40, bThing = 2 }: SearchOptions = {}): Promise<(ScraperResponse)[]> {
 
-	public async search(query: string): Promise<(ScraperData | ScraperError)[]> {
+		console.log(resultCount, bThing);
 
 		// Fetch search results
 		const searchUrl = `https://mangasee123.com/search/?sort=vm&desc=true&name=${encodeURIComponent(query)}`;
 		let searchRes = await fetch(searchUrl);
 		let html = await searchRes.text();
 
-		// <a class="SeriesName ng-binding" href="/manga/Fire-Brigade-Of-Flames" ng-bind-html="Series.s">
 		let directory = JSON.parse(html.split("vm.Directory = ")[1].split("];")[0] + "]");
 		
-		let matchedResults;
+		let matchedResults = [];
 		if(query === "") {
 			// @ts-ignore You can totally substract strings.
 			matchedResults = directory.sort((a: DirectoryItem, b: DirectoryItem) => b.v - a.v).slice(0, 40);
 		} else {
 			const fuse = new Fuse(directory, {
 				keys: [Directory.Title]
-			});	
+			});
 			matchedResults = fuse.search(query)
 			  .map(result => result.item)
-			  .slice(0, 40);
+			  .slice(0, resultCount);
 		}
 
 		
 
-		let searchResultData: (ScraperData | ScraperError)[] = await Promise.all(matchedResults.map((item: DirectoryItem) => this.scrape(item[Directory.Slug])))
+		let searchResultData: ScraperResponse[] = await Promise.all(matchedResults.map((item: DirectoryItem) => updateManga(item[Directory.Slug])))
 
 		return searchResultData.filter(v => v.success);
 	}
 
-	public async scrape(slug: string, chapter: number = -1, season: number = -1): Promise<ScraperData | ScraperError> {
+	public async scrape(slug: string, chapter: number = -1, season: number = -1): Promise<ScraperResponse> {
 
-		async function error(status = -1, err = "Unknown") {
+		function error(status = -1, err = "Unknown"): ScraperError {
 			return {
 				status,
 				err,
@@ -104,6 +108,8 @@ class MangaseeClass {
 				}
 		
 			});
+
+			let genres = JSON.parse(html.split(`"genre": `)[1].split("],")[0] + "]");
 		
 			return {
 				constant: {
@@ -111,7 +117,8 @@ class MangaseeClass {
 					slug,
 					posterUrl,
 					alternateTitles,
-					descriptionParagraphs
+					descriptionParagraphs,
+					genres
 				},
 				data: {
 					chapters
@@ -120,7 +127,7 @@ class MangaseeClass {
 			}
 		} catch(err) {
 			console.log(err.stack);
-			return await error(-1, err);
+			return error(-1, err);
 		}
 
 		

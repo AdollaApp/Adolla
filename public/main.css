@@ -14,8 +14,12 @@
 	:root {
 		--body: #191919;
 		--body-offset: #242424;
-		--text: #fcfcfc;
-		--text-secondary: #e2e2e2;
+		--text: #c9c9c9;
+		--text-secondary: #a1a1a1;
+
+		--border: rgba(255, 255, 255, 0.05);
+		--border-dark: rgba(255, 255, 255, 0.1);
+
 	}
 }
 
@@ -33,6 +37,7 @@ body {
 }
 .content-wrapper {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: center;
 	align-items: flex-start;
 }
@@ -76,6 +81,15 @@ aside .logo img {
 	margin-top: 0;
 }
 
+.badge {
+	display: inline-block;
+	padding: 2px 8px;
+	background: #4babce;
+	color: white;
+	border-radius: 4px;
+	margin-bottom: 4px;
+}
+
 label ~ input {
 	margin-top: 5px;
 }
@@ -86,6 +100,8 @@ input, textarea {
 	border: 1px solid var(--border-dark);
 	border-radius: 4px;
 	padding: 5px 8px;
+	background: var(--body);
+	color: var(--text);
 }
 
 /* Manga grid layout */
@@ -139,16 +155,59 @@ input, textarea {
 	overflow-y: hidden;
 }
 
+/* Manga layout */
+.manga-top {
+	display: grid;
+	grid-template-columns: 200px 1fr;
+	grid-gap: 50px;
+}
+.manga-top .poster {
+	width: 100%;
+	border-radius: 4px;
+	border: 1px solid var(--border);
+}
+
+/* Chapters */
+.chapter-list {
+	margin-top: 40px;
+}
+.chapters {
+	display: grid;
+	grid-template-columns: 100%;
+}
+.chapters .chapter {
+	padding: 12px 15px;
+	margin-left: -15px;
+	text-decoration: none;
+	color: var(--text);
+}
+.chapters .chapter + .chapter {
+	border-top: 1px solid var(--border);
+}
+.chapters .chapter:hover {
+	background: var(--border);
+}
+
 /* Responsiveness */
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 700px), (orientation: portrait) {
 	.wrapper-all {
 		grid-template-columns: 100%;
 	}
+	/* Sidebar */
 	aside.main-sidebar {
 		position: initial;
 		height: auto;
 	}
+	aside .logo img {
+		max-width: 250px;
+	}
 
+}
+@media screen and (max-width: 500px) {
+	/* Manga grid */
+	.manga-grid {
+		grid-template-columns: 100%;
+	}
 	/* Cards */
 	.manga-card {
 		grid-template-columns: 100px 1fr;
