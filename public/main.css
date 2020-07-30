@@ -38,10 +38,10 @@ body {
 }
 .content-inner {
 	width: calc(100% - 40px);
-	max-width: 800px;
+	max-width: 1000px;
 	margin: 80px 0;
 }
-.content-inner .section {
+.content-inner .section + .section {
 	margin: 50px 0;
 }
 
@@ -56,6 +56,14 @@ aside.main-sidebar {
 	top: 0;
 	box-sizing: border-box;
 	padding: 20px;
+}
+aside.main-sidebar > * + * {
+	margin-top: 20px;
+}
+aside .logo img {
+	width: 100%;
+	border: 1px solid var(--border-dark);
+	border-radius: 4px;
 }
 
 /* Util */
@@ -84,7 +92,7 @@ input, textarea {
 .manga-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-	grid-gap: 10px;
+	grid-gap: 30px 10px;
 }
 
 /* Manga items */
@@ -123,9 +131,34 @@ input, textarea {
 	margin-bottom: 5px;
 }
 .manga-card .title-small {
+	margin: 0;
 	color: var(--text);
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
 	overflow-y: hidden;
+}
+
+/* Responsiveness */
+@media screen and (max-width: 700px) {
+	.wrapper-all {
+		grid-template-columns: 100%;
+	}
+	aside.main-sidebar {
+		position: initial;
+		height: auto;
+	}
+
+	/* Cards */
+	.manga-card {
+		grid-template-columns: 100px 1fr;
+		grid-template-rows: auto;
+		align-items: center;
+	}
+	.manga-card .poster {
+		height: auto;
+	}
+	.manga-card .manga-meta {
+		height: auto;
+	}
 }

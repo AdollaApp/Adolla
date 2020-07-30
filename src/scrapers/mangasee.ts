@@ -36,30 +36,14 @@ class MangaseeClass {
 		let directory = JSON.parse(html.split("vm.Directory = ")[1].split("];")[0] + "]");
 		console.clear();
 		let queryArr = query.trim().toLowerCase().split("");
-		// let matchedResults: DirectoryItem[] = directory.filter((v: DirectoryItem) => {
-
-		// 	let title = v[Directory.Title].trim().toLowerCase();
-
-		// 	// Some messed up search algorithm
-		// 	for(let i = 0; i < queryArr.length; i++) {
-		// 		let index = title.indexOf(queryArr[i]);
-		// 		if(index >= 0 && index <= 5) {
-		// 			title = title.slice(index);
-		// 		} else {
-		// 			return false;
-		// 		}
-		// 	}
-
-		// 	return true;
-		// }).sort((a: DirectoryItem, b: DirectoryItem) => {
-		// 	return similarity(b[Directory.Title], query);
-		// }).slice(0, 40);
 		
 		const fuse = new Fuse(directory, {
 			keys: [Directory.Title]
 		});
 
-		let matchedResults = fuse.search(query).map(result => result.item);
+		let matchedResults = fuse.search(query)
+		  .map(result => result.item)
+		  .slice(0, 40);
 
 		let searchResultData: (ScraperData | ScraperError)[] = await Promise.all(matchedResults.map((item: DirectoryItem) => this.scrape(item[Directory.Slug])))
 
