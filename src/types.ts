@@ -15,18 +15,14 @@ export interface MangaMeta {
 	descriptionParagraphs: string[];
 }
 export interface MangaData {
-	chapters: Chapter[]
-}
-
-interface Manga {
-	// Todo. obviously.
+	chapters: Chapter[];
 }
 
 export interface Database {
 	manga_cache: {
 		[key: string]: MangaMeta;
 	}
-	reading: Manga[]
+	reading: any[] // TODO: Fix this.
 }
 
 // Scraper interfaces

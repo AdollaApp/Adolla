@@ -2,10 +2,15 @@
 import express from "express";
 const router = express.Router();
 
-import db from "../db";
+import Mangasee from "../scrapers/mangasee";
 
-router.get("/", (req, res) => {
-	res.render("home");
+router.get("/", async (req, res) => {
+
+	let popular = await Mangasee.search(""); // Empty search sorts by popular
+
+	res.render("home", {
+		popular
+	});
 });
 
 export default router;

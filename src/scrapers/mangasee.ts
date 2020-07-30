@@ -28,22 +28,27 @@ class MangaseeClass {
 	public async search(query: string): Promise<(ScraperData | ScraperError)[]> {
 
 		// Fetch search results
-		const searchUrl = `https://mangasee123.com/search/?sort=v&desc=true&name=${encodeURIComponent(query)}`;
+		const searchUrl = `https://mangasee123.com/search/?sort=vm&desc=true&name=${encodeURIComponent(query)}`;
 		let searchRes = await fetch(searchUrl);
 		let html = await searchRes.text();
 
 		// <a class="SeriesName ng-binding" href="/manga/Fire-Brigade-Of-Flames" ng-bind-html="Series.s">
 		let directory = JSON.parse(html.split("vm.Directory = ")[1].split("];")[0] + "]");
-		console.clear();
-		let queryArr = query.trim().toLowerCase().split("");
 		
-		const fuse = new Fuse(directory, {
-			keys: [Directory.Title]
-		});
+		let matchedResults;
+		if(query === "") {
+			// @ts-ignore You can totally substract strings.
+			matchedResults = directory.sort((a: DirectoryItem, b: DirectoryItem) => b.v - a.v).slice(0, 40);
+		} else {
+			const fuse = new Fuse(directory, {
+				keys: [Directory.Title]
+			});	
+			matchedResults = fuse.search(query)
+			  .map(result => result.item)
+			  .slice(0, 40);
+		}
 
-		let matchedResults = fuse.search(query)
-		  .map(result => result.item)
-		  .slice(0, 40);
+		
 
 		let searchResultData: (ScraperData | ScraperError)[] = await Promise.all(matchedResults.map((item: DirectoryItem) => this.scrape(item[Directory.Slug])))
 

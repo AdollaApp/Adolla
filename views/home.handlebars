@@ -48,5 +48,13 @@
 
 		</div>
 	</section>
+	<section class="section popular">
+		<h2 class="sub-title">Popular right now</h2>
+		<div class="manga-grid">
+		{{#each popular}}
+			{{>manga-card manga=this}}
+		{{/each}}
+		</div>
+	</section>
 
 </div>
