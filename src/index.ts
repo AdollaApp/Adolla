@@ -1,3 +1,6 @@
+
+console.clear();
+
 import app from "./web";
 
 import cfg from "./config.json";

@@ -17,4 +17,8 @@ app.use("/", routers.home);
 // Static assets
 app.use(express.static("public"));
 
+// More routers
+app.use("/", routers.mangaPage);
+
+
 export default app;
