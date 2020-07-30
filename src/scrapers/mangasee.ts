@@ -23,14 +23,11 @@ interface ChapterResponse {
 
 interface SearchOptions {
 	resultCount?: number;
-	bThing?: number;
 }
 
 class MangaseeClass {
 
-	public async search(query: string, { resultCount = 40, bThing = 2 }: SearchOptions = {}): Promise<(ScraperResponse)[]> {
-
-		console.log(resultCount, bThing);
+	public async search(query: string, { resultCount = 40 }: SearchOptions = {}): Promise<(ScraperResponse)[]> {
 
 		// Fetch search results
 		const searchUrl = `https://mangasee123.com/search/?sort=vm&desc=true&name=${encodeURIComponent(query)}`;
