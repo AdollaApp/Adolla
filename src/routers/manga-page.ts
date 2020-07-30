@@ -5,7 +5,7 @@ const router = express.Router();
 import db from "../db";
 import updateManga from "../util/updateManga";
 
-router.get("/:slug", async (req, res) => {
+router.get("/:slug", async (req, res, next) => {
 
 	let param = req.params.slug;
 
@@ -17,11 +17,16 @@ router.get("/:slug", async (req, res) => {
 	await updateManga(param);
 
 	let data = db.get(`manga_cache.${param}`).value();
-	console.log(data);
+	if(data) {
+		res.render("manga", {
+			data
+		});
+	} else {
+		console.log("No data found");
+		next();
+	}
 
-	res.render("manga", {
-		data
-	});
+	
 });
 
 export default router;
