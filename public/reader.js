@@ -3,21 +3,21 @@
 // that this is the reader page
 
 // This is a debounce effect for the page update
-// let scrollDebounce;
-// function updateScrollDebounce() {
-// 	if(scrollDebounce) {
-// 		clearTimeout(scrollDebounce);
-// 		delete scrollDebounce;
-// 	}
-// 	scrollDebounce = setTimeout(() => {
-// 		updatePages();
-// 		console.log("U")
-// 	}, 400);
-// }
+let scrollDebounce;
+function updateScrollDebounce() {
+	if(scrollDebounce) {
+		clearTimeout(scrollDebounce);
+		delete scrollDebounce;
+	}
+	scrollDebounce = setTimeout(() => {
+		// Send POST request to update "reading" state
+		// TODO
+	}, 1e3);
+}
 
-// // Find html and pages so that we can add scroll listeners for both
-// document.addEventListener("scroll", updateScrollDebounce);
-// document.querySelector(".pages").addEventListener("scroll", updateScrollDebounce);
+// Find html and pages so that we can add scroll listeners for both
+document.addEventListener("scroll", updateScrollDebounce);
+document.querySelector(".pages").addEventListener("scroll", updateScrollDebounce);
 setInterval(updatePages, 500);
 
 
@@ -36,7 +36,7 @@ function updatePages() {
 	
 	let closestPage = elementOffsets.pop()?.el;
 	
-	let currentPage = closestPage ? [...document.querySelectorAll(".pageImg")].indexOf(closestPage) : 0;
+	let currentPage = closestPage ? [...document.querySelectorAll(".pageImg")].indexOf(closestPage) + 1 : 1;
 
 	document.querySelector(".chapterNavigation span.current").innerText = `${currentPage} of ${pageCount}`;
 }

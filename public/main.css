@@ -24,7 +24,7 @@
 
 body {
 
-	--footer-height: 0;
+	--footer-height: 0px;
 
 	margin: 0;
 	color: var(--text-secondary);
@@ -236,7 +236,7 @@ input, textarea {
 .pageImg {
 	/* TEMPORARY */
 	width: 100%;
-	max-height: calc(100vh - var(--foter-height));
+	max-height: calc(100vh - var(--footer-height));
 	object-fit: contain;
 	margin-bottom: 10px;
 }
@@ -289,6 +289,10 @@ input, textarea {
 	}
 	.chapterNavigation svg.decorative {
 		display: none;
+	}
+	/* Manga page */
+	.manga-top {
+		grid-template-columns: 100%;
 	}
 }
 @media screen and (max-width: 500px) {
