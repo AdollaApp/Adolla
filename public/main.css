@@ -7,7 +7,6 @@
 
 	--border: rgba(0, 0, 10, 0.05);
 	--border-dark: rgba(0, 0, 10, 0.1);
-
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,6 +23,9 @@
 }
 
 body {
+
+	--footer-height: 0;
+
 	margin: 0;
 	color: var(--text-secondary);
 	background: var(--body);
@@ -188,8 +190,85 @@ input, textarea {
 	background: var(--border);
 }
 
+/* Chapter navigation */
+.chapterNavigation {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-areas: "current current" "previous next";
+	grid-gap: 10px 5px;
+	color: var(--text);
+	align-items: center;
+}
+.chapterNavigation .current {
+	text-align: center;
+	grid-area: current;
+}
+.chapterNavigation .next {
+	grid-area: next;
+}
+.chapterNavigation .previous {
+	grid-area: previous;
+}
+
+.chapterLink {
+	/* font-size: 0.8rem; */
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	grid-gap: 5px;
+	text-decoration: none;
+	color: inherit;
+	padding: 5px 8px;
+	border: 1px solid var(--border);
+	background: var(--body);
+	box-sizing: border-box;
+	border-radius: 4px;
+}
+.next .chapterLink {
+	grid-template-columns: 1fr auto;
+	text-align: right;
+}
+
+/* Pages */ 
+.pages {
+	padding-bottom: var(--footer-height);
+}
+.pageImg {
+	/* TEMPORARY */
+	width: 100%;
+	max-height: calc(100vh - var(--foter-height));
+	object-fit: contain;
+	margin-bottom: 10px;
+}
+
 /* Responsiveness */
 @media screen and (max-width: 700px), (orientation: portrait) {
+	/* Chapter navigation */
+	body {
+		--footer-height: calc(50px + env(safe-area-inset-bottom));
+	}
+	.chapterNavigation {
+		width: 100%;
+		background: var(--body-offset);
+		box-sizing: border-box;
+		position: fixed;
+		grid-template-columns: 1fr auto 1fr;
+		grid-gap: 10px;
+		grid-template-areas: "previous current next";
+		left: 0;
+		bottom: 0;
+		height: var(--footer-height);
+		padding: 0 10px;
+		border-bottom: env(safe-area-inset-bottom) solid transparent;
+	}
+	.chapterNavigation span.decorative {
+		display: none;
+	}
+	.chapterNavigation .chapterLink {
+		text-align: center;
+	}
+
+	/* Main layout */
 	.wrapper-all {
 		grid-template-columns: 100%;
 	}
@@ -202,6 +281,15 @@ input, textarea {
 		max-width: 250px;
 	}
 
+}
+@media screen and (max-width: 450px) {
+	/* Chevrons in nav */
+	.chapterNavigation .chapterLink  {
+		grid-template-columns: 100%;
+	}
+	.chapterNavigation svg.decorative {
+		display: none;
+	}
 }
 @media screen and (max-width: 500px) {
 	/* Manga grid */

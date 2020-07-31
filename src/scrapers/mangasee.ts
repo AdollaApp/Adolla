@@ -102,6 +102,7 @@ class MangaseeClass {
 			  .split(", ") // Seperate names on comma
 			  .filter(Boolean); // Remove empty strings
 		
+			  // Get description paragraphs
 			let descriptionParagraphs = html
 			  .split(`<span class="mlabel">Description:</span>`)[1] // Find start of div of descriptions (it's a bit weird)
 			  .split(">")[1] // Find closing of opening paragraph
@@ -134,6 +135,34 @@ class MangaseeClass {
 			// Extract genre array from dom
 			let genres = JSON.parse(html.split(`"genre": `)[1].split("],")[0] + "]");
 		
+			// Generate chapter images
+			let chapterImages;
+			if(season >= 0 && chapter >= 0) {
+				console.log("Fetching chapter image page");
+				// Generate URL for page with chapter data
+				const chapterUrl = `https://mangasee123.com/read-online/${slug}-chapter-${chapter}-index-${season}.html`;
+
+				// Fetch chapter data
+				let chapterRes = await fetch(chapterUrl);
+				let chapterBody = await chapterRes.text();
+
+				// CDN url, like `s6.mangabeast.com`
+				let cdnUrl = chapterBody.split(`vm.CurPathName = "`)[1].split(`"`)[0];
+				
+				// Get curChapter (which has info on pages and such)
+				let curChapter = JSON.parse(chapterBody.split(`vm.CurChapter = `)[1].split("};")[0] + "}");
+				
+				// Generate URLs
+				chapterImages = [];
+				for(let page = 0; page < Number(curChapter.Page); page++) {
+					chapterImages.push(`https://${cdnUrl}/manga/${slug}${curChapter.Directory ? `/${curChapter.Directory}` : ""}/${chapter.toString().padStart(4, "0")}-${(page + 1).toString().padStart(3, "0")}.png`);
+				}
+
+				console.log("Got HTML");
+
+
+			}
+
 			// Now we return it
 			return {
 				constant: {
@@ -145,7 +174,8 @@ class MangaseeClass {
 					genres
 				},
 				data: {
-					chapters
+					chapters,
+					chapterImages
 				},
 				success: true
 			}

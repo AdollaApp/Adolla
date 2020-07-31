@@ -17,6 +17,7 @@ export interface MangaMeta {
 }
 export interface MangaData {
 	chapters: Chapter[];
+	chapterImages?: string[];
 }
 
 export interface Database {
