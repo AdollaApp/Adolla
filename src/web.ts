@@ -21,8 +21,9 @@ app.engine("handlebars", handlebars({
 			return "Not started yet";
 		},
 		genLink(manga: StoredData, toChapter: boolean, progress: Progress | null = null, href: string | null = null) {
-			
-			if(!href) href = `/${manga.constant.slug}${toChapter ? `/${manga.progress.season}-${manga.progress.chapter}` : ""}`
+
+			// @ts-ignore Handlebars sucks.
+			if(!href || href.hash) href = `/${manga.constant.slug}${toChapter ? `/${manga.progress.season}-${manga.progress.chapter}` : ""}`
 			let suffix = progress ? `#${progress.current}` : "";
 			return `${href}${suffix}`;
 
