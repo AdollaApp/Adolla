@@ -70,7 +70,8 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 				nextChapter,
 				previousChapter,
 				currentChapter
-			}
+			},
+			readerSettings: true
 		});
 	} else {
 		console.log("No data found for", slug);

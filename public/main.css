@@ -104,6 +104,8 @@ input, textarea {
 	padding: 5px 8px;
 	background: var(--body);
 	color: var(--text);
+	appearance: none;
+	-webkit-appearance: none;
 }
 
 /* Manga grid layout */
@@ -233,12 +235,59 @@ input, textarea {
 .pages {
 	padding-bottom: var(--footer-height);
 }
+/* Horizontal reader */
+.pages[data-reader-direction="horizontal"] {
+	/* Horizontal reader */
+	max-width: 100%;
+	overflow-x: auto;
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
+	scroll-snap-type: x mandatory;
+}
+.pages[data-reader-direction="horizontal"] .pageImg {
+	height: calc(100vh - var(--footer-height));
+}
+/* Vertical reader */
+.pages[data-reader-direction="vertical"] .pageImg {
+	margin-bottom: 10px;
+}
+
+/* Pages */
 .pageImg {
 	/* TEMPORARY */
 	width: 100%;
+	min-width: 100%;
 	max-height: calc(100vh - var(--footer-height));
 	object-fit: contain;
-	margin-bottom: 10px;
+	scroll-snap-align: start;
+}
+
+/* Reader settings */
+.setting.boxes {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 10px;
+	margin-top: 5px;
+}
+.setting-box {
+	box-sizing: border-box;
+	border: 1px solid var(--border);
+	padding: 10px;
+	width: 100%;
+	text-align: center;
+	border-radius: 4px;
+}
+.setting-box svg {
+	width: 100%;
+}
+.setting-box:not(.selected):hover {
+	cursor: pointer;
+	background: var(--border);
+}
+.setting-box.selected {
+	background: var(--body);
+	color: var(--text);
 }
 
 /* Responsiveness */

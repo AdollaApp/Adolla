@@ -28,13 +28,14 @@ function updatePages() {
 	let isHorizontal = readerIsHorizontal();
 	
 	// Get offset for pages
-	let direction = isHorizontal ? "left" : "top";
+	let direction = isHorizontal ? "left" : "bottom";
+	let wrapperOffset = isHorizontal ? document.querySelector(".pages").getBoundingClientRect()[direction] : window.innerHeight;
 	let elementOffsets = [...document.querySelectorAll(".pageImg")].map(d => ({
-		offset: d.getBoundingClientRect()[direction],
+		offset: Math.abs(d.getBoundingClientRect()[direction] - wrapperOffset),
 		el: d
-	})).filter(v => v.offset < 0).sort((a, b) => a.offset - b.offset);
+	})).sort((a, b) => a.offset - b.offset);
 	
-	let closestPage = elementOffsets.pop()?.el;
+	let closestPage = elementOffsets[0]?.el;
 	
 	let currentPage = closestPage ? [...document.querySelectorAll(".pageImg")].indexOf(closestPage) + 1 : 1;
 
@@ -47,3 +48,84 @@ function readerIsHorizontal() {
 	let leftPositions = [...document.querySelectorAll(".pageImg")].map(d => d.getBoundingClientRect().left);
 	return [...new Set(leftPositions)].length !== 1;
 }
+
+// Settings
+const defaultSettings = {
+	"reader-direction": "horizontal"
+};
+
+// Get current settings
+function getSettings() {
+	// Verify stored settings
+	if(!localStorage.getItem("settings")) localStorage.setItem("settings", JSON.stringify(defaultSettings));
+
+	// Add defaultSettings as default values in case LS is missing some
+	let settings = {
+		...defaultSettings,
+		...JSON.parse(localStorage.getItem("settings"))
+	};
+	return settings;
+}
+
+// Update settings
+function initSettings() {
+
+	let settings = getSettings();
+
+	// Add event listeners for settings (boxes specifically)
+	document.querySelectorAll(".setting-box").forEach(box => {
+		box.addEventListener("click", () => {
+			let setting = box.closest("[data-setting]").dataset.setting;
+			let value = box.dataset.value;
+			setSetting(setting, value).then(settings => {
+				updateSettings();
+			});
+		});
+	});
+
+	updateSettings();
+
+}
+
+function updateSettings() {
+	let settings = getSettings();
+	updateSettingBoxes(settings);
+	applySettings();
+}
+
+// Apply settings to DOM so CSS can be adjusted
+function applySettings() {
+	let settings = getSettings();
+	for(let key of Object.keys(settings)) {
+		document.querySelectorAll(".pages").forEach(pages => {
+			pages.setAttribute(`data-${key}`, settings[key]);
+		});
+	}
+}
+
+// Update setting boxes in sidebar
+function updateSettingBoxes(settings) {
+	
+	// Clean selected classes
+	document.querySelectorAll(".setting-box.selected").forEach(box => box.classList.remove("selected"));
+
+	// Find every key and add selected class
+	for(let settingKey of Object.keys(settings)) {
+		document.querySelectorAll(`.setting-wrapper[data-setting="${settingKey}"] .setting-box[data-value="${settings[settingKey]}"]`).forEach(el => {
+			el.classList.add("selected");
+		});
+	}
+}
+
+// Set setting
+async function setSetting(key, value) {
+
+	let settings = getSettings();
+
+	settings[key] = value;
+
+	localStorage.setItem("settings", JSON.stringify(settings));
+}
+
+
+initSettings();
