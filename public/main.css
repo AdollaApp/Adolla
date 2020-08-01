@@ -88,10 +88,13 @@ aside .logo img {
 .badge {
 	display: inline-block;
 	padding: 2px 8px;
-	background: var(--badge);
-	color: white;
 	border-radius: 4px;
 	margin-bottom: 4px;
+}
+
+.badgeBackground {
+	color: white;
+	background: var(--badge);
 }
 
 label ~ input {
@@ -181,11 +184,13 @@ input, textarea {
 	display: grid;
 	grid-template-columns: 100%;
 }
+.chapters .chapter:not(.badgeBackground) {
+	color: var(--text);
+}
 .chapters .chapter {
 	padding: 12px 15px;
 	margin-left: -15px;
 	text-decoration: none;
-	color: var(--text);
 	display: grid;
 	grid-template-columns: 1fr auto;
 	grid-gap: 5px;
@@ -202,7 +207,7 @@ input, textarea {
 .chapters .chapter + .chapter {
 	border-top: 1px solid var(--border);
 }
-.chapters .chapter:hover {
+.chapters .chapter:not(.badgeBackground):hover {
 	background: var(--border);
 }
 
@@ -242,10 +247,6 @@ input, textarea {
 }
 .chapterLink:hover {
 	background: var(--border);
-}
-.chapterLink.clicked {
-	color: white;
-	background: var(--badge);
 }
 .next .chapterLink {
 	grid-template-columns: 1fr auto;
@@ -356,10 +357,10 @@ input, textarea {
 	position: relative;
 }
 .quick-select .scroll > *:first-child {
-	margin-top: 150px;
+	margin-top: 50px;
 }
 .quick-select .scroll > *:last-child {
-	margin-bottom: 150px;
+	margin-bottom: 50px;
 }
 
 /* Prevent page scrolling */

@@ -23,6 +23,9 @@ app.engine("handlebars", handlebars({
 		},
 		genLink(manga: StoredData, toChapter: boolean) {
 			return `/${manga.constant.slug}${toChapter ? `/${manga.progress.season}-${manga.progress.chapter}` : ""}/`;
+		},
+		isCurrentChapter(season1: number, season2: number, chapter1: number, chapter2: number) {
+			return season1 === season2 && chapter1 === chapter2 ? "currentChapter badgeBackground" : "";
 		}
 	}
 }));

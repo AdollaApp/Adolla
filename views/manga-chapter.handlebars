@@ -11,7 +11,7 @@
 	<div class="quick-select chapter-quick-select">
 		<div class="scroll chapters">
 			{{#each data.data.chapters}}
-			<a class="chapter" href="{{this.href}}">
+			<a class="chapter {{ isCurrentChapter this.season @root.navigation.currentChapter.season this.chapter @root.navigation.currentChapter.chapter }}" href="{{this.href}}">
 				<span class="label">{{this.label}}</span> 
 				{{#if this.progress}}<span class="progress" data-color="{{this.progress.percentageColor}}">{{this.progress.percentage}}%</span>{{/if}}
 			</a>
