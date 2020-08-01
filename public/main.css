@@ -152,7 +152,16 @@ input, textarea {
 	grid-gap: 15px;
 	grid-template-rows: auto 1fr;
 }
-.manga-card .to-manga {
+.manga-card .title-div {
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: space-between;
+}
+.manga-card .title-div .to-manga-page {
+	margin-left: 5px;
+}
+.manga-card .to-manga, .manga-card .to-manga-page {
 	/* Href */
 	color: var(--color);
 	text-decoration: none;
