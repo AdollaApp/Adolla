@@ -6,7 +6,7 @@
 		<h2 class="sub-title">Continue reading</h2>
 		<div class="manga-grid">
 
-			<div class="manga-card">
+			{{!-- <div class="manga-card">
 				<img alt="Poster" src="https://cover.mangabeast01.com/cover/Fire-Brigade-Of-Flames.jpg" class="poster">
 				<div class="manga-meta">
 					<p class="progress">Season 1, chapter 129</p>
@@ -44,7 +44,11 @@
 					<p class="progress">Season 1, chapter 2</p>
 					<h2 class="title-small">Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darou ka Gaiden - Sword Oratoria</h2>
 				</div>
-			</div>
+			</div> --}}
+
+			{{#each reading}}
+			{{> manga-card manga=this toChapter=true}}
+			{{/each}}
 
 		</div>
 	</section>

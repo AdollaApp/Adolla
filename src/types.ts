@@ -5,6 +5,7 @@ export interface Chapter {
 	label: string;
 	date: Date;
 	href: string;
+	progress?: Progress;
 }
 
 export interface MangaMeta {
@@ -24,7 +25,12 @@ export interface Database {
 	manga_cache: {
 		[key: string]: MangaMeta;
 	}
-	reading: any[] // TODO: Fix this.
+	reading: Reading;
+}
+export interface Reading {
+	[key: string]: {
+		[key: string]: Progress
+	}
 }
 
 // Scraper interfaces
@@ -42,6 +48,23 @@ export interface ScraperError {
 
 export interface StoredData extends ScraperData {
 	savedAt?: number;
+	progress?: Progress;
+}
+
+export interface Progress {
+	/** Current page */
+	current: number;
+	/** Total pages in chapter */
+	total: number
+	/** Date timestamp */
+	at: number;
+	/** Season */
+	season: number;
+	/** Chapter */
+	chapter: number;
+	/** Progress in percentages */
+	percentage?: number; // Between 0-100
+	percentageColor?: string; // Used in list of chapters
 }
 
 // Search interfaces

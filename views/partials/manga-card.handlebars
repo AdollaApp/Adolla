@@ -1,7 +1,7 @@
 <div class="manga-card">
-	<a class="to-manga" href="/{{manga.constant.slug}}"><img alt="Poster" src="{{manga.constant.posterUrl}}" class="poster"></a>
+	<a class="to-manga" href="{{genLink manga toChapter}}"><img alt="Poster" src="{{manga.constant.posterUrl}}" class="poster"></a>
 	<div class="manga-meta">
-		<p class="progress">Season 1, chapter 129</p>
-		<a class="to-manga" href="/{{manga.constant.slug}}"><h2 class="title-small">{{manga.constant.title}}</h2></a>
+		<p class="progress">{{getProgressString manga}}</p>
+		<a class="to-manga" href="{{genLink manga toChapter}}"><h2 class="title-small">{{manga.constant.title}}</h2></a>
 	</div>
 </div>

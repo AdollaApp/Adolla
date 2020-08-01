@@ -12,6 +12,17 @@ function updateScrollDebounce() {
 	scrollDebounce = setTimeout(() => {
 		// Send POST request to update "reading" state
 		// TODO
+		let [currentPage, pageCount] = getPageProgress();
+		fetch("./set-progress", {
+			method: "POST",
+			headers: {
+				"content-type": "application/json"
+			},
+			body: JSON.stringify({
+				current: currentPage,
+				total: pageCount
+			})
+		});
 	}, 1e3);
 }
 
@@ -22,6 +33,15 @@ setInterval(updatePages, 500);
 
 
 function updatePages() {
+	
+	let [currentPage, pageCount] = getPageProgress();
+
+	document.querySelector(".chapterNavigation span.current").innerText = `${currentPage} of ${pageCount}`;
+}
+updatePages();
+
+// Get page progress
+function getPageProgress() {
 	let pageCount = document.querySelectorAll(".pageImg").length;
 
 	// Check if the reader is horizontal or not
@@ -38,10 +58,8 @@ function updatePages() {
 	let closestPage = elementOffsets[0]?.el;
 	
 	let currentPage = closestPage ? [...document.querySelectorAll(".pageImg")].indexOf(closestPage) + 1 : 1;
-
-	document.querySelector(".chapterNavigation span.current").innerText = `${currentPage} of ${pageCount}`;
+	return [currentPage, pageCount];
 }
-updatePages();
 
 function readerIsHorizontal() {
 	// Returns if the images are vertical or not

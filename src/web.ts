@@ -1,19 +1,38 @@
 import express from "express";
-import handlebars from "express-handlebars"
+import handlebars from "express-handlebars";
+import bodyParser from "body-parser";
 import routers from "./routers"
+
+
+import { StoredData } from "./types";
+import getMangaProgress from "./util/getMangaProgress";
 
 const app = express();
 
 // Set up view engine
 app.engine("handlebars", handlebars({
 	helpers: {
-		stringify: v => JSON.stringify(v)
+		stringify: (v: any) => JSON.stringify(v),
+		getProgressString(manga: StoredData) {
+			if(manga.progress && manga.success) {
+				// let progressString = 
+				let curChapter = manga.data.chapters.find(c => c.chapter === manga.progress.chapter && c.season === manga.progress.season);
+				return curChapter?.label + (manga.progress.percentage ? ` (${manga.progress.percentage}%)` : "") ?? "Chapter not found";
+			};
+			return "Not started yet";
+		},
+		genLink(manga: StoredData, toChapter: boolean) {
+			return `/${manga.constant.slug}${toChapter ? `/${manga.progress.season}-${manga.progress.chapter}` : ""}/`;
+		}
 	}
 }));
 app.set("view engine", "handlebars");
 app.set("view options", {
 	layout: "main"
 });
+
+// Bodyparser
+app.use(bodyParser.json());
 
 // Routers
 app.use("/", routers.home);

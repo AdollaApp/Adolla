@@ -20,7 +20,10 @@
 					<h3 class="sub-title">Chapters</h3>
 					<div class="chapters">
 						{{#each data.data.chapters}}
-						<a class="chapter" href="{{this.href}}">{{this.label}}</a>
+						<a class="chapter" href="{{this.href}}">
+							<span class="label">{{this.label}}</span> 
+							{{#if this.progress}}<span class="progress" data-color="{{this.progress.percentageColor}}">{{this.progress.percentage}}%</span>{{/if}}
+						</a>
 						{{/each}}
 					</div>
 				</div>
