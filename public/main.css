@@ -239,6 +239,10 @@ input, textarea {
 }
 .small-manga .small-title {
 	margin: 0;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	overflow-y: hidden;
 }
 .small-manga:not(.badge-background) .small-title {
 	color: var(--text-secondary);
