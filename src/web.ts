@@ -21,7 +21,7 @@ app.engine("handlebars", handlebars({
 			return "Not started yet";
 		},
 		genLink(manga: StoredData, toChapter: boolean) {
-			return `/${manga.constant.slug}${toChapter ? `/${manga.progress.season}-${manga.progress.chapter}` : ""}/`;
+			return `/${manga.constant.slug}${toChapter ? `/${manga.progress.season}-${manga.progress.chapter}` : ""}/${manga.progress ? `#${manga.progress.current}` : ""}`;
 		},
 		isCurrentChapter(season1: number, season2: number, chapter1: number, chapter2: number) {
 			return season1 === season2 && chapter1 === chapter2 ? "currentChapter badge-background" : "";
