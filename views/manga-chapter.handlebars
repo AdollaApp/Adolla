@@ -6,3 +6,16 @@
 	</div>
 </section>
 <script src="/reader.js"></script>
+
+<div class="quick-select-wrapper toggle-quick-select">
+	<div class="quick-select chapter-quick-select">
+		<div class="scroll chapters">
+			{{#each data.data.chapters}}
+			<a class="chapter" href="{{this.href}}">
+				<span class="label">{{this.label}}</span> 
+				{{#if this.progress}}<span class="progress" data-color="{{this.progress.percentageColor}}">{{this.progress.percentage}}%</span>{{/if}}
+			</a>
+			{{/each}}
+		</div>
+	</div>
+</div>

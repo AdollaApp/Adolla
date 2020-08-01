@@ -11,7 +11,7 @@ export default async function getMangaProgress(slug: string, where: string = "la
 	return null;
 }
 
-export async function setMangaProgress(manga: StoredData) {
+export async function setMangaProgress(manga: ScraperResponse) {
 	if(manga.success) {
 		manga.progress = await getMangaProgress(manga.constant.slug);
 	}

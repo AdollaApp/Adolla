@@ -145,5 +145,4 @@ async function setSetting(key, value) {
 	localStorage.setItem("settings", JSON.stringify(settings));
 }
 
-
 initSettings();

@@ -12,16 +12,15 @@ router.get("/:slug", async (req, res, next) => {
 
 	let param = req.params.slug;
 
-	await updateManga(param, true);
+	let data = await updateManga(param, true);
 
-	let data: StoredData = db.get(`manga_cache.${param}`).value();
+	if(data && data.success) {
 
-	if(data) {
-
+		data
 		let lastChapter: Progress = await getMangaProgress(param);
 
 		await Promise.all(data.data.chapters.map(async ch => {
-			ch.progress = await getMangaProgress(data.constant.slug, `${ch.season}-${ch.chapter}`);
+			if(data.success) ch.progress = await getMangaProgress(data.constant.slug, `${ch.season}-${ch.chapter}`);
 			if(ch.progress) ch.progress.percentageColor = (ch.progress && ch.progress.season === lastChapter.season && ch.progress.chapter === lastChapter.chapter) ? "green" : "red";
 			return ch;
 		}));
@@ -47,10 +46,9 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 
 	let [_null, season, chapter]: number[] = chapterMatch.map(v => Number(v)); // Bit of a hack...
 	
-	await updateManga(slug, true);
+	let data = await updateManga(slug, true);
 
-	let data = db.get(`manga_cache.${slug}`).value();
-	if(data) {
+	if(data && data.success) {
 
 		// Stuff
 		let manga = await Mangasee.scrape(slug, chapter, season);
@@ -65,6 +63,11 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 		let nextChapter = chapters.find(c => c.season === season && c.chapter === chapter + 1) ?? chapters.find(c => c.season === season + 1 && (c.chapter === 0 || c.chapter === 1));
 		let previousChapter = chapters.find(c => c.season === season && c.chapter === chapter - 1) ?? chapters.find(c => c.season === season - 1 && c.chapter === chapters.filter(ch => ch.season === season - 1).length - 1);
 		let currentChapter = chapters.find(c => c.season === season && c.chapter === chapter);
+
+		// Add progress from `data` chapters to `manga` chapters
+		for(let i = 0; i < data.data.chapters.length; i++) {
+			manga.data.chapters[i].progress = data.data.chapters[i].progress;
+		}
 
 		res.render("manga-chapter", {
 			data: manga,

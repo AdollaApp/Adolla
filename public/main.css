@@ -25,6 +25,7 @@
 body {
 
 	--footer-height: 0px;
+	--badge: #4babce;
 
 	margin: 0;
 	color: var(--text-secondary);
@@ -87,7 +88,7 @@ aside .logo img {
 .badge {
 	display: inline-block;
 	padding: 2px 8px;
-	background: #4babce;
+	background: var(--badge);
 	color: white;
 	border-radius: 4px;
 	margin-bottom: 4px;
@@ -239,6 +240,13 @@ input, textarea {
 	box-sizing: border-box;
 	border-radius: 4px;
 }
+.chapterLink:hover {
+	background: var(--border);
+}
+.chapterLink.clicked {
+	color: white;
+	background: var(--badge);
+}
 .next .chapterLink {
 	grid-template-columns: 1fr auto;
 	text-align: right;
@@ -301,6 +309,62 @@ input, textarea {
 .setting-box.selected {
 	background: var(--body);
 	color: var(--text);
+}
+
+/* Chapter quick select */
+.toggle-quick-select:not(.quick-select-wrapper):hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+.quick-select {
+	
+	background: var(--body);
+	
+	box-sizing: border-box;
+	
+	border: 1px solid var(--border);
+	border-radius: 4px;
+
+	position: fixed;
+	padding: 20px 0;
+	top: 50%;
+	left: 50%;
+	width: 90%;
+	max-width: 320px;
+	transform: translate(-50%, -50%);
+}
+.quick-select-wrapper:not(.visible) {
+	display: none;
+}
+.quick-select .chapter {
+	padding-left: 20px;
+	margin-left: 0;
+}
+.quick-select-wrapper::before {
+	content: "";
+	display: block;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.2);
+}
+.quick-select .scroll {
+	max-height: 300px;
+	overflow-y: auto;
+	position: relative;
+}
+.quick-select .scroll > *:first-child {
+	margin-top: 150px;
+}
+.quick-select .scroll > *:last-child {
+	margin-bottom: 150px;
+}
+
+/* Prevent page scrolling */
+.overlay-visible, .overlay-body body {
+	overflow-y: hidden;
 }
 
 /* Responsiveness */

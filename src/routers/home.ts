@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
 	let readingKeys = Object.keys(readingManga).sort((b, a) => readingManga[a].last.at - readingManga[b].last.at);
 
 	let reading = await Promise.all(readingKeys.map(async slug => {
-		let manga: StoredData = await updateManga(slug);
+		let manga = await updateManga(slug);
 		manga = await setMangaProgress(manga);
 		return manga;
 	}));
