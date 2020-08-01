@@ -13,6 +13,7 @@ function updateScrollDebounce() {
 		// Send POST request to update "reading" state
 		// TODO
 		let [currentPage, pageCount] = getPageProgress();
+		location.href = `#${currentPage}`;
 		fetch("./set-progress", {
 			method: "POST",
 			headers: {

@@ -5,7 +5,7 @@ const router = express.Router();
 import db from "../db";
 import updateManga from "../util/updateManga";
 import Mangasee from "../scrapers/mangasee";
-import { Progress } from "../types";
+import { Progress, StoredData } from "../types";
 import getMangaProgress from "../util/getMangaProgress";
 import getReading from "../util/getReading";
 
@@ -17,14 +17,12 @@ router.get("/:slug", async (req, res, next) => {
 
 	if(data && data.success) {
 
-		let lastChapter: Progress = await getMangaProgress(param);
+		
 
 		// See if chapter is same as last chapter
-		await Promise.all(data.data.chapters.map(async ch => {
-			if(data.success) ch.progress = await getMangaProgress(data.constant.slug, `${ch.season}-${ch.chapter}`);
-			if(ch.progress) ch.progress.percentageColor = (ch.progress && ch.progress.season === lastChapter.season && ch.progress.chapter === lastChapter.chapter) ? "green" : "red";
-			return ch;
-		}));
+		await setColors(data, param);
+
+		console.log(data.data.chapters);
 
 		let reading = await getReading();
 
@@ -73,6 +71,9 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 		for(let i = 0; i < data.data.chapters.length; i++) {
 			manga.data.chapters[i].progress = data.data.chapters[i].progress;
 		}
+
+		// See if chapter is same as last chapter
+		await setColors(manga, slug);
 
 		// Get reading
 		let reading = await getReading();
@@ -131,3 +132,10 @@ router.post("/:slug/:chapter/set-progress", async (req, res, next) => {
 });
 
 export default router;
+
+async function setColors(data: StoredData, slug: string) {
+	let lastChapter: Progress = await getMangaProgress(slug);
+	data.data.chapters.forEach(ch => {
+		if(ch.progress) ch.progress.percentageColor = (ch.progress && ch.progress.season === lastChapter.season && ch.progress.chapter === lastChapter.chapter) ? "recent" : "neutral";
+	});
+}
