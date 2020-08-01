@@ -14,7 +14,11 @@ function updateScrollDebounce() {
 		// TODO
 		let [currentPage, pageCount] = getPageProgress();
 		location.href = `#${currentPage}`;
-		fetch("./set-progress", {
+
+		let pathname = location.pathname;
+		if(!pathname.endsWith("/")) pathname += "/";
+		
+		fetch(pathname + "set-progress", {
 			method: "POST",
 			headers: {
 				"content-type": "application/json"
