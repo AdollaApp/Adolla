@@ -5,7 +5,6 @@ import routers from "./routers"
 
 
 import { StoredData } from "./types";
-import getMangaProgress from "./util/getMangaProgress";
 
 const app = express();
 
@@ -25,7 +24,10 @@ app.engine("handlebars", handlebars({
 			return `/${manga.constant.slug}${toChapter ? `/${manga.progress.season}-${manga.progress.chapter}` : ""}/`;
 		},
 		isCurrentChapter(season1: number, season2: number, chapter1: number, chapter2: number) {
-			return season1 === season2 && chapter1 === chapter2 ? "currentChapter badgeBackground" : "";
+			return season1 === season2 && chapter1 === chapter2 ? "currentChapter badge-background" : "";
+		},
+		checkSmallHighlight(mangaSlug: string, currentPage: string) {
+			return mangaSlug === currentPage ? "currentManga badge-background" : "";
 		}
 	}
 }));

@@ -15,8 +15,44 @@
 					<label for="search">Search</label>
 					<input type="text" placeholder="Fire Force" id="search" value="{{query}}">
 				</div>
+				{{#if reading}}
+				<div class="section reading-side">
+					<label>Reading</label>
+					<div class="small-manga-list">
+					{{#each reading}}
+						{{> manga-small manga=this}}
+					{{/each}}
+					</div>
+				</div>
+				{{/if}}
+				
+				{{#if readerSettings}}
+				<hr>
+				<details class="section settings-toggle">
+					<summary>
+						<label class="settings">Reader settings</label>
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+					</summary>					
+					<div class="section settings">
+						<div class="setting-wrapper" data-setting="reader-direction">
+							<label>Reader type</label>
+							<div class="setting boxes">
+								<div class="setting-box" data-value="horizontal">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+									Horizontal
+								</div>
+								<div class="setting-box" data-value="vertical">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+									Vertical
+								</div>
+							</div>
+						</div>
+					</div>
+				</details>
+				{{/if}}
 				{{#if navigation}}
-				<div class="section chapterNavigation">
+				<hr>
+				<div class="section chapter-navigation">
 					<div class="current toggle-quick-select"><span class="decorative">Currently on page</span> <span class="current">0 of 0</span></div>
 					<div class="next">
 						{{#if navigation.nextChapter}}
@@ -33,23 +69,6 @@
 							<span>{{navigation.previousChapter.label}}</span>
 						</a>
 						{{/if}}
-					</div>
-				</div>
-				{{/if}}
-				{{#if readerSettings}}
-				<div class="section settings">
-					<div class="setting-wrapper" data-setting="reader-direction">
-						<label>Reader type</label>
-						<div class="setting boxes">
-							<div class="setting-box" data-value="horizontal">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-								Horizontal
-							</div>
-							<div class="setting-box" data-value="vertical">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-								Vertical
-							</div>
-						</div>
 					</div>
 				</div>
 				{{/if}}

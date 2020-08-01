@@ -74,6 +74,30 @@ aside .logo img {
 	border: 1px solid var(--border-dark);
 	border-radius: 4px;
 }
+aside hr {
+	width: 100%;
+	height: 1px;
+	border: 0;
+	background: var(--border);
+	margin: 10px 0;
+}
+aside details > summary {
+	list-style: none;
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-weight: bold;
+}
+aside details > summary svg {
+	display: block;
+}
+aside details[open] > summary svg {
+	transform: rotate(180deg);
+}
+aside details > summary::-webkit-details-marker {
+	display: none;
+}
 
 /* Util */
 .title {
@@ -92,7 +116,7 @@ aside .logo img {
 	margin-bottom: 4px;
 }
 
-.badgeBackground {
+.badge-background {
 	color: white;
 	background: var(--badge);
 }
@@ -164,6 +188,48 @@ input, textarea {
 	overflow-y: hidden;
 }
 
+/* List of small manga */
+.small-manga-list {
+	display: grid;
+	grid-template-columns: 100%;
+	grid-gap: 8px;
+	margin-top: 10px;
+}
+/* Small manga card */
+.small-manga {
+	padding: 0 5px;
+	margin-left: -5px;
+	border-radius: 4px;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	grid-gap: 5px;
+	color: var(--text-secondary);
+	text-decoration: none;
+}
+.small-manga.badge-background {
+	color: white;
+	padding: 5px;
+}
+.small-manga .icon {
+	padding: 5px;
+	border-radius: 6px;
+}
+.small-manga:not(.badge-background) .icon {
+	background: rgba(0, 0, 20, 0.1);
+}
+.small-manga .icon svg {
+	width: 20px;
+	height: 20px;
+	display: block;
+}
+.small-manga .small-title {
+	margin: 0;
+}
+.small-manga:not(.badge-background) .small-title {
+	color: var(--text-secondary);
+}
+
 /* Manga layout */
 .manga-top {
 	display: grid;
@@ -184,7 +250,7 @@ input, textarea {
 	display: grid;
 	grid-template-columns: 100%;
 }
-.chapters .chapter:not(.badgeBackground) {
+.chapters .chapter:not(.badge-background) {
 	color: var(--text);
 }
 .chapters .chapter {
@@ -207,12 +273,12 @@ input, textarea {
 .chapters .chapter + .chapter {
 	border-top: 1px solid var(--border);
 }
-.chapters .chapter:not(.badgeBackground):hover {
+.chapters .chapter:not(.badge-background):hover {
 	background: var(--border);
 }
 
 /* Chapter navigation */
-.chapterNavigation {
+.chapter-navigation {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	grid-template-areas: "current current" "previous next";
@@ -220,14 +286,14 @@ input, textarea {
 	color: var(--text);
 	align-items: center;
 }
-.chapterNavigation .current {
+.chapter-navigation .current {
 	text-align: center;
 	grid-area: current;
 }
-.chapterNavigation .next {
+.chapter-navigation .next {
 	grid-area: next;
 }
-.chapterNavigation .previous {
+.chapter-navigation .previous {
 	grid-area: previous;
 }
 
@@ -374,7 +440,7 @@ input, textarea {
 	body {
 		--footer-height: calc(50px + env(safe-area-inset-bottom));
 	}
-	.chapterNavigation {
+	.chapter-navigation {
 		width: 100%;
 		background: var(--body-offset);
 		box-sizing: border-box;
@@ -388,10 +454,10 @@ input, textarea {
 		padding: 0 10px;
 		border-bottom: env(safe-area-inset-bottom) solid transparent;
 	}
-	.chapterNavigation span.decorative {
+	.chapter-navigation :not(svg).decorative {
 		display: none;
 	}
-	.chapterNavigation .chapterLink {
+	.chapter-navigation .chapterLink {
 		text-align: center;
 	}
 
@@ -411,10 +477,10 @@ input, textarea {
 }
 @media screen and (max-width: 450px) {
 	/* Chevrons in nav */
-	.chapterNavigation .chapterLink  {
+	.chapter-navigation .chapterLink  {
 		grid-template-columns: 100%;
 	}
-	.chapterNavigation svg.decorative {
+	.chapter-navigation svg.decorative {
 		display: none;
 	}
 	/* Manga page */

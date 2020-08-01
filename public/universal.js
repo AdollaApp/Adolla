@@ -19,7 +19,7 @@ document.querySelectorAll(".toggle-quick-select").forEach(div => {
 // Add class to chapterlink when clicked
 document.querySelectorAll(".chapterLink").forEach(link => {
 	link.addEventListener("click", () => {
-		link.classList.add("clicked", "badgeBackground");
+		link.classList.add("clicked", "badge-background");
 	});
 });
 

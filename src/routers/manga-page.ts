@@ -5,8 +5,9 @@ const router = express.Router();
 import db from "../db";
 import updateManga from "../util/updateManga";
 import Mangasee from "../scrapers/mangasee";
-import { StoredData, Progress } from "../types";
+import { Progress } from "../types";
 import getMangaProgress from "../util/getMangaProgress";
+import getReading from "../util/getReading";
 
 router.get("/:slug", async (req, res, next) => {
 
@@ -16,17 +17,21 @@ router.get("/:slug", async (req, res, next) => {
 
 	if(data && data.success) {
 
-		data
 		let lastChapter: Progress = await getMangaProgress(param);
 
+		// See if chapter is same as last chapter
 		await Promise.all(data.data.chapters.map(async ch => {
 			if(data.success) ch.progress = await getMangaProgress(data.constant.slug, `${ch.season}-${ch.chapter}`);
 			if(ch.progress) ch.progress.percentageColor = (ch.progress && ch.progress.season === lastChapter.season && ch.progress.chapter === lastChapter.chapter) ? "green" : "red";
 			return ch;
 		}));
 
+		let reading = await getReading();
+
 		res.render("manga", {
-			data
+			data,
+			reading,
+			currentSlug: param
 		});
 	} else {
 		console.log("No data found for", param);
@@ -69,6 +74,9 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 			manga.data.chapters[i].progress = data.data.chapters[i].progress;
 		}
 
+		// Get reading
+		let reading = await getReading();
+
 		res.render("manga-chapter", {
 			data: manga,
 			navigation: {
@@ -76,7 +84,9 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 				previousChapter,
 				currentChapter
 			},
-			readerSettings: true
+			readerSettings: true,
+			currentSlug: slug,
+			reading
 		});
 	} else {
 		console.log("No data found for", slug);
