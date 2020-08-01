@@ -133,8 +133,6 @@ class MangaseeClass {
 		
 			}).sort((a: Chapter, b: Chapter) => a.combined - b.combined);
 
-			console.log(chapters);
-
 			// Extract genre array from dom
 			let genres = JSON.parse(html.split(`"genre": `)[1].split("],")[0] + "]");
 		
