@@ -94,6 +94,9 @@ aside details > summary .summary-inner {
 	align-items: center;
 	font-weight: bold;
 }
+aside details > summary:focus {
+	outline: 2px solid var(--badge);
+}
 aside details[open] > summary svg {
 	transform: rotate(180deg);
 }
