@@ -5,4 +5,4 @@ data.manga_cache = {}
 
 fs.writeFileSync("data.json", JSON.stringify(data, null, "  "));
 
-console.log("Cleared");
+console.info("Cleared");

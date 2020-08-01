@@ -139,7 +139,6 @@ class MangaseeClass {
 			// Generate chapter images
 			let chapterImages;
 			if(season >= 0 && chapter >= 0) {
-				console.log("Fetching chapter image page");
 				// Generate URL for page with chapter data
 				const chapterUrl = `https://mangasee123.com/read-online/${slug}-chapter-${chapter}-index-${season}.html`;
 
@@ -158,9 +157,6 @@ class MangaseeClass {
 				for(let page = 0; page < Number(curChapter.Page); page++) {
 					chapterImages.push(`https://${cdnUrl}/manga/${slug}${curChapter.Directory ? `/${curChapter.Directory}` : ""}/${chapter.toString().padStart(4, "0")}-${(page + 1).toString().padStart(3, "0")}.png`);
 				}
-
-				console.log("Got HTML");
-
 
 			}
 
@@ -182,7 +178,7 @@ class MangaseeClass {
 			}
 		} catch(err) {
 			//  OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!
-			console.log(err.stack);
+			console.err(err.stack);
 			return error(-1, err);
 		}
 

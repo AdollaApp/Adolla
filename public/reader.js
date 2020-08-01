@@ -151,7 +151,7 @@ initSettings();
 // Scroll to page
 function scrollToPage() {
 	let page = Number(location.hash.slice(1));
-	console.log("Scroll to page", page);
+	console.info("Scroll to page", page);
 	if(page) {
 		let pageEl = document.querySelectorAll(".pageImg")[page - 1];
 		if(!pageEl) return null;

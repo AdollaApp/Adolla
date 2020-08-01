@@ -22,8 +22,6 @@ router.get("/:slug", async (req, res, next) => {
 		// See if chapter is same as last chapter
 		await setColors(data, param);
 
-		console.log(data.data.chapters);
-
 		let reading = await getReading();
 
 		res.render("manga", {
@@ -32,7 +30,7 @@ router.get("/:slug", async (req, res, next) => {
 			currentSlug: param
 		});
 	} else {
-		console.log("No data found for", param);
+		console.error("No data found for", param);
 		next();
 	}
 });
@@ -90,7 +88,7 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 			reading
 		});
 	} else {
-		console.log("No data found for", slug);
+		console.error("No data found for", slug);
 		next();
 	}
 
