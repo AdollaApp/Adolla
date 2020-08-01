@@ -83,14 +83,16 @@ aside hr {
 }
 aside details > summary {
 	list-style: none;
+}
+aside details > summary svg {
+	display: block;
+}
+aside details > summary .summary-inner {
 	margin-bottom: 10px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	font-weight: bold;
-}
-aside details > summary svg {
-	display: block;
 }
 aside details[open] > summary svg {
 	transform: rotate(180deg);
