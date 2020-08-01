@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "ts-node src/index.ts",
-		"dev": "ts-node-dev src/index.ts"
+		"dev": "ts-node src/index.ts"
 	},
 	"keywords": [],
 	"author": "",
@@ -22,7 +22,6 @@
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.4",
-		"ts-node-dev": "^1.0.0-pre.56",
 		"typescript": "^3.9.7"
 	}
 }

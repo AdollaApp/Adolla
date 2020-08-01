@@ -6,6 +6,7 @@ export interface Chapter {
 	date: Date;
 	href: string;
 	progress?: Progress;
+	combined?: number;
 }
 
 export interface MangaMeta {

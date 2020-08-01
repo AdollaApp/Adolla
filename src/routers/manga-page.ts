@@ -19,13 +19,10 @@ router.get("/:slug", async (req, res, next) => {
 	if(data) {
 
 		let lastChapter: Progress = await getMangaProgress(param);
-		console.log(lastChapter);
-		console.log("-")
 
 		await Promise.all(data.data.chapters.map(async ch => {
 			ch.progress = await getMangaProgress(data.constant.slug, `${ch.season}-${ch.chapter}`);
 			if(ch.progress) ch.progress.percentageColor = (ch.progress && ch.progress.season === lastChapter.season && ch.progress.chapter === lastChapter.chapter) ? "green" : "red";
-			console.log(ch.progress);
 			return ch;
 		}));
 
