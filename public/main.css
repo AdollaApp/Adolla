@@ -361,6 +361,7 @@ input, textarea {
 	/* Manga grid */
 	.manga-grid {
 		grid-template-columns: 100%;
+		grid-gap: 10px;
 	}
 	/* Cards */
 	.manga-card {
