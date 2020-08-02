@@ -194,16 +194,16 @@ input, textarea {
 	display: block;
 	position: absolute;
 	transition: left 150ms;
-	left: 3px;
 	top: 50%;
 	transform: translateY(-50%);
 	width: 20px;
 	height: 20px;
 	border-radius: 50px;
 	background: var(--badge);
+	left: 2px;
 }
 .switch:checked::before {
-	left: calc(100% - 20px - 3px);
+	left: calc(100% - 20px - 2px);
 }
 
 /* Manga grid layout */
