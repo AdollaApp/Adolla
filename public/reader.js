@@ -74,7 +74,8 @@ function readerIsHorizontal() {
 
 // Settings
 const defaultSettings = {
-	"reader-direction": "horizontal"
+	"reader-direction": "horizontal",
+	"fit-to-screen": "yes"
 };
 
 // Get current settings

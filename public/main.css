@@ -243,26 +243,28 @@ input, textarea {
 }
 /* Small manga card */
 .small-manga {
-	padding: 0 5px;
+	padding: 5px;
 	margin-left: -5px;
 	border-radius: 4px;
 	display: grid;
 	grid-template-columns: auto 1fr;
 	align-items: center;
-	grid-gap: 5px;
+	grid-gap: 8px;
 	color: var(--text-secondary);
 	text-decoration: none;
 }
 .small-manga.badge-background {
-	padding: 5px;
 	--text-secondary: white;
 }
 .small-manga .icon {
 	padding: 5px;
 	border-radius: 6px;
-}
-.small-manga:not(.badge-background) .icon {
 	background: rgba(0, 0, 20, 0.1);
+	color: var(--text);
+}
+.small-manga.badge-background .icon {
+	background: var(--body);
+	border-radius: 4px;
 }
 .small-manga .icon svg {
 	width: 20px;
@@ -409,18 +411,23 @@ input, textarea {
 .pages[data-reader-direction="vertical"] .pageImg {
 	margin-bottom: 10px;
 }
+.pages[data-reader-direction="vertical"][data-fit-to-screen="yes"] .pageImg, .pages[data-reader-direction="horizontal"] .pageImg {
+	max-height: calc(100vh - var(--footer-height));
+}
 
 /* Pages */
 .pageImg {
 	/* TEMPORARY */
 	width: 100%;
 	min-width: 100%;
-	max-height: calc(100vh - var(--footer-height));
 	object-fit: contain;
 	scroll-snap-align: start;
 }
 
 /* Reader settings */
+.setting-wrapper + .setting-wrapper {
+	margin-top: 10px;
+}
 .setting.boxes {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
