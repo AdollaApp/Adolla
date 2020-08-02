@@ -123,6 +123,7 @@ aside details > summary::-webkit-details-marker {
 .badge-background {
 	color: white !important;
 	background: var(--badge) !important;
+	--text-secondary: rgba(255, 255, 255, 0.7);
 	/* I don't like using !important, but there's no better way to do priority here */
 }
 .clicked {
@@ -245,9 +246,10 @@ input, textarea {
 	-webkit-line-clamp: 1;
 	-webkit-box-orient: vertical;
 	overflow-y: hidden;
+	color: var(--text-secondary);
 }
 .small-manga:not(.badge-background) .small-title {
-	color: var(--text-secondary);
+	
 }
 
 /* Manga layout */
@@ -272,8 +274,9 @@ input, textarea {
 	display: grid;
 	grid-template-columns: 100%;
 }
-.chapters .chapter.badge-background .progress {
-	color: white;
+.chapters .chapter.badge-background {
+	border-radius: 4px;
+	border-top: 0;
 }
 .chapters .chapter:not(.badge-background) {
 	color: var(--text);
@@ -298,6 +301,9 @@ input, textarea {
 }
 .progress[data-color="recent"] {
 	color: var(--badge);
+}
+.chapters .chapter.badge-background .progress[data-color="recent"] {
+	color: white;	
 }
 .progress[data-color="neutral"] {
 	color: inherit;
@@ -502,6 +508,10 @@ input, textarea {
 	}
 	aside .logo img {
 		max-width: 250px;
+	}
+
+	.chapters .chapter {
+		margin-right: -15px;
 	}
 
 }
