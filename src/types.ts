@@ -95,6 +95,7 @@ export enum Directory {
 	Title = "s",
 	OngoingPublish = "ps", // Maybe?
 	OngoingPrint = "ss", // Maybe?
+	AlternateTitles = "al"
 }
 /** This is what the API holds in the Directory array. Fun. */
 export interface DirectoryItem {

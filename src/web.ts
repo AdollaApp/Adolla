@@ -28,6 +28,12 @@ app.engine("handlebars", handlebars({
 			return `${href}${suffix}`;
 
 		},
+		genLink2(slug: string, season: number = null, episode: number = null, page: number = null) {
+			let href = `/${slug}/`;
+			let seasonLink = season && episode ? `${season}-${episode}/` : "";
+			let pageLink = page ? `#${page}` : "";
+			return `${href}${seasonLink}${pageLink}`;
+		},
 		isCurrentChapter(season1: number, season2: number, chapter1: number, chapter2: number) {
 			return season1 === season2 && chapter1 === chapter2 ? "current-chapter badge-background" : "";
 		},

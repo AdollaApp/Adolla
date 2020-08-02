@@ -20,7 +20,7 @@
 					<h3 class="sub-title">Chapters</h3>
 					<div class="chapters">
 						{{#each data.data.chapters}}
-						<a class="chapter" href="{{ genLink @root.data true this.progress this.href }}">
+						<a class="chapter" href="{{ genLink2 @root.data.constant.slug this.season this.chapter this.progress.current }}">
 							<span class="label">{{this.label}}</span> 
 							{{#if this.progress}}<span class="progress" data-color="{{this.progress.percentageColor}}">{{this.progress.percentage}}%</span>{{/if}}
 						</a>

@@ -13,7 +13,7 @@ function updateScrollDebounce() {
 		// Send POST request to update "reading" state
 		// TODO
 		let [currentPage, pageCount] = getPageProgress();
-		location.href = `#${currentPage}`;
+		location.replace(`#${currentPage}`);
 
 		let pathname = location.pathname;
 		if(!pathname.endsWith("/")) pathname += "/";

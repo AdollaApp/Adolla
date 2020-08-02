@@ -53,8 +53,9 @@ class MangaseeClass {
 			matchedResults = directory.sort((a: DirectoryItem, b: DirectoryItem) => b.v - a.v).slice(0, resultCount);
 		} else {
 			// If query is not empty, use fuse to search
+			console.log(directory);
 			const fuse = new Fuse(directory, {
-				keys: [Directory.Title]
+				keys: [Directory.Title, Directory.Genres, Directory.AlternateTitles]
 			});
 			matchedResults = fuse.search(query)
 			  .map(result => result.item)
