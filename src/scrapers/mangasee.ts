@@ -1,7 +1,7 @@
 
 import { ScraperData, ScraperError, Chapter, Directory, DirectoryItem, ScraperResponse } from "../types";
 import fetch from "node-fetch";
-import Fuse from 'fuse.js'
+import Fuse from "fuse.js";
 import updateManga from "../util/updateManga";
 
 /** This is a chapter in mangasee API */
@@ -53,8 +53,9 @@ class MangaseeClass {
 			matchedResults = directory.sort((a: DirectoryItem, b: DirectoryItem) => b.v - a.v).slice(0, resultCount);
 		} else {
 			// If query is not empty, use fuse to search
-			console.log(directory);
 			const fuse = new Fuse(directory, {
+				threshold: 0.2,
+				distance: 100,
 				keys: [Directory.Title, Directory.Genres, Directory.AlternateTitles]
 			});
 			matchedResults = fuse.search(query)

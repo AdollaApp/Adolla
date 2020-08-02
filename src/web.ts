@@ -6,7 +6,7 @@ import bodyParser from "body-parser";
 
 // Import custom modules
 import routers from "./routers"
-import { StoredData } from "./types";
+import { StoredData, Chapter } from "./types";
 import cfg from "./config.json";
 
 const app = express();
@@ -34,6 +34,13 @@ app.engine("handlebars", handlebars({
 		},
 		checkSmallHighlight(mangaSlug: string, currentPage: string) {
 			return mangaSlug === currentPage ? "currentManga badge-background" : "";
+		},
+		getChapterDate(chapter: Chapter) {
+			function pad(v: number, amount: number = 2) {
+				return v.toString().padStart(amount, "0");
+			}
+			let d = new Date(chapter.date);
+			return `${pad(d.getDate())}-${pad(d.getMonth())}-${pad(d.getFullYear(), 4)}`
 		}
 	}
 }));

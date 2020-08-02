@@ -21,7 +21,7 @@
 					<div class="chapters">
 						{{#each data.data.chapters}}
 						<a class="chapter" href="{{ genLink2 @root.data.constant.slug this.season this.chapter this.progress.current }}">
-							<span class="label">{{this.label}}</span> 
+							<span class="label">{{this.label}} <span class="date">{{getChapterDate this}}</span></span> 
 							{{#if this.progress}}<span class="progress" data-color="{{this.progress.percentageColor}}">{{this.progress.percentage}}%</span>{{/if}}
 						</a>
 						{{/each}}
