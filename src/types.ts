@@ -56,6 +56,7 @@ export type ScraperResponse = StoredData | ScraperError;
 export interface ScraperData {
 	constant: MangaMeta;
 	data: MangaData;
+	provider: "Mangasee"; // All possible scrapers. Useful for future proofing
 	success: true; // Always true
 }
 /** Error object thrown by scrapers */

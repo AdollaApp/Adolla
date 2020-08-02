@@ -176,7 +176,8 @@ class MangaseeClass {
 					chapters,
 					chapterImages
 				},
-				success: true
+				success: true,
+				provider: "Mangasee"
 			}
 		} catch(err) {
 			//  OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!
