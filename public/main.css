@@ -74,6 +74,27 @@ aside .logo img {
 	border: 1px solid var(--border-dark);
 	border-radius: 4px;
 }
+aside .logo-section > a {
+	text-decoration: none;
+	color: var(--text);
+}
+aside .logo {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-gap: 20px;
+	align-items: center;
+	margin: 20px 0;
+	margin-bottom: 40px;
+}
+aside .logo h1 {
+	margin: 0;
+}
+aside .logo .square {
+	width: 30px;
+	height: 30px;
+	background: var(--badge);
+	transform: rotate(45deg);
+}
 aside hr {
 	width: 100%;
 	height: 1px;
@@ -234,6 +255,7 @@ input, textarea {
 }
 .small-manga.badge-background {
 	padding: 5px;
+	--text-secondary: white;
 }
 .small-manga .icon {
 	padding: 5px;
