@@ -17,8 +17,6 @@ router.get("/:slug", async (req, res, next) => {
 
 	if(data && data.success) {
 
-		
-
 		// See if chapter is same as last chapter
 		await setColors(data, param);
 

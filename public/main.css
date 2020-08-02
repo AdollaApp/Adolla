@@ -120,10 +120,13 @@ aside details > summary::-webkit-details-marker {
 	border-radius: 4px;
 	margin-bottom: 4px;
 }
-
 .badge-background {
-	color: white;
-	background: var(--badge);
+	color: white !important;
+	background: var(--badge) !important;
+	/* I don't like using !important, but there's no better way to do priority here */
+}
+.clicked {
+	padding: 200px;
 }
 
 label ~ input {
@@ -222,7 +225,6 @@ input, textarea {
 	text-decoration: none;
 }
 .small-manga.badge-background {
-	color: white;
 	padding: 5px;
 }
 .small-manga .icon {
