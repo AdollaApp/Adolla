@@ -113,6 +113,13 @@ aside details > summary::-webkit-details-marker {
 	color: var(--text);
 	margin-top: 0;
 }
+.anchor {
+	color: var(--badge);
+	text-decoration: none;
+}
+.anchor:hover {
+	text-decoration: underline;
+}
 
 .badge {
 	display: inline-block;
@@ -258,10 +265,13 @@ input, textarea {
 	grid-template-columns: 200px 1fr;
 	grid-gap: 50px;
 }
-.manga-top .poster {
+.poster {
+	box-sizing: border-box;
 	width: 100%;
 	border-radius: 4px;
 	border: 1px solid var(--border);
+}
+.manga-top .poster {
 	position: sticky;
 	top: 10px;
 }
@@ -420,6 +430,9 @@ input, textarea {
 	text-decoration: underline;
 	cursor: pointer;
 }
+.quick-select-wrapper:not(.visible) {
+	display: none;
+}
 .quick-select {
 	
 	background: var(--body);
@@ -436,8 +449,22 @@ input, textarea {
 	max-width: 320px;
 	transform: translate(-50%, -50%);
 }
-.quick-select-wrapper:not(.visible) {
-	display: none;
+.quick-select .manga-profile-medium {
+	padding: 20px;
+	border-bottom: 1px solid var(--border);
+	display: grid;
+	grid-template-columns: 100px 1fr;
+	grid-gap: 10px;
+	align-items: center;
+}
+.quick-select .small-title {
+	margin: 0;
+	color: var(--text);
+	margin-bottom: 5px;
+}
+.quick-select .poster {
+	width: 100%;
+
 }
 .quick-select .chapter {
 	padding-left: 20px;
