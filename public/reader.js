@@ -102,20 +102,19 @@ function initSettings() {
 		box.addEventListener("click", () => {
 			let setting = box.closest("[data-setting]").dataset.setting;
 			let value = box.dataset.value;
-			setSetting(setting, value).then(settings => {
-				updateSettings();
-			});
+			setSetting(setting, value).then(updateSettings);
+		});
+	});
+	document.querySelectorAll(".setting-wrapper.toggle").forEach(wrapper => {
+		let input = wrapper.querySelector(`input[type="checkbox"]`);
+		input.addEventListener("change", () => {
+			setSetting(wrapper.dataset.setting, input.dataset[input.checked])
+			  .then(updateSettings);
 		});
 	});
 
 	updateSettings();
 
-}
-
-function updateSettings() {
-	let settings = getSettings();
-	updateSettingBoxes(settings);
-	applySettings();
 }
 
 // Apply settings to DOM so CSS can be adjusted
@@ -128,6 +127,14 @@ function applySettings() {
 	}
 }
 
+// Update switches, boxes, etc.
+function updateSettings() {
+	let settings = getSettings();
+	updateSettingBoxes(settings);
+	updateSettingToggles(settings);
+	applySettings();
+}
+
 // Update setting boxes in sidebar
 function updateSettingBoxes(settings) {
 	
@@ -138,6 +145,19 @@ function updateSettingBoxes(settings) {
 	for(let settingKey of Object.keys(settings)) {
 		document.querySelectorAll(`.setting-wrapper[data-setting="${settingKey}"] .setting-box[data-value="${settings[settingKey]}"]`).forEach(el => {
 			el.classList.add("selected");
+		});
+	}
+}
+
+// Update setting toggles in sidebar
+function updateSettingToggles(settings) {
+	// Clean selected classes
+	document.querySelectorAll(".setting-box.selected").forEach(box => box.classList.remove("selected"));
+
+	// Find every key and add selected class
+	for(let settingKey of Object.keys(settings)) {
+		document.querySelectorAll(`.setting-wrapper.toggle[data-setting="${settingKey}"] .switch`).forEach(input => {
+			input.checked = input.dataset.true === settings[settingKey];
 		});
 	}
 }
