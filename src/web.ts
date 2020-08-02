@@ -40,7 +40,7 @@ app.engine("handlebars", handlebars({
 				return v.toString().padStart(amount, "0");
 			}
 			let d = new Date(chapter.date);
-			return `${pad(d.getDate())}-${pad(d.getMonth())}-${pad(d.getFullYear(), 4)}`
+			return `${pad(d.getDate())}-${pad(d.getMonth() + 1)}-${pad(d.getFullYear(), 4)}`
 		}
 	}
 }));
