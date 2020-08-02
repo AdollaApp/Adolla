@@ -274,7 +274,7 @@ input, textarea {
 	display: grid;
 	grid-template-columns: 100%;
 }
-.chapters .chapter.badge-background {
+.chapter-list .chapters .chapter.badge-background {
 	border-radius: 4px;
 	border-top: 0;
 }
@@ -510,7 +510,7 @@ input, textarea {
 		max-width: 250px;
 	}
 
-	.chapters .chapter {
+	.chapter-list .chapters .chapter {
 		margin-right: -15px;
 	}
 
