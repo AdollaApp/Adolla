@@ -1,10 +1,13 @@
+
+// Import modules
 import express from "express";
 import handlebars from "express-handlebars";
 import bodyParser from "body-parser";
+
+// Import custom modules
 import routers from "./routers"
-
-
-import { StoredData, Progress } from "./types";
+import { StoredData } from "./types";
+import cfg from "./config.json";
 
 const app = express();
 
@@ -22,7 +25,7 @@ app.engine("handlebars", handlebars({
 		},
 		genLink2(slug: string, season: number = null, episode: number = null, page: number = null) {
 			let href = `/${slug}/`;
-			let seasonLink = season && episode ? `${season}-${episode}/` : "";
+			let seasonLink = season !== null && episode !== null ? `${season}-${episode}/` : "";
 			let pageLink = page ? `#${page}` : "";
 			return `${href}${seasonLink}${pageLink}`;
 		},
