@@ -16,6 +16,7 @@ export interface Chapter {
 	 * This is everchanging, but also optional
 	 */
 	progress?: Progress;
+	realProgress?: Progress;
 	/** Season and chapter combined for sorting purposes, for example 300012 */
 	combined?: number;
 }
@@ -68,6 +69,7 @@ export interface ScraperError {
 export interface StoredData extends ScraperData {
 	savedAt?: number;
 	progress?: Progress;
+	realProgress?: Progress;
 }
 
 /** Object for progress. Can be stored under ["manga-slug"]["1-5"] */

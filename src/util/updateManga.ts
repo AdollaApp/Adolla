@@ -22,6 +22,7 @@ export default async function updateManga(slug: string, ignoreExisting: boolean 
 async function addInfo(data: ScraperResponse) {
 
 	if(data.success) {
+		// This still works thanks to references, somehow
 		let chapterPromises = data.data.chapters.map(async ch => {
 			ch.progress = await getMangaProgress(data.constant.slug, `${ch.season}-${ch.chapter}`);
 			return ch;
