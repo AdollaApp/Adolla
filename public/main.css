@@ -408,7 +408,7 @@ input, textarea {
 	height: calc(100vh - var(--footer-height));
 }
 /* Vertical reader */
-.pages[data-reader-direction="vertical"] .pageImg {
+.pages[data-reader-direction="vertical"][data-vertical-gap="yes"] .pageImg {
 	margin-bottom: 10px;
 }
 .pages[data-reader-direction="vertical"][data-fit-to-screen="yes"] .pageImg, .pages[data-reader-direction="horizontal"] .pageImg {
@@ -417,11 +417,11 @@ input, textarea {
 
 /* Pages */
 .pageImg {
-	/* TEMPORARY */
 	width: 100%;
 	min-width: 100%;
 	object-fit: contain;
 	scroll-snap-align: start;
+	display: block;
 }
 
 /* Reader settings */
