@@ -340,8 +340,10 @@ input, textarea {
 	box-sizing: border-box;
 	border-radius: 4px;
 }
-.chapterLink:hover {
-	background: var(--border);
+@media (hover:hover) {
+	.chapterLink:hover {
+		background: var(--border);
+	}
 }
 .next .chapterLink {
 	grid-template-columns: 1fr auto;

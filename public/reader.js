@@ -154,7 +154,7 @@ initSettings();
 
 // Scroll to page
 function scrollToPage() {
-	let page = Number(location.hash.slice(1));
+	let page = Number(location.hash.slice(1)) || 1;
 	console.info("Scroll to page", page);
 	if(page) {
 		let pageEl = document.querySelectorAll(".pageImg")[page - 1];
@@ -163,7 +163,7 @@ function scrollToPage() {
 	}
 }
 function scrollReader(pageEl) {
-	pageEl.scrollIntoView(false);
+	pageEl.scrollIntoView(true);
 }
 
 window.addEventListener("load", () => {
