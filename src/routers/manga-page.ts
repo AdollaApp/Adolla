@@ -20,7 +20,7 @@ router.get("/:slug", async (req, res, next) => {
 		// See if chapter is same as last chapter
 		await setColors(data, param);
 
-		let reading = await getReading();
+		let reading = await getReading(4);
 
 		res.render("manga", {
 			data,
@@ -72,7 +72,7 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 		await setColors(manga, slug);
 
 		// Get reading
-		let reading = await getReading();
+		let reading = await getReading(4);
 
 		res.render("manga-chapter", {
 			data: manga,

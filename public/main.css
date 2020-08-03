@@ -273,6 +273,9 @@ input, textarea {
 	grid-gap: 8px;
 	margin-top: 10px;
 }
+.small-manga-list > *:nth-child(n+5) {
+	display: none;
+}
 /* Small manga card */
 .small-manga {
 	padding: 0 5px;

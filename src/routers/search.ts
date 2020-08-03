@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
 	
 	await Promise.all(searchResults.map(setMangaProgress));
 
-	let reading = await getReading();
+	let reading = await getReading(4);
 
 	res.render("search", {
 		reading,
