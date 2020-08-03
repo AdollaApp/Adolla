@@ -9,7 +9,7 @@ const minute = 1e3 * 60;
 export default async function updateManga(slug: string, ignoreExisting: boolean = false) {
 
 	let existing = db.get(`manga_cache.${slug}`).value();
-	if(existing && existing.savedAt > Date.now() - 30 * minute) return await addInfo(existing);
+	if(existing && existing.savedAt > Date.now() - 30 * minute && !ignoreExisting) return await addInfo(existing);
 
 	let data = await Mangasee.scrape(slug);
 	if(data.success) {
