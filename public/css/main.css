@@ -454,14 +454,14 @@ input, textarea {
 	scroll-snap-type: x mandatory;
 }
 .pages[data-reader-direction="horizontal"] .pageImg {
-	height: calc(100vh - var(--footer-height));
+	height: calc(100vh - var(--footer-height) - env(safe-area-inset-top));
 }
 /* Vertical reader */
 .pages[data-reader-direction="vertical"][data-vertical-gap="yes"] .pageImg {
 	margin-bottom: 10px;
 }
 .pages[data-reader-direction="vertical"][data-fit-to-screen="yes"] .pageImg, .pages[data-reader-direction="horizontal"] .pageImg {
-	max-height: calc(100vh - var(--footer-height));
+	max-height: calc(100vh - var(--footer-height) - env(safe-area-inset-top));
 }
 
 /* Pages */
