@@ -17,8 +17,6 @@ router.get("/:slug", async (req, res, next) => {
 
 	if(data && data.success) {
 
-		console.log(data.data.chapters);
-
 		// See if chapter is same as last chapter
 		await setColors(data, param);
 
@@ -46,8 +44,6 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 	}
 
 	let [_null, season, chapter]: number[] = chapterMatch.map(v => Number(v)); // Bit of a hack...
-	
-	console.log(season, chapter);
 
 	let data = await updateManga(slug, true);
 
