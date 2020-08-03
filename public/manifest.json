@@ -1,0 +1,15 @@
+{
+	"name": "MANGA ",
+	"short_name": "MANGA",
+	"lang": "EN",
+	"start_url": "/",
+	"display": "standalone",
+	"theme_color": "#4babce",
+	"background_color": "#ffffff",
+	"icons": [
+		{
+			"sizes": "500x500",
+			"src": "/apple-touch-icon.png"
+		}
+	]
+}
