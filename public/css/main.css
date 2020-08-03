@@ -37,11 +37,6 @@ body {
 	border-top: env(safe-area-inset-top) solid transparent;
 	padding-right: env(safe-area-inset-right);
 }
-body[data-is-dev="true"] {
-	--badge: #07c05f;
-	--text-on-badge: rgb(255, 255, 255);
-	--text-on-badge-secondary: rgb(199, 199, 199);
-}
 body[data-is-dev="true"]::after {
 	content: "DEV";
 	display: flex;
