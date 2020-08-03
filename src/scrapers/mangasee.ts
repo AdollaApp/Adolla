@@ -119,7 +119,7 @@ class MangaseeClass {
 			let chapters: Chapter[] = chapterData.map((ch: ChapterResponse) => {
 
 				let season = Number(ch.Chapter[0]);
-				let chapter = normalizeNumber(ch.Chapter.slice(1, -1))
+				let chapter = normalizeNumber(ch.Chapter.slice(1)) / 10;
 				let label = `${ch.Type} ${chapter}`;
 				let date = new Date(ch.Date);
 				let href = `/${slug}/${season}-${chapter}/`;
@@ -157,7 +157,7 @@ class MangaseeClass {
 				// Generate URLs
 				chapterImages = [];
 				for(let page = 0; page < Number(curChapter.Page); page++) {
-					chapterImages.push(`https://${cdnUrl}/manga/${slug}${curChapter.Directory ? `/${curChapter.Directory}` : ""}/${chapter.toString().padStart(4, "0")}-${(page + 1).toString().padStart(3, "0")}.png`);
+					chapterImages.push(`https://${cdnUrl}/manga/${slug}${curChapter.Directory ? `/${curChapter.Directory}` : ""}/${Math.floor(chapter).toString().padStart(4, "0") + (chapter - Math.floor(chapter)).toString().slice(1)}-${(page + 1).toString().padStart(3, "0")}.png`);
 				}
 
 			}

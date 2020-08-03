@@ -17,6 +17,8 @@ router.get("/:slug", async (req, res, next) => {
 
 	if(data && data.success) {
 
+		console.log(data.data.chapters);
+
 		// See if chapter is same as last chapter
 		await setColors(data, param);
 
@@ -37,7 +39,7 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 	let chapterIndicator = req.params.chapter;
 	let slug = req.params.slug;
 	
-	let chapterMatch = chapterIndicator.match(/(\d+)-(\d+)/);
+	let chapterMatch = chapterIndicator.match(/(\d*\.?\d+)-(\d*\.?\d+)/);
 	if(!chapterMatch) {
 		next();
 		return;
@@ -45,6 +47,8 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 
 	let [_null, season, chapter]: number[] = chapterMatch.map(v => Number(v)); // Bit of a hack...
 	
+	console.log(season, chapter);
+
 	let data = await updateManga(slug, true);
 
 	if(data && data.success) {
@@ -59,9 +63,9 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 
 		// Find current, last, and next chapter
 		let chapters = manga.data.chapters;
-		let nextChapter = chapters.find(c => c.season === season && c.chapter === chapter + 1) ?? chapters.find(c => c.season === season + 1 && (c.chapter === 0 || c.chapter === 1));
-		let previousChapter = chapters.find(c => c.season === season && c.chapter === chapter - 1) ?? chapters.find(c => c.season === season - 1 && c.chapter === chapters.filter(ch => ch.season === season - 1).length - 1);
 		let currentChapter = chapters.find(c => c.season === season && c.chapter === chapter);
+		let nextChapter = chapters[chapters.indexOf(currentChapter) + 1] ?? null;
+		let previousChapter = chapters[chapters.indexOf(currentChapter) - 1] ?? null;
 
 		// Add progress from `data` chapters to `manga` chapters
 		for(let i = 0; i < data.data.chapters.length; i++) {
@@ -96,7 +100,7 @@ router.post("/:slug/:chapter/set-progress", async (req, res, next) => {
 	let chapterIndicator = req.params.chapter;
 	let slug = req.params.slug;
 	
-	let chapterMatch = chapterIndicator.match(/(\d+)-(\d+)/);
+	let chapterMatch = chapterIndicator.match(/(\d*\.?\d+)-(\d*\.?\d+)/);
 	if(!chapterMatch) {
 		next();
 		return;
