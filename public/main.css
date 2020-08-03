@@ -275,7 +275,7 @@ input, textarea {
 }
 /* Small manga card */
 .small-manga {
-	padding: 5px;
+	padding: 0 5px;
 	margin-left: -5px;
 	border-radius: 4px;
 	display: grid;
@@ -286,16 +286,17 @@ input, textarea {
 	text-decoration: none;
 }
 .small-manga.badge-background {
+	padding: 5px;
 	--text-secondary: white;
 }
 .small-manga .icon {
 	padding: 5px;
 	border-radius: 6px;
 	background: rgba(0, 0, 20, 0.1);
-	color: var(--text);
+	color: var(--text-secondary);
 }
 .small-manga.badge-background .icon {
-	background: var(--body);
+	background: transparent;
 	border-radius: 4px;
 }
 .small-manga .icon svg {

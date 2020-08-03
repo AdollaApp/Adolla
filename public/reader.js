@@ -12,7 +12,6 @@ function updateScrollDebounce() {
 	scrollDebounce = setTimeout(() => {
 		// Send POST request to update "reading" state
 		let [currentPage, pageCount] = getPageProgress();
-		// location.replace(`#${currentPage}`);
 
 		let pathname = location.pathname;
 		if(!pathname.endsWith("/")) pathname += "/";
@@ -142,7 +141,6 @@ function updateSettingBoxes(settings) {
 
 	// Find every key and add selected class
 	for(let settingKey of Object.keys(settings)) {
-		console.log(document.querySelectorAll(`.setting-wrapper[data-setting="${settingKey}"] .setting-box[data-value="${settings[settingKey]}"]`))
 		document.querySelectorAll(`.setting-wrapper[data-setting="${settingKey}"] .setting-box[data-value="${settings[settingKey]}"]`).forEach(el => {
 			el.classList.add("selected");
 		});
@@ -174,7 +172,7 @@ initSettings();
 
 // Scroll to page
 function scrollToPage() {
-	let page = Number(location.hash.slice(1)) || 1;
+	let page = Number(document.body.dataset.toPage) || 1;
 	console.info("Scroll to page", page);
 	if(page) {
 		let pageEl = document.querySelectorAll(".pageImg")[page - 1];

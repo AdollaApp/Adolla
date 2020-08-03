@@ -6,8 +6,7 @@ import bodyParser from "body-parser";
 
 // Import custom modules
 import routers from "./routers"
-import { StoredData, Chapter } from "./types";
-import cfg from "./config.json";
+import { StoredData, Chapter, Progress } from "./types";
 
 const app = express();
 
@@ -42,6 +41,10 @@ app.engine("handlebars", handlebars({
 			}
 			let d = new Date(chapter.date);
 			return `${pad(d.getDate())}-${pad(d.getMonth() + 1)}-${pad(d.getFullYear(), 4)}`
+		},
+		getPageProgress(progress: Progress | void) {
+			if(!progress) return false;
+			return progress.percentage < 90 ? progress.current : 1;
 		}
 	}
 }));

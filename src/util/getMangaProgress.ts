@@ -18,7 +18,6 @@ export async function setMangaProgress(manga: ScraperResponse) {
 
 		// Check if next chapter should be used instead
 		if(manga.progress && manga.progress.percentage > 90) { // The 90% might be subject to change
-			console.log("Load next chapter for", manga.constant.title);
 			let { season, chapter } = manga.progress;
 			let nextChapter = manga.data.chapters.find(c => c.season === season && c.chapter === chapter + 1) ?? manga.data.chapters.find(c => c.season === season + 1 && (c.chapter === 0 || c.chapter === 1));
 			
