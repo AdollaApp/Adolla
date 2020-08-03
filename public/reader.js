@@ -26,7 +26,7 @@ function updateScrollDebounce() {
 				total: pageCount
 			})
 		});
-	}, 1e3);
+	}, 500);
 }
 
 // Find html and pages so that we can add scroll listeners for both
