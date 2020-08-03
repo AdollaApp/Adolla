@@ -182,12 +182,14 @@ function scrollToPage() {
 	}
 }
 function scrollReader(pageEl) {
+	let topOffset = Number(window.getComputedStyle(document.body, ":before").height.slice(0, -2));
+	
 	pageEl.scrollIntoView({
-		block: "start",
-		inline: "start"
+		inline: "start",
+		block: "start"
 	});
 	if(!readerIsHorizontal()) {
-		window.scrollBy(0, -window.getComputedStyle(document.body, ":before").height.slice(0, -2));
+		window.scrollBy(0, -topOffset);
 		// Deal with iOS padding
 	}
 }

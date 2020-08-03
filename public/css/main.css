@@ -60,6 +60,7 @@ body::before {
 	width: 100%;
 	height: env(safe-area-inset-top);
 	background: var(--badge);
+	z-index: 100;
 }
 
 /* Layout */
@@ -487,7 +488,7 @@ input, textarea {
 	scroll-snap-align: start;
 	display: block;
 	scroll-padding-top: env(safe-area-inset-top);
-	scroll-margin-top: 100px;
+	scroll-margin-top: env(safe-area-inset-top);
 }
 
 /* Reader settings */
