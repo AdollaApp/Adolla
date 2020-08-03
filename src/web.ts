@@ -19,14 +19,15 @@ app.engine("handlebars", handlebars({
 			if(manga.progress && manga.success) {
 				// let progressString = 
 				let curChapter = manga.data.chapters.find(c => c.chapter === manga.progress.chapter && c.season === manga.progress.season);
-				return curChapter?.label + (manga.progress.percentage ? ` (${manga.progress.percentage}%)` : "") ?? "Chapter not found";
+				return curChapter?.label + (typeof manga?.progress?.percentage !== "undefined" ? ` (${manga.progress.percentage}%)` : "") ?? "Chapter not found";
 			};
 			return "Not started yet";
 		},
 		genLink2(slug: string, season: number = null, episode: number = null, page: number = null) {
 			let href = `/${slug}/`;
 			let seasonLink = season !== null && episode !== null ? `${season}-${episode}/` : "";
-			let pageLink = page ? `#${page}` : "";
+			// let pageLink = page ? `#${page}` : "";
+			let pageLink = ""; // I'm going to try replacing the # with an on-page attribute to fix some issues
 			return `${href}${seasonLink}${pageLink}`;
 		},
 		isCurrentChapter(season1: number, season2: number, chapter1: number, chapter2: number) {

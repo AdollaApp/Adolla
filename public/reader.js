@@ -11,9 +11,8 @@ function updateScrollDebounce() {
 	}
 	scrollDebounce = setTimeout(() => {
 		// Send POST request to update "reading" state
-		// TODO
 		let [currentPage, pageCount] = getPageProgress();
-		location.replace(`#${currentPage}`);
+		// location.replace(`#${currentPage}`);
 
 		let pathname = location.pathname;
 		if(!pathname.endsWith("/")) pathname += "/";
@@ -143,6 +142,7 @@ function updateSettingBoxes(settings) {
 
 	// Find every key and add selected class
 	for(let settingKey of Object.keys(settings)) {
+		console.log(document.querySelectorAll(`.setting-wrapper[data-setting="${settingKey}"] .setting-box[data-value="${settings[settingKey]}"]`))
 		document.querySelectorAll(`.setting-wrapper[data-setting="${settingKey}"] .setting-box[data-value="${settings[settingKey]}"]`).forEach(el => {
 			el.classList.add("selected");
 		});
@@ -151,9 +151,7 @@ function updateSettingBoxes(settings) {
 
 // Update setting toggles in sidebar
 function updateSettingToggles(settings) {
-	// Clean selected classes
-	document.querySelectorAll(".setting-box.selected").forEach(box => box.classList.remove("selected"));
-
+	
 	// Find every key and add selected class
 	for(let settingKey of Object.keys(settings)) {
 		document.querySelectorAll(`.setting-wrapper.toggle[data-setting="${settingKey}"] .switch`).forEach(input => {

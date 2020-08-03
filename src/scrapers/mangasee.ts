@@ -184,8 +184,6 @@ class MangaseeClass {
 			console.error(err.stack);
 			return error(-1, err);
 		}
-
-		
 	}
 }
 
