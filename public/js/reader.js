@@ -15,6 +15,8 @@ function updateScrollDebounce() {
 
 		let pathname = location.pathname;
 		if(!pathname.endsWith("/")) pathname += "/";
+
+		document.body.setAttribute("data-to-page", currentPage);
 		
 		fetch(pathname + "set-progress", {
 			method: "POST",
@@ -131,6 +133,8 @@ function updateSettings() {
 	updateSettingBoxes(settings);
 	updateSettingToggles(settings);
 	applySettings();
+	
+	scrollToPage(); // Scroll to page when settings are adjusted
 }
 
 // Update setting boxes in sidebar
@@ -160,11 +164,8 @@ function updateSettingToggles(settings) {
 
 // Set setting
 async function setSetting(key, value) {
-
 	let settings = getSettings();
-
 	settings[key] = value;
-
 	localStorage.setItem("settings", JSON.stringify(settings));
 }
 
