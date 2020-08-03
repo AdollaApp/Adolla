@@ -182,7 +182,14 @@ function scrollToPage() {
 	}
 }
 function scrollReader(pageEl) {
-	pageEl.scrollIntoView(true);
+	pageEl.scrollIntoView({
+		block: "start",
+		inline: "start"
+	});
+	if(!readerIsHorizontal()) {
+		window.scrollBy(0, -window.getComputedStyle(document.body, ":before").height.slice(0, -2));
+		// Deal with iOS padding
+	}
 }
 
 window.addEventListener("load", () => {

@@ -486,6 +486,8 @@ input, textarea {
 	object-fit: contain;
 	scroll-snap-align: start;
 	display: block;
+	scroll-padding-top: env(safe-area-inset-top);
+	scroll-margin-top: 100px;
 }
 
 /* Reader settings */
