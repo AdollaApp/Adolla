@@ -65,6 +65,6 @@ app.use(express.static("public"));
 
 // More routers
 app.use("/", routers.mangaPage);
-
+app.use("*", routers.notFound);
 
 export default app;

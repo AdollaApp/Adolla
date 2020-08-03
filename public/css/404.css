@@ -1,0 +1,9 @@
+.anchor {
+	margin-top: 20px;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+}
+.anchor svg {
+	margin-right: 20px;
+}
