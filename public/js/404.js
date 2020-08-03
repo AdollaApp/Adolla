@@ -3,5 +3,5 @@ if(window.history) {
 		history.back();
 	});
 } else {
-	document.querySelector(".not-found .anchor")
+	document.querySelector(".not-found .anchor").remove();
 }
