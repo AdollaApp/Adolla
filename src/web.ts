@@ -45,6 +45,9 @@ app.engine("handlebars", handlebars({
 		getPageProgress(progress: Progress | void) {
 			if(!progress) return false;
 			return progress.percentage < 90 ? progress.current : 1;
+		},
+		ifDev(options) {
+			return !!process.env.dev ? options.fn(this) : options.inverse(this);
 		}
 	}
 }));

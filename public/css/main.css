@@ -26,6 +26,8 @@ body {
 
 	--footer-height: 0px;
 	--badge: #4babce;
+	--text-on-badge: white;
+	--text-on-badge-secondary: rgba(255, 255, 255, 0.7);
 
 	margin: 0;
 	color: var(--text-secondary);
@@ -34,6 +36,25 @@ body {
 	font-variant-numeric: tabular-nums;
 	border-top: env(safe-area-inset-top) solid transparent;
 	padding-right: env(safe-area-inset-right);
+}
+body[data-is-dev="true"] {
+	--badge: #07c05f;
+	--text-on-badge: rgb(255, 255, 255);
+	--text-on-badge-secondary: rgb(199, 199, 199);
+}
+body[data-is-dev="true"]::after {
+	content: "DEV";
+	display: flex;
+	justify-items: center;
+	position: fixed;
+	bottom: -12px;
+	left: -30px;
+	color: var(--text-on-badge);
+	background: var(--badge);
+
+	transform: rotate(45deg);
+	padding: 0 30px;
+	padding-bottom: 30px;
 }
 body::before {
 	content: "";
@@ -162,9 +183,9 @@ aside details > summary::-webkit-details-marker {
 	margin-bottom: 4px;
 }
 .badge-background {
-	color: white !important;
 	background: var(--badge) !important;
-	--text-secondary: rgba(255, 255, 255, 0.7);
+	color: var(--text-on-badge) !important;
+	--text-secondary: var(--text-on-badge-secondary);
 	/* I don't like using !important, but there's no better way to do priority here */
 }
 .clicked {
@@ -303,16 +324,18 @@ input, textarea {
 }
 .small-manga.badge-background {
 	padding: 5px;
-	--text-secondary: white;
 }
 .small-manga .icon {
 	padding: 5px;
 	border-radius: 6px;
 	background: rgba(0, 0, 20, 0.1);
+}
+.small-manga:not(.badge-background) .icon {
 	color: var(--text-secondary);
 }
 .small-manga.badge-background .icon {
 	background: transparent;
+	color: inherit;
 	border-radius: 4px;
 }
 .small-manga .icon svg {
@@ -326,10 +349,7 @@ input, textarea {
 	-webkit-line-clamp: 1;
 	-webkit-box-orient: vertical;
 	overflow-y: hidden;
-	color: var(--text-secondary);
-}
-.small-manga:not(.badge-background) .small-title {
-	
+	color: inherit;
 }
 
 /* Manga layout */
@@ -386,7 +406,7 @@ input, textarea {
 	color: var(--badge);
 }
 .chapters .chapter.badge-background .progress[data-color="recent"] {
-	color: white;	
+	color: var(--text-on-badge);	
 }
 .progress[data-color="neutral"] {
 	color: inherit;

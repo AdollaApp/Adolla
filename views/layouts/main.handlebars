@@ -30,7 +30,7 @@
 		
 		<meta name="twitter:title" content="MANGA">
 	</head>
-	<body data-to-page="{{getPageProgress navigation.currentChapter.progress}}">
+	<body data-to-page="{{getPageProgress navigation.currentChapter.progress}}" {{#ifDev}}data-is-dev="true"{{/ifDev}}>
 		<div class="wrapper-all">
 			<aside class="sidebar main-sidebar">
 				<div class="section logo-section">

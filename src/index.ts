@@ -1,6 +1,9 @@
 
 console.clear();
 
+import { config } from "dotenv";
+config();
+
 import app from "./web";
 
 import cfg from "./config.json";
