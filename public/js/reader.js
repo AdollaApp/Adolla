@@ -2,6 +2,9 @@
 // If this is run, it's fair to assume
 // that this is the reader page
 
+// Load state
+let loaded = false;
+
 // This is a debounce effect for the page update
 let scrollDebounce;
 function updateScrollDebounce() {
@@ -10,6 +13,7 @@ function updateScrollDebounce() {
 		delete scrollDebounce;
 	}
 	scrollDebounce = setTimeout(() => {
+		if(!loaded) return;
 		// Send POST request to update "reading" state
 		let [currentPage, pageCount] = getPageProgress();
 
@@ -196,6 +200,7 @@ function scrollReader(pageEl) {
 }
 
 window.addEventListener("load", () => {
+	loaded = true;
 	setTimeout(() => {
 		scrollToPage();
 	}, 100);

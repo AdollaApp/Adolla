@@ -69,7 +69,6 @@ body::before {
 	height: env(safe-area-inset-top);
 	background: var(--header-background);
 	z-index: 100;
-	border-bottom: 1px solid var(--border-dark);
 }
 
 /* Layout */
@@ -602,7 +601,7 @@ input, textarea {
 .floating-button-wrapper {
 	position: sticky;
 	width: calc(100% - 20px);
-	top: calc(10px + env(safe-area-inset-top));
+	top: env(safe-area-inset-top);
 	left: calc(10px + env(safe-area-inset-left));
 }
 .floating-button {
@@ -613,13 +612,16 @@ input, textarea {
 	justify-content: center;
 	align-items: center;
 	background: var(--body);
-	border-radius: 50%;
+	border-radius: 4px;
 	border: 2px solid var(--border);
 	margin: 10px 0;
 }
 .floating-button svg {
 	display: block;
 	color: var(--text);
+}
+.floating-button.badge-background svg {
+	color: var(--text-on-badge);
 }
 
 /* Responsiveness */
