@@ -1,4 +1,9 @@
 :root {
+	--badge: #4babce;
+	--text-on-badge: white;
+	--text-on-badge-secondary: rgba(255, 255, 255, 0.7);
+}
+:root {
 	--body: #FBFBFB;
 	--body-offset: #f5f7f9;
 	
@@ -7,6 +12,9 @@
 
 	--border: rgba(0, 0, 10, 0.05);
 	--border-dark: rgba(0, 0, 10, 0.1);
+
+	--header-background: var(--badge);
+	--body-harsh: white;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,15 +27,15 @@
 		--border: rgba(255, 255, 255, 0.05);
 		--border-dark: rgba(255, 255, 255, 0.1);
 
+		--header-background: var(--body-offset);
+		--body-harsh: black;
+
 	}
 }
 
 body {
 
 	--footer-height: 0px;
-	--badge: #4babce;
-	--text-on-badge: white;
-	--text-on-badge-secondary: rgba(255, 255, 255, 0.7);
 
 	margin: 0;
 	color: var(--text-secondary);
@@ -59,8 +67,9 @@ body::before {
 	left: 0;
 	width: 100%;
 	height: env(safe-area-inset-top);
-	background: var(--badge);
+	background: var(--header-background);
 	z-index: 100;
+	border-bottom: 1px solid var(--border-dark);
 }
 
 /* Layout */
@@ -593,8 +602,38 @@ input, textarea {
 	overflow-y: hidden;
 }
 
+/* The oppoite of responsiveness */
+.floating-button-wrapper {
+	position: sticky;
+	width: calc(100% - 20px);
+	top: calc(10px + env(safe-area-inset-top));
+	left: calc(10px + env(safe-area-inset-left));
+}
+.floating-button {
+	display: none;
+	width: 36px;
+	height: 36px;
+	box-sizing: border-box;
+	justify-content: center;
+	align-items: center;
+	background: var(--body);
+	border-radius: 50%;
+	border: 2px solid var(--badge);
+	margin: 10px 0;
+}
+.floating-button svg {
+	display: block;
+}
+
 /* Responsiveness */
 @media screen and (max-width: 700px), (orientation: portrait) {
+	[data-reader-reader-direction="vertical"] .floating-button {
+		display: flex;
+	}
+	[data-reader-reader-direction="vertical"] .pages .pageImg:first-child {
+		/* Deal with tricky back button margins */
+		margin-top: -56px;
+	}
 	/* Chapter navigation */
 	body {
 		--footer-height: calc(50px + env(safe-area-inset-bottom));

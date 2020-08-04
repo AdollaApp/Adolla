@@ -123,6 +123,7 @@ function applySettings() {
 	for(let key of Object.keys(settings)) {
 		document.querySelectorAll(".pages").forEach(pages => {
 			pages.setAttribute(`data-${key}`, settings[key]);
+			document.body.setAttribute(`data-reader-${key}`, settings[key]);
 		});
 	}
 }
