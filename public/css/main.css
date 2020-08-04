@@ -27,7 +27,7 @@
 		--border: rgba(255, 255, 255, 0.05);
 		--border-dark: rgba(255, 255, 255, 0.1);
 
-		--header-background: var(--body-offset);
+		--header-background: black;
 		--body-harsh: black;
 
 	}
@@ -99,7 +99,7 @@ aside.main-sidebar {
 	overflow-y: auto;
 	background: var(--body-offset);
 	position: sticky;
-	top: 0;
+	top: env(safe-area-inset-top);
 	box-sizing: border-box;
 	padding: 20px;
 	border-left: env(safe-area-inset-left) solid transparent;
@@ -366,7 +366,7 @@ input, textarea {
 }
 .manga-top .poster {
 	position: sticky;
-	top: calc(10px + env(safe-area-inset-top));
+	top: calc(20px + env(safe-area-inset-top));
 }
 
 /* Chapters */
