@@ -614,11 +614,12 @@ input, textarea {
 	align-items: center;
 	background: var(--body);
 	border-radius: 50%;
-	border: 2px solid var(--badge);
+	border: 2px solid var(--border);
 	margin: 10px 0;
 }
 .floating-button svg {
 	display: block;
+	color: var(--text);
 }
 
 /* Responsiveness */
