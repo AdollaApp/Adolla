@@ -95,7 +95,7 @@ body::before {
 aside.main-sidebar {
 	width: 100%;
 	height: 100vh;
-	max-height: 100vh;
+	max-height: calc(100vh - env(safe-area-inset-top));
 	overflow-y: auto;
 	background: var(--body-offset);
 	position: sticky;
@@ -366,7 +366,7 @@ input, textarea {
 }
 .manga-top .poster {
 	position: sticky;
-	top: 10px;
+	top: calc(10px + env(safe-area-inset-top));
 }
 
 /* Chapters */
