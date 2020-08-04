@@ -200,3 +200,10 @@ window.addEventListener("load", () => {
 		scrollToPage();
 	}, 100);
 });
+
+// Add click event to floating button
+document.querySelectorAll(".floating-button").forEach(button => {
+	button.addEventListener("click", () => {
+		button.classList.add("clicked", "badge-background");
+	});
+});

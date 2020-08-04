@@ -193,10 +193,6 @@ aside details > summary::-webkit-details-marker {
 	--text-secondary: var(--text-on-badge-secondary);
 	/* I don't like using !important, but there's no better way to do priority here */
 }
-.clicked {
-	padding: 200px;
-}
-
 label ~ input {
 	margin-top: 5px;
 }
