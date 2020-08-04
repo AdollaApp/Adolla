@@ -14,7 +14,6 @@
 	--border-dark: rgba(0, 0, 10, 0.1);
 
 	--header-background: var(--badge);
-	--body-harsh: white;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -27,8 +26,7 @@
 		--border: rgba(255, 255, 255, 0.05);
 		--border-dark: rgba(255, 255, 255, 0.1);
 
-		--header-background: black;
-		--body-harsh: black;
+		--header-background: #0e0e0e;
 
 	}
 }
