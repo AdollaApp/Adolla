@@ -1,4 +1,6 @@
+node_modules/
+backups/
+
 .DS_Store
-node_modules
 data.json
 .env
