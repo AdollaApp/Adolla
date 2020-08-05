@@ -12,7 +12,6 @@
 		{{/each}}
 	</div>
 </section>
-<script src="/js/reader.js"></script>
 
 <div class="quick-select-wrapper toggle-quick-select">
 
@@ -34,6 +33,8 @@
 
 		{{!-- Scrollable section --}}
 		<div class="scroll chapters">
+			{{> settings }}
+			<h3 class="small-title">Chapters</h3>
 			{{#each data.data.chapters}}
 			<a class="chapter {{ isCurrentChapter this.season @root.navigation.currentChapter.season this.chapter @root.navigation.currentChapter.chapter }}" href="{{this.href}}">
 				<span class="label">{{this.label}}</span> 
@@ -44,3 +45,4 @@
 
 	</div>
 </div>
+<script src="/js/reader.js"></script>

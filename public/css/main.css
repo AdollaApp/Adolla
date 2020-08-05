@@ -138,27 +138,29 @@ aside hr {
 	background: var(--border);
 	margin: 10px 0;
 }
-aside details > summary {
+details.settings > summary {
 	list-style: none;
 }
-aside details > summary svg {
+details.settings > summary svg {
 	display: block;
 }
-aside details > summary .summary-inner {
-	margin-bottom: 10px;
+details.settings > summary .summary-inner {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	font-weight: bold;
 }
-aside details > summary:focus {
+details.settings > summary:focus {
 	outline: 2px solid var(--badge);
 }
-aside details[open] > summary svg {
+details.settings[open] > summary svg {
 	transform: rotate(180deg);
 }
-aside details > summary::-webkit-details-marker {
+details.settings > summary::-webkit-details-marker {
 	display: none;
+}
+details.settings .details-inner {
+	margin-top: 10px;
 }
 
 /* Util */
@@ -522,6 +524,10 @@ input, textarea {
 	background: var(--body);
 	color: var(--text);
 }
+.quick-select .setting-box.selected {
+	background: var(--badge);
+	color: var(--text-on-badge);
+}
 
 /* Chapter quick select */
 .toggle-quick-select:not(.quick-select-wrapper):hover {
@@ -546,9 +552,16 @@ input, textarea {
 	width: 90%;
 	max-width: 320px;
 	transform: translate(-50%, -50%);
+	max-height: calc(95vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+	overflow-y: auto;
+}
+.quick-select .manga-profile-medium, .quick-select .add-padding {
+	padding: 20px;
+}
+.quick-select .section.add-padding {
+	border-bottom: 1px solid var(--border);
 }
 .quick-select .manga-profile-medium {
-	padding: 20px;
 	border-bottom: 1px solid var(--border);
 	display: grid;
 	grid-template-columns: 100px 1fr;
@@ -560,9 +573,14 @@ input, textarea {
 	color: var(--text);
 	margin-bottom: 5px;
 }
+.quick-select .chapters .small-title {
+	margin-top: 20px;
+	margin-left: 20px;
+	margin-bottom: 15px;
+}
 .quick-select .poster {
 	width: 100%;
-
+	display: block;
 }
 .quick-select .chapter {
 	padding-left: 20px;
@@ -583,10 +601,10 @@ input, textarea {
 	overflow-y: auto;
 	position: relative;
 }
-.quick-select .scroll > *:first-child {
+.quick-select .scroll > .chapter:first-child {
 	margin-top: 50px;
 }
-.quick-select .scroll > *:last-child {
+.quick-select .scroll > .chapter:last-child {
 	margin-bottom: 50px;
 }
 
