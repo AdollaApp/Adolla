@@ -48,6 +48,7 @@ class Backup {
 	}
 
 	private async getLastBackupTime() {
+		if(!fs.existsSync("backups/")) fs.mkdirSync("backups");
 		let files = fs.readdirSync("backups/").map(fileName => Number(fileName.slice(0, -5)));
 		let last = files.sort((a, b) => b - a)[0] ?? 0;
 		return last;
