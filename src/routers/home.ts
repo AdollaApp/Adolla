@@ -8,10 +8,8 @@ import getReading from "../util/getReading";
 import db from "../db";
 
 router.get("/", async (req, res) => {
-	
-	let host = req.headers.host; // localhost:8080
-	let protocol = req.headers.referer.split(":")[0];
-	let url = `${protocol}://${host}/`;
+
+	let url = `http://${req.headers.host}/`;
 	db.set("other.host", url).write();
 
 	// Get popular manga
