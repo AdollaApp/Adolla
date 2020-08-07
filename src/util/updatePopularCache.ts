@@ -6,6 +6,7 @@ import db from "../db";
 import getReading from "./getReading";
 import { Reading, Progress } from "../types";
 import Bot from "./bot";
+import chalk from "chalk";
 
 class Updater {
 
@@ -17,7 +18,7 @@ class Updater {
 	}
 
 	private async updateCache() {
-		console.info("Updating 'popular' cache");
+		console.info(chalk.yellowBright("[CACHE]") + ` Updating popular cache at ${new Date().toLocaleString()}`);
 		let popular = await Mangasee.search("");
 		
 		await Promise.all(popular.map(obj => obj.success ? obj.constant.slug : null).filter(Boolean).map(async slug => {
@@ -25,9 +26,9 @@ class Updater {
 			await updateManga(slug, true);
 		}));
 
-		console.info("Updated 'popular' cache");
+		console.info(chalk.green("[CACHE]") + " Updated cache for popular manga");
 
-		console.info("Looking for new chapters");
+		console.info(chalk.yellowBright("[NOTIFS]") + ` Looking for new chapters at ${new Date().toLocaleString()}`);
 		let reading = await getReading();
 		
 		await Promise.all(reading.map(obj => obj.success ? obj.constant.slug : null).filter(Boolean).map(async slug => {
@@ -63,12 +64,12 @@ class Updater {
 						let hasNotified = db.get(dbString).value();
 
 						if(hasNotified) {
-							console.log(`New chapter for ${data.constant.title}, user has been notified already`);
+							console.info(chalk.red("[NOTIFS]") + ` New chapter was found for ${data.constant.title}, user has already been notified`);
 							return;
 						}
 
 						// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
-						console.info(`New chapter for ${data.constant.title}`);
+						console.info(chalk.green("[NOTIFS]") + ` New chapter found for ${data.constant.title}, notifying user`);
 
 						let bot = Bot.get();
 						if(bot) {
@@ -87,7 +88,7 @@ class Updater {
 			}
 		}));
 
-		console.info("Checked for new chapters, done");
+		console.info(chalk.green("[NOTIFS]") + ` Checked for new chapters, now done`);
 
 		
 

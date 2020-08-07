@@ -1,5 +1,6 @@
 
 import fs from "fs";
+import chalk from "chalk";
 
 class Backup {
 
@@ -12,7 +13,7 @@ class Backup {
 	}
 
 	public async createBackup() {
-		console.info("Making backup at", new Date().toLocaleString("it-it"));
+		console.info(chalk.yellowBright("[BACKUP]") + ` Making backup at ${new Date().toLocaleString("it")}`);
 		let reading = JSON.parse(fs.readFileSync("data.json", "utf-8")).reading;
 		
 		let now = Date.now();
@@ -25,6 +26,8 @@ class Backup {
 		if(!fs.existsSync("backups/")) fs.mkdirSync("backups");
 		fs.writeFileSync(`backups/${now}.json`, JSON.stringify(backupJson));
 
+		console.info(chalk.green("[BACKUP]") + `Saved backup at ${new Date().toLocaleString("it")}`);
+
 	}
 
 	private async checkTime() {
@@ -33,7 +36,7 @@ class Backup {
 
 		let lastBackupTime = await this.getLastBackupTime();
 		let difference = Date.now() - lastBackupTime;
-		console.info("Running backup check");
+		console.info(chalk.yellowBright("[BACKUP]") + " Running backup check");
 		if(difference > day) {
 			this.createBackup();
 			setTimeout(() => {
