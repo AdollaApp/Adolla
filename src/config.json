@@ -1,5 +1,8 @@
 {
 	"http": {
 		"port": 8080
+	},
+	"cache": {
+		"duration": 1800000
 	}
 }
