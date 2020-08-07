@@ -459,6 +459,39 @@ input, textarea {
 	text-align: right;
 }
 
+/* Reader */
+.manga-reader .loading {
+	position: relative;
+	width: 100%;
+	height: 200px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.manga-reader .loading::before {
+	content: "";
+	display: block;
+	width: 25px;
+	height: 25px;
+	border-radius: 4px;
+	background: var(--badge);
+	animation: spin 1s infinite linear;
+}
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+.manga-reader:not(.loaded) .pages {
+	display: none;
+}
+.manga-reader.loaded .loading {
+	display: none;
+}
+
 /* Pages */ 
 .pages {
 	padding-bottom: var(--footer-height);

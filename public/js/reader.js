@@ -201,6 +201,7 @@ function scrollReader(pageEl) {
 
 window.addEventListener("load", () => {
 	loaded = true;
+	document.querySelector(".manga-reader").classList.add("loaded");
 	setTimeout(() => {
 		scrollToPage();
 	}, 100);

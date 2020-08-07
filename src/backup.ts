@@ -34,7 +34,7 @@ class Backup {
 		let lastBackupTime = await this.getLastBackupTime();
 		let difference = Date.now() - lastBackupTime;
 		console.info("Running backup check");
-		if(difference > day) { // TODO proper checks
+		if(difference > day) {
 			this.createBackup();
 			setTimeout(() => {
 				this.checkTime();
