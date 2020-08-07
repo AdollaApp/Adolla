@@ -4,8 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"start": "ts-node src/index.ts",
-		"dev": "ts-node src/index.ts"
+		"start": "npx ts-node src/index.ts",
+		"dev": "npx ts-node src/index.ts"
 	},
 	"keywords": [],
 	"author": "",
@@ -22,7 +22,8 @@
 		"fuse.js": "^6.4.1",
 		"lowdb": "^1.0.0",
 		"node-fetch": "^2.6.0",
-		"telebot": "^1.4.1"
+		"telebot": "^1.4.1",
+		"ts-node": "^8.10.2"
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.4",
