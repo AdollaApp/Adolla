@@ -42,6 +42,14 @@ export interface Database {
 		[key: string]: MangaMeta;
 	}
 	reading: Reading;
+	other: {
+		host?: string
+	},
+	notified: {
+		[key: string]: {
+			[key: string]: true // 
+		}
+	}
 }
 /** Save what the user is currently reading */
 export interface Reading {

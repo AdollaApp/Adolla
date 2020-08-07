@@ -11,7 +11,9 @@ const db = low(adapter);
 // Defaults
 const defaults: Database = {
 	manga_cache: {},
-	reading: {}
+	reading: {},
+	other: {},
+	notified: {}
 }
 db.defaults(defaults).write();
 
