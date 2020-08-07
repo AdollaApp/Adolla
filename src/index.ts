@@ -11,8 +11,8 @@ import updatePopularCache from "./util/updatePopularCache";
 
 import cfg from "./config.json";
 
-app.listen(cfg.http.port, () => {
-	console.info(`Web server is live on localhost:${cfg.http.port}`);
+app.listen(process.env.PORT ?? cfg.http.port, () => {
+	console.info(`Web server is live on localhost:${process.env.PORT ?? cfg.http.port}`);
 	backup.start();
 	updatePopularCache.start();
 });
