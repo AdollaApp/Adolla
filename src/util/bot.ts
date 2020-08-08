@@ -1,5 +1,6 @@
 import Telebot from "telebot";
 import fs from "fs";
+import chalk from "chalk";
 
 interface SecretConfig {
 	telegram?: {
@@ -9,10 +10,13 @@ interface SecretConfig {
 }
 
 let secretConfig: SecretConfig;
-if(fs.existsSync("./secret-config.json")) {
-	secretConfig = JSON.parse(fs.readFileSync("secret-config.json", "utf-8"));
+console.log(__dirname);
+let path = __dirname.split("/").slice(0, -1).join("/") + "/secret-config.json";
+console.log(path);
+if(fs.existsSync(path)) {
+	secretConfig = JSON.parse(fs.readFileSync(path, "utf-8"));
 } else {
-	console.error("[TELEGRAM] No secret-config provided. The bot will not prompt you with new chapters.");
+	console.error(chalk.red("[TELEGRAM]") + ` No secret-config provided. The bot will not prompt you with new chapters.`);
 }
 
 let bot = null;
