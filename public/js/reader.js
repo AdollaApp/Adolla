@@ -19,8 +19,6 @@ function updateScrollDebounce() {
 
 		let pathname = location.pathname;
 		if(!pathname.endsWith("/")) pathname += "/";
-
-		document.body.setAttribute("data-to-page", currentPage);
 		
 		fetch(pathname + "set-progress", {
 			method: "POST",
@@ -44,6 +42,8 @@ setInterval(updatePages, 500);
 function updatePages() {
 	
 	let [currentPage, pageCount] = getPageProgress();
+
+	document.body.setAttribute("data-to-page", currentPage);
 
 	document.querySelector(".chapter-navigation span.current").innerText = `${currentPage} of ${pageCount}`;
 }
@@ -212,4 +212,47 @@ document.querySelectorAll(".floating-button").forEach(button => {
 	button.addEventListener("click", () => {
 		button.classList.add("clicked", "badge-background");
 	});
+});
+
+// Keyboard controls
+document.addEventListener("keydown", evt => {
+	if(!evt.key.startsWith("Arrow")) return;
+	evt.preventDefault();
+
+	let isHorizontal = readerIsHorizontal();
+
+	function nextPage() {
+		let [currentPage, pageCount] = getPageProgress();
+		let pageEl = document.querySelectorAll(".pageImg")[currentPage];
+		if(pageEl) scrollReader(pageEl);
+	}
+	function previousPage() {
+		let [currentPage, pageCount] = getPageProgress();
+		let pageEl = document.querySelectorAll(".pageImg")[currentPage - 2];
+		if(pageEl) scrollReader(pageEl);
+	}
+	function nextChapter() {
+		document.querySelector(".next .chapterLink").click()
+	}
+	function previousChapter() {
+		document.querySelector(".previous .chapterLink").click()
+	}
+
+	switch(evt.key) {
+		case "ArrowLeft":
+			isHorizontal ? previousPage() : previousChapter();
+			break;
+		case "ArrowRight":
+			isHorizontal ? nextPage() : nextChapter();
+			break;
+		case "ArrowUp":
+			isHorizontal ? previousChapter() : previousPage();
+			break;
+		case "ArrowDown":
+			isHorizontal ? nextChapter() : nextPage();
+			break;
+		default:
+			alert("Unknown");
+	}
+
 });
