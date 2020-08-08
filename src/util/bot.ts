@@ -10,9 +10,7 @@ interface SecretConfig {
 }
 
 let secretConfig: SecretConfig;
-console.log(__dirname);
 let path = __dirname.split("/").slice(0, -1).join("/") + "/secret-config.json";
-console.log(path);
 if(fs.existsSync(path)) {
 	secretConfig = JSON.parse(fs.readFileSync(path, "utf-8"));
 } else {
