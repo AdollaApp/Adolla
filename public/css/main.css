@@ -673,6 +673,28 @@ input, textarea {
 	color: var(--text-on-badge);
 }
 
+/* Backups */
+.backups {
+	margin: 20px 0;
+	display: grid;
+	grid-template-columns: 100%;
+	grid-gap: 10px;
+}
+.backup {
+	background: var(--body-offset);
+	padding: 10px 20px;
+	border-radius: 4px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.backup button {
+	border: 0;
+	padding: 4px 8px;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
 /* Responsiveness */
 @media screen and (max-width: 700px), (orientation: portrait) {
 	[data-reader-reader-direction="vertical"] .floating-button {

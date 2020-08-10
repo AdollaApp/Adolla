@@ -62,6 +62,7 @@ app.use(bodyParser.json());
 // Routers
 app.use("/", routers.home);
 app.use("/search", routers.search);
+app.use("/backups", routers.backups);
 
 // Static assets
 app.use(express.static("public"));
