@@ -6,7 +6,6 @@ import getReading from "../util/getReading";
 import fs from "fs";
 import db from "../db";
 
-
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
