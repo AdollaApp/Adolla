@@ -13,7 +13,8 @@ const defaults: Database = {
 	manga_cache: {},
 	reading: {},
 	other: {},
-	notified: {}
+	notified: {},
+	lists: []
 }
 db.defaults(defaults).write();
 

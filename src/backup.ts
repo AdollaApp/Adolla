@@ -1,6 +1,7 @@
 
 import fs from "fs";
 import chalk from "chalk";
+import db from "./db";
 
 class Backup {
 
@@ -14,19 +15,23 @@ class Backup {
 
 	public async createBackup() {
 		console.info(chalk.yellowBright("[BACKUP]") + ` Making backup at ${new Date().toLocaleString("it")}`);
-		let reading = JSON.parse(fs.readFileSync("data.json", "utf-8")).reading;
+		// let reading = JSON.parse(fs.readFileSync("data.json", "utf-8")).reading;
+		// let lists = JSON.parse(fs.readFileSync("data.json", "utf-8")).lists;
+		let reading = db.get("reading").value();
+		let lists = db.get("lists").value();
 		
 		let now = Date.now();
 
 		let backupJson = {
 			backupAt: now,
-			reading
+			reading,
+			lists
 		};
 
 		if(!fs.existsSync("backups/")) fs.mkdirSync("backups");
 		fs.writeFileSync(`backups/${now}.json`, JSON.stringify(backupJson));
 
-		console.info(chalk.green("[BACKUP]") + `Saved backup at ${new Date().toLocaleString("it")}`);
+		console.info(chalk.green("[BACKUP]") + ` Saved backup at ${new Date().toLocaleString("it")}`);
 
 	}
 

@@ -50,6 +50,7 @@ export interface Database {
 			[key: string]: true // 
 		}
 	}
+	lists: List[];
 }
 /** Save what the user is currently reading */
 export interface Reading {
@@ -125,4 +126,14 @@ export interface DirectoryItem {
 	lt: number;
 	g: string[];
 	h: boolean;
+}
+
+/** "List" type. Used for users to store manga */
+export interface List {
+	name: string;
+	slug: string;
+	entries: {
+		slug: string;
+		data?: ScraperResponse
+	}[];
 }

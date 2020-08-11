@@ -1,0 +1,18 @@
+<div class="content-inner">
+	<h1 class="title">Lists</h1>
+	<p>Lorem ipsum dolor sit amet consectetur adipiscing elit ad varius habitant dis, suspendisse aliquam leo congue gravida semper non ante taciti sem commodo senectus, etiam integer lacinia donec pharetra eleifend morbi mus vulputate cras.</p>
+	
+	{{#each lists}}
+	<section class="section lists">
+		<h2 class="sub-title" id="{{slug}}">{{name}}</h2>
+		<div class="manga-grid">
+			{{#each entries}}
+			{{>manga-card manga=this.data}}
+			{{/each}}
+		</div>
+	</section>
+	{{/each}}
+
+</div>
+
+<script src="/js/backups.js"></script>

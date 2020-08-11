@@ -43,7 +43,7 @@ function updatePages() {
 	
 	let [currentPage, pageCount] = getPageProgress();
 
-	document.body.setAttribute("data-to-page", currentPage);
+	if(loaded) document.body.setAttribute("data-to-page", currentPage);
 
 	document.querySelector(".chapter-navigation span.current").innerText = `${currentPage} of ${pageCount}`;
 }

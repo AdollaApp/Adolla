@@ -693,6 +693,7 @@ input, textarea {
 	padding: 4px 8px;
 	border-radius: 4px;
 	cursor: pointer;
+	font-size: 1rem;
 }
 
 /* Responsiveness */

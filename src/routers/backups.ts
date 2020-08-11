@@ -16,13 +16,13 @@ router.get("/", async (req, res) => {
 	let backupFiles = fs.readdirSync("./backups/");
 	let backups = backupFiles.map(fileName => {
 		let d = new Date(Number(fileName.slice(0, -5)));
-		let label = `${days[d.getDay()]}, ${d.getDate().toString().padStart(2, "0")} ${months[d.getMonth()]} ${d.getFullYear()}`;
+		let label = `${days[d.getDay()]}, ${d.getDate().toString().padStart(2, "0")} ${months[d.getMonth()]} ${d.getFullYear()}, ${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
 		return {
 			fileName,
 			label,
 			date: d
 		};
-	}).sort((a, b) => b.date.getTime() - a.date.getTime())
+	}).sort((a, b) => b.date.getTime() - a.date.getTime());
 
 	res.render("backups", {
 		reading,
@@ -37,8 +37,10 @@ router.get("/restore/:filename", async (req, res) => {
 		let filename = req.params.filename;
 		let backup = JSON.parse(fs.readFileSync(`backups/${filename}`, "utf-8"));
 		
-		let reading = backup.reading;
+		let reading = backup.reading ?? {};
+		let lists = backup.lists ?? [];
 		db.set("reading", reading).write();
+		db.set("lists", lists).write();
 
 		res.json({
 			status: 200
