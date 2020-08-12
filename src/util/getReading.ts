@@ -22,7 +22,7 @@ export default async function getReading(maxResults: number = Infinity) {
 		return manga;
 	}));
 
-	reading = reading.filter(e => e.success === true).sort((a, b) => (a.success ? a.progress.at : 0) - (b.success ? b.progress.at : 0))
+	reading = reading.filter(e => e.success === true).sort((a, b) => (b.success ? b.progress.at : 0) - (a.success ? a.progress.at : 0))
 
 	return reading;
 }

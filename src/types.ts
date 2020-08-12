@@ -97,6 +97,8 @@ export interface Progress {
 	/** Progress in percentages */
 	percentage?: number; // Between 0-100
 	percentageColor?: string; // Used in list of chapters
+	/** Is new? */
+	new?: boolean;
 }
 
 // Search interfaces

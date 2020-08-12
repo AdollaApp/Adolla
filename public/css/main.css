@@ -189,7 +189,9 @@ details.settings .details-inner {
 	display: inline-block;
 	padding: 2px 8px;
 	border-radius: 4px;
-	margin-bottom: 4px;
+}
+.badge svg {
+	display: block;
 }
 .badge-background {
 	background: var(--badge) !important;

@@ -45,7 +45,8 @@ export async function setMangaProgress(manga: ScraperResponse) {
 					chapter: nextChapter.chapter,
 					current: 0,
 					total: null, // Unknown
-					at: Math.min(progressLast, chapterDate) // If the chapter is newer than last read, sort by that. If not, don't.
+					at: progressLast > chapterDate ? progressLast : Date.now(), // If the chapter is newer than last read, sort by that. If not, don't.
+					new: true
 				}	
 			}
 
