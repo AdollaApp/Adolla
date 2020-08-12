@@ -121,7 +121,6 @@ router.post("/:slug/:chapter/set-progress", async (req, res, next) => {
 		chapter
 	};
 	// Update db
-	console.log(progressData);
 	db.set(`reading.${slug}.${season}-${chapter.toString().replace(/\./g, "_")}`, progressData);
 	db.set(`reading.${slug}.last`, progressData);
 
