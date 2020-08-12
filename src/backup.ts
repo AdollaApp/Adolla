@@ -37,18 +37,18 @@ class Backup {
 
 	private async checkTime() {
 
-		let day = 1e3 * 60 * 60 * 24;
+		let offset = 1e3 * 60 * 60 * 12;
 
 		let lastBackupTime = await this.getLastBackupTime();
 		let difference = Date.now() - lastBackupTime;
 		console.info(chalk.yellowBright("[BACKUP]") + " Running backup check");
-		if(difference > day) {
+		if(difference > offset) {
 			this.createBackup();
 			setTimeout(() => {
 				this.checkTime();
-			}, day);
+			}, offset);
 		} else {
-			let timeoutValue = day - difference;
+			let timeoutValue = offset - difference;
 			setTimeout(() => {
 				this.checkTime();
 			}, timeoutValue);
