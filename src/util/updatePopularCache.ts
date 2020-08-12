@@ -46,7 +46,7 @@ class Updater {
 				chapters = chapters.sort((a, b) => a.combined - b.combined);	
 
 				// Get reading
-				let reading: Progress = db.get(`reading.${data.constant.slug}.last`).value();
+				let reading: Progress = db.get(`reading.${data.constant.slug}.last`);
 				let currentChapter = chapters.find(c => c.season === reading.season && c.chapter === reading.chapter);
 				
 				let nextChapter = chapters[chapters.indexOf(currentChapter) + 1];
@@ -61,7 +61,7 @@ class Updater {
 
 						// Check if user hasn't been notified already
 						let dbString = `notified.${data.constant.slug}.${nextChapter.season}-${nextChapter.chapter}`;
-						let hasNotified = db.get(dbString).value();
+						let hasNotified = db.get(dbString);
 
 						if(hasNotified) {
 							console.info(chalk.red("[NOTIFS]") + ` New chapter was found for ${data.constant.title}, user has already been notified`);
@@ -75,11 +75,11 @@ class Updater {
 						if(bot) {
 							let msg = `New chapter for *${data.constant.title}*!`;
 							
-							let host = db.get("other.host").value();
+							let host = db.get("other.host");
 							let urlMsg = host ? `Check it out at ${host.replace("localhost", "127.0.0.1")}${data.constant.slug}/${nextChapter.season}-${nextChapter.chapter}/` : ""; 
 							
 							Bot.send(`${msg}\n${urlMsg}`);
-							db.set(dbString, true).write();
+							db.set(dbString, true);
 						} 
 
 					}

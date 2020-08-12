@@ -10,7 +10,7 @@ import db from "../db";
 router.get("/", async (req, res) => {
 
 	let url = `http://${req.headers.host}/`;
-	db.set("other.host", url).write();
+	db.set("other.host", url);
 
 	// Get popular manga
 	let popular = await Mangasee.search("", {

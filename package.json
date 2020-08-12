@@ -5,7 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "npx ts-node src/index.ts",
-		"dev": "npx ts-node src/index.ts"
+		"dev": "npx ts-node src/index.ts",
+		"test-db": "npx ts-node src/test-db.ts"
 	},
 	"keywords": [],
 	"author": "",
