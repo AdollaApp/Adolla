@@ -31,13 +31,6 @@ export async function setMangaProgress(manga: ScraperResponse) {
 				chapterDateObj.setMinutes(59);
 				let chapterDate = chapterDateObj.getTime();
 
-
-				if(manga.constant.title.includes("Fire")) {
-					console.log(nextChapter.date, new Date(progressLast));
-					console.log( progressLast > chapterDate ? progressLast : chapterDate);
-					console.log(Math.min(progressLast, chapterDate));
-				}
-
 				manga.progress = {
 					...manga.progress,
 					percentage: 0,
