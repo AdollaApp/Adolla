@@ -2,28 +2,12 @@
 import { Database } from "./types";
 import fs from "fs";
 
-// Basic database setup
-// import low from "lowdb";
-// import FileSync from "lowdb/adapters/FileSync"
-
-// const adapter = new FileSync("data.json");
-// const db = low(adapter);
-
-// // Defaults
-// const defaults: Database = {
-// 	manga_cache: {},
-// 	reading: {},
-// 	other: {},
-// 	notified: {},
-// 	lists: []
-// }
-// db.defaults(defaults);
-
 class Db {
 	
 	private db: Db;
 	private file: string;
 	public data: any;
+	private storeDebounce: any;
 
 	constructor() {
 		this.db = this;
@@ -44,15 +28,18 @@ class Db {
 			if(!this.data[key]) this.data[key] = defaults[key];
 		}
 
-		setInterval(() => {
-			this.store();
-		}, 30e3);
 		this.store();
 
 	}
 
-	public store() {
-		fs.writeFileSync(this.file, JSON.stringify(this.data));
+	public store(doDebounce = true) {
+		if(this.storeDebounce) {
+			clearTimeout(this.storeDebounce);
+			delete this.storeDebounce;
+		}
+		this.storeDebounce = setTimeout(() => {
+			fs.writeFileSync(this.file, JSON.stringify(this.data));
+		}, doDebounce ? 15e3 : 0);	
 	}
 
 	public get(str: string, setFields = false) {

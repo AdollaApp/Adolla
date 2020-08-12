@@ -6,7 +6,7 @@ import db from "../db";
 import updateManga from "../util/updateManga";
 import Mangasee from "../scrapers/mangasee";
 import { Progress, StoredData } from "../types";
-import getMangaProgress from "../util/getMangaProgress";
+import getMangaProgress, { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";
 
 router.get("/:slug", async (req, res, next) => {
@@ -51,6 +51,7 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 
 		// Stuff
 		let manga = await Mangasee.scrape(slug, chapter, season);
+		manga = await setMangaProgress(manga);
 
 		if(!manga.success) {
 			next();
@@ -116,9 +117,10 @@ router.post("/:slug/:chapter/set-progress", async (req, res, next) => {
 	let progressData = {
 		current: req.body.current,
 		total: req.body.total,
+		percentage: Math.round((req.body.current / req.body.total) * 100),
 		at: Date.now(),
 		season,
-		chapter
+		chapter	
 	};
 	// Update db
 	db.set(`reading.${slug}.${season}-${chapter.toString().replace(/\./g, "_")}`, progressData);
