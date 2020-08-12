@@ -268,6 +268,12 @@ input, textarea {
 	align-items: center;
 	justify-content: space-between;
 }
+.manga-card .title-div > span {
+	display: flex;
+}
+.manga-card .title-div > span .badge {
+	margin-right: 5px;
+}
 .manga-card .title-div .to-manga-page {
 	margin-left: 5px;
 }
