@@ -172,6 +172,11 @@ details.settings .details-inner {
 	color: var(--text);
 	margin-top: 0;
 }
+.sub-title.spread {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
 .anchor {
 	color: var(--badge);
 	text-decoration: none;
@@ -694,6 +699,15 @@ input, textarea {
 	border-radius: 4px;
 	cursor: pointer;
 	font-size: 1rem;
+}
+
+/* Selects */
+select {
+	padding: 4px 8px;
+	border-radius: 4px;
+	border: 1px solid var(--border);
+	font-size: 1em;
+	background: var(--body-offset);
 }
 
 /* Responsiveness */

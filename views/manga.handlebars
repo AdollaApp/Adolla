@@ -17,10 +17,18 @@
 					{{/each}}
 				</div>
 				<div class="chapter-list">
-					<h3 class="sub-title">Chapters</h3>
+					<h3 class="sub-title spread">
+						<span>Chapters</span>
+						<select class="sorting">
+							<option selected disabled value="chapter">Sorting</option>
+							<option value="chapter">Chapters</option>
+							<option value="chapter-reversed">Chapters (reversed)</option>
+							<option value="read">Last read</option>
+						</select>
+					</h3>
 					<div class="chapters">
 						{{#each data.data.chapters}}
-						<a class="chapter" href="{{ genLink2 @root.data.constant.slug this.season this.chapter this.progress.current }}">
+						<a class="chapter" data-combined="{{this.combined}}" data-release-date="{{this.date}}" data-last-read={{this.progress.at}} href="{{ genLink2 @root.data.constant.slug this.season this.chapter this.progress.current }}">
 							<span class="label">{{this.label}} <span class="date">{{getChapterDate this}}</span></span> 
 							{{#if this.progress}}<span class="progress" data-color="{{this.progress.percentageColor}}">{{this.progress.percentage}}%</span>{{/if}}
 						</a>
@@ -31,3 +39,5 @@
 		</div>
 	</div>
 </div>
+
+<script src="/js/manga.js"></script>
