@@ -777,6 +777,13 @@ select {
 	.manga-top .poster {
 		position: initial;
 	}
+	/* Sub title spread */
+	.sub-title.spread {
+		display: block;
+	}
+	.sub-title.spread > select {
+		margin-top: 10px;
+	}
 }
 @media screen and (max-width: 500px) {
 	/* Manga grid */
