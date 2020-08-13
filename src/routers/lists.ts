@@ -53,16 +53,17 @@ router.get("/", async (req, res) => {
 
 	let reading = await getReading();
 
-	await Promise.all(lists.map(async list => {
+	let sortedLists = await Promise.all(lists.map(async list => {
 
 		for(let entry of list.entries) {
 			entry.data = await updateManga(entry.slug);
 			entry.data = await setMangaProgress(entry.data);
 		}
+		return list;
 		
 	}));
 
-	let sortedLists = lists.sort((a, b) => b.entries.length - a.entries.length);
+	sortedLists = lists.sort((a, b) => b.entries.length - a.entries.length);
 
 	res.render("lists", {
 		reading,

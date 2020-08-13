@@ -3,7 +3,7 @@ import mangaPage from "./manga-page";
 import search from "./search";
 import notFound from "./not-found";
 import backups from "./backups";
-// import lists from "./lists";
+import lists from "./lists";
 
 export default {
 	home,
@@ -11,5 +11,5 @@ export default {
 	search,
 	notFound,
 	backups,
-	// lists
+	lists
 }

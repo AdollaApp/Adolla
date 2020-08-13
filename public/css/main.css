@@ -185,6 +185,9 @@ details.settings .details-inner {
 	text-decoration: underline;
 }
 
+.badges .badge {
+	margin-bottom: 5px;
+}
 .badge {
 	display: inline-block;
 	padding: 2px 8px;
