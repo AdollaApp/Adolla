@@ -273,6 +273,7 @@ input, textarea {
 }
 .manga-card .title-div > span {
 	display: flex;
+	align-items: center;
 }
 .manga-card .title-div > span .badge {
 	margin-right: 5px;
@@ -787,6 +788,9 @@ select {
 	}
 	.manga-top .poster {
 		position: initial;
+	}
+	.manga-card .title-div > span {
+		display: block;
 	}
 	/* Sub title spread */
 	.sub-title.spread {
