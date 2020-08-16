@@ -5,11 +5,7 @@ import { StoredData, ScraperResponse } from "../types";
 export default async function getMangaProgress(slug: string, where: string = "last") {
 	let dbString = `reading.${slug}.${where.replace(/\./g, "_")}`;
 	let entry = db.get(dbString);
-	if(entry) {
-		// entry.percentage = Math.round((entry.current / entry.total) * 100);
-		return entry;
-	}
-	return null;
+	return entry ?? null;
 }
 
 export async function setMangaProgress(manga: ScraperResponse) {
