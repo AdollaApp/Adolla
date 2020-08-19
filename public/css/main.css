@@ -578,6 +578,18 @@ input, textarea {
 	background: var(--badge);
 	color: var(--text-on-badge);
 }
+.quick-select details.settings {
+	position: fixed;
+	z-index: 100;
+	background: var(--body);
+	border-top: 1px solid var(--border);
+	width: 90%;
+	max-width: 320px;
+	margin-top: -1px;
+}
+.quick-select details[open] {
+	box-shadow: 0 4px 8px var(--border-dark);
+}
 
 /* Chapter quick select */
 .toggle-quick-select:not(.quick-select-wrapper):hover {
@@ -624,7 +636,7 @@ input, textarea {
 	margin-bottom: 5px;
 }
 .quick-select .chapters .small-title {
-	margin-top: 20px;
+	margin-top: 100px;
 	margin-left: 20px;
 	margin-bottom: 15px;
 }
@@ -720,6 +732,7 @@ select {
 	border: 1px solid var(--border);
 	font-size: 1em;
 	background: var(--body-offset);
+	color: var(--text);
 }
 
 /* Responsiveness */
