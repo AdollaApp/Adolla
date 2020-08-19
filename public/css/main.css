@@ -555,6 +555,12 @@ input, textarea {
 	grid-gap: 10px;
 	margin-top: 5px;
 }
+.setting.boxes.small {
+	grid-template-columns: repeat(4, 1fr);
+}
+.setting.boxes:not(.small) .setting-box svg {
+	margin-bottom: 5px;
+}
 .setting-box {
 	box-sizing: border-box;
 	border: 1px solid var(--border);
@@ -565,6 +571,7 @@ input, textarea {
 }
 .setting-box svg {
 	width: 100%;
+	display: block;
 }
 .setting-box:not(.selected):hover {
 	cursor: pointer;
@@ -675,10 +682,18 @@ input, textarea {
 /* The oppoite of responsiveness */
 .floating-button-wrapper {
 	position: sticky;
+	display: flex;
 	width: calc(100% - 20px);
 	/* Footer height including padding, normal footer, margin */
 	top: calc(100vh - var(--footer-height) - 50px - 10px);
 	left: calc(10px + env(safe-area-inset-left));
+}
+[data-reader-back-location="top-left"] .floating-button-wrapper, [data-reader-back-location="top-right"] .floating-button-wrapper {
+	top: env(safe-area-inset-top);
+}
+
+[data-reader-back-location="top-right"] .floating-button-wrapper, [data-reader-back-location="bottom-right"] .floating-button-wrapper {
+	justify-content: flex-end;
 }
 .floating-button {
 	display: none;
