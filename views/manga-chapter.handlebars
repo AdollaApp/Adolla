@@ -19,22 +19,26 @@
 	{{!-- Quick select for chapters --}}
 	<div class="quick-select chapter-quick-select">
 
-		{{!-- Back to manga link --}}
-		<div class="manga-profile-medium">
-			<div class="poster-wrapper">
-				<img class="poster" alt="Manga's poster" src="{{data.constant.posterUrl}}">
-			</div>
-			<div class="core">
-				<div class="core-inner">
-					<h3 class="small-title">{{data.constant.title}}</h3>
-					<a class="anchor go-to-main-page" href="/{{data.constant.slug}}">Go to details page</a>
+		<div class="quick-sticky">
+			{{!-- Back to manga link --}}
+			<div class="manga-profile-medium">
+				<div class="poster-wrapper">
+					<img class="poster" alt="Manga's poster" src="{{data.constant.posterUrl}}">
+				</div>
+				<div class="core">
+					<div class="core-inner">
+						<h3 class="small-title">{{data.constant.title}}</h3>
+						<a class="anchor go-to-main-page" href="/{{data.constant.slug}}">Go to details page</a>
+					</div>
 				</div>
 			</div>
+
+			{{!-- Setting --}}
+			{{> settings }}
 		</div>
 
 		{{!-- Scrollable section --}}
 		<div class="scroll chapters">
-			{{> settings }}
 			<h3 class="small-title">Chapters</h3>
 			{{#each data.data.chapters}}
 			<a class="chapter {{ isCurrentChapter this.season @root.navigation.currentChapter.season this.chapter @root.navigation.currentChapter.chapter }}" href="{{this.href}}">
