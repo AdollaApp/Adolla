@@ -4,10 +4,10 @@ Easy to use Manga web app
 
 ## Screenshots
 
-![Image of the home page](screenshots/0.png)
-![Manga page](screenshots/1.png)
-![Manga page with screenshot](screenshots/2.png)
-![Reader](screenshots/3.png)
+![Image of the home page](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/0.png)
+![Manga page](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/1.png)
+![Manga page with screenshot](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/2.png)
+![Reader](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/3.png)
 
 ## Setup
 
