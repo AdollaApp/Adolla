@@ -80,7 +80,8 @@ function readerIsHorizontal() {
 const defaultSettings = {
 	"reader-direction": "horizontal",
 	"fit-to-screen": "yes",
-	"vertical-gap": "yes"
+	"vertical-gap": "yes",
+	"back-location": "bottom-left"
 };
 
 // Get current settings
