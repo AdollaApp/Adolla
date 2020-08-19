@@ -8,6 +8,8 @@ Easy to use Manga web app
 ![Manga page](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/1.png)
 ![Manga page with screenshot](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/2.png)
 ![Reader](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/3.png)
+![Reader on mobile](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/mobile_0.png)
+![Reader on mobile, dark](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/mobile_1.png)
 
 ## Setup
 
