@@ -578,14 +578,11 @@ input, textarea {
 	background: var(--badge);
 	color: var(--text-on-badge);
 }
-.quick-select details.settings {
-	position: fixed;
+.quick-select .quick-sticky {
+	position: sticky;
+	top: 0;
 	z-index: 100;
 	background: var(--body);
-	border-top: 1px solid var(--border);
-	width: 90%;
-	max-width: 320px;
-	margin-top: -1px;
 }
 .quick-select details[open] {
 	box-shadow: 0 4px 8px var(--border-dark);
@@ -614,7 +611,7 @@ input, textarea {
 	width: 90%;
 	max-width: 320px;
 	transform: translate(-50%, -50%);
-	max-height: calc(95vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+	max-height: calc(80vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
 	overflow-y: auto;
 }
 .quick-select .manga-profile-medium, .quick-select .add-padding {
@@ -660,7 +657,7 @@ input, textarea {
 }
 .quick-select .scroll {
 	max-height: 300px;
-	overflow-y: auto;
+	/* overflow-y: auto; */
 	position: relative;
 }
 .quick-select .scroll > .chapter:first-child {
@@ -679,7 +676,8 @@ input, textarea {
 .floating-button-wrapper {
 	position: sticky;
 	width: calc(100% - 20px);
-	top: env(safe-area-inset-top);
+	/* Footer height including padding, normal footer, margin */
+	top: calc(100vh - var(--footer-height) - 50px - 10px);
 	left: calc(10px + env(safe-area-inset-left));
 }
 .floating-button {
