@@ -3,12 +3,9 @@ import db from "../db";
 import { StoredData, ScraperResponse } from "../types";
 
 export default async function getMangaProgress(slug: string, where: string = "last") {
-	let entry = db.get(`reading.${slug}.${where}`).value();
-	if(entry) {
-		entry.percentage = Math.round((entry.current / entry.total) * 100);
-		return entry;
-	}
-	return null;
+	let dbString = `reading.${slug}.${where.replace(/\./g, "_")}`;
+	let entry = db.get(dbString);
+	return entry ?? null;
 }
 
 export async function setMangaProgress(manga: ScraperResponse) {
@@ -25,7 +22,10 @@ export async function setMangaProgress(manga: ScraperResponse) {
 			if(nextChapter) {
 
 				let progressLast = manga.progress.at;
-				let chapterDate = new Date(nextChapter.date).getTime();
+				let chapterDateObj = new Date(nextChapter.date);
+				chapterDateObj.setHours(23);
+				chapterDateObj.setMinutes(59);
+				let chapterDate = chapterDateObj.getTime();
 
 				manga.progress = {
 					...manga.progress,
@@ -34,7 +34,8 @@ export async function setMangaProgress(manga: ScraperResponse) {
 					chapter: nextChapter.chapter,
 					current: 0,
 					total: null, // Unknown
-					at: progressLast > chapterDate ? progressLast : chapterDate // If the chapter is newer than last read, sort by that. If not, don't.
+					at: progressLast > chapterDate ? progressLast : Date.now(), // If the chapter is newer than last read, sort by that. If not, don't.
+					new: chapterDate > progressLast
 				}	
 			}
 

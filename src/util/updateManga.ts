@@ -7,13 +7,13 @@ import config from "../config.json";
 
 export default async function updateManga(slug: string, ignoreExisting: boolean = false) {
 
-	let existing = db.get(`manga_cache.${slug}`).value();
+	let existing = db.get(`manga_cache.${slug}`);
 	if(existing && existing.savedAt > Date.now() - config.cache.duration && !ignoreExisting) return await addInfo(existing);
 
 	let data = await Mangasee.scrape(slug);
 	if(data.success) {
 		data.savedAt = Date.now(); 
-		db.set(`manga_cache.${slug}`, data).write();
+		db.set(`manga_cache.${slug}`, data);
 	} 
 	return await addInfo(data);
 }
