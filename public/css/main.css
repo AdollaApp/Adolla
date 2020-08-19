@@ -31,6 +31,10 @@
 	}
 }
 
+html, body {
+	min-height: 100vh;
+}
+
 body {
 
 	--footer-height: 0px;
@@ -493,6 +497,7 @@ input, textarea {
 	border-radius: 4px;
 	background: var(--badge);
 	animation: spin 1s infinite linear;
+	z-index: 1;
 }
 @keyframes spin {
 	0% {
@@ -555,6 +560,12 @@ input, textarea {
 	grid-gap: 10px;
 	margin-top: 5px;
 }
+.setting.boxes.small {
+	grid-template-columns: repeat(4, 1fr);
+}
+.setting.boxes:not(.small) .setting-box svg {
+	margin-bottom: 5px;
+}
 .setting-box {
 	box-sizing: border-box;
 	border: 1px solid var(--border);
@@ -565,6 +576,7 @@ input, textarea {
 }
 .setting-box svg {
 	width: 100%;
+	display: block;
 }
 .setting-box:not(.selected):hover {
 	cursor: pointer;
@@ -578,14 +590,11 @@ input, textarea {
 	background: var(--badge);
 	color: var(--text-on-badge);
 }
-.quick-select details.settings {
-	position: fixed;
+.quick-select .quick-sticky {
+	position: sticky;
+	top: 0;
 	z-index: 100;
 	background: var(--body);
-	border-top: 1px solid var(--border);
-	width: 90%;
-	max-width: 320px;
-	margin-top: -1px;
 }
 .quick-select details[open] {
 	box-shadow: 0 4px 8px var(--border-dark);
@@ -614,7 +623,7 @@ input, textarea {
 	width: 90%;
 	max-width: 320px;
 	transform: translate(-50%, -50%);
-	max-height: calc(95vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+	max-height: calc(80vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
 	overflow-y: auto;
 }
 .quick-select .manga-profile-medium, .quick-select .add-padding {
@@ -660,7 +669,7 @@ input, textarea {
 }
 .quick-select .scroll {
 	max-height: 300px;
-	overflow-y: auto;
+	/* overflow-y: auto; */
 	position: relative;
 }
 .quick-select .scroll > .chapter:first-child {
@@ -678,9 +687,18 @@ input, textarea {
 /* The oppoite of responsiveness */
 .floating-button-wrapper {
 	position: sticky;
+	display: flex;
 	width: calc(100% - 20px);
-	top: env(safe-area-inset-top);
+	/* Footer height including padding, normal footer, margin */
+	top: calc(100vh - var(--footer-height) - 50px - 10px);
 	left: calc(10px + env(safe-area-inset-left));
+}
+[data-reader-back-location="top-left"] .floating-button-wrapper, [data-reader-back-location="top-right"] .floating-button-wrapper {
+	top: env(safe-area-inset-top);
+}
+
+[data-reader-back-location="top-right"] .floating-button-wrapper, [data-reader-back-location="bottom-right"] .floating-button-wrapper {
+	justify-content: flex-end;
 }
 .floating-button {
 	display: none;
