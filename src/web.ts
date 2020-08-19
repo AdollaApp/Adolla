@@ -63,7 +63,6 @@ app.use(bodyParser.json());
 app.use("/", routers.home);
 app.use("/search", routers.search);
 app.use("/backups", routers.backups);
-// app.use("/lists", routers.lists);
 
 // Static assets
 app.use(express.static("public"));
