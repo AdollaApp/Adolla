@@ -17,8 +17,8 @@ class Backup {
 		console.info(chalk.yellowBright("[BACKUP]") + ` Making backup at ${new Date().toLocaleString("it")}`);
 		// let reading = JSON.parse(fs.readFileSync("data.json", "utf-8")).reading;
 		// let lists = JSON.parse(fs.readFileSync("data.json", "utf-8")).lists;
-		let reading = db.get("reading").value();
-		let lists = db.get("lists").value();
+		let reading = db.get("reading");
+		let lists = db.get("lists");
 		
 		let now = Date.now();
 
@@ -41,7 +41,9 @@ class Backup {
 
 		let lastBackupTime = await this.getLastBackupTime();
 		let difference = Date.now() - lastBackupTime;
+		
 		console.info(chalk.yellowBright("[BACKUP]") + " Running backup check");
+
 		if(difference > offset) {
 			this.createBackup();
 			setTimeout(() => {

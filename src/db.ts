@@ -1,14 +1,7 @@
 
 import { Database } from "./types";
+import Db from "jipdb";
 
-// Basic database setup
-import low from "lowdb";
-import FileSync from "lowdb/adapters/FileSync"
-
-const adapter = new FileSync("data.json");
-const db = low(adapter);
-
-// Defaults
 const defaults: Database = {
 	manga_cache: {},
 	reading: {},
@@ -16,6 +9,7 @@ const defaults: Database = {
 	notified: {},
 	lists: []
 }
-db.defaults(defaults).write();
+
+const db = new Db("data.json", defaults);
 
 export default db;

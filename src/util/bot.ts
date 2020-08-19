@@ -22,7 +22,7 @@ if(secretConfig?.telegram?.bot) {
 	bot = new Telebot(secretConfig.telegram.bot);
 	bot.start();
 	bot.on("text", message => {
-		console.log(`The Telegram bot has received a message from ID: ${message.from.id} (@${message.from.username})`)
+		console.info(`The Telegram bot has received a message from ID: ${message.from.id} (@${message.from.username})`)
 	});
 }
 
