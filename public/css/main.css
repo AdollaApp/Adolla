@@ -160,7 +160,7 @@ details > summary .summary-inner {
 details > summary:focus {
 	outline: 2px solid var(--badge);
 }
-details[open] > summary svg {
+details[open] > summary svg.feather-chevron-down {
 	transform: rotate(180deg);
 }
 details > summary::-webkit-details-marker {
@@ -171,6 +171,12 @@ details.settings .details-inner {
 }
 details .summary-inner .sub-title {
 	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+details .summary-inner .sub-title .badge {
+	margin-right: 10px;
 }
 details.big-summary summary {
 	padding: 10px;
