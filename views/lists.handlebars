@@ -1,10 +1,21 @@
 <div class="content-inner">
-	<h1 class="title">Lists</h1>
-	<p>Here's your lists. You can modify lists on the manga's details page.</p>
+	<div class="manga-top">
+		<div class="list-nav-wrapper">
+			<nav class="list-nav chapters">
+				{{#each lists}}
+				<a class="chapter no-badge" href="#{{this.slug}}">{{this.name}}</a>
+				{{/each}}
+			</nav>
+		</div>
+		<div class="list-core">
+			<h1 class="title">Lists</h1>
+		<p>Here's your lists. You can modify lists on the manga's details page.</p>
 
-	{{#each lists}}
-	{{> list list=this}}
-	{{/each}}
+		{{#each lists}}
+		{{> list list=this}}
+		{{/each}}
+		</div>
+	</div>
 
 </div>
 
