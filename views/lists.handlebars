@@ -3,14 +3,19 @@
 	<p>Here's your lists. You can modify lists on the manga's details page.</p>
 
 	{{#each lists}}
-	<section class="section lists">
-		<h2 class="sub-title" id="{{slug}}">{{name}}</h2>
+	<details open class="section lists big-summary">
+		<summary>
+			<div class="summary-inner">
+				<h2 class="sub-title" id="{{slug}}">{{name}}</h2>
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"> <polyline points="6 9 12 15 18 9"></polyline> </svg>
+			</div>
+		</summary>
 		<div class="manga-grid">
 			{{#each entries}}
 			{{>manga-card manga=this.data}}
 			{{/each}}
 		</div>
-	</section>
+	</details>
 	{{/each}}
 
 </div>
