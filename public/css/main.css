@@ -768,6 +768,55 @@ select {
 	color: var(--text);
 }
 
+/* Lists editor */
+.lists-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+}
+.lists-wrapper > * + * {
+	margin-left: 5px;
+}
+.lists-wrapper .badge {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	padding-left: 12px;
+	padding-right: 12px;
+	box-sizing: border-box;
+}
+.lists-wrapper .badge svg {
+	margin-right: 5px;
+	color: var(--text-secondary);
+	cursor: pointer;
+}
+.display-lists {
+	display: flex;
+}
+.display-lists > * + * {
+	margin-left: 5px;
+}
+.shake {
+	animation: 200ms shake linear infinite;
+}
+@keyframes shake {
+	0% {
+		margin-left: 5px;
+	}
+	33% {
+		margin-left: 0px;	
+	}
+	66% {
+		margin-left: 10px;
+	}
+	100% {
+		margin-left: 5px;
+	}
+}
+.input-div {
+	display: inline-block;
+}
+
+
 /* Responsiveness */
 @media screen and (max-width: 700px), (orientation: portrait) {
 	.floating-button {

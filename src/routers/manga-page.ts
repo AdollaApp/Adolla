@@ -5,7 +5,7 @@ const router = express.Router();
 import db from "../db";
 import updateManga from "../util/updateManga";
 import Mangasee from "../scrapers/mangasee";
-import { Progress, StoredData } from "../types";
+import { Progress, StoredData, List } from "../types";
 import getMangaProgress, { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";
 
@@ -17,15 +17,23 @@ router.get("/:slug", async (req, res, next) => {
 
 	if(data && data.success) {
 
-		// See if chapter is same as last chapter
+		// See if chapter is same as "last read" chapter
 		await setColors(data, param);
 
+		// Get reading
 		let reading = await getReading(4);
+
+		// Get lists for manga
+		let lists: List[] = db.get("lists").filter((l: List) => l.entries.find(m => m.slug === param));
 
 		res.render("manga", {
 			data,
 			reading,
-			currentSlug: param
+			currentSlug: param,
+			lists: lists.map(l => ({
+				slug: l.slug,
+				name: l.name
+			}))
 		});
 	} else {
 		console.error("No data found for", param);
@@ -93,6 +101,52 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 
 });
 
+router.post("/:slug/set-lists", async (req, res) => {
+	
+	interface NewList {
+		slug: string;
+		name: string;
+	}
+
+	let newLists: NewList[] = req.body.lists;
+
+	let currentLists: List[] = db.get("lists");
+
+	for(let n of newLists) {
+		// Verify existing list
+		if(!currentLists.find(l => l.slug === n.slug)) {
+			// Add new list
+			currentLists.push({
+				slug: n.slug,
+				name: n.name,
+				entries: []
+			});
+		}
+
+		// Add to list
+		let list = currentLists.find(l => l.slug === n.slug);
+		if(!list.entries.find(entry => entry.slug === req.params.slug)) {
+			list.entries.push({
+				slug: req.params.slug
+			});
+		}
+
+	}
+
+	// Remove from other list
+	let otherLists = currentLists.filter(l => !newLists.find(newList => newList.slug === l.slug));
+	for(let deleteFrom of otherLists) {
+		// Remove every entry from this list since it wasn't mentioned in the updated list
+		while(deleteFrom.entries.find(v => v.slug === req.params.slug)) {
+			deleteFrom.entries.splice(deleteFrom.entries.indexOf(deleteFrom.entries.find(v => v.slug === req.params.slug)), 1);
+		}
+	}
+
+	db.set("lists", currentLists);
+
+	res.json(req.body);
+});
+
 router.post("/:slug/:chapter/set-progress", async (req, res, next) => {
 	let chapterIndicator = req.params.chapter;
 	let slug = req.params.slug;
@@ -122,11 +176,14 @@ router.post("/:slug/:chapter/set-progress", async (req, res, next) => {
 		season,
 		chapter	
 	};
+
 	// Update db
 	db.set(`reading.${slug}.${season}-${chapter.toString().replace(/\./g, "_")}`, progressData);
 	db.set(`reading.${slug}.last`, progressData);
 
-	res.send("ok elol");
+	res.json({
+		status: 200
+	});
 });
 
 export default router;

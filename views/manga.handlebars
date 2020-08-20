@@ -1,5 +1,10 @@
 <div class="content-inner">
 	<div class="manga-content">
+
+		<script>
+			let lists = {{{stringify lists}}};
+		</script>
+
 		<div class="manga-top">
 			<div class="image">
 				<img class="poster" alt="Poster" src="{{data.constant.posterUrl}}">
@@ -15,6 +20,15 @@
 					{{#each data.constant.descriptionParagraphs}}
 					<p class="description">{{this}}</p>
 					{{/each}}
+				</div>
+				<div class="chapter-lists">
+					<h3 class="sub-title">Lists</h3>
+					<div class="lists-wrapper">
+						<div class="display-lists"></div>
+						<div class="input-div">
+							<input type="text" placeholder="Add to list">
+						</div>
+					</div>
 				</div>
 				<div class="chapter-list">
 					<h3 class="sub-title spread">
@@ -40,4 +54,5 @@
 	</div>
 </div>
 
+<script src="/js/lists-editor.js"></script>
 <script src="/js/manga.js"></script>

@@ -63,6 +63,9 @@ db.set("lists", [
 		"entries": [
 			{
 				"slug": "The-God-Of-High-School"
+			},
+			{
+				"slug": "Fire-Brigade-Of-Flames"
 			}
 		]
 	},
