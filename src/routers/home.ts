@@ -21,12 +21,16 @@ router.get("/", async (req, res) => {
 	// Set progress for popular manga
 	await Promise.all(popular.map(setMangaProgress));
 
+	// Get lists
+	let lists = await getLists();
+	
 	// Get reading
 	let reading = await getReading();
 
 	res.render("home", {
 		popular,
-		reading
+		reading,
+		lists
 	});
 });
 
