@@ -15,8 +15,6 @@ class Backup {
 
 	public async createBackup() {
 		console.info(chalk.yellowBright("[BACKUP]") + ` Making backup at ${new Date().toLocaleString("it")}`);
-		// let reading = JSON.parse(fs.readFileSync("data.json", "utf-8")).reading;
-		// let lists = JSON.parse(fs.readFileSync("data.json", "utf-8")).lists;
 		let reading = db.get("reading");
 		let lists = db.get("lists");
 		
