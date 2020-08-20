@@ -148,23 +148,33 @@ details.settings > summary {
 details.settings > summary svg {
 	display: block;
 }
-details.settings > summary .summary-inner {
+details > summary .summary-inner {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	font-weight: bold;
 }
-details.settings > summary:focus {
+details > summary:focus {
 	outline: 2px solid var(--badge);
 }
-details.settings[open] > summary svg {
+details[open] > summary svg {
 	transform: rotate(180deg);
 }
-details.settings > summary::-webkit-details-marker {
+details > summary::-webkit-details-marker {
 	display: none;
 }
 details.settings .details-inner {
 	margin-top: 10px;
+}
+details .summary-inner .sub-title {
+	margin: 0;
+}
+details.big-summary summary {
+	padding: 5px 0;
+	border-bottom: 1px solid var(--border-dark);
+}
+details .manga-grid {
+	margin-top: 20px;
 }
 
 /* Util */
