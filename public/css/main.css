@@ -170,8 +170,12 @@ details .summary-inner .sub-title {
 	margin: 0;
 }
 details.big-summary summary {
-	padding: 5px 0;
+	padding: 10px 0;
+	padding-top: 15px;
 	border-bottom: 1px solid var(--border-dark);
+	position: sticky;
+	top: env(safe-area-inset-top);
+	background: var(--body);
 }
 details .manga-grid {
 	margin-top: 20px;
