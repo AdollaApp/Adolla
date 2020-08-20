@@ -25,58 +25,7 @@ async function updateRecommended() {
 updateRecommended();
 setInterval(updateRecommended, 1e3 * 60 * 60 * 12); // Update every 12 hours
 
-// Set default lists. This is temporary
-db.set("lists", [
-	{
-		"slug": "good",
-		"name": "Good",
-		"entries": [
-			{
-				"slug": "Fire-Brigade-Of-Flames"
-			},
-			{
-				"slug": "Tower-Of-God"
-			},
-			{
-				"slug": "Shingeki-No-Kyojin"
-			},
-			{
-				"slug": "Yokohama-Kaidashi-Kikou"
-			},
-			{
-				"slug": "The-God-Of-High-School"
-			}
-		]
-	},
-	{
-		"slug": "bad",
-		"name": "Kinda lame",
-		"entries": [
-			{
-				"slug": "Dr-Stone"
-			}
-		]
-	},
-	{
-		"slug": "might-read",
-		"name": "Might read",
-		"entries": [
-			{
-				"slug": "The-God-Of-High-School"
-			},
-			{
-				"slug": "Fire-Brigade-Of-Flames"
-			}
-		]
-	},
-	{
-		"slug": "empty-list", 
-		"name": "This is an empty lists",
-		"entries": []
-	}
-]);
-
-
+// Main page!
 router.get("/", async (req, res) => {
 	
 	// Set lists
