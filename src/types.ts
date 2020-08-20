@@ -134,6 +134,7 @@ export interface DirectoryItem {
 export interface List {
 	name: string;
 	slug: string;
+	last?: number;
 	entries: {
 		slug: string;
 		data?: ScraperResponse
