@@ -186,6 +186,7 @@ details.big-summary summary {
 	position: sticky;
 	top: env(safe-area-inset-top);
 	background: var(--body);
+	z-index: 20;
 }
 details .manga-grid {
 	margin-top: 20px;
@@ -775,6 +776,12 @@ select {
 	font-size: 1em;
 	background: var(--body-offset);
 	color: var(--text);
+}
+
+/* Lists page */
+.list-nav {
+	position: sticky;
+	top: 10px;
 }
 
 /* Lists editor */
