@@ -3,6 +3,7 @@
 	<p>Here's your lists. You can modify lists on the manga's details page.</p>
 
 	{{#each lists}}
+	{{#if entries}}
 	<details open class="section lists big-summary">
 		<summary>
 			<div class="summary-inner">
@@ -16,6 +17,7 @@
 			{{/each}}
 		</div>
 	</details>
+	{{/if}}
 	{{/each}}
 
 </div>

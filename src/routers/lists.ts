@@ -42,6 +42,11 @@ const lists = [
 				"slug": "The-God-Of-High-School"
 			}
 		]
+	},
+	{
+		"slug": "empty-list", 
+		"name": "This is an empty lists",
+		"entries": []
 	}
 ];
 
