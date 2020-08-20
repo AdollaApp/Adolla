@@ -4,7 +4,7 @@ import updateManga from "./updateManga";
 import Mangasee from "../scrapers/mangasee";
 import db from "../db";
 import getReading from "./getReading";
-import { Reading, Progress } from "../types";
+import { Progress } from "../types";
 import Bot from "./bot";
 import chalk from "chalk";
 
@@ -32,8 +32,10 @@ class Updater {
 		let reading = await getReading();
 		
 		await Promise.all(reading.map(obj => obj.success ? obj.constant.slug : null).filter(Boolean).map(async slug => {
+			
 			// Update manga and store new value in cache + variable
 			let data = await updateManga(slug, true);
+			
 			if(data.success) {
 				// Now get a potential next chapter
 				let chapters = data.data.chapters;
