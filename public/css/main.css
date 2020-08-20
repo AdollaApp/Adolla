@@ -755,8 +755,11 @@ select {
 
 /* Responsiveness */
 @media screen and (max-width: 700px), (orientation: portrait) {
-	[data-reader-reader-direction="vertical"] .floating-button {
+	.floating-button {
 		display: flex;
+	}
+	[data-reader-reader-direction="horizontal"] .floating-button {
+		margin-bottom: -100%;
 	}
 	[data-reader-reader-direction="vertical"] .pages .pageImg:first-child {
 		/* Deal with tricky back button margins */
