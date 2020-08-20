@@ -129,6 +129,7 @@ router.post("/:slug/set-lists", async (req, res) => {
 			list.entries.push({
 				slug: req.params.slug
 			});
+			list.last = Date.now();
 		}
 
 	}
@@ -139,10 +140,18 @@ router.post("/:slug/set-lists", async (req, res) => {
 		// Remove every entry from this list since it wasn't mentioned in the updated list
 		while(deleteFrom.entries.find(v => v.slug === req.params.slug)) {
 			deleteFrom.entries.splice(deleteFrom.entries.indexOf(deleteFrom.entries.find(v => v.slug === req.params.slug)), 1);
+			deleteFrom.last = Date.now();
 		}
 	}
 
-	db.set("lists", currentLists.filter(list => list.entries.length > 0));
+	// Remove empty lists
+	currentLists = currentLists.filter(list => list.entries.length > 0);
+
+	// Sort lists
+	currentLists = currentLists.sort((a, b) => (b.last ?? -1) - (a.last ?? -1));
+	
+	// Store new value
+	db.set("lists", currentLists);
 
 	res.json(req.body);
 });
