@@ -12,7 +12,10 @@ async function updateRecommended() {
 
 	const suggestionsUrl = "https://gist.githubusercontent.com/JipFr/17fabda0f0515965cbe1c73b75b7ed71/raw";
 	let recommended = await (await fetch(suggestionsUrl)).json();
-	recommendedLists = recommended;
+	recommendedLists = recommended.map(recommendedItem => {
+		recommendedItem.byCreator = true;
+		return recommendedItem;
+	});
 
 	console.info(chalk.green("[RECOMMENDATIONS]") + ` Updated recommendations`);
 
