@@ -89,8 +89,11 @@ body::before {
 	max-width: 1000px;
 	margin: 80px 0;
 }
-.content-inner .section + .section {
+.content-inner .section:not(.decreased-margin) + .section {
 	margin: 50px 0;
+}
+.content-inner .section.decreased-margin + .section {
+	margin: 20px 0;
 }
 
 /* Sidebar */
