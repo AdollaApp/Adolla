@@ -142,7 +142,7 @@ router.post("/:slug/set-lists", async (req, res) => {
 		}
 	}
 
-	db.set("lists", currentLists);
+	db.set("lists", currentLists.filter(list => list.entries.length > 0));
 
 	res.json(req.body);
 });
