@@ -68,11 +68,12 @@ class Updater {
 							return;
 						}
 
-						// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
-						console.info(chalk.green("[NOTIFS]") + ` New chapter found for ${data.constant.title}, notifying user`);
-
 						let bot = Bot.get();
 						if(bot) {
+
+							// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
+							console.info(chalk.green("[NOTIFS]") + ` New chapter found for ${data.constant.title}, notifying user`);
+
 							let msg = `New chapter for *${data.constant.title}*!`;
 							
 							let host = db.get("other.host");
@@ -80,7 +81,10 @@ class Updater {
 							
 							Bot.send(`${msg}\n${urlMsg}`);
 							db.set(dbString, true);
-						} 
+						} else {
+							// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
+							console.info(chalk.red("[NOTIFS]") + ` New chapter found for ${data.constant.title}, not notifying user since bot wasn't configured`);
+						}
 
 					}
 				}
