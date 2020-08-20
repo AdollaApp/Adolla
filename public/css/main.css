@@ -460,6 +460,15 @@ input, textarea {
 .chapters .chapter + .chapter {
 	border-top: 1px solid var(--border);
 }
+.chapter .chapter-icon svg {
+	display: inline-block;
+	margin-right: 10px;
+	color: var(--badge);
+}
+.chapter .do-center {
+	display: flex;
+	align-items: center;
+}
 
 /* Chapter navigation */
 .chapter-navigation {
