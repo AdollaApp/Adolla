@@ -42,6 +42,9 @@ db.set("lists", [
 			},
 			{
 				"slug": "Yokohama-Kaidashi-Kikou"
+			},
+			{
+				"slug": "The-God-Of-High-School"
 			}
 		]
 	},
@@ -82,7 +85,7 @@ router.get("/", async (req, res) => {
 		for(let entry of list.entries) {
 			entry.data = await updateManga(entry.slug);
 		}
-		
+
 	}
 	
 	// Get reading 
