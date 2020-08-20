@@ -773,9 +773,6 @@ select {
 	display: flex;
 	flex-wrap: wrap;
 }
-.lists-wrapper > * + * {
-	margin-left: 5px;
-}
 .lists-wrapper .badge {
 	display: flex;
 	align-items: center;
@@ -783,6 +780,7 @@ select {
 	padding-left: 12px;
 	padding-right: 12px;
 	box-sizing: border-box;
+	margin-right: 5px;
 }
 .lists-wrapper .badge svg {
 	margin-right: 5px;
@@ -791,9 +789,6 @@ select {
 }
 .display-lists {
 	display: flex;
-}
-.display-lists > * + * {
-	margin-left: 5px;
 }
 .shake {
 	animation: 200ms shake linear infinite;
