@@ -4,10 +4,10 @@
 
 	{{#each lists}}
 	{{#if entries}}
-	<details open class="section lists big-summary">
+	<details open id="{{slug}}" class="section lists big-summary">
 		<summary>
 			<div class="summary-inner">
-				<h2 class="sub-title" id="{{slug}}">{{name}}</h2>
+				<h2 class="sub-title">{{name}}</h2>
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"> <polyline points="6 9 12 15 18 9"></polyline> </svg>
 			</div>
 		</summary>
@@ -22,4 +22,4 @@
 
 </div>
 
-<script src="/js/backups.js"></script>
+<script src="/js/lists.js"></script>
