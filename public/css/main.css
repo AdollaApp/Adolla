@@ -790,7 +790,7 @@ select {
 /* Lists page */
 .list-nav {
 	position: sticky;
-	top: 10px;
+	top: 55px;
 }
 
 /* Lists editor */
