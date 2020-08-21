@@ -232,6 +232,21 @@ details .manga-grid {
 	--text-secondary: var(--text-on-badge-secondary);
 	/* I don't like using !important, but there's no better way to do priority here */
 }
+.secondary-badge {
+	box-sizing: border-box;
+	padding: 5px 10px;
+	display: flex;
+	align-items: center;
+	color: var(--text);
+	background: var(--body-offset);
+	border: 1px solid rgba(0, 0, 0, 0.03);
+	border-radius: 4px;
+	margin-right: 5px;
+}
+.secondary-badge svg {
+	display: block;
+	margin-right: 5px;
+}
 label ~ input {
 	margin-top: 5px;
 }
@@ -359,7 +374,6 @@ input, textarea {
 }
 /* Small manga card */
 .small-manga {
-	padding: 0 5px;
 	border-radius: 4px;
 	display: grid;
 	grid-template-columns: auto 1fr;
@@ -369,6 +383,7 @@ input, textarea {
 	text-decoration: none;
 }
 .small-manga:not(.no-margin) {
+	padding: 0 5px;
 	margin-left: -5px;
 }
 .small-manga.badge-background {
@@ -872,10 +887,13 @@ select {
 	box-sizing: border-box;
 	margin-right: 5px;
 }
-.lists-wrapper .badge svg {
+.lists-wrapper svg {
 	margin-right: 5px;
 	color: var(--text-secondary);
 	cursor: pointer;
+}
+.lists-wrapper .input-div input {
+	height: 100%;
 }
 .display-lists {
 	display: flex;
