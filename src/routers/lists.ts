@@ -36,7 +36,7 @@ router.post("/set-home", async (req, res) => {
 	if(list) list.showOnHome = value;
 	
 	// Store lists in database
-	db.set("lists", lists);
+	db.set("lists", lists.filter(l => !l.byCreator));
 
 	res.json({
 		status: 200
