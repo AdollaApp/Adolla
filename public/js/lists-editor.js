@@ -1,3 +1,7 @@
+
+const clean = str => str.replace(/[\W_]+/g," ").trim().toLowerCase().replace(/ /g, "-");
+let suggestions = [];
+
 function updateLists() {
 	
 	const wrapper = document.querySelector(".display-lists");
@@ -26,6 +30,7 @@ function updateLists() {
 		wrapper.appendChild(span);
 	}
 
+	updateSuggestions();
 
 }
 
@@ -33,38 +38,24 @@ function initLists() {
 
 	document.querySelector(".lists-wrapper input").addEventListener("keyup", evt => {
 		if(evt.key === "Enter" && evt.currentTarget.value.length > 0) { // Add this to the lists
-			
-			// Get current value
-			let input = evt.currentTarget.value;
-			let slug = input.replace(/[\W_]+/g," ").trim().toLowerCase().replace(/ /g, "-");
-
-			// Prevent duplicates
-			let current = lists.find(v => v.slug === slug);
-			if(current) {
-				let input = evt.currentTarget;
-				input.classList.add("shake");
-				setTimeout(() => {
-					input.classList.remove("shake");
-				}, 300);
-				return;
-			}
-
-			// Add to list
-			lists.push({
-				name: input,
-				slug
-			});
-			
-			// Now store the updated list
-			// TODO: ^ yep, that
-			setLists();
+			addList(evt.currentTarget.value);
 
 			// Reset input
 			evt.currentTarget.value = "";
-
-			// Render updated list
-			updateLists();
 		}
+
+		updateSuggestions();
+
+	});
+
+	let input = document.querySelector(".lists-wrapper input");
+	input.addEventListener("focus", evt => {
+		input.classList.add("show-suggestions");
+	});
+	input.addEventListener("blur", evt => {
+		setTimeout(() => {
+			input.classList.remove("show-suggestions");
+		}, 100);
 	});
 
 	updateLists();
@@ -81,4 +72,75 @@ async function setLists() {
 		},
 		body: JSON.stringify({ lists })
 	});
+}
+
+// Add list
+function addList(input) {
+	// Get current value
+	let slug = clean(input);
+
+	// Prevent duplicates
+	let current = lists.find(v => v.slug === slug);
+	if(current) {
+		let input = evt.currentTarget;
+		input.classList.add("shake");
+		setTimeout(() => {
+			input.classList.remove("shake");
+		}, 300);
+		return;
+	}
+
+	// Add to list
+	lists.push({
+		name: input,
+		slug
+	});
+	
+	// Now store the updated list
+	// TODO: ^ yep, that
+	setLists();
+
+	// Render updated list
+	updateLists();
+
+	// Update suggestions
+	updateSuggestions();
+}
+
+// Update suggestions in DOM
+function updateSuggestions() {
+	
+	// Get all lists the manga isn't already in
+	suggestions = allLists.filter(v => !lists.find(e => e.slug === v.slug))
+	
+	// Sort by current matches compared to input
+	let currentValue = clean(document.querySelector(".chapter-lists .input-div input").value);
+	suggestions = suggestions.filter(suggestionList => suggestionList.slug.includes(currentValue));
+
+	// Add nodes
+	let wrapper = document.querySelector(".suggestions");
+	wrapper.innerHTML = "";
+
+	// Add each suggestion
+	for(let list of suggestions) {
+
+		// Create node
+		let node = document.createElement("div");
+
+		// Add classes
+		node.classList.add("suggestion");
+		node.setAttribute("data-list-slug", list.slug);
+
+		// Set name and ID
+		node.innerText = list.name;
+
+		// Add to "suggestions" div
+		wrapper.appendChild(node);
+
+		// Add "add" functionality
+		node.addEventListener("click", () => {
+			addList(list.name);
+		});
+
+	}
 }
