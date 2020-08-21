@@ -161,6 +161,13 @@ details > summary .summary-inner {
 details > summary:focus {
 	outline: 2px solid var(--badge);
 }
+details .icons {
+	display: flex;
+	flex-wrap: nowrap;
+}
+details .icons > * + * {
+	margin-left: 10px;
+}
 details[open] > summary svg.feather-chevron-down {
 	transform: rotate(180deg);
 }
@@ -206,6 +213,29 @@ details .manga-grid {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+}
+.list-type-picker {
+	display: none;
+	flex-wrap: nowrap;
+}
+.list-type-picker > * + * {
+	margin-left: 5px;
+}
+.list-type-option {
+	padding: 5px;
+	border-radius: 4px;
+	background: var(--border);
+	color: var(--text-secondary);
+	cursor: pointer;
+}
+[data-list-type="list"] .list-type-option.set-list-list, [data-list-type="grid"] .list-type-option.set-list-grid {
+	background: var(--badge);
+	color: var(--text-on-badge);
+}
+.list-type-option svg {
+	width: 20px;
+	height: 20px;
+	display: block;
 }
 .anchor {
 	color: var(--badge);
@@ -995,7 +1025,7 @@ select {
 		display: block;
 	}
 	/* Sub title spread */
-	.sub-title.spread {
+	.sub-title.spread:not(.do-spread) {
 		display: block;
 	}
 	.sub-title.spread > select {
@@ -1005,22 +1035,39 @@ select {
 @media screen and (max-width: 500px) {
 	/* Manga grid */
 	.manga-grid {
-		grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
 		grid-gap: 10px;
 	}
+	[data-list-type="list"] .manga-grid {
+		grid-template-columns: 100%;
+	}
+	[data-list-type="grid"] .manga-grid {
+		grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+	}
+
+	/* Picker */
+	.list-type-picker {
+		display: flex;
+	}
+
 	/* Cards */
 	.manga-card {
-		grid-template-columns: 1fr;
 		grid-template-rows: auto;
 		align-items: center;
 	}
-	.poster-bottom {
+	[data-list-type="grid"] .manga-card {
+		grid-template-columns: 1fr;
+	}
+	[data-list-type="list"] .manga-card {
+		grid-template-columns: 100px 1fr;
+	}
+
+	[data-list-type="grid"] .poster-bottom {
 		display: block;
 	}
-	.manga-card .poster {
+	[data-list-type="list"] .manga-card .manga-meta {
 		height: auto;
 	}
-	.manga-card .manga-meta {
+	[data-list-type="grid"] .manga-card .manga-meta {
 		display: none;
 	}
 }

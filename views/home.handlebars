@@ -3,8 +3,8 @@
 	<p>Lorem ipsum dolor sit amet consectetur adipiscing elit ad varius habitant dis, suspendisse aliquam leo congue gravida semper non ante taciti sem commodo senectus, etiam integer lacinia donec pharetra eleifend morbi mus vulputate cras.</p>
 
 	{{#if reading}}
-	<section class="section continue-reading">
-		<h2 class="sub-title">Continue reading</h2>
+	<section class="section continue-reading" data-list-id="continue-reading">
+		<h2 class="sub-title spread do-spread"><span>Continue reading</span> {{> list-type }}</h2>
 		<div class="manga-grid">
 			
 			{{#each reading}}
@@ -17,8 +17,8 @@
 	{{#each lists}}
 	{{> list list=this}}
 	{{/each}}
-	<section class="section popular">
-		<h2 class="sub-title">Popular right now</h2>
+	<section class="section popular" data-list-id="popular">
+		<h2 class="sub-title spread do-spread"><span>Popular right now</span> {{> list-type }}</h2>
 		<div class="manga-grid">
 		{{#each popular}}
 			{{>manga-card manga=this}}
@@ -29,3 +29,4 @@
 </div>
 
 <script src="/js/lists.js"></script>
+<script src="/js/list-type.js"></script>
