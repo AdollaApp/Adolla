@@ -928,7 +928,7 @@ select {
 	margin-right: 5px;
 }
 .lists-wrapper .input-div input {
-	height: 100%;
+	height: calc(100% - 2px);
 }
 .display-lists {
 	display: flex;
