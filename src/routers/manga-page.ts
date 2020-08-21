@@ -46,7 +46,7 @@ router.get("/:slug", async (req, res, next) => {
 			reading,
 			currentSlug: param,
 			lists: lists.map(convert),
-			allLists: allLists.map(convert)
+			allLists: allLists.filter(l => l.byCreator).map(convert)
 		});
 	} else {
 		console.error("No data found for", param);
@@ -160,7 +160,7 @@ router.post("/:slug/set-lists", async (req, res) => {
 	currentLists = currentLists.sort((a, b) => (b.last ?? -1) - (a.last ?? -1));
 	
 	// Store new value
-	db.set("lists", currentLists);
+	db.set("lists", currentLists.filter(l => !l.byCreator));
 
 	res.json(req.body);
 });
