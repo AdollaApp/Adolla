@@ -163,6 +163,7 @@ details > summary:focus {
 }
 details .icons {
 	display: flex;
+	align-items: center;
 	flex-wrap: nowrap;
 }
 details .icons > * + * {
@@ -188,7 +189,7 @@ details .summary-inner .sub-title .badge {
 	margin-right: 10px;
 }
 details.big-summary summary {
-	padding: 10px;
+	padding: 10px 5px;
 	padding-top: 15px;
 	margin: 0 -5px;
 	border-bottom: 1px solid var(--border-dark);
