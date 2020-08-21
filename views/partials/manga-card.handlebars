@@ -1,7 +1,7 @@
 <div class="manga-card">
 	<a class="to-manga" href="
 	{{#if toChapter}}
-	{{genLink2 manga.constant.slug manga.progress.season manga.progress.chapter manga.progress.current}}
+	{{genLink2 manga.constant.slug manga.progress.season manga.progress.chapter }}
 	{{else}}
 	{{genLink2 manga.constant.slug}}
 	{{/if}}
@@ -37,7 +37,7 @@
 
 				<a class="to-manga" href="
 				{{#if toChapter}}
-					{{genLink2 manga.constant.slug manga.progress.season manga.progress.chapter manga.progress.current}}
+					{{genLink2 manga.constant.slug manga.progress.season manga.progress.chapter }}
 				{{else}}
 					{{genLink2 manga.constant.slug}}
 				{{/if}}

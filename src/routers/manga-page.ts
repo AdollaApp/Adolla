@@ -20,6 +20,9 @@ router.get("/:slug", async (req, res, next) => {
 		// See if chapter is same as "last read" chapter
 		await setColors(data, param);
 
+		// Set progress
+		await setMangaProgress(data);
+
 		// Get reading
 		let reading = await getReading(4);
 
