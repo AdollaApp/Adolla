@@ -444,6 +444,10 @@ input, textarea {
 	border-top-right-radius: 100px;
 	border-bottom-right-radius: 100px;
 }
+.progress-bar-wrapper .progress-bar-line[data-width="100%"] {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
 
 /* Manga layout */
 .manga-top {
