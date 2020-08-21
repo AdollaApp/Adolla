@@ -568,7 +568,7 @@ input, textarea {
 	color: inherit;
 }
 .chapters .chapter + .chapter {
-	border-top: 1px solid var(--border);
+	border-top: 1px solid var(--border-dark);
 }
 .chapter .chapter-icon svg {
 	display: inline-block;
