@@ -450,6 +450,7 @@ input, textarea {
 	background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
 	color: white;
 	padding-top: 20px;
+	display: none;
 }
 .poster-img .poster-inner .poster-text {
 	padding: 8px 5px;
@@ -1012,6 +1013,9 @@ select {
 		grid-template-columns: 1fr;
 		grid-template-rows: auto;
 		align-items: center;
+	}
+	.poster-bottom {
+		display: block;
 	}
 	.manga-card .poster {
 		height: auto;
