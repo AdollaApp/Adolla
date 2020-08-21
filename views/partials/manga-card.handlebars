@@ -10,9 +10,12 @@
 		<div class="poster-img" style="background-color: var(--border); background-image: url('{{manga.constant.posterUrl}}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 			{{#if toChapter}}
 			<div class="poster-inner">
-				<div class="progress-bar-wrapper">
-					<div class="progress-bar-line" style="width: {{manga.progress.percentage}}%">
-
+				<div class="poster-bottom">
+					<div class="poster-text">
+						{{getChapterName manga.progress manga}}
+					</div>
+					<div class="progress-bar-wrapper">
+						<div class="progress-bar-line" style="width: {{manga.progress.percentage}}%"></div>
 					</div>
 				</div>
 			</div>

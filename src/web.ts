@@ -6,7 +6,7 @@ import bodyParser from "body-parser";
 
 // Import custom modules
 import routers from "./routers"
-import { StoredData, Chapter, Progress } from "./types";
+import { StoredData, Chapter, Progress, ScraperResponse } from "./types";
 
 const app = express();
 
@@ -46,6 +46,11 @@ app.engine("handlebars", handlebars({
 		},
 		ifDev(options) {
 			return !!process.env.dev ? options.fn(this) : options.inverse(this);
+		},
+		getChapterName(progress, manga: StoredData) {
+			let { season, chapter } = progress;
+			let current = manga.data.chapters.find(v => v.season === season && v.chapter === chapter);
+			return current ? current.label : "Unknown chapter";
 		}
 	}
 }));
