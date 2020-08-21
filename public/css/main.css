@@ -928,6 +928,7 @@ select {
 }
 .display-lists {
 	display: flex;
+	flex-wrap: wrap;
 }
 .shake {
 	animation: 200ms shake linear infinite;
@@ -948,8 +949,43 @@ select {
 }
 .input-div {
 	display: inline-block;
+	position: relative;
+	z-index: 1;
+}
+.input-div .suggestions {
+	width: 100%;
+	box-sizing: border-box;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	padding: 5px 0;
+	background: var(--body);
+	border: 1px solid var(--border);
+	border-radius: 4px;
+	max-height: 200px;
+	overflow-y: auto;
+	display: none;
+}
+.input-div input.show-suggestions ~ .suggestions:not(:empty) {
+	display: flex;
+	flex-wrap: wrap;
 }
 
+/* Suggestions */
+.suggestions {
+	box-shadow: 0 3px 5px var(--border);
+}
+.suggestions .suggestion {
+	width: 100%;
+	padding: 8px 5px;
+}
+.suggestions .suggestion:hover {
+	background: var(--border);
+	cursor: pointer;
+}
+.suggestions > * + * {
+	border-top: 1px solid var(--border);
+}
 
 /* Responsiveness */
 @media screen and (max-width: 700px), (orientation: portrait) {

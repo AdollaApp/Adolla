@@ -9,6 +9,11 @@ import { Progress, StoredData, List } from "../types";
 import getMangaProgress, { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";
 
+interface NewList {
+	slug: string;
+	name: string;
+}
+
 router.get("/:slug", async (req, res, next) => {
 
 	let param = req.params.slug;
@@ -27,16 +32,20 @@ router.get("/:slug", async (req, res, next) => {
 		let reading = await getReading(4);
 
 		// Get lists for manga
-		let lists: List[] = db.get("lists").filter((l: List) => l.entries.find(m => m.slug === param));
+		let allLists: List[] = db.get("lists")
+		let lists = allLists.filter(l => l.entries.find(m => m.slug === param));
+
+		const convert = ((l: List) => ({
+			slug: l.slug,
+			name: l.name
+		}));
 
 		res.render("manga", {
 			data,
 			reading,
 			currentSlug: param,
-			lists: lists.map(l => ({
-				slug: l.slug,
-				name: l.name
-			}))
+			lists: lists.map(convert),
+			allLists: allLists.map(convert)
 		});
 	} else {
 		console.error("No data found for", param);
@@ -105,11 +114,6 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 });
 
 router.post("/:slug/set-lists", async (req, res) => {
-	
-	interface NewList {
-		slug: string;
-		name: string;
-	}
 
 	let newLists: NewList[] = req.body.lists;
 
