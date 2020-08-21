@@ -19,7 +19,7 @@ function setCollapsedElements() {
 
 	// Close elements
 	for(let slug of closedLists) {
-		let el = document.querySelector(`#${slug}`);
+		let el = document.querySelector(`[id="${slug}"]`);
 		if(el) el.removeAttribute("open");
 	}
 

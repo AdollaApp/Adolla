@@ -2,6 +2,7 @@
 import fs from "fs";
 import chalk from "chalk";
 import db from "./db";
+import { List } from "./types";
 
 class Backup {
 
@@ -16,9 +17,16 @@ class Backup {
 	public async createBackup() {
 		console.info(chalk.yellowBright("[BACKUP]") + ` Making backup at ${new Date().toLocaleString("it")}`);
 		let reading = db.get("reading");
-		let lists = db.get("lists");
+		let lists: List[] = db.get("lists");
 		
 		let now = Date.now();
+
+		// Remove stuff
+		lists.forEach(l => {
+			for(let entry of l.entries) {
+				delete entry.data;
+			}
+		});
 
 		let backupJson = {
 			backupAt: now,

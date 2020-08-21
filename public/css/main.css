@@ -182,6 +182,7 @@ details .summary-inner .sub-title {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
+    word-break: break-word;
 }
 details .summary-inner .sub-title .badge {
 	margin-right: 10px;
@@ -228,7 +229,7 @@ details .manga-grid {
 	color: var(--text-secondary);
 	cursor: pointer;
 }
-[data-list-type="list"] .list-type-option.set-list-list, [data-list-type="grid"] .list-type-option.set-list-grid {
+[data-list-type="list"] .list-type-option.set-list-list, [data-list-type="grid"] .list-type-option.set-list-grid, .list-type-option.is-selected {
 	background: var(--badge);
 	color: var(--text-on-badge);
 }

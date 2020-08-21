@@ -20,8 +20,9 @@ function updateListTypes() {
 function initListTypes() {
 
 	document.querySelectorAll("[data-list-id]").forEach(section => {
+		
 		let listId = section.dataset.listId;
-		console.log(section);
+		
 		section.querySelector(".set-list-list").addEventListener("click", evt => {
 			evt.preventDefault();
 			listTypes[listId] = "list";
@@ -32,6 +33,33 @@ function initListTypes() {
 			listTypes[listId] = "grid";
 			updateListTypes();
 		});
+	});
+
+	// Toggle "show on home"
+	document.querySelectorAll(".toggle-home").forEach(homeButton => {
+		homeButton.addEventListener("click", evt => {
+
+			evt.preventDefault();
+
+			let listId = homeButton.closest("[id]").id;
+			homeButton.classList.toggle("is-selected");
+			let showOnHome = homeButton.classList.contains("is-selected");
+			
+			let url = location.href;
+			if(!url.endsWith("/")) url += "/";
+
+			fetch(`${url}set-home`, {
+				method: "POST",
+				headers: {
+					"content-type": "application/json"
+				},
+				body: JSON.stringify({
+					listId,
+					value: showOnHome
+				})
+			});
+
+		})
 	});
 
 	updateListTypes();
