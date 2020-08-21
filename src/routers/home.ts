@@ -23,6 +23,7 @@ router.get("/", async (req, res) => {
 
 	// Get lists
 	let lists = await getLists();
+	lists = lists.filter(list => list.showOnHome);
 	
 	// Get reading
 	let reading = await getReading();

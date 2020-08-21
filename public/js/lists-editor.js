@@ -37,7 +37,7 @@ function updateLists() {
 function initLists() {
 
 	document.querySelector(".lists-wrapper input").addEventListener("keyup", evt => {
-		if(evt.key === "Enter" && evt.currentTarget.value.length > 0) { // Add this to the lists
+		if(evt.key === "Enter" && evt.currentTarget.value.length > 0 && clean(evt.currentTarget.value).length > 0) { // Add this to the lists
 			addList(evt.currentTarget.value);
 
 			// Reset input
@@ -97,7 +97,6 @@ function addList(input) {
 	});
 	
 	// Now store the updated list
-	// TODO: ^ yep, that
 	setLists();
 
 	// Render updated list

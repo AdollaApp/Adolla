@@ -8,6 +8,7 @@ import Mangasee from "../scrapers/mangasee";
 import { Progress, StoredData, List } from "../types";
 import getMangaProgress, { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";
+import { getLists } from "../util/lists";
 
 interface NewList {
 	slug: string;
@@ -32,7 +33,7 @@ router.get("/:slug", async (req, res, next) => {
 		let reading = await getReading(4);
 
 		// Get lists for manga
-		let allLists: List[] = db.get("lists")
+		let allLists = await getLists();
 		let lists = allLists.filter(l => l.entries.find(m => m.slug === param));
 
 		const convert = ((l: List) => ({
@@ -117,7 +118,7 @@ router.post("/:slug/set-lists", async (req, res) => {
 
 	let newLists: NewList[] = req.body.lists;
 
-	let currentLists: List[] = db.get("lists");
+	let currentLists: List[] = await getLists();
 
 	for(let n of newLists) {
 		// Verify existing list
@@ -126,7 +127,8 @@ router.post("/:slug/set-lists", async (req, res) => {
 			currentLists.push({
 				slug: n.slug,
 				name: n.name,
-				entries: []
+				entries: [],
+				showOnHome: false
 			});
 		}
 
