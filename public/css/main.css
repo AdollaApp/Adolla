@@ -24,7 +24,7 @@
 		--text-secondary: #a1a1a1;
 
 		--border: #555555;
-		--border-dark: #727272;
+		--border-dark: #2b2b2b;
 
 		--header-background: #0e0e0e;
 
@@ -272,7 +272,6 @@ details .manga-grid {
 	background: var(--body-offset);
 	border: 1px solid rgba(0, 0, 0, 0.03);
 	border-radius: 4px;
-	margin-right: 5px;
 }
 .secondary-badge svg {
 	display: block;
@@ -923,6 +922,10 @@ select {
 	margin-right: 5px;
 	color: var(--text-secondary);
 	cursor: pointer;
+}
+.lists-wrapper .input-div input, .lists-wrapper .secondary-badge {
+	margin: 2px 0;
+	margin-right: 5px;
 }
 .lists-wrapper .input-div input {
 	height: 100%;
