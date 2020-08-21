@@ -46,7 +46,7 @@ router.get("/:slug", async (req, res, next) => {
 			reading,
 			currentSlug: param,
 			lists: lists.map(convert),
-			allLists: allLists.filter(l => l.byCreator).map(convert)
+			allLists: allLists.filter(l => !l.byCreator).map(convert)
 		});
 	} else {
 		console.error("No data found for", param);
@@ -162,7 +162,9 @@ router.post("/:slug/set-lists", async (req, res) => {
 	// Store new value
 	db.set("lists", currentLists.filter(l => !l.byCreator));
 
-	res.json(req.body);
+	res.json({
+		status: 200
+	});
 });
 
 router.post("/:slug/:chapter/set-progress", async (req, res, next) => {
