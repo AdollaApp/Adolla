@@ -43,5 +43,7 @@ export async function getLists(): Promise<List[]> {
 		}
 
 	}
+	
+	// Return both database items and creator's suggestions
 	return updatedLists;
 }
