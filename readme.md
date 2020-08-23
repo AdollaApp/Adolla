@@ -5,13 +5,13 @@ Easy to use web app to read Manga.
 ## Screenshots
 
 ![Image of the home page](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/0.png)
-![Manga page](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/1.png)
-![Manga page with screenshot](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/2.png)
-![Reader](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/3.png)
-![Reader](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/4.png)
-![Reader](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/5.png)
-![Reader on mobile](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/mobile_0.png)
-![Reader on mobile, dark](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/mobile_1.png)
+![Lists page](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/1.png)
+![Backups page](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/2.png)
+![Manga page](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/3.png)
+![Reader page](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/4.png)
+![Reader with overlay](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/5.png)
+![Mobile](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/mobile_0.png)
+![Mobile, dark](https://raw.githubusercontent.com/JipFr/manga-5/dev/screenshot/mobile_1.png)
 
 ## Setup
 
