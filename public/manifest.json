@@ -8,11 +8,11 @@
 	"background_color": "#ffffff",
 	"icons": [
 		{
-			"sizes": "100x100",
+			"sizes": "200x200",
 			"src": "/icon.png"
 		},
 		{
-			"sizes": "500x500",
+			"sizes": "200x200",
 			"src": "/apple-touch-icon.png"
 		}
 	]
