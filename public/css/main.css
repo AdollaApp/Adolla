@@ -415,6 +415,7 @@ input, textarea {
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
 	overflow-y: hidden;
+	word-break: break-word;
 }
 
 /* List of small manga */
