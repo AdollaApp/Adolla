@@ -862,10 +862,9 @@ input, textarea {
 [data-reader-back-location="top-right"] .floating-button-wrapper, [data-reader-back-location="bottom-right"] .floating-button-wrapper {
 	justify-content: flex-end;
 }
-.floating-button {
+.floating-button-wrapper > * {
 	display: none;
-	width: 36px;
-	height: 36px;
+	min-height: 36px;
 	box-sizing: border-box;
 	justify-content: center;
 	align-items: center;
@@ -873,6 +872,15 @@ input, textarea {
 	border-radius: 4px;
 	border: 2px solid var(--border);
 	margin: 10px 0;
+}
+.floating-button-wrapper .do-padding {
+	padding: 0 10px;
+}
+.floating-button-wrapper > * + * {
+	margin-left: 5px;
+}
+.floating-button {
+	width: 36px;
 }
 .floating-button svg {
 	display: block;
@@ -1008,12 +1016,24 @@ select {
 	border-top: 1px solid var(--border);
 }
 
+/* Toggle on tap */
+.toggle-on-tap {
+	transition: opacity 300ms;
+	opacity: 0;
+	pointer-events: none;
+}
+.toggle-on-tap.tapped {
+	opacity: 1;
+	pointer-events: initial;
+}
+
 /* Responsiveness */
 @media screen and (max-width: 700px), (orientation: portrait) {
-	.floating-button {
+	.floating-button-wrapper > * {
 		display: flex;
+		color: var(--text);
 	}
-	[data-reader-reader-direction="horizontal"] .floating-button {
+	[data-reader-reader-direction="horizontal"] .floating-button-wrapper {
 		margin-bottom: -100%;
 	}
 	[data-reader-reader-direction="vertical"] .pages .pageImg:first-child {

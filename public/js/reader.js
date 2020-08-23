@@ -257,3 +257,10 @@ document.addEventListener("keydown", evt => {
 	}
 
 });
+
+// "Tap to toggle" elements
+document.querySelectorAll(".pageImg").forEach(page => {
+	page.addEventListener("click", () => {
+		document.querySelectorAll(".toggle-on-tap").forEach(toggle => toggle.classList.toggle("tapped"));
+	});
+});
