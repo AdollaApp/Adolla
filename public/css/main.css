@@ -340,6 +340,21 @@ input, textarea {
 	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 	grid-gap: 30px 10px;
 }
+.manga-grid .show-all {
+	grid-column: 1 / -1;
+	padding: 8px;
+	background: var(--body-offset);
+	border: 1px solid rgba(0, 0, 0, 0.03);
+	font-size: 1rem;
+	color: var(--text);
+	border-radius: 4px;
+}
+.show-all-wrapper:not(.do-show-all):not(.force-show) .do-hide {
+	display: none;
+}
+.show-all-wrapper.do-show-all .show-all, .show-all-wrapper.force-show .show-all {
+	display: none;
+}
 
 /* Manga items */
 .manga-card {
