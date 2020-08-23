@@ -26,7 +26,14 @@ setInterval(updateRecommended, 1e3 * 60 * 60 * 12); // Update every 12 hours
 
 
 export async function getLists(): Promise<List[]> {
+	
+	// Get lists from database
 	let lists: List[] = db.get("lists");
+
+	// Remove creator items from db results. There shouldn't be any, but I hope that this is what fixes Destruc7i0n's bug.
+	lists = lists.filter(l => !l.byCreator);
+
+	// Now combine the lists
 	let updatedLists = Object.assign([], [...recommendedLists, ...lists]);
 	for(let list of updatedLists) {
 
