@@ -860,7 +860,8 @@ input, textarea {
 }
 
 [data-reader-back-location="top-right"] .floating-button-wrapper, [data-reader-back-location="bottom-right"] .floating-button-wrapper {
-	justify-content: flex-end;
+	justify-content: flex-start;
+    flex-direction: row-reverse;
 }
 .floating-button-wrapper > * {
 	display: none;
@@ -878,6 +879,7 @@ input, textarea {
 }
 .floating-button-wrapper > * + * {
 	margin-left: 5px;
+	margin-right: 5px;
 }
 .floating-button {
 	width: 36px;
