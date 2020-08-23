@@ -45,7 +45,7 @@ router.get("/:slug", async (req, res, next) => {
 			data,
 			reading,
 			currentSlug: param,
-			lists: lists.map(convert),
+			lists: lists.filter(l => !l.byCreator).map(convert),
 			allLists: allLists.filter(l => !l.byCreator).map(convert)
 		});
 	} else {
@@ -134,7 +134,7 @@ router.post("/:slug/set-lists", async (req, res) => {
 
 		// Add to list
 		let list = currentLists.find(l => l.slug === n.slug);
-		if(!list.entries.find(entry => entry.slug === req.params.slug)) {
+		if(!list.entries.find(entry => entry.slug === req.params.slug) && !list.byCreator) {
 			list.entries.push({
 				slug: req.params.slug
 			});
@@ -144,7 +144,7 @@ router.post("/:slug/set-lists", async (req, res) => {
 	}
 
 	// Remove from other list
-	let otherLists = currentLists.filter(l => !newLists.find(newList => newList.slug === l.slug));
+	let otherLists = currentLists.filter(l => !newLists.find(newList => newList.slug === l.slug) && !l.byCreator);
 	for(let deleteFrom of otherLists) {
 		// Remove every entry from this list since it wasn't mentioned in the updated list
 		while(deleteFrom.entries.find(v => v.slug === req.params.slug)) {
