@@ -137,11 +137,15 @@ aside .logo {
 aside .logo h1 {
 	margin: 0;
 }
-aside .logo .square {
+aside .logo .square, aside .logo svg {
 	width: 30px;
+	--a: var(--badge);
+	--b: #6ebdda;
+}
+aside .logo .square {
 	height: 30px;
-	background: var(--badge);
 	transform: rotate(45deg);
+	background: var(--badge);
 }
 aside hr {
 	width: 100%;
