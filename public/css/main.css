@@ -376,6 +376,7 @@ input, textarea {
 }
 .manga-card .title-div > span .badge {
 	margin-right: 5px;
+	display: block;
 }
 .manga-card .title-div .to-manga-page {
 	margin-left: 5px;
