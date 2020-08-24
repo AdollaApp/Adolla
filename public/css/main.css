@@ -641,6 +641,7 @@ input, textarea {
 	background: var(--body);
 	box-sizing: border-box;
 	border-radius: 4px;
+	word-break: break-word;
 }
 @media (hover:hover) {
 	.chapterLink:hover {
