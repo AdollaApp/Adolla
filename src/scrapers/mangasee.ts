@@ -161,7 +161,7 @@ class MangaseeClass {
 					// Thanks Pandawan, for helping out with floating point funny business!
 					
 					// Get 0-paddedchapter string with decimal
-					let [chapterNormal, ...chapterModded] = chapter.toString().split(/(\.+)/);
+					let [chapterNormal, ...chapterModded] = chapter.toString().split(/(\.)/); // Using a capture group holds the divider in the array. ChapterModded becomes ['.', someDecimalNumber]
 					let chapterString = `${chapterNormal.padStart(4, "0")}${chapterModded.join("")}`;
 					
 					// Get directory and page
