@@ -78,6 +78,15 @@ body::before {
 	z-index: 100;
 }
 
+/* Util */
+.anchor {
+	text-decoration: none;
+	color: var(--badge);
+}
+.anchor:hover {
+	text-decoration: underline;
+}
+
 /* Layout */
 .wrapper-all {
 	display: grid;
@@ -1044,6 +1053,32 @@ select {
 		/* Deal with tricky back button margins */
 		margin-top: -56px;
 	}
+
+
+	/* Scaling */
+	.pages {
+		max-width: 100%;
+		overflow-x: auto;
+	}
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="100%"] .pages .pageImg,
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="125%"] .pages .pageImg,
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="150%"] .pages .pageImg,
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="200%"] .pages .pageImg {
+		max-height: initial;
+	}
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="100%"] .pages .pageImg {
+		width: 100%;
+	}
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="125%"] .pages .pageImg {
+		width: 125%;
+	}
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="150%"] .pages .pageImg {
+		width: 150%;
+	}
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="200%"] .pages .pageImg {
+		width: 200%;
+	}
+
 	/* Chapter navigation */
 	body {
 		--footer-height: calc(50px + env(safe-area-inset-bottom));

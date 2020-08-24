@@ -81,7 +81,8 @@ const defaultSettings = {
 	"reader-direction": "horizontal",
 	"fit-to-screen": "yes",
 	"vertical-gap": "yes",
-	"back-location": "bottom-left"
+	"back-location": "bottom-left",
+	"image-scaling": "100%"
 };
 
 // Get current settings
