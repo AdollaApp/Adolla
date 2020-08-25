@@ -1,21 +1,26 @@
 <div class="content-inner">
 	<h1 class="title">Manga thing</h1>
-	<p>Lorem ipsum dolor sit amet consectetur adipiscing elit ad varius habitant dis, suspendisse aliquam leo congue gravida semper non ante taciti sem commodo senectus, etiam integer lacinia donec pharetra eleifend morbi mus vulputate cras.</p>
+	<p>Adolla is a manga-reader web app built by <a href="https://jipfr.nl" target="_blank" class="anchor">Jip Fr</a>. The source code is available <a href="https://github.com/jipfr/Adolla" target="_blank" class="anchor">here</a>.</p>
 
 	{{#if reading}}
-	<section class="section continue-reading">
-		<h2 class="sub-title">Continue reading</h2>
-		<div class="manga-grid">
+	<section class="section continue-reading" data-list-id="continue-reading">
+		<h2 class="sub-title spread do-spread"><span>Continue reading</span> {{> list-type }}</h2>
+		<div class="manga-grid show-all-wrapper do-show-all">
 			
 			{{#each reading}}
 			{{> manga-card manga=this toChapter=true}}
 			{{/each}}
 
+			<button class="show-all">Show <span class="more-count"></span> more</button>
+
 		</div>
 	</section>
 	{{/if}}
-	<section class="section popular">
-		<h2 class="sub-title">Popular right now</h2>
+	{{#each lists}}
+	{{> list list=this}}
+	{{/each}}
+	<section class="section popular" data-list-id="popular">
+		<h2 class="sub-title spread do-spread"><span>Popular right now</span> {{> list-type }}</h2>
 		<div class="manga-grid">
 		{{#each popular}}
 			{{>manga-card manga=this}}
@@ -24,3 +29,7 @@
 	</section>
 
 </div>
+
+<script src="/js/home.js"></script>
+<script src="/js/lists.js"></script>
+<script src="/js/list-type.js"></script>

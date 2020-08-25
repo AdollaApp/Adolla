@@ -132,8 +132,11 @@ export interface DirectoryItem {
 
 /** "List" type. Used for users to store manga */
 export interface List {
+	showOnHome: boolean;
+	byCreator?: boolean;
 	name: string;
 	slug: string;
+	last?: number;
 	entries: {
 		slug: string;
 		data?: ScraperResponse

@@ -4,7 +4,7 @@ import updateManga from "./updateManga";
 import Mangasee from "../scrapers/mangasee";
 import db from "../db";
 import getReading from "./getReading";
-import { Reading, Progress } from "../types";
+import { Progress } from "../types";
 import Bot from "./bot";
 import chalk from "chalk";
 
@@ -32,8 +32,10 @@ class Updater {
 		let reading = await getReading();
 		
 		await Promise.all(reading.map(obj => obj.success ? obj.constant.slug : null).filter(Boolean).map(async slug => {
+			
 			// Update manga and store new value in cache + variable
 			let data = await updateManga(slug, true);
+			
 			if(data.success) {
 				// Now get a potential next chapter
 				let chapters = data.data.chapters;
@@ -68,11 +70,12 @@ class Updater {
 							return;
 						}
 
-						// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
-						console.info(chalk.green("[NOTIFS]") + ` New chapter found for ${data.constant.title}, notifying user`);
-
 						let bot = Bot.get();
 						if(bot) {
+
+							// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
+							console.info(chalk.green("[NOTIFS]") + ` New chapter found for ${data.constant.title}, notifying user`);
+
 							let msg = `New chapter for *${data.constant.title}*!`;
 							
 							let host = db.get("other.host");
@@ -80,7 +83,10 @@ class Updater {
 							
 							Bot.send(`${msg}\n${urlMsg}`);
 							db.set(dbString, true);
-						} 
+						} else {
+							// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
+							console.info(chalk.red("[NOTIFS]") + ` New chapter found for ${data.constant.title}, not notifying user since bot wasn't configured`);
+						}
 
 					}
 				}

@@ -157,7 +157,20 @@ class MangaseeClass {
 				// Generate URLs
 				chapterImages = [];
 				for(let page = 0; page < Number(curChapter.Page); page++) {
-					chapterImages.push(`https://${cdnUrl}/manga/${slug}${curChapter.Directory ? `/${curChapter.Directory}` : ""}/${Math.floor(chapter).toString().padStart(4, "0") + (chapter - Math.floor(chapter)).toString().slice(1)}-${(page + 1).toString().padStart(3, "0")}.png`);
+
+					// Thanks Pandawan, for helping out with floating point funny business!
+					
+					// Get 0-paddedchapter string with decimal
+					let [chapterNormal, ...chapterModded] = chapter.toString().split(/(\.)/); // Using a capture group holds the divider in the array. ChapterModded becomes ['.', someDecimalNumber]
+					let chapterString = `${chapterNormal.padStart(4, "0")}${chapterModded.join("")}`;
+					
+					// Get directory and page
+					let directoryString = curChapter.Directory ? `/${curChapter.Directory}` : "";
+					let pageString = (page + 1).toString().padStart(3, "0");
+
+					// Add page url to array
+					chapterImages.push(`https://${cdnUrl}/manga/${slug}${directoryString}/${chapterString}-${pageString}.png`);
+				
 				}
 
 			}

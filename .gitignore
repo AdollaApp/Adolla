@@ -3,5 +3,6 @@ backups/
 
 .DS_Store
 data.json
+data*.json
 .env
 secret-config.json
