@@ -38,15 +38,26 @@ class MangaseeClass {
 			...options,
 		}
 
-		// Fetch search results
-		let directory = await (await fetch("https://mangasee123.com/_search.php")).json();
-
 		let matchedResults = [];
 		// If the query is empty, sort by popular
 		if(query === "") {
+			
+			const searchUrl = `https://mangasee123.com/search/?sort=vm&desc=true&name=${encodeURIComponent(query)}`;
+			let searchRes = await fetch(searchUrl);	
+			let html = await searchRes.text();	
+
+
+			// Parse directory	
+			let directory = JSON.parse(html.split("vm.Directory = ")[1].split("];")[0] + "]");
+
 			// @ts-ignore You can totally substract strings.
 			matchedResults = directory.sort((a: DirectoryItem, b: DirectoryItem) => b.v - a.v).slice(0, resultCount);
+		
 		} else {
+
+			// Fetch search results
+			let directory = await (await fetch("https://mangasee123.com/_search.php")).json();
+			
 			// If query is not empty, use fuse to search
 			const fuse = new Fuse(directory, {
 				threshold: 0.2,
