@@ -1,7 +1,7 @@
 
 <div class="content-inner">
-	<section class="section search-results">
-		<h2 class="sub-title">{{searchResults.length}} search results for "{{query}}"</h2>
+	<section class="section search-results" data-list-id="search">
+		<h2 class="sub-title spread do-spread"><span>{{searchResults.length}} search results for "{{query}}"</span>{{> list-type }}</h2>
 		<div class="manga-grid">
 			{{#each searchResults}}
 			{{> manga-card manga=this }}
@@ -10,3 +10,5 @@
 	</section>
 </div>
 
+
+<script src="/js/list-type.js"></script>

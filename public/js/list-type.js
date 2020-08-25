@@ -7,7 +7,7 @@ function updateListTypes() {
 	document.querySelectorAll("[data-list-id]").forEach(section => {
 		
 		// Default value
-		if(!listTypes[section.dataset.listId]) listTypes[section.dataset.listId] = "grid"; // "list" or "grid"
+		if(!listTypes[section.dataset.listId]) listTypes[section.dataset.listId] = "list"; // "list" or "grid"
 		
 		// Update attribute
 		section.setAttribute("data-list-type", listTypes[section.dataset.listId]);
