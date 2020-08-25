@@ -1050,7 +1050,7 @@ select {
 	[data-reader-reader-direction="horizontal"] .floating-button-wrapper {
 		margin-bottom: -100%;
 	}
-	[data-reader-reader-direction="vertical"] .pages .pageImg:first-child {
+	[data-reader-reader-direction="vertical"] .manga-reader {
 		/* Deal with tricky back button margins */
 		margin-top: -56px;
 	}
