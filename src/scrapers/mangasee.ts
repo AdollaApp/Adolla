@@ -39,13 +39,8 @@ class MangaseeClass {
 		}
 
 		// Fetch search results
-		const searchUrl = `https://mangasee123.com/search/?sort=vm&desc=true&name=${encodeURIComponent(query)}`;
-		let searchRes = await fetch(searchUrl);
-		let html = await searchRes.text();
+		let directory = await (await fetch("https://mangasee123.com/_search.php")).json();
 
-		// Parse directory
-		let directory = JSON.parse(html.split("vm.Directory = ")[1].split("];")[0] + "]");
-		
 		let matchedResults = [];
 		// If the query is empty, sort by popular
 		if(query === "") {
