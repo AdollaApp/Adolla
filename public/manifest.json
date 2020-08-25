@@ -1,6 +1,6 @@
 {
-	"name": "MANGA ",
-	"short_name": "MANGA",
+	"name": "Adolla",
+	"short_name": "Adolla",
 	"lang": "EN",
 	"start_url": "/",
 	"display": "standalone",
@@ -8,7 +8,11 @@
 	"background_color": "#ffffff",
 	"icons": [
 		{
-			"sizes": "500x500",
+			"sizes": "200x200",
+			"src": "/icon.png"
+		},
+		{
+			"sizes": "200x200",
 			"src": "/apple-touch-icon.png"
 		}
 	]

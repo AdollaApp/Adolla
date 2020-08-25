@@ -11,7 +11,9 @@
 	--text-secondary: #7D7D7D;
 
 	--border: rgba(0, 0, 10, 0.05);
+	--border-2: #e4e4e4;
 	--border-dark: rgba(0, 0, 10, 0.1);
+	
 
 	--header-background: var(--badge);
 }
@@ -25,6 +27,8 @@
 
 		--border: rgba(255, 255, 255, 0.05);
 		--border-dark: rgba(255, 255, 255, 0.1);
+		--border-2: #555555;
+		--border-dark-2: #2b2b2b;
 
 		--header-background: #0e0e0e;
 
@@ -32,12 +36,12 @@
 }
 
 html, body {
-	min-height: 100vh;
+	min-height: calc(100vh - env(safe-area-inset-top));
 }
 
 body {
 
-	--footer-height: 0px;
+	--footer-height: env(safe-area-inset-bottom);
 
 	margin: 0;
 	color: var(--text-secondary);
@@ -56,6 +60,7 @@ body[data-is-dev="true"]::after {
 	left: -30px;
 	color: var(--text-on-badge);
 	background: var(--badge);
+	z-index: 999;
 
 	transform: rotate(45deg);
 	padding: 0 30px;
@@ -71,6 +76,15 @@ body::before {
 	height: env(safe-area-inset-top);
 	background: var(--header-background);
 	z-index: 100;
+}
+
+/* Util */
+.anchor {
+	text-decoration: none;
+	color: var(--badge);
+}
+.anchor:hover {
+	text-decoration: underline;
 }
 
 /* Layout */
@@ -89,14 +103,17 @@ body::before {
 	max-width: 1000px;
 	margin: 80px 0;
 }
-.content-inner .section + .section {
+.content-inner .section:not(.decreased-margin) + .section {
 	margin: 50px 0;
+}
+.content-inner .section.decreased-margin + .section {
+	margin: 20px 0;
 }
 
 /* Sidebar */
 aside.main-sidebar {
 	width: 100%;
-	height: 100vh;
+	height: calc(100vh - env(safe-area-inset-top));
 	max-height: calc(100vh - env(safe-area-inset-top));
 	overflow-y: auto;
 	background: var(--body-offset);
@@ -129,11 +146,15 @@ aside .logo {
 aside .logo h1 {
 	margin: 0;
 }
-aside .logo .square {
+aside .logo .square, aside .logo svg {
 	width: 30px;
+	--a: var(--badge);
+	--b: #6ebdda;
+}
+aside .logo .square {
 	height: 30px;
-	background: var(--badge);
 	transform: rotate(45deg);
+	background: var(--badge);
 }
 aside hr {
 	width: 100%;
@@ -148,23 +169,54 @@ details.settings > summary {
 details.settings > summary svg {
 	display: block;
 }
-details.settings > summary .summary-inner {
+details > summary .summary-inner {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	font-weight: bold;
 }
-details.settings > summary:focus {
+details > summary:focus {
 	outline: 2px solid var(--badge);
 }
-details.settings[open] > summary svg {
+details .icons {
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
+}
+details .icons > * + * {
+	margin-left: 10px;
+}
+details[open] > summary svg.feather-chevron-down {
 	transform: rotate(180deg);
 }
-details.settings > summary::-webkit-details-marker {
+details > summary::-webkit-details-marker {
 	display: none;
 }
 details.settings .details-inner {
 	margin-top: 10px;
+}
+details .summary-inner .sub-title {
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+    word-break: break-word;
+}
+details .summary-inner .sub-title .badge {
+	margin-right: 10px;
+}
+details.big-summary summary {
+	padding: 10px 5px;
+	padding-top: 15px;
+	margin: 0 -5px;
+	border-bottom: 1px solid var(--border-dark);
+	position: sticky;
+	top: env(safe-area-inset-top);
+	background: var(--body);
+	z-index: 20;
+}
+details .manga-grid {
+	margin-top: 20px;
 }
 
 /* Util */
@@ -180,6 +232,29 @@ details.settings .details-inner {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+}
+.list-type-picker {
+	display: none;
+	flex-wrap: nowrap;
+}
+.list-type-picker > * + * {
+	margin-left: 5px;
+}
+.list-type-option {
+	padding: 5px;
+	border-radius: 4px;
+	background: var(--border);
+	color: var(--text-secondary);
+	cursor: pointer;
+}
+[data-list-type="list"] .list-type-option.set-list-list, [data-list-type="grid"] .list-type-option.set-list-grid, .list-type-option.is-selected {
+	background: var(--badge);
+	color: var(--text-on-badge);
+}
+.list-type-option svg {
+	width: 20px;
+	height: 20px;
+	display: block;
 }
 .anchor {
 	color: var(--badge);
@@ -205,6 +280,20 @@ details.settings .details-inner {
 	color: var(--text-on-badge) !important;
 	--text-secondary: var(--text-on-badge-secondary);
 	/* I don't like using !important, but there's no better way to do priority here */
+}
+.secondary-badge {
+	box-sizing: border-box;
+	padding: 5px 10px;
+	display: flex;
+	align-items: center;
+	color: var(--text);
+	background: var(--body-offset);
+	border: 1px solid rgba(0, 0, 0, 0.03);
+	border-radius: 4px;
+}
+.secondary-badge svg {
+	display: block;
+	margin-right: 5px;
 }
 label ~ input {
 	margin-top: 5px;
@@ -260,6 +349,21 @@ input, textarea {
 	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 	grid-gap: 30px 10px;
 }
+.manga-grid .show-all {
+	grid-column: 1 / -1;
+	padding: 8px;
+	background: var(--body-offset);
+	border: 1px solid rgba(0, 0, 0, 0.03);
+	font-size: 1rem;
+	color: var(--text);
+	border-radius: 4px;
+}
+.show-all-wrapper:not(.do-show-all):not(.force-show) .do-hide {
+	display: none;
+}
+.show-all-wrapper.do-show-all .show-all, .show-all-wrapper.force-show .show-all {
+	display: none;
+}
 
 /* Manga items */
 .manga-card {
@@ -281,6 +385,7 @@ input, textarea {
 }
 .manga-card .title-div > span .badge {
 	margin-right: 5px;
+	display: block;
 }
 .manga-card .title-div .to-manga-page {
 	margin-left: 5px;
@@ -296,7 +401,7 @@ input, textarea {
 .manga-card .poster {
 	width: 100%;
 	box-sizing: border-box;
-	border: 1px solid var(--border);
+	border: 1px solid var(--border-2);
 	border-radius: 6px;
 	display: block;
 	height: 288px;
@@ -319,6 +424,7 @@ input, textarea {
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
 	overflow-y: hidden;
+	word-break: break-word;
 }
 
 /* List of small manga */
@@ -333,8 +439,6 @@ input, textarea {
 }
 /* Small manga card */
 .small-manga {
-	padding: 0 5px;
-	margin-left: -5px;
 	border-radius: 4px;
 	display: grid;
 	grid-template-columns: auto 1fr;
@@ -342,6 +446,10 @@ input, textarea {
 	grid-gap: 8px;
 	color: var(--text-secondary);
 	text-decoration: none;
+}
+.small-manga:not(.no-margin) {
+	padding: 0 5px;
+	margin-left: -5px;
 }
 .small-manga.badge-background {
 	padding: 5px;
@@ -372,6 +480,58 @@ input, textarea {
 	overflow-y: hidden;
 	color: inherit;
 }
+.small-manga .sub-title {
+	margin: 0;
+	color: var(--text-secondary);
+	font-weight: regular;
+}
+.small-manga .content.do-padding {
+	padding: 5px 0;
+}
+
+/* Posters */
+.poster-img {
+	width: 100%;
+	padding-bottom: 150.3%;
+	border-radius: 4px;
+	position: relative;
+	z-index: 1;
+	overflow: hidden;
+	border: 1px solid var(--border-2);
+	box-sizing: border-box;
+}
+.poster-img .poster-inner {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+}
+.poster-bottom {
+	width: 100%;
+	background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+	color: white;
+	padding-top: 20px;
+	display: none;
+}
+.poster-img .poster-inner .poster-text {
+	padding: 8px 5px;
+}
+
+/* Progress bar */
+.progress-bar-wrapper {
+	width: 100%;
+	height: 10px;
+	background: rgba(255, 255, 255, 0.2);
+}
+.progress-bar-wrapper .progress-bar-line {
+	height: 100%;
+	background: var(--badge);
+	min-width: 10px;
+}
 
 /* Manga layout */
 .manga-top {
@@ -379,15 +539,18 @@ input, textarea {
 	grid-template-columns: 200px 1fr;
 	grid-gap: 50px;
 }
+.manga-top .side-nav {
+	margin-top: 20px;
+}
+.manga-top .aside-inner {
+	position: sticky;
+	top: calc(20px + env(safe-area-inset-top));
+}
 .poster {
 	box-sizing: border-box;
 	width: 100%;
 	border-radius: 4px;
 	border: 1px solid var(--border);
-}
-.manga-top .poster {
-	position: sticky;
-	top: calc(20px + env(safe-area-inset-top));
 }
 
 /* Chapters */
@@ -433,7 +596,16 @@ input, textarea {
 	color: inherit;
 }
 .chapters .chapter + .chapter {
-	border-top: 1px solid var(--border);
+	border-top: 1px solid var(--border-dark);
+}
+.chapter .chapter-icon svg {
+	display: inline-block;
+	margin-right: 10px;
+	color: var(--badge);
+}
+.chapter .do-center {
+	display: flex;
+	align-items: center;
 }
 
 /* Chapter navigation */
@@ -469,6 +641,7 @@ input, textarea {
 	background: var(--body);
 	box-sizing: border-box;
 	border-radius: 4px;
+	word-break: break-word;
 }
 @media (hover:hover) {
 	.chapterLink:hover {
@@ -483,6 +656,7 @@ input, textarea {
 /* Reader */
 .manga-reader .loading {
 	position: relative;
+	z-index: 0;
 	width: 100%;
 	height: 200px;
 	display: flex;
@@ -645,7 +819,7 @@ input, textarea {
 	margin-bottom: 5px;
 }
 .quick-select .chapters .small-title {
-	margin-top: 100px;
+	margin-top: 30px;
 	margin-left: 20px;
 	margin-bottom: 15px;
 }
@@ -668,7 +842,7 @@ input, textarea {
 	background: rgba(0, 0, 0, 0.2);
 }
 .quick-select .scroll {
-	max-height: 300px;
+	/* max-height: 300px; */
 	/* overflow-y: auto; */
 	position: relative;
 }
@@ -698,12 +872,12 @@ input, textarea {
 }
 
 [data-reader-back-location="top-right"] .floating-button-wrapper, [data-reader-back-location="bottom-right"] .floating-button-wrapper {
-	justify-content: flex-end;
+	justify-content: flex-start;
+    flex-direction: row-reverse;
 }
-.floating-button {
+.floating-button-wrapper > * {
 	display: none;
-	width: 36px;
-	height: 36px;
+	min-height: 36px;
 	box-sizing: border-box;
 	justify-content: center;
 	align-items: center;
@@ -711,6 +885,16 @@ input, textarea {
 	border-radius: 4px;
 	border: 2px solid var(--border);
 	margin: 10px 0;
+}
+.floating-button-wrapper .do-padding {
+	padding: 0 10px;
+}
+.floating-button-wrapper > * + * {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+.floating-button {
+	width: 36px;
 }
 .floating-button svg {
 	display: block;
@@ -753,18 +937,149 @@ select {
 	color: var(--text);
 }
 
+/* Lists page */
+.list-nav {
+	position: sticky;
+	top: 55px;
+}
+
+/* Lists editor */
+.lists-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+}
+.lists-wrapper .badge {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	padding-left: 12px;
+	padding-right: 12px;
+	box-sizing: border-box;
+	margin-right: 5px;
+}
+.lists-wrapper svg {
+	margin-right: 5px;
+	color: var(--text-secondary);
+	cursor: pointer;
+}
+.lists-wrapper .input-div input, .lists-wrapper .secondary-badge {
+	margin: 2px 0;
+	margin-right: 5px;
+}
+.lists-wrapper .input-div input {
+	height: calc(100% - 4px);
+}
+.display-lists {
+	display: flex;
+	flex-wrap: wrap;
+}
+.shake {
+	animation: 200ms shake linear infinite;
+}
+@keyframes shake {
+	0% {
+		margin-left: 5px;
+	}
+	33% {
+		margin-left: 0px;	
+	}
+	66% {
+		margin-left: 10px;
+	}
+	100% {
+		margin-left: 5px;
+	}
+}
+.input-div {
+	display: inline-block;
+	position: relative;
+	z-index: 1;
+}
+.input-div .suggestions {
+	width: 100%;
+	box-sizing: border-box;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	padding: 5px 0;
+	background: var(--body);
+	border: 1px solid var(--border);
+	border-radius: 4px;
+	max-height: 200px;
+	overflow-y: auto;
+	display: none;
+}
+.input-div input.show-suggestions ~ .suggestions:not(:empty) {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+/* Suggestions */
+.suggestions {
+	box-shadow: 0 3px 5px var(--border);
+}
+.suggestions .suggestion {
+	width: 100%;
+	padding: 8px 5px;
+}
+.suggestions .suggestion:hover {
+	background: var(--border);
+	cursor: pointer;
+}
+.suggestions > * + * {
+	border-top: 1px solid var(--border);
+}
+
+/* Toggle on tap */
+.toggle-on-tap {
+	transition: opacity 300ms;
+	opacity: 0;
+	pointer-events: none;
+}
+.toggle-on-tap.tapped {
+	opacity: 1;
+	pointer-events: initial;
+}
+
 /* Responsiveness */
 @media screen and (max-width: 700px), (orientation: portrait) {
-	.floating-button {
+	.floating-button-wrapper > * {
 		display: flex;
+		color: var(--text);
 	}
-	[data-reader-reader-direction="horizontal"] .floating-button {
+	[data-reader-reader-direction="horizontal"] .floating-button-wrapper {
 		margin-bottom: -100%;
 	}
 	[data-reader-reader-direction="vertical"] .pages .pageImg:first-child {
 		/* Deal with tricky back button margins */
 		margin-top: -56px;
 	}
+
+
+	/* Scaling */
+	.pages {
+		max-width: 100%;
+		overflow-x: auto;
+	}
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="100%"] .pages .pageImg,
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="125%"] .pages .pageImg,
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="150%"] .pages .pageImg,
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="200%"] .pages .pageImg {
+		max-height: initial;
+	}
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="100%"] .pages .pageImg {
+		width: 100%;
+	}
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="125%"] .pages .pageImg {
+		width: 125%;
+	}
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="150%"] .pages .pageImg {
+		width: 150%;
+	}
+	[data-reader-reader-direction="vertical"][data-reader-image-scaling="200%"] .pages .pageImg {
+		width: 200%;
+	}
+
 	/* Chapter navigation */
 	body {
 		--footer-height: calc(50px + env(safe-area-inset-bottom));
@@ -827,7 +1142,7 @@ select {
 		display: block;
 	}
 	/* Sub title spread */
-	.sub-title.spread {
+	.sub-title.spread:not(.do-spread) {
 		display: block;
 	}
 	.sub-title.spread > select {
@@ -837,19 +1152,39 @@ select {
 @media screen and (max-width: 500px) {
 	/* Manga grid */
 	.manga-grid {
-		grid-template-columns: 100%;
 		grid-gap: 10px;
 	}
+	[data-list-type="list"] .manga-grid {
+		grid-template-columns: 100%;
+	}
+	[data-list-type="grid"] .manga-grid {
+		grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+	}
+
+	/* Picker */
+	.list-type-picker {
+		display: flex;
+	}
+
 	/* Cards */
 	.manga-card {
-		grid-template-columns: 100px 1fr;
 		grid-template-rows: auto;
 		align-items: center;
 	}
-	.manga-card .poster {
+	[data-list-type="grid"] .manga-card {
+		grid-template-columns: 1fr;
+	}
+	[data-list-type="list"] .manga-card {
+		grid-template-columns: 100px 1fr;
+	}
+
+	[data-list-type="grid"] .poster-bottom {
+		display: block;
+	}
+	[data-list-type="list"] .manga-card .manga-meta {
 		height: auto;
 	}
-	.manga-card .manga-meta {
-		height: auto;
+	[data-list-type="grid"] .manga-card .manga-meta {
+		display: none;
 	}
 }

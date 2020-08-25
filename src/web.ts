@@ -6,7 +6,7 @@ import bodyParser from "body-parser";
 
 // Import custom modules
 import routers from "./routers"
-import { StoredData, Chapter, Progress } from "./types";
+import { StoredData, Chapter, Progress, ScraperResponse, List } from "./types";
 
 const app = express();
 
@@ -22,7 +22,7 @@ app.engine("handlebars", handlebars({
 			};
 			return "Not started yet";
 		},
-		genLink2(slug: string, season: number = null, episode: number = null, page: number = null) {
+		genLink2(slug: string, season: number = null, episode: number = null) {
 			let href = `/${slug}/`;
 			let seasonLink = season !== null && episode !== null ? `${season}-${episode}/` : "";
 			return `${href}${seasonLink}`;
@@ -46,6 +46,15 @@ app.engine("handlebars", handlebars({
 		},
 		ifDev(options) {
 			return !!process.env.dev ? options.fn(this) : options.inverse(this);
+		},
+		getChapterName(progress: Progress, manga: StoredData) {
+			if(!progress) return "shrug";
+			let { season, chapter } = progress;
+			let current = manga.data.chapters.find(v => v.season === season && v.chapter === chapter);
+			return current ? current.label : "Unknown chapter";
+		},
+		ifNotByCreator(list: List, options) {
+			return list.byCreator ? options.inverse() : options.fn();
 		}
 	}
 }));
@@ -61,6 +70,7 @@ app.use(bodyParser.json());
 app.use("/", routers.home);
 app.use("/search", routers.search);
 app.use("/backups", routers.backups);
+app.use("/lists", routers.lists);
 
 // Static assets
 app.use(express.static("public"));

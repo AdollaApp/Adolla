@@ -81,7 +81,8 @@ const defaultSettings = {
 	"reader-direction": "horizontal",
 	"fit-to-screen": "yes",
 	"vertical-gap": "yes",
-	"back-location": "bottom-left"
+	"back-location": "bottom-left",
+	"image-scaling": "100%"
 };
 
 // Get current settings
@@ -256,4 +257,11 @@ document.addEventListener("keydown", evt => {
 			alert("Unknown");
 	}
 
+});
+
+// "Tap to toggle" elements
+document.querySelectorAll(".pageImg").forEach(page => {
+	page.addEventListener("click", () => {
+		document.querySelectorAll(".toggle-on-tap").forEach(toggle => toggle.classList.toggle("tapped"));
+	});
 });
