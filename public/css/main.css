@@ -689,7 +689,7 @@ input, textarea {
 }
 
 /* Pages */ 
-.pages {
+.manga-reader.loaded {
 	padding-bottom: var(--footer-height);
 }
 /* Horizontal reader */
