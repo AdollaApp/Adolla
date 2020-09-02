@@ -866,6 +866,8 @@ input, textarea {
 	/* Footer height including padding, normal footer, margin */
 	top: calc(100vh - var(--footer-height) - 50px - 10px);
 	left: calc(10px + env(safe-area-inset-left));
+	margin-left: -2px;
+	margin-right: -2px;
 }
 [data-reader-back-location="top-left"] .floating-button-wrapper, [data-reader-back-location="top-right"] .floating-button-wrapper {
 	top: env(safe-area-inset-top);
@@ -889,9 +891,9 @@ input, textarea {
 .floating-button-wrapper .do-padding {
 	padding: 0 10px;
 }
-.floating-button-wrapper > * + * {
-	margin-left: 5px;
-	margin-right: 5px;
+.floating-button-wrapper > * {
+	margin-left: 2px;
+	margin-right: 2px;
 }
 .floating-button {
 	width: 36px;
