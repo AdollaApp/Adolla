@@ -1136,6 +1136,7 @@ select {
 	aside.main-sidebar {
 		position: initial;
 		height: auto;
+		max-height: initial;
 	}
 	aside .logo img {
 		max-width: 250px;
