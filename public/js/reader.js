@@ -79,7 +79,7 @@ function readerIsHorizontal() {
 // Settings
 const defaultSettings = {
 	"reader-direction": "horizontal",
-	"fit-to-screen": "yes",
+	"vertical-image-size": "auto",
 	"vertical-gap": "yes",
 	"back-location": "bottom-left",
 	"image-scaling": "100%"
