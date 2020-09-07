@@ -709,8 +709,24 @@ input, textarea {
 .pages[data-reader-direction="vertical"][data-vertical-gap="yes"] .pageImg {
 	margin-bottom: 10px;
 }
-.pages[data-reader-direction="vertical"][data-fit-to-screen="yes"] .pageImg, .pages[data-reader-direction="horizontal"] .pageImg {
+.pages[data-reader-direction="vertical"][data-vertical-image-size="full-height"] .pageImg, 
+.pages[data-reader-direction="horizontal"] .pageImg {
+	width: 100%;
 	max-height: calc(100vh - var(--footer-height) - env(safe-area-inset-top));
+	height: calc(100vh - var(--footer-height) - env(safe-area-inset-top));
+}
+
+[data-reader-reader-direction="vertical"][data-reader-vertical-image-size="full-height"] .manga-reader.loaded, 
+.manga-reader.loaded .pages[data-reader-direction="vertical"][data-vertical-image-size="full-height"],
+[data-reader-reader-direction="vertical"][data-reader-vertical-image-size="full-width"] .manga-reader.loaded, 
+.manga-reader.loaded .pages[data-reader-direction="vertical"][data-vertical-image-size="full-width"] {
+	width: 100%;
+}
+
+
+.pages[data-reader-direction="vertical"][data-vertical-image-size="full-width"] .pageImg {
+	width: 100%;
+	max-height: auto;
 }
 
 /* Pages */
@@ -735,7 +751,7 @@ input, textarea {
 	margin-top: 5px;
 }
 .setting.boxes.small {
-	grid-template-columns: repeat(4, 1fr);
+	grid-template-columns: repeat(auto-fit, minmax(1px, 1fr));
 }
 .setting.boxes:not(.small) .setting-box svg {
 	margin-bottom: 5px;
@@ -747,9 +763,14 @@ input, textarea {
 	width: 100%;
 	text-align: center;
 	border-radius: 4px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
 }
 .setting-box svg {
 	width: 100%;
+	height: 24px;
 	display: block;
 }
 .setting-box:not(.selected):hover {
