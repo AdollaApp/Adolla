@@ -557,10 +557,6 @@ input, textarea {
 .chapter-list {
 	margin-top: 40px;
 }
-.chapters {
-	display: grid;
-	grid-template-columns: 100%;
-}
 .chapter-list .chapters .chapter.badge-background {
 	border-radius: 4px;
 	border-top: 0;
