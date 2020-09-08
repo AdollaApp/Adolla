@@ -2,6 +2,12 @@
 
 Easy to use web app to read Manga.
 
+## Setup
+
+To set this up, clone the repo. Navigate to the project root and install the relevant packages. This can be done with `npm install`. 
+
+Then, to start the app, run `npm start`. This will host the web server.
+
 ## Screenshots
 
 ![Image of the home page](https://raw.githubusercontent.com/JipFr/manga-5/master/screenshot/0.png)
@@ -12,9 +18,3 @@ Easy to use web app to read Manga.
 ![Reader with overlay](https://raw.githubusercontent.com/JipFr/manga-5/master/screenshot/5.png)
 ![Mobile](https://raw.githubusercontent.com/JipFr/manga-5/master/screenshot/mobile_0.png)
 ![Mobile, dark](https://raw.githubusercontent.com/JipFr/manga-5/master/screenshot/mobile_1.png)
-
-## Setup
-
-To set this up, clone the repo. Navigate to the project root and install the relevant packages. This can be done with `npm install`. 
-
-Then, to start the app, run `npm start`. This will host the web server.
