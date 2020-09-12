@@ -219,6 +219,49 @@ details .manga-grid {
 	margin-top: 20px;
 }
 
+/* Selection mode header */
+.is-selection-mode, .chapter-list {
+	-webkit-touch-callout: none;
+    -webkit-user-select: none; 
+     -khtml-user-select: none; 
+       -moz-user-select: none; 
+        -ms-user-select: none; 
+            user-select: none; 
+}
+.selection-mode-header {
+	box-sizing: border-box;
+	position: fixed;
+	top: 0;
+	opacity: 0;
+	margin-top: 0;
+	transition: margin-top 300ms, opacity 300ms;
+	width: calc(100% - 20px);
+	background: var(--body);
+	border: 1px solid var(--border);
+	padding: 20px 15px;
+	border-radius: 4px;
+	z-index: 200;
+	/* box-shadow: 0 3px 5px var(--border); */
+	box-shadow: 0 4px 8px var(--border-dark);
+}
+.is-selection-mode .selection-mode-header {
+	margin-top: calc(env(safe-area-inset-top) + 10px);
+	opacity: 1;
+}
+.selection-mode-header .sub-title {
+	margin-bottom: 10px;
+	margin-top: 0;
+}
+.selection-mode-header .selection-mode-options {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 10px;
+}
+.selection-mode-header .btn {
+	padding: 8px 5px;
+	width: 100%;
+}
+
 /* Util */
 .title {
 	margin: 0;
@@ -568,12 +611,23 @@ input, textarea {
 	background: var(--border);
 }
 .chapters .chapter {
-	padding: 12px 15px;
-	margin-left: -15px;
+	/* padding: 12px 15px; */
+	/* margin-left: -15px; */
+	padding: 12px 20px;
+	margin-left: -20px;
 	text-decoration: none;
 	display: grid;
 	grid-template-columns: 1fr auto;
 	grid-gap: 5px;
+	border-left: 5px solid transparent;
+	transition: border-left-color 200ms;
+}
+.is-selection-mode .chapters .chapter {
+	/* Just for selection mode ;) */
+	border-left-color: var(--border-2);
+}
+.chapters .chapter.mark-selected {
+	border-left-color: var(--badge);
 }
 .chapters .chapter .date {
 	color: var(--text-secondary);
@@ -938,7 +992,7 @@ input, textarea {
 	justify-content: space-between;
 	align-items: center;
 }
-.backup button {
+.btn {
 	border: 0;
 	padding: 4px 8px;
 	border-radius: 4px;
@@ -1139,7 +1193,9 @@ select {
 	}
 
 	.chapter-list .chapters .chapter {
-		margin-right: -15px;
+		/* margin-right: -15px; */
+		margin-right: -20px;
+		border-radius: 0;
 	}
 
 }
