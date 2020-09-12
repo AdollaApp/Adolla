@@ -23,7 +23,7 @@ document.querySelectorAll(".toggle-quick-select").forEach(div => {
 document.querySelectorAll(".chapterLink, a.chapter:not(.no-badge)").forEach(link => {
 	link.addEventListener("click", () => {
 		document.querySelectorAll("a.chapter").forEach(a => a.classList.remove("badge-background"));
-		link.classList.add("clicked", "badge-background");
+		if(!selectionMode) link.classList.add("clicked", "badge-background");
 	});
 });
 
