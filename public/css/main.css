@@ -575,6 +575,33 @@ input, textarea {
 	grid-template-columns: 1fr auto;
 	grid-gap: 5px;
 }
+.chapters .chapter .select {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	margin-right: 10px; 
+}
+.chapters .chapter .select svg {
+	width: 1.2rem;
+	height: 1.2rem;
+	display: block;
+	padding: 5px;
+	margin-top: -5px;
+	margin-left: -5px;
+	margin-bottom: -5px;
+	color: var(--text-secondary);
+	background-color: transparent;
+	transition: background-color 150ms;
+	border-radius: 4px;
+}
+.chapters .chapter .select:hover svg {
+	background-color: var(--border);
+}
+.chapters .chapter .label {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
 .chapters .chapter .date {
 	color: var(--text-secondary);
 	margin-left: 10px;
