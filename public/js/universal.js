@@ -21,9 +21,16 @@ document.querySelectorAll(".toggle-quick-select").forEach(div => {
 
 // Add class to chapterlink when clicked
 document.querySelectorAll(".chapterLink, a.chapter:not(.no-badge)").forEach(link => {
-	link.addEventListener("click", () => {
-		document.querySelectorAll("a.chapter").forEach(a => a.classList.remove("badge-background"));
-		link.classList.add("clicked", "badge-background");
+	link.addEventListener("click", evt => {
+		
+		// Clean up
+		document.querySelectorAll("a.chapter.badge-background").forEach(a => a.classList.remove("badge-background"));
+		
+		// Add class
+		let select = link.querySelector(".select");
+		if(!evt.composedPath().includes(select)) {
+			link.classList.add("clicked", "badge-background");
+		}
 	});
 });
 

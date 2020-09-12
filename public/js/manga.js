@@ -1,3 +1,8 @@
+
+/***********
+ * SORTING PART
+ */
+
 document.querySelector("select.sorting").addEventListener("change", updateSorting);
 
 function updateSorting() {
@@ -25,3 +30,26 @@ function updateSorting() {
 
 }
 updateSorting();
+
+
+
+/**************
+ * SELECTION PART
+ */
+
+function initSelection() {
+	document.querySelectorAll(".chapter").forEach(chapter => {
+
+		let select = chapter.querySelector(".select");
+
+		chapter.addEventListener("click", evt => {
+			if(evt.composedPath().includes(select)) {
+				evt.preventDefault();
+				
+				select.querySelector("svg").classList.toggle("is-selected");
+				select.querySelector("svg").classList.toggle("badge-background");
+			}
+		});
+	});
+}
+initSelection();
