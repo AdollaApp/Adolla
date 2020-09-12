@@ -45,11 +45,25 @@ function initSelection() {
 		chapter.addEventListener("click", evt => {
 			if(evt.composedPath().includes(select)) {
 				evt.preventDefault();
-				
+
 				select.querySelector("svg").classList.toggle("is-selected");
 				select.querySelector("svg").classList.toggle("badge-background");
+
+				updateSelectionStatus();
+
 			}
 		});
 	});
 }
 initSelection();
+
+function updateSelectionStatus() {
+	let selectedExists = !!document.querySelector(".chapter .select svg.is-selected");
+
+	if(selectedExists) {
+		document.body.classList.add("is-selection-mode");
+	} else {
+		document.body.classList.remove("is-selection-mode");
+	}
+
+}

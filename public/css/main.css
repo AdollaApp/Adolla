@@ -568,8 +568,8 @@ input, textarea {
 	background: var(--border);
 }
 .chapters .chapter {
-	padding: 12px 15px;
-	margin-left: -15px;
+	padding: 12px 20px;
+	margin-left: -20px;
 	text-decoration: none;
 	display: grid;
 	grid-template-columns: 1fr auto;
@@ -585,10 +585,11 @@ input, textarea {
 	width: 1.2rem;
 	height: 1.2rem;
 	display: block;
-	padding: 5px;
-	margin-top: -5px;
-	margin-left: -5px;
-	margin-bottom: -5px;
+	--size: 8px;
+	padding: var(--size);
+	margin-top: calc(var(--size) * -1);
+	margin-left: calc(var(--size) * -1);
+	margin-bottom: calc(var(--size) * -1);
 	color: var(--text-secondary);
 	background-color: transparent;
 	transition: background-color 150ms;
@@ -651,7 +652,7 @@ input, textarea {
 	grid-area: previous;
 }
 
-.chapterLink {
+.secondary-button {
 	/* font-size: 0.8rem; */
 	display: grid;
 	grid-template-columns: auto 1fr;
@@ -667,11 +668,11 @@ input, textarea {
 	word-break: break-word;
 }
 @media (hover:hover) {
-	.chapterLink:hover {
+	.secondary-button:hover {
 		background: var(--border);
 	}
 }
-.next .chapterLink {
+.next .secondary-button {
 	grid-template-columns: 1fr auto;
 	text-align: right;
 }
@@ -1087,6 +1088,44 @@ select {
 	pointer-events: initial;
 }
 
+/* Another footer type situation */
+.is-footer {
+	width: 100%;
+    background: var(--body-offset);
+    box-sizing: border-box;
+    position: fixed;
+    grid-gap: 10px;
+    left: 0;
+    bottom: 0;
+    height: var(--footer-height);
+    padding: 0 10px;
+	border-bottom: env(safe-area-inset-bottom) solid transparent;
+	z-index: 999;
+}
+.is-footer.selection-actions {
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 150ms; 
+}
+.is-selection-mode .is-footer.is-footer.selection-actions {
+	opacity: 1;
+	pointer-events: initial;
+}
+
+.is-footer .secondary-button {
+	display: block;
+	text-align: center;
+	color: var(--text);
+	font-size: 1rem;
+}
+.selection-actions-inner {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 10px;
+	align-items: center;
+	height: 100%;
+}
+
 /* Responsiveness */
 @media screen and (max-width: 700px), (orientation: portrait) {
 	.floating-button-wrapper > * {
@@ -1147,7 +1186,7 @@ select {
 	.chapter-navigation :not(svg).decorative {
 		display: none;
 	}
-	.chapter-navigation .chapterLink {
+	.chapter-navigation .secondary-button {
 		text-align: center;
 	}
 
@@ -1166,13 +1205,14 @@ select {
 	}
 
 	.chapter-list .chapters .chapter {
-		margin-right: -15px;
+		margin-right: -20px;
+		border-radius: 0;
 	}
 
 }
 @media screen and (max-width: 450px) {
 	/* Chevrons in nav */
-	.chapter-navigation .chapterLink  {
+	.chapter-navigation .secondary-button  {
 		grid-template-columns: 100%;
 	}
 	.chapter-navigation svg.decorative {
