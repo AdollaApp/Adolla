@@ -536,7 +536,6 @@ input, textarea {
 .progress-bar-wrapper .progress-bar-line {
 	height: 100%;
 	background: var(--badge);
-	min-width: 10px;
 }
 
 /* Manga layout */
