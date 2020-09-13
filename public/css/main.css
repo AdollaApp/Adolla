@@ -1091,14 +1091,14 @@ select {
 /* Another footer type situation */
 .is-footer {
 	width: 100%;
-    background: var(--body-offset);
-    box-sizing: border-box;
-    position: fixed;
-    grid-gap: 10px;
-    left: 0;
-    bottom: 0;
-    height: var(--footer-height);
-    padding: 0 10px;
+	background: var(--body-offset);
+	box-sizing: border-box;
+	position: fixed;
+	grid-gap: 10px;
+	left: 0;
+	bottom: 0;
+	min-height: var(--footer-height);
+	padding: 3px 10px;
 	border-bottom: env(safe-area-inset-bottom) solid transparent;
 	z-index: 999;
 }

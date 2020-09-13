@@ -28,7 +28,7 @@ document.querySelectorAll(".chapterLink, a.chapter:not(.no-badge)").forEach(link
 		
 		// Add class
 		let select = link.querySelector(".select");
-		if(!evt.composedPath().includes(select)) {
+		if(!evt.composedPath().includes(select) && !document.querySelector(".chapter .select .is-selected")) {
 			link.classList.add("clicked", "badge-background");
 		}
 	});

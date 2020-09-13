@@ -9,6 +9,7 @@ import { Progress, StoredData, List } from "../types";
 import getMangaProgress, { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";
 import { getLists } from "../util/lists";
+import getProgressData from "../util/getProgressData";
 
 interface NewList {
 	slug: string;
@@ -114,6 +115,54 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 
 });
 
+// Mark as read
+router.post("/:slug/mark-chapters-as/", async (req, res) => {
+
+	// Get relevant values
+	let slug = req.params.slug;
+	let updateValues: {season: number, chapter: number}[] = req.body.values;
+
+	// Get data
+	let data = await updateManga(slug);
+
+	if(data.success === true) { 
+
+		// Get relevant chapters
+		let chapters = data.data.chapters;
+		let markChapters = updateValues.map(markingChapter => chapters.find(c => c.season === markingChapter.season && c.chapter === markingChapter.chapter));
+
+		let lastProgressData;
+		for(let chapter of markChapters) {
+			let progressData = getProgressData({
+				current: 500,
+				total: 500,
+				season: chapter.season,
+				chapter: chapter.chapter
+			}); // 500 is just a really high number. It has no meaning.
+			lastProgressData = progressData;
+
+			// Update db
+			db.set(`reading.${slug}.${chapter.season}-${chapter.chapter.toString().replace(/\./g, "_")}`, progressData);
+		}
+
+		// Set last progress data
+		db.set(`reading.${slug}.last`, lastProgressData);
+
+		res.json({
+			status: 200
+		});
+
+	} else {
+		res.status(404);
+		res.json({
+			status: 404,
+			err: "Something went wrong while fetching information about this manga"
+		});
+	}
+
+});
+
+// Set the lists
 router.post("/:slug/set-lists", async (req, res) => {
 
 	let newLists: NewList[] = req.body.lists;
@@ -188,14 +237,11 @@ router.post("/:slug/:chapter/set-progress", async (req, res, next) => {
 		return;
 	}
 
-	let progressData = {
-		current: req.body.current,
-		total: req.body.total,
-		percentage: Math.round((req.body.current / req.body.total) * 100),
-		at: Date.now(),
+	let progressData = getProgressData({
+		...req.body,
 		season,
-		chapter	
-	};
+		chapter
+	});
 
 	// Update db
 	db.set(`reading.${slug}.${season}-${chapter.toString().replace(/\./g, "_")}`, progressData);
