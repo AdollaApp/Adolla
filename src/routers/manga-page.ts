@@ -118,6 +118,8 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 // Mark as read
 router.post("/:slug/mark-chapters-as/", async (req, res) => {
 
+	// ! Allow removing of read status on this endpoint
+
 	// Get relevant values
 	let slug = req.params.slug;
 	let updateValues: {season: number, chapter: number}[] = req.body.values;
@@ -139,6 +141,11 @@ router.post("/:slug/mark-chapters-as/", async (req, res) => {
 				season: chapter.season,
 				chapter: chapter.chapter
 			}); // 500 is just a really high number. It has no meaning.
+			
+			// If the action is to remove the read status, override progressData
+			if(req.body.action === "remove-read-status") progressData = undefined;
+
+			// Update last
 			lastProgressData = progressData;
 
 			// Update db
@@ -146,7 +153,7 @@ router.post("/:slug/mark-chapters-as/", async (req, res) => {
 		}
 
 		// Set last progress data
-		db.set(`reading.${slug}.last`, lastProgressData);
+		if(lastProgressData) db.set(`reading.${slug}.last`, lastProgressData);
 
 		res.json({
 			status: 200

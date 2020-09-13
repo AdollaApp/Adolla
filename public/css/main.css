@@ -163,6 +163,12 @@ aside hr {
 	background: var(--border);
 	margin: 10px 0;
 }
+details > summary {
+	list-style: none;
+}
+details > summary::-webkit-details-marker {
+	display: none;
+}
 details.settings > summary {
 	list-style: none;
 }
