@@ -92,7 +92,7 @@ function initSelection() {
 	
 			// Generate URL
 			let url = location.href;
-			if(!url.endsWith("/")) url.endsWith("/");
+			if(!url.endsWith("/")) url += "/";
 			let endpoint = `${url}mark-chapters-as/`;
 	
 			let res = await fetch(endpoint, {
