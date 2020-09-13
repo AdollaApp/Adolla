@@ -12,7 +12,14 @@ export default async function updateManga(slug: string, ignoreExisting: boolean 
 
 	let data = await Mangasee.scrape(slug);
 	if(data.success) {
-		data.savedAt = Date.now(); 
+		data.savedAt = Date.now();
+		
+		// Remove unnecesary data from DB
+		data.data.chapters.forEach(d => {
+			delete d.progress;
+			delete d.realProgress;
+		});
+		
 		db.set(`manga_cache.${slug}`, data);
 	} 
 	return await addInfo(data);

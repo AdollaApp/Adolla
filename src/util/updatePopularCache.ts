@@ -18,6 +18,10 @@ class Updater {
 	}
 
 	private async updateCache() {
+	
+		/**
+		 * UPDATE "POPULAR" CACHE
+		 */
 		console.info(chalk.yellowBright("[CACHE]") + ` Updating popular cache at ${new Date().toLocaleString()}`);
 		let popular = await Mangasee.search("");
 		
@@ -28,6 +32,10 @@ class Updater {
 
 		console.info(chalk.green("[CACHE]") + " Updated cache for popular manga");
 
+
+		/**
+		 * UPDATE "READING" CACHE
+		 */
 		console.info(chalk.yellowBright("[NOTIFS]") + ` Looking for new chapters at ${new Date().toLocaleString()}`);
 		let reading = await getReading();
 		
@@ -36,6 +44,7 @@ class Updater {
 			// Update manga and store new value in cache + variable
 			let data = await updateManga(slug, true);
 			
+			// Check for new chapters and notify user
 			if(data.success) {
 				// Now get a potential next chapter
 				let chapters = data.data.chapters;
@@ -96,7 +105,32 @@ class Updater {
 
 		console.info(chalk.green("[NOTIFS]") + ` Checked for new chapters, now done`);
 
+		/**
+		 * Remove old items from cache
+		 */
+
+
+		// Get data
+		let cache = db.get("manga_cache");
 		
+		console.info(chalk.yellowBright("[CLEANUP]") + ` Checking each cache entry for old data`);
+
+		// Check each entry and
+		for(let slug of Object.keys(cache)) {
+			
+			// Get difference from saved time in MS
+			let diff = Date.now() - cache[slug].savedAt;
+			
+			// Check if cache is old. How old should be fairly obvious
+			if(diff > (1e3 * 60 * 60) * 24) {
+				cache[slug] = undefined;
+			}
+
+		}
+
+		// Write to db
+		db.set("manga_cache", cache);
+		console.info(chalk.green("[CLEANUP]") + ` Done cleaning up`);
 
 	}
 }
