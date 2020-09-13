@@ -72,7 +72,7 @@ export interface ScraperData {
 export interface ScraperError {
 	status: number;
 	err: string;
-	success: false; // Always fale
+	success: false; // Always false
 }
 
 /** Extended ScrapeData with front-end variables */

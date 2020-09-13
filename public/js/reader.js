@@ -183,6 +183,7 @@ function scrollToPage() {
 	let page = Number(document.body.dataset.toPage) || 1;
 	console.info("Scroll to page", page);
 	if(page) {
+		// Get relevant element and scroll to it
 		let pageEl = document.querySelectorAll(".pageImg")[page - 1];
 		if(!pageEl) return null;
 		scrollReader(pageEl);
