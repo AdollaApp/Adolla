@@ -1,0 +1,23 @@
+
+<link rel="stylesheet" href="/css/settings.css">
+
+<div class="content-inner">
+	<h1 class="title">Settings</h1>
+	<p>These are app-wide settings.</p>
+
+	<section class="section">
+		<h2 class="sub-title">App icon</h2>
+
+		<div class="icon-grid">
+			{{#each icons}}
+			<div class="icon-option {{#if isSelected}}is-current-icon{{/if}}">
+				<img src="{{src}}" class="icon" alt>
+				<p class="text">{{name}}</p>
+			</div>
+			{{/each}}
+		</div>
+
+	</section>
+</div>
+
+<script src="/js/settings.js"></script>

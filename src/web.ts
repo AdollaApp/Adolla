@@ -7,6 +7,7 @@ import bodyParser from "body-parser";
 // Import custom modules
 import routers from "./routers"
 import { StoredData, Chapter, Progress, ScraperResponse, List } from "./types";
+import getIconSrc from "./util/getIconSrc";
 
 const app = express();
 
@@ -55,7 +56,8 @@ app.engine("handlebars", handlebars({
 		},
 		ifNotByCreator(list: List, options) {
 			return list.byCreator ? options.inverse() : options.fn();
-		}
+		},
+		getIconSrc
 	}
 }));
 app.set("view engine", "handlebars");
@@ -71,6 +73,7 @@ app.use("/", routers.home);
 app.use("/search", routers.search);
 app.use("/backups", routers.backups);
 app.use("/lists", routers.lists);
+app.use("/settings", routers.settings);
 
 // Static assets
 app.use(express.static("public"));

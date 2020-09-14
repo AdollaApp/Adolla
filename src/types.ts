@@ -51,6 +51,9 @@ export interface Database {
 		}
 	}
 	lists: List[];
+	settings: {
+		icon: string;
+	}
 }
 /** Save what the user is currently reading */
 export interface Reading {
