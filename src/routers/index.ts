@@ -4,6 +4,7 @@ import search from "./search";
 import notFound from "./not-found";
 import backups from "./backups";
 import lists from "./lists";
+import settings from "./settings";
 
 export default {
 	home,
@@ -11,5 +12,6 @@ export default {
 	search,
 	notFound,
 	backups,
-	lists
+	lists,
+	settings
 }

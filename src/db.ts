@@ -7,7 +7,10 @@ const defaults: Database = {
 	reading: {},
 	other: {},
 	notified: {},
-	lists: []
+	lists: [],
+	settings: {
+		icon: "Night"
+	}
 }
 
 const db = new Db("data.json", defaults);
