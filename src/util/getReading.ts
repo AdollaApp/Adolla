@@ -10,7 +10,8 @@ export default async function getReading(maxResults: number = Infinity) {
 	// Get manga that is being read
 	let readingManga = db.get("reading");
 
-	let readingKeys = Object.keys(readingManga).sort((b, a) => readingManga[a].last.at - readingManga[b].last.at);
+	let readingKeys = Object.keys(readingManga).sort((b, a) => readingManga[a].last.at - readingManga[b].last.at).filter(key => readingManga[key]?.last);
+	console.log(readingManga);
 
 	readingKeys = readingKeys.slice(0, maxResults);
 

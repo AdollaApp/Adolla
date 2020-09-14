@@ -118,8 +118,6 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 // Mark as read
 router.post("/:slug/mark-chapters-as/", async (req, res) => {
 
-	// ! Allow removing of read status on this endpoint
-
 	// Get relevant values
 	let slug = req.params.slug;
 	let updateValues: {season: number, chapter: number}[] = req.body.values;
@@ -154,6 +152,23 @@ router.post("/:slug/mark-chapters-as/", async (req, res) => {
 
 		// Set last progress data
 		if(lastProgressData) db.set(`reading.${slug}.last`, lastProgressData);
+
+		// Remove `reading object if nothing is left`
+		
+		  // Get data
+		let readingData = db.get(`reading.${slug}`);
+		
+		  // Get keys with proper values
+		let remainingData = Object.entries(readingData).filter(v => v[1]).map(v => v[0]);
+		 
+		  // If the only entry is "last" (and not "1-1" or whatever), remove it
+		console.log(remainingData);
+		if(remainingData[0] === "last" && remainingData.length <= 1) {
+			console.log("Settings");
+			db.set(`reading.${slug}`, undefined)
+		} else {
+			console.log(remainingData, 123);
+		}
 
 		res.json({
 			status: 200
