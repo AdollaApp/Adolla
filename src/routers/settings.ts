@@ -6,7 +6,7 @@ import fs from "fs";
 import getReading from "../util/getReading";
 import getIconSrc, { iconNames, iconNamesReversed } from "../util/getIconSrc";
 
-router.get("/", async (req, res) => {
+router.get("/settings/", async (req, res) => {
 
 	let reading = await getReading();
 
@@ -24,11 +24,12 @@ router.get("/", async (req, res) => {
 
 	res.render("settings", {
 		isSettings: true,
-		icons
+		icons,
+		reading
 	});
 });
 
-router.post("/set-icon/", async (req, res) => {
+router.post("/settings/set-icon/", async (req, res) => {
 
 	let newName = req.body.name;
 	if(iconNamesReversed[newName]) {
@@ -48,6 +49,34 @@ router.post("/set-icon/", async (req, res) => {
 
 	}
 
+});
+
+// Intercept manifest.json
+router.get("/manifest.json", (req, res) => {
+
+	let icons = fs.readdirSync("public/icons").filter(name => !name.includes("DS_Store")).map(fileName => {
+		return {
+			size: "200x200",
+			src: `/icons/${fileName}`
+		}
+	});
+
+	res.json({
+		"name": "Adolla",
+		"short_name": "Adolla",
+		"lang": "EN",
+		"start_url": "/",
+		"display": "standalone",
+		"theme_color": "#4babce",
+		"background_color": "#ffffff",
+		"icons": [
+			{
+				"sizes": "200x200",
+				"src": "/icon.png"
+			},
+			...icons
+		]
+	});
 });
 
 function getIconName(fileName: string) {
