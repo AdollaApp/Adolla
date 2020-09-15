@@ -28,6 +28,8 @@ function updateSorting() {
 		document.querySelector(".chapters").appendChild(div);
 	}
 
+	initSelection();
+
 }
 updateSorting();
 
@@ -119,7 +121,6 @@ function initSelection() {
 	});
 
 }
-initSelection();
 
 function updateSelectionStatus() {
 	let selectedExists = !!document.querySelector(".chapter .select svg.is-selected");
