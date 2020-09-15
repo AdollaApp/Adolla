@@ -1,4 +1,6 @@
 
+let hasAppliedFooterEvents = false;
+
 /***********
  * SORTING PART
  */
@@ -64,61 +66,64 @@ function initSelection() {
 	});
 
 	// Add event listener to the "mark as read" button
-	document.querySelectorAll(".is-footer.selection-actions .action-button").forEach(button => {
+	if(!hasAppliedFooterEvents) {
+		document.querySelectorAll(".is-footer.selection-actions .action-button").forEach(button => {
 
-		button.addEventListener("click", async evt => {
-		
-			// Add background class to button
-			evt.currentTarget.classList.add("badge-background");
-	
-			// Get all "chapter" elements for each selected chapter
-			let selectedChapterEls = [...document.querySelectorAll(".chapter .select .is-selected")].map(selectButton => selectButton.closest(".chapter")).reverse();
-			let selectedChaptersCombinedValues = selectedChapterEls.map(chapter => getChapterSeason(chapter)); // This generates an array with the `combined` value for each selected chapter
+			button.addEventListener("click", async evt => {
 			
-			/**
-			 * Get season and chapter from chapter element
-			 * @param {Element} chapterEl Chapter element
-			 */
-			function getChapterSeason(chapterEl) {
+				// Add background class to button
+				evt.currentTarget.classList.add("badge-background");
+		
+				// Get all "chapter" elements for each selected chapter
+				let selectedChapterEls = [...document.querySelectorAll(".chapter .select .is-selected")].map(selectButton => selectButton.closest(".chapter")).reverse();
+				let selectedChaptersCombinedValues = selectedChapterEls.map(chapter => getChapterSeason(chapter)); // This generates an array with the `combined` value for each selected chapter
 				
-				
-				let href = chapterEl.href;
-				let slug = href.split("/").filter(Boolean).pop();
-				let [season, chapter] = slug.split("-");
-				
-				return { 
-					season: Number(season), 
-					chapter: Number(chapter)
-				};
-			}
-	
-			// Generate URL
-			let url = location.href;
-			if(!url.endsWith("/")) url += "/";
-			let endpoint = `${url}mark-chapters-as/`;
-	
-			let res = await fetch(endpoint, {
-				method: "POST",
-				headers: {
-					"content-type": "application/json"
-				},
-				body: JSON.stringify({
-					values: selectedChaptersCombinedValues,
-					action: button.dataset.action
-				})
+				/**
+				 * Get season and chapter from chapter element
+				 * @param {Element} chapterEl Chapter element
+				 */
+				function getChapterSeason(chapterEl) {
+					
+					
+					let href = chapterEl.href;
+					let slug = href.split("/").filter(Boolean).pop();
+					let [season, chapter] = slug.split("-");
+					
+					return { 
+						season: Number(season), 
+						chapter: Number(chapter)
+					};
+				}
+		
+				// Generate URL
+				let url = location.href;
+				if(!url.endsWith("/")) url += "/";
+				let endpoint = `${url}mark-chapters-as/`;
+		
+				let res = await fetch(endpoint, {
+					method: "POST",
+					headers: {
+						"content-type": "application/json"
+					},
+					body: JSON.stringify({
+						values: selectedChaptersCombinedValues,
+						action: button.dataset.action
+					})
+				});
+				let body = await res.json();
+				if(res.status !== 200) {
+					alert(body.error);
+				} else {
+					// Reload page so the updated percentages are shown
+					// And the badge bg is gone from the button
+					location.reload();
+				}
+		
 			});
-			let body = await res.json();
-			if(res.status !== 200) {
-				alert(body.error);
-			} else {
-				// Reload page so the updated percentages are shown
-				// And the badge bg is gone from the button
-				location.reload();
-			}
 	
 		});
-
-	});
+		hasAppliedFooterEvents = true;
+	}
 
 }
 
