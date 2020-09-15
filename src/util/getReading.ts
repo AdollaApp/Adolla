@@ -11,7 +11,6 @@ export default async function getReading(maxResults: number = Infinity) {
 	let readingManga = db.get("reading");
 
 	let readingKeys = Object.keys(readingManga).filter(key => readingManga[key]?.last).sort((b, a) => readingManga[a].last.at - readingManga[b].last.at);
-	console.log(readingManga);
 
 	readingKeys = readingKeys.slice(0, maxResults);
 
