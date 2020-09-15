@@ -133,21 +133,32 @@ router.post("/:slug/mark-chapters-as/", async (req, res) => {
 
 		let lastProgressData;
 		for(let chapter of markChapters) {
-			let progressData = getProgressData({
-				current: 500,
-				total: 500,
-				season: chapter.season,
-				chapter: chapter.chapter
-			}); // 500 is just a really high number. It has no meaning.
+
+			// Generate query string, this will be used twice
+			let queryString = `reading.${slug}.${chapter.season}-${chapter.chapter.toString().replace(/\./g, "_")}`;
 			
-			// If the action is to remove the read status, override progressData
-			if(req.body.action === "remove-read-status") progressData = undefined;
+			// Get existing data
+			let existingData = db.get(queryString);
+			
+			if(!existingData || (existingData && existingData.percentage !== 100) || req.body.action === "remove-read-status") { // Check if existing data doesn't already have 100%. We don't want to override existing data
+				
+				let progressData = getProgressData({
+					current: 500,
+					total: 500,
+					season: chapter.season,
+					chapter: chapter.chapter
+				}); // 500 is just a really high number. It has no meaning.
+				
+				// If the action is to remove the read status, override progressData
+				if(req.body.action === "remove-read-status") progressData = undefined;
+	
+				// Update last
+				lastProgressData = progressData;
+	
+				// Update db
+				db.set(queryString, progressData);
+			}
 
-			// Update last
-			lastProgressData = progressData;
-
-			// Update db
-			db.set(`reading.${slug}.${chapter.season}-${chapter.chapter.toString().replace(/\./g, "_")}`, progressData);
 		}
 
 		// Set last progress data

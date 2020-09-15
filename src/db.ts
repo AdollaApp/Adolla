@@ -9,7 +9,7 @@ const defaults: Database = {
 	notified: {},
 	lists: [],
 	settings: {
-		icon: "Night"
+		icon: "White"
 	}
 }
 

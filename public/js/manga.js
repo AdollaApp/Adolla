@@ -67,9 +67,41 @@ function initSelection() {
 
 	// Add event listener to the "mark as read" button
 	if(!hasAppliedFooterEvents) {
-		document.querySelectorAll(".is-footer.selection-actions .action-button").forEach(button => {
+		
+		// Add event listener to "select all" buttons
+		document.querySelectorAll(".secondary-button.select-all-chapters").forEach(btn => {
+
+			btn.addEventListener("click", () => {
+				for(let el of document.querySelectorAll(".chapter .select svg")) {
+					el.classList.add("is-selected", "badge-background");
+				}
+				updateSelectionStatus();
+			});
+
+		});
+
+		// Add event listener to "deselect all" buttons
+		document.querySelectorAll(".secondary-button.deselect-all-chapters").forEach(btn => {
+
+			btn.addEventListener("click", () => {
+				for(let el of document.querySelectorAll(".chapter .select svg.is-selected")) {
+					el.classList.remove("is-selected", "badge-background");
+				}
+				updateSelectionStatus();
+			});
+
+		});
+
+		// Add event listener to "mark as read" and "remove read status" buttons (in footer and in sidebar)
+		document.querySelectorAll(".selection-actions .action-button").forEach(button => {
+
+			let action = button.dataset.action;
 
 			button.addEventListener("click", async evt => {
+
+				if(action === "remove-read-status" && !confirm("Do you really want to remove the 'read status' for all these chapters?")) {
+					return;
+				}
 			
 				// Add background class to button
 				evt.currentTarget.classList.add("badge-background");
@@ -107,7 +139,7 @@ function initSelection() {
 					},
 					body: JSON.stringify({
 						values: selectedChaptersCombinedValues,
-						action: button.dataset.action
+						action
 					})
 				});
 				let body = await res.json();
