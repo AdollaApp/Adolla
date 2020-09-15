@@ -23,6 +23,9 @@
 						</a>
 					</nav>
 					{{/if}}
+					<nav class="side-nav selection-actions">
+						{{> mark-as-buttons}}
+					</nav>
 				</div>
 			</div>
 			<div class="top-content">
@@ -79,8 +82,7 @@
 
 <div class="selection-actions is-footer">
 	<div class="selection-actions-inner">
-		<button class="action-button secondary-button remove-read-status" data-action="remove-read-status">Remove read</button>
-		<button class="action-button secondary-button mark-as-read" data-action="mark-as-read">Mark as read</button>
+		{{> mark-as-buttons}}
 	</div>
 </div>
 

@@ -558,6 +558,31 @@ input, textarea {
 	border: 1px solid var(--border);
 }
 
+.manga-top .side-nav.selection-actions .secondary-button {
+	display: flex;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border: 0;
+	width: 100%;
+	font-size: 1rem;
+	cursor: pointer;
+}
+.manga-top .side-nav.selection-actions .secondary-button .icon {
+	margin-right: 8px;
+}
+
+
+.manga-top .selection-actions .show-on-selection-mode {
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 150ms;
+}
+.is-selection-mode .selection-actions .show-on-selection-mode {
+	opacity: 1;
+	pointer-events: initial;
+}
+
+
 /* Chapters */
 .chapter-list {
 	margin-top: 40px;
@@ -1103,36 +1128,56 @@ select {
 	left: 0;
 	bottom: 0;
 	min-height: var(--footer-height);
-	padding: 3px 10px;
+	padding: 9px 10px;
 	border-bottom: env(safe-area-inset-bottom) solid transparent;
 	z-index: 999;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 .is-footer.selection-actions {
 	opacity: 0;
 	pointer-events: none;
 	transition: opacity 150ms; 
 }
-.is-selection-mode .is-footer.is-footer.selection-actions {
-	opacity: 1;
-	pointer-events: initial;
-}
 
 .is-footer .secondary-button {
 	display: block;
 	text-align: center;
+	padding: 5px 8px;
+	margin-left: 0;
+}
+.is-footer .secondary-button .icon {
+	display: none;
+}
+.is-footer .secondary-button .small-title {
 	color: var(--text);
 	font-size: 1rem;
+	font-weight: normal;
 }
-.selection-actions-inner {
+.is-footer .selection-actions-inner {
+	width: 100%;
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	grid-gap: 10px;
+	grid-gap: 5px;
 	align-items: center;
-	height: 100%;
 }
+
+
 
 /* Responsiveness */
 @media screen and (max-width: 700px), (orientation: portrait) {
+
+	/* Selection mode */
+	.is-selection-mode .is-footer.is-footer.selection-actions {
+		opacity: 1;
+		pointer-events: initial;
+	}
+	.side-nav.selection-actions {
+		display: none;
+	}
+
+	/* Floating buttons and stuff */
 	.floating-button-wrapper > * {
 		display: flex;
 		color: var(--text);

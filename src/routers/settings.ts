@@ -62,8 +62,8 @@ router.get("/manifest.json", (req, res) => {
 	});
 
 	res.json({
-		"name": "Adolla",
-		"short_name": "Adolla",
+		"name": `${!!process.env.dev ? "DEV " : ""}Adolla`,
+		"short_name": `${!!process.env.dev ? "DEV " : ""}Adolla`,
 		"lang": "EN",
 		"start_url": "/",
 		"display": "standalone",

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Adolla</title>
+		<title>{{#ifDev}}DEV {{/ifDev}}Adolla</title>
 		<link rel="apple-touch-icon" href="{{getIconSrc}}">
 
 
@@ -25,11 +25,11 @@
 		<meta name="keywords" content="online palette storage">
 		<meta name="theme-color" content="#4babce">
 		
-		<meta property="og:title" content="Adolla">
+		<meta property="og:title" content="{{#ifDev}}DEV {{/ifDev}}Adolla">
 		
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, minimal-ui, viewport-fit=cover">
 		
-		<meta name="twitter:title" content="Adolla">
+		<meta name="twitter:title" content="{{#ifDev}}DEV {{/ifDev}}Adolla">
 	</head>
 	<body data-to-page="{{getPageProgress navigation.currentChapter.progress}}" {{#ifDev}}data-is-dev="true"{{/ifDev}}>
 		<div class="wrapper-all">
