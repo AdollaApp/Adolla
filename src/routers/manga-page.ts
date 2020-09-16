@@ -115,12 +115,14 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 
 });
 
+interface SeasonChapter {season: number, chapter: number};
+
 // Mark as read
 router.post("/:slug/mark-chapters-as/", async (req, res) => {
 
 	// Get relevant values
 	let slug = req.params.slug;
-	let updateValues: {season: number, chapter: number}[] = req.body.values;
+	let updateValues: SeasonChapter[] = req.body.values;
 
 	// Get data
 	let data = await updateManga(slug);
@@ -173,6 +175,7 @@ router.post("/:slug/mark-chapters-as/", async (req, res) => {
 		let remainingData = Object.entries(readingData).filter(v => v[1]).map(v => v[0]);
 		 
 		  // If the only entry is "last" (and not "1-1" or whatever), remove it
+		console.log(remainingData);
 		if(remainingData[0] === "last" && remainingData.length <= 1) {
 			db.set(`reading.${slug}`, undefined)
 		}
@@ -180,14 +183,15 @@ router.post("/:slug/mark-chapters-as/", async (req, res) => {
 		res.json({
 			status: 200
 		});
+		return;
 
-	} else {
-		res.status(404);
-		res.json({
-			status: 404,
-			err: "Something went wrong while fetching information about this manga"
-		});
 	}
+	
+	res.status(404);
+	res.json({
+		status: 404,
+		err: "Something went wrong while fetching information about this manga"
+	});
 
 });
 
