@@ -873,7 +873,7 @@ input, textarea {
 	max-width: 320px;
 	transform: translate(-50%, -50%);
 	max-height: calc(80vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-	overflow-y: auto;
+	/* overflow-y: auto; */
 }
 .quick-select .manga-profile-medium, .quick-select .add-padding {
 	padding: 20px;
@@ -917,9 +917,12 @@ input, textarea {
 	background: rgba(0, 0, 0, 0.2);
 }
 .quick-select .scroll {
-	/* max-height: 300px; */
-	/* overflow-y: auto; */
+	max-height: 300px;
+	overflow-y: auto;
 	position: relative;
+}
+.quick-select.settings-is-open .chapters {
+	display: none;
 }
 .quick-select .scroll > .chapter:first-child {
 	margin-top: 50px;
