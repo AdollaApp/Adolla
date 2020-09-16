@@ -175,7 +175,6 @@ router.post("/:slug/mark-chapters-as/", async (req, res) => {
 		let remainingData = Object.entries(readingData).filter(v => v[1]).map(v => v[0]);
 		 
 		  // If the only entry is "last" (and not "1-1" or whatever), remove it
-		console.log(remainingData);
 		if(remainingData[0] === "last" && remainingData.length <= 1) {
 			db.set(`reading.${slug}`, undefined)
 		}
