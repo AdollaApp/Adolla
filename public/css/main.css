@@ -281,7 +281,7 @@ details .manga-grid {
 .badge svg {
 	display: block;
 }
-.badge-background {
+.badge-background, .badge-background .small-title {
 	background: var(--badge) !important;
 	color: var(--text-on-badge) !important;
 	--text-secondary: var(--text-on-badge-secondary);
@@ -844,6 +844,7 @@ input, textarea {
 	top: 0;
 	z-index: 100;
 	background: var(--body);
+	overflow-y: hidden;
 }
 .quick-select details[open] {
 	box-shadow: 0 4px 8px var(--border-dark);
@@ -1178,6 +1179,11 @@ select {
 	}
 	.side-nav.selection-actions {
 		display: none;
+	}
+
+	/* Extra margin for chapters */
+	.content-inner .chapters {
+		margin-bottom: calc(50px + calc(env(safe-area-inset-bottom)));
 	}
 
 	/* Floating buttons and stuff */
