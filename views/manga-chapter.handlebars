@@ -3,9 +3,6 @@
 	<a class="anchor go-to-main-page floating-button is-floating-button" href="/{{data.constant.slug}}">
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg>
 	</a>
-	<a class="anchor go-to-main-page floating-button is-floating-button" href="/">
-		<svg style="padding: 5px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path</svg>
-	</a>
 	<div class="do-padding is-floating-button">
 		{{navigation.currentChapter.label}}
 	</div>
@@ -52,23 +49,21 @@
 	{{!-- Quick select for chapters --}}
 	<div class="quick-select chapter-quick-select">
 
-		<div class="quick-sticky">
-			{{!-- Back to manga link --}}
-			<div class="manga-profile-medium">
-				<div class="poster-wrapper">
-					<img class="poster" alt="Manga's poster" src="{{data.constant.posterUrl}}">
-				</div>
-				<div class="core">
-					<div class="core-inner">
-						<h3 class="small-title">{{data.constant.title}}</h3>
-						<a class="anchor go-to-main-page" href="/{{data.constant.slug}}">Go to details page</a>
-					</div>
+		{{!-- Back to manga link --}}
+		<div class="manga-profile-medium">
+			<div class="poster-wrapper">
+				<img class="poster" alt="Manga's poster" src="{{data.constant.posterUrl}}">
+			</div>
+			<div class="core">
+				<div class="core-inner">
+					<h3 class="small-title">{{data.constant.title}}</h3>
+					<a class="anchor go-to-main-page" href="/{{data.constant.slug}}">Go to details page</a>
 				</div>
 			</div>
-
-			{{!-- Setting --}}
-			{{> settings }}
 		</div>
+
+		{{!-- Setting --}}
+		{{> settings }}
 
 		{{!-- Scrollable section --}}
 		<div class="scroll chapters">
