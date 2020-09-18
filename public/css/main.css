@@ -965,7 +965,7 @@ input, textarea {
 	justify-content: flex-start;
     flex-direction: row-reverse;
 }
-.floating-button-wrapper > * {
+.is-floating-button {
 	display: none;
 	min-height: 36px;
 	box-sizing: border-box;
@@ -976,7 +976,7 @@ input, textarea {
 	border: 2px solid var(--border);
 	margin: 10px 0;
 }
-.floating-button-wrapper .do-padding {
+.is-floating-button.do-padding {
 	padding: 0 10px;
 }
 .floating-button-wrapper > * {
@@ -1120,17 +1120,6 @@ select {
 	border-top: 1px solid var(--border);
 }
 
-/* Toggle on tap */
-.toggle-on-tap {
-	transition: opacity 300ms;
-	opacity: 0;
-	pointer-events: none;
-}
-.toggle-on-tap.tapped {
-	opacity: 1;
-	pointer-events: initial;
-}
-
 /* Another footer type situation */
 .is-footer {
 	width: 100%;
@@ -1201,6 +1190,14 @@ select {
 	align-items: center;
 }
 
+/* Alternative page coounter */
+.current-pages-button {
+	position: fixed;
+	bottom: calc(10px + env(safe-area-inset-bottom));
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 20;
+}
 
 
 /* Responsiveness */
@@ -1219,6 +1216,17 @@ select {
 		display: flex;
 	}
 
+	/* Toggle on tap */
+	.toggle-on-tap {
+		transition: opacity 300ms;
+		opacity: 0;
+		pointer-events: none;
+	}
+	.toggle-on-tap.tapped {
+		opacity: 1;
+		pointer-events: initial;
+	}
+
 	/* Selection mode */
 	.is-selection-mode .selection-actions {
 		opacity: 1;
@@ -1234,7 +1242,7 @@ select {
 	}
 
 	/* Floating buttons and stuff */
-	.floating-button-wrapper > * {
+	.is-floating-button {
 		display: flex;
 		color: var(--text);
 	}
