@@ -45,7 +45,9 @@ function updatePages() {
 
 	if(loaded) document.body.setAttribute("data-to-page", currentPage);
 
-	document.querySelector(".chapter-navigation span.current").innerText = `${currentPage} of ${pageCount}`;
+	document.querySelectorAll(".current-page").forEach(span => {
+		span.innerText = `${currentPage} of ${pageCount}`;
+	});
 }
 updatePages();
 

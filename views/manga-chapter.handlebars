@@ -1,12 +1,12 @@
 
 <div class="floating-button-wrapper toggle-on-tap">
-	<a class="anchor go-to-main-page floating-button" href="/{{data.constant.slug}}">
+	<a class="anchor go-to-main-page floating-button is-floating-button" href="/{{data.constant.slug}}">
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg>
 	</a>
-	<a class="anchor go-to-main-page floating-button" href="/">
+	<a class="anchor go-to-main-page floating-button is-floating-button" href="/">
 		<svg style="padding: 5px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path</svg>
 	</a>
-	<div class="do-padding">
+	<div class="do-padding is-floating-button">
 		{{navigation.currentChapter.label}}
 	</div>
 </div>
@@ -17,6 +17,9 @@
 		{{#each data.data.chapterImages}}
 		<img alt="Page" src="{{this}}" class="pageImg">
 		{{/each}}
+	</div>
+	<div class="current-pages-button toggle-on-tap tapped is-floating-button do-padding">
+		<span class="current-page">0 of 0</span>
 	</div>
 </section>
 
