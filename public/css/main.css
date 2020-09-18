@@ -1203,11 +1203,13 @@ select {
 
 /* Chapter navigation at end of chapter */
 .in-chapter-navigation {
+	box-sizing: border-box;
+	width: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin: 80px 20px;
-	padding-bottom: var(--footer-height);
+	padding: 80px 20px;
+	padding-bottom: calc(80px + var(--footer-height));
 }
 .in-chapter-navigation .nav-items {
 	display: grid;
