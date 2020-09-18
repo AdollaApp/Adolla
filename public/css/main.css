@@ -21,7 +21,7 @@
 
 @media (prefers-color-scheme: dark) {
 	:root {
-		--body-harsh: black:
+		--body-harsh: black;
 		--body: #191919;
 		--body-offset: #242424;
 		--text: #c9c9c9;
