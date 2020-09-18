@@ -221,7 +221,7 @@ details.big-summary summary {
 	position: sticky;
 	top: env(safe-area-inset-top);
 	background: var(--body);
-	z-index: 20;
+	z-index: 10;
 }
 details .manga-grid {
 	margin-top: 20px;
