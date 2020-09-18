@@ -17,6 +17,30 @@
 		{{#each data.data.chapterImages}}
 		<img alt="Page" src="{{this}}" class="pageImg">
 		{{/each}}
+		{{#if navigation}}
+		<div class="in-chapter-navigation">
+			<div class="in-chapter-nav-inner">
+				<div class="nav-items">
+					<div class="next">
+						{{#if navigation.nextChapter}}
+						<a href="{{navigation.nextChapter.href}}" class="chapterLink secondary-button">
+							<span>{{navigation.nextChapter.label}}</span>
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="decorative feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+						</a>
+						{{/if}}
+					</div>
+					<div class="previous">
+						{{#if navigation.previousChapter}}
+						<a href="{{navigation.previousChapter.href}}" class="chapterLink secondary-button">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="decorative feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg>
+							<span>{{navigation.previousChapter.label}}</span>
+						</a>
+						{{/if}}
+					</div>
+				</div>
+			</div>
+		</div>
+		{{/if}}
 	</div>
 	<div class="current-pages-button toggle-on-tap tapped is-floating-button do-padding">
 		<span class="current-page">0 of 0</span>
