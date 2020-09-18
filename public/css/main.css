@@ -4,6 +4,7 @@
 	--text-on-badge-secondary: rgba(255, 255, 255, 0.7);
 }
 :root {
+	--body-harsh: white;
 	--body: #FBFBFB;
 	--body-offset: #f5f7f9;
 	
@@ -20,6 +21,7 @@
 
 @media (prefers-color-scheme: dark) {
 	:root {
+		--body-harsh: black:
 		--body: #191919;
 		--body-offset: #242424;
 		--text: #c9c9c9;
@@ -1199,6 +1201,30 @@ select {
 	z-index: 20;
 }
 
+/* Chapter navigation at end of chapter */
+.in-chapter-navigation {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 80px 20px;
+	padding-bottom: var(--footer-height);
+}
+.in-chapter-navigation .nav-items {
+	display: grid;
+	grid-template-columns: auto auto;
+	grid-template-areas: "previous next";
+	grid-gap: 10px;
+}
+.in-chapter-navigation .nav-items .secondary-button  {
+	background: var(--body-harsh);
+	color: var(--text);
+}
+.in-chapter-navigation .nav-items .next {
+	grid-area: next;
+}
+.in-chapter-navigation .nav-items .previous {
+	grid-area: previous;
+}
 
 /* Responsiveness */
 @media screen and (max-width: 700px), (orientation: portrait) {
