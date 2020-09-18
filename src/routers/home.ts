@@ -31,7 +31,8 @@ router.get("/", async (req, res) => {
 	res.render("home", {
 		popular,
 		reading,
-		lists
+		lists,
+		isHome: true
 	});
 });
 

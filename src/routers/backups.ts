@@ -27,7 +27,7 @@ router.get("/", async (req, res) => {
 	res.render("backups", {
 		reading,
 		backups,
-		isBackup: true
+		isBackups: true
 	});
 });
 
