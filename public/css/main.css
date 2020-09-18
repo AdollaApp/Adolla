@@ -41,8 +41,8 @@ html, body {
 
 body {
 
-	--main-footer-height: 50px;
-	--footer-height: calc(var(--main-footer-height) + env(safe-area-inset-bottom));;
+	--main-footer-height: 0px;
+	--footer-height: 0;
 
 	margin: 0;
 	color: var(--text-secondary);
@@ -747,6 +747,7 @@ input, textarea {
 /* Pages */ 
 .manga-reader.loaded {
 	padding-bottom: calc(var(--footer-height) + 50px);
+	padding-bottom: 0;
 }
 /* Horizontal reader */
 .pages[data-reader-direction="horizontal"] {
@@ -768,8 +769,8 @@ input, textarea {
 .pages[data-reader-direction="vertical"][data-vertical-image-size="full-height"] .pageImg, 
 .pages[data-reader-direction="horizontal"] .pageImg {
 	width: 100%;
-	max-height: calc(100vh - var(--footer-height) - env(safe-area-inset-top) - 50px);
-	height: calc(100vh - var(--footer-height) - env(safe-area-inset-top) - 50px);
+	max-height: calc(100vh - env(safe-area-inset-top));
+	height: calc(100vh - env(safe-area-inset-top));
 }
 
 [data-reader-reader-direction="vertical"][data-reader-vertical-image-size="full-height"] .manga-reader.loaded, 
@@ -877,12 +878,17 @@ input, textarea {
 	transform: translate(-50%, -50%);
 	max-height: calc(80vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
 	overflow-y: hidden;
+
+	z-index: 200;
 }
 .quick-select .manga-profile-medium, .quick-select .add-padding {
 	padding: 20px;
 }
 .quick-select .section.add-padding {
 	border-bottom: 1px solid var(--border);
+}
+.quick-select .section.add-padding[open] {
+	border-bottom: 0;
 }
 .quick-select .manga-profile-medium {
 	border-bottom: 1px solid var(--border);
@@ -918,6 +924,7 @@ input, textarea {
 	width: 100vw;
 	height: 100vh;
 	background: rgba(0, 0, 0, 0.2);
+	z-index: 5;
 }
 .quick-select .scroll {
 	max-height: 300px;
@@ -1142,6 +1149,7 @@ select {
 	border-top: 1px solid var(--border);
 	display: none;
 	box-sizing: border-box;
+	z-index: 1;
 }
 .is-footer .nav-link {
 	text-decoration: none;
@@ -1198,8 +1206,12 @@ select {
 /* Responsiveness */
 @media screen and (max-width: 700px), (orientation: portrait) {
 
-	/* Show footer */
+	body {
+		--main-footer-height: 50px;
+		--footer-height: calc(var(--main-footer-height) + env(safe-area-inset-bottom));;
+	}
 
+	/* Show footer */
 	aside.main-sidebar .section.nav {
 		display: none;
 	}
