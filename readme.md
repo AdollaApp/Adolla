@@ -2,6 +2,18 @@
 
 Easy to use web app to read Manga.
 
+## Features
+
+- Easy progress tracking
+- A light and dark theme
+- Multiple icons to pick from
+- Automatic backups every 12 hours
+- Lists to store manga in
+- A customizable reader
+- Standalone iOS support
+- Is a PWA
+- Easy navigation from anywhere in the app
+
 ## Setup
 
 To set this up, clone the repo. Navigate to the project root and install the relevant packages. This can be done with `npm install`. 
