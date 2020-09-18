@@ -789,7 +789,7 @@ input, textarea {
 }
 
 /* Pages */
-.pageImg {
+.pages > * {
 	width: 100%;
 	min-width: 100%;
 	object-fit: contain;
@@ -1218,6 +1218,9 @@ select {
 .in-chapter-navigation .nav-items .secondary-button  {
 	background: var(--body-harsh);
 	color: var(--text);
+}
+.in-chapter-navigation .nav-items .secondary-button:hover {
+	background: transparent;
 }
 .in-chapter-navigation .nav-items .next {
 	grid-area: next;
