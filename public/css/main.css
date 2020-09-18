@@ -924,7 +924,7 @@ input, textarea {
 	width: 100vw;
 	height: 100vh;
 	background: rgba(0, 0, 0, 0.2);
-	z-index: 5;
+	z-index: 25;
 }
 .quick-select .scroll {
 	max-height: 300px;
@@ -1237,13 +1237,6 @@ select {
 	.floating-button-wrapper > * {
 		display: flex;
 		color: var(--text);
-	}
-	[data-reader-reader-direction="horizontal"] .floating-button-wrapper {
-		margin-bottom: -100%;
-	}
-	[data-reader-reader-direction="vertical"] .manga-reader {
-		/* Deal with tricky back button margins */
-		margin-top: -56px;
 	}
 
 
