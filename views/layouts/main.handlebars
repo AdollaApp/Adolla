@@ -33,7 +33,7 @@
 	</head>
 	<body data-to-page="{{getPageProgress navigation.currentChapter.progress}}" {{#ifDev}}data-is-dev="true"{{/ifDev}}>
 		
-		<div class="nav-footer is-footer">
+		<div class="nav-footer is-footer toggle-on-tap">
 			<a class="nav-link {{#if isHome}}is-current-nav-item{{/if}}" href="/">
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
 			</a>
@@ -119,7 +119,7 @@
 				{{/if}}
 				{{#if navigation}}
 				<hr>
-				<div class="section chapter-navigation">
+				<div class="section chapter-navigation toggle-on-tap">
 					<div class="current toggle-quick-select"><span class="decorative">Currently on page</span> <span class="current">0 of 0</span></div>
 					<div class="next">
 						{{#if navigation.nextChapter}}
