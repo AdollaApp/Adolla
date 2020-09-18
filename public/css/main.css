@@ -1149,7 +1149,7 @@ select {
 	border-top: 1px solid var(--border);
 	display: none;
 	box-sizing: border-box;
-	z-index: 1;
+	z-index: 20;
 }
 .is-footer .nav-link {
 	text-decoration: none;

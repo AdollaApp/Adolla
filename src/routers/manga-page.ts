@@ -104,6 +104,7 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 				previousChapter,
 				currentChapter
 			},
+			isMangaPage: true,
 			readerSettings: true,
 			currentSlug: slug,
 			reading
