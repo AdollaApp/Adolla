@@ -58,17 +58,3 @@ if (sw && navigator.onLine) {
 		});
 	}
 }
-
-// Add event listener for click
-// document.querySelectorAll(".quick-select .settings-toggle").forEach(settings => {
-	
-// 	settings.addEventListener("click", () => {
-// 		// See if details is open or not
-// 		let isOpen = settings.getAttribute("open") === null;
-		
-// 		// Remove or add class to wrapper based on that
-// 		let classFunction = isOpen ? "add" : "remove";
-// 		settings.closest(".quick-select").classList[classFunction]("settings-is-open");
-// 	});
-
-// });
