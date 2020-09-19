@@ -11,8 +11,8 @@ export interface SearchOptions {
  * A scraper
  * This can be any of the scrapers
  */
-export interface Scraper {
-	provider: Provider;
-	search(query: string, options?: Partial<SearchOptions>): Promise<ScraperResponse[]>;
-	scrape(query: string, chapter?: number, season?: number): Promise<ScraperResponse>
+export abstract class Scraper {
+	public provider: Provider;
+	public abstract search(query: string, options?: Partial<SearchOptions>): Promise<ScraperResponse[]>;
+	public abstract scrape(query: string, chapter?: number, season?: number): Promise<ScraperResponse>
 }
