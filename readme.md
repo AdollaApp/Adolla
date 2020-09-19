@@ -13,6 +13,7 @@ Easy to use web app to read Manga.
 - Standalone iOS support
 - Is a PWA
 - Easy navigation from anywhere in the app
+- Telegram intergration to notify you about new chapters
 
 ## Setup
 
