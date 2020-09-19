@@ -17,7 +17,7 @@ export default async function getReading(maxResults: number = Infinity) {
 
 	// TypeScript doesn't typeguard .filter :/
 	let reading: ScraperResponse[] = await Promise.all(readingKeys.map(async slug => {
-		let manga = await updateManga(slug);
+		let manga = await updateManga(readingManga[slug].provider ?? "Mangasee", slug);
 		manga = await setMangaProgress(manga);
 		return manga;
 	}));

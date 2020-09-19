@@ -4,7 +4,7 @@ const router = express.Router();
 
 import db from "../db";
 import updateManga from "../util/updateManga";
-import Mangasee from "../scrapers/mangasee";
+import scrapers from "../scrapers";
 import { Progress, StoredData, List } from "../types";
 import getMangaProgress, { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";
@@ -20,7 +20,7 @@ router.get("/:slug", async (req, res, next) => {
 
 	let param = req.params.slug;
 
-	let data = await updateManga(param, true);
+	let data = await updateManga("Mangasee", param, true);
 
 	if(data && data.success) {
 
@@ -67,12 +67,12 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 
 	let [_null, season, chapter]: number[] = chapterMatch.map(v => Number(v)); // Bit of a hack...
 
-	let data = await updateManga(slug, true);
+	let data = await updateManga("Mangasee", slug, true);
 
 	if(data && data.success) {
 
 		// Stuff
-		let manga = await Mangasee.scrape(slug, chapter, season);
+		let manga = await scrapers.Mangasee.scrape(slug, chapter, season); // TODO: implement season & chapter in `updateManga`
 		manga = await setMangaProgress(manga);
 
 		if(!manga.success) {
@@ -126,7 +126,7 @@ router.post("/:slug/mark-chapters-as/", async (req, res) => {
 	let updateValues: SeasonChapter[] = req.body.values;
 
 	// Get data
-	let data = await updateManga(slug);
+	let data = await updateManga("Mangasee", slug);
 
 	if(data.success === true) { 
 
@@ -218,7 +218,8 @@ router.post("/:slug/set-lists", async (req, res) => {
 		let list = currentLists.find(l => l.slug === n.slug);
 		if(!list.entries.find(entry => entry.slug === req.params.slug) && !list.byCreator) {
 			list.entries.push({
-				slug: req.params.slug
+				slug: req.params.slug,
+				provider: "Mangasee"
 			});
 			list.last = Date.now();
 		}

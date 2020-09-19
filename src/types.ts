@@ -1,4 +1,7 @@
 
+/** All available scrapers */
+type Provider = "Mangasee";
+
 /** This is a single chapter */
 export interface Chapter {
 	/** Season of chapter */
@@ -68,7 +71,7 @@ export type ScraperResponse = StoredData | ScraperError;
 export interface ScraperData {
 	constant: MangaMeta;
 	data: MangaData;
-	provider: "Mangasee"; // All possible scrapers. Useful for future proofing
+	provider: Provider; // All possible scrapers. Useful for future proofing
 	success: true; // Always true
 }
 /** Error object thrown by scrapers */
@@ -142,6 +145,7 @@ export interface List {
 	last?: number;
 	entries: {
 		slug: string;
+		provider?: string;
 		data?: ScraperResponse
 	}[];
 }

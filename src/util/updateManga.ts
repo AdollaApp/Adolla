@@ -1,16 +1,29 @@
 
-import Mangasee from "../scrapers/mangasee";
+import scrapers from "../scrapers";
 import db from "../db";
 import { ScraperResponse } from "../types";
 import getMangaProgress from "./getMangaProgress";
 import config from "../config.json";
+import { Scraper } from "../scrapers/types";
 
-export default async function updateManga(slug: string, ignoreExisting: boolean = false) {
+export default async function updateManga(provider: string, slug: string, ignoreExisting: boolean = false): Promise<ScraperResponse> {
 
-	let existing = db.get(`manga_cache.${slug}`);
+	let dbQuery = `manga_cache.${provider}.${slug}`;
+
+	let existing = db.get(dbQuery);
 	if(existing && existing.savedAt > Date.now() - config.cache.duration && !ignoreExisting) return await addInfo(existing);
 
-	let data = await Mangasee.scrape(slug);
+	let scraper: Scraper = scrapers[provider];
+	if(!scraper) {
+		console.error("No scraper: " + provider);
+		return {
+			err: "No such scraper exists",
+			status: 0,
+			success: false
+		};
+	}
+
+	let data = await scraper.scrape(slug);
 	if(data.success) {
 		data.savedAt = Date.now();
 		
@@ -20,7 +33,7 @@ export default async function updateManga(slug: string, ignoreExisting: boolean 
 			delete d.realProgress;
 		});
 		
-		db.set(`manga_cache.${slug}`, data);
+		db.set(dbQuery, data);
 	} 
 	return await addInfo(data);
 }

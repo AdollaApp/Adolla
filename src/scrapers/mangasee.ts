@@ -3,6 +3,7 @@ import { ScraperData, ScraperError, Chapter, Directory, DirectoryItem, ScraperRe
 import fetch from "node-fetch";
 import Fuse from "fuse.js";
 import updateManga from "../util/updateManga";
+import { Scraper } from "./types";
 
 /** This is a chapter in mangasee API */
 interface ChapterResponse {
@@ -24,10 +25,9 @@ interface ChapterResponse {
 
 interface SearchOptions {
 	resultCount: number;
-	bThing: number;
 }
 
-class MangaseeClass {
+export default class MangaseeClass extends Scraper {
 
 	public async search(query: string, options?: Partial<SearchOptions>): Promise<(ScraperResponse)[]> {
 
@@ -71,7 +71,7 @@ class MangaseeClass {
 
 		
 		// Get details for each search result
-		let searchResultData: ScraperResponse[] = await Promise.all(matchedResults.map((item: DirectoryItem) => updateManga(item[Directory.Slug])))
+		let searchResultData: ScraperResponse[] = await Promise.all(matchedResults.map((item: DirectoryItem) => updateManga("mangasee", item[Directory.Slug])))
 
 		// Return all successfull data requests
 		return searchResultData.filter(v => v.success);
@@ -218,10 +218,6 @@ function error(status = -1, err = "Unknown"): ScraperError {
 		success: false
 	}
 }
-
-// Generate mangasee object and export it
-const Mangasee = new MangaseeClass();
-export default Mangasee;
 
 /** 
  * Normalize a number string.
