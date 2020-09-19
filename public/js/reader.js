@@ -5,6 +5,11 @@
 // Load state
 let loaded = false;
 
+document.querySelector(".manga-reader .loading").scrollIntoView({
+	inline: "start",
+	block: "start"
+});
+
 // This is a debounce effect for the page update
 let scrollDebounce;
 function updateScrollDebounce() {
@@ -161,8 +166,11 @@ document.addEventListener("keydown", evt => {
 });
 
 // "Tap to toggle" elements
-document.querySelectorAll(".pageImg").forEach(page => {
-	page.addEventListener("click", () => {
-		document.querySelectorAll(".toggle-on-tap").forEach(toggle => toggle.classList.toggle("tapped"));
-	});
+document.querySelector(".pages").addEventListener("click", evt => {
+	
+	// Get all classes for each element in the path
+	let classes = [...evt.composedPath()].reverse().map(v => Object.values(v.classList ?? {}).join(".")).map(v => v.length > 0 ? "." + v : v).join(" ").trim();
+
+	// If no button was pressed, toggle each relevant class
+	if(!classes.includes(".secondary-button")) document.querySelectorAll(".toggle-on-tap").forEach(toggle => toggle.classList.toggle("tapped"));
 });
