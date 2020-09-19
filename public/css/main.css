@@ -44,7 +44,7 @@ html, body {
 body {
 
 	--main-footer-height: 0px;
-	--footer-height: 0;
+	--footer-height: 0px;
 
 	margin: 0;
 	color: var(--text-secondary);
