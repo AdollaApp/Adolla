@@ -186,7 +186,7 @@ details > summary .summary-inner {
 	font-weight: bold;
 }
 details > summary:focus {
-	outline: 2px solid var(--badge);
+	outline: 0;
 }
 details .icons {
 	display: flex;
