@@ -58,3 +58,10 @@ if (sw && navigator.onLine) {
 		});
 	}
 }
+
+// Loading state for footer buttons
+document.querySelectorAll(".nav-footer .nav-link").forEach(link => {
+	link.addEventListener("click", () => {
+		link.classList.add("loading");
+	});
+});

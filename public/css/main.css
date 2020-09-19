@@ -716,7 +716,7 @@ input, textarea {
 	position: relative;
 	z-index: 0;
 	width: 100%;
-	height: 200px;
+	height: calc(100vh - env(safe-area-inset-top));
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -1144,6 +1144,9 @@ select {
 .nav-link.is-current-nav-item {
 	background: var(--badge);
 	color: var(--text-on-badge);
+}
+.nav-link:not(.is-current-nav-item).loading {
+	background: var(--border);
 }
 .is-footer svg {
 	display: block;
