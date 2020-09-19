@@ -1230,9 +1230,15 @@ select {
 /* Responsiveness */
 @media screen and (max-width: 700px), (orientation: portrait) {
 
+	/* Set footer height */
 	body {
 		--main-footer-height: 50px;
 		--footer-height: calc(var(--main-footer-height) + env(safe-area-inset-bottom));;
+	}
+
+	/* Fix settings */
+	.content-inner .settings.details-inner {
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 	}
 
 	/* Show footer */
