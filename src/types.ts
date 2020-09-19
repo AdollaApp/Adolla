@@ -1,6 +1,5 @@
 
-/** All available scrapers */
-type Provider = "Mangasee";
+import { Provider } from "./scrapers/types";
 
 /** This is a single chapter */
 export interface Chapter {

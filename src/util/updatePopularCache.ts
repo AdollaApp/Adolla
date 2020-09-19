@@ -1,7 +1,7 @@
 
 import cfg from "../config.json";
 import updateManga from "./updateManga";
-import scrapers from "../scrapers";
+import * as scrapers from "../scrapers";
 import db from "../db";
 import getReading from "./getReading";
 import { Progress } from "../types";
