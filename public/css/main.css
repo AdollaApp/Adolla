@@ -760,6 +760,8 @@ input, textarea {
 	align-items: center;
 	flex-wrap: nowrap;
 	scroll-snap-type: x mandatory;
+	max-height: calc(100vh - env(safe-area-inset-top));
+	overflow-y: hidden;
 }
 .pages[data-reader-direction="horizontal"] .pageImg {
 	height: calc(100vh - var(--footer-height) - env(safe-area-inset-top) - 50px);
