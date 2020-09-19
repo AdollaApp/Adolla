@@ -1,7 +1,7 @@
 
 import cfg from "../config.json";
 import updateManga from "./updateManga";
-import Mangasee from "../scrapers/mangasee";
+import scrapers from "../scrapers";
 import db from "../db";
 import getReading from "./getReading";
 import { Progress } from "../types";
@@ -23,11 +23,11 @@ class Updater {
 		 * UPDATE "POPULAR" CACHE
 		 */
 		console.info(chalk.yellowBright("[CACHE]") + ` Updating popular cache at ${new Date().toLocaleString()}`);
-		let popular = await Mangasee.search("");
+		let popular = await scrapers.Mangasee.search("");
 		
-		await Promise.all(popular.map(obj => obj.success ? obj.constant.slug : null).filter(Boolean).map(async slug => {
+		await Promise.all(popular.map(obj => obj.success ? obj : null).filter(Boolean).map(async obj => {
 			// Update manga and store new value in cache
-			await updateManga(slug, true);
+			await updateManga(obj.provider ?? "Mangasee", obj.constant.slug, true);
 		}));
 
 		console.info(chalk.green("[CACHE]") + " Updated cache for popular manga");
@@ -39,10 +39,11 @@ class Updater {
 		console.info(chalk.yellowBright("[NOTIFS]") + ` Looking for new chapters at ${new Date().toLocaleString()}`);
 		let reading = await getReading();
 		
-		await Promise.all(reading.map(obj => obj.success ? obj.constant.slug : null).filter(Boolean).map(async slug => {
+		await Promise.all(reading.map(obj => obj.success ? obj : null).filter(Boolean).map(async obj => {
 			
 			// Update manga and store new value in cache + variable
-			let data = await updateManga(slug, true);
+	
+			let data = await updateManga(obj.provider, obj.constant.slug, true);
 			
 			// Check for new chapters and notify user
 			if(data.success) {
