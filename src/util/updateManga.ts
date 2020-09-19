@@ -1,5 +1,5 @@
 
-import scrapers from "../scrapers";
+import * as scrapers from "../scrapers";
 import db from "../db";
 import { ScraperResponse } from "../types";
 import getMangaProgress from "./getMangaProgress";

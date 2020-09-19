@@ -2,7 +2,7 @@
 import express from "express";
 const router = express.Router();
 
-import scrapers from "../scrapers";
+import * as scrapers from "../scrapers";
 import { ScraperResponse } from "../types";
 import { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";

@@ -4,7 +4,7 @@ const router = express.Router();
 
 import db from "../db";
 import updateManga from "../util/updateManga";
-import scrapers from "../scrapers";
+import * as scrapers from "../scrapers";
 import { Progress, StoredData, List } from "../types";
 import getMangaProgress, { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";
