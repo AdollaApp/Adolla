@@ -71,7 +71,6 @@ app.use(bodyParser.json());
 // Routers
 app.use("/", routers.home);
 app.use("/search", routers.search);
-app.use("/backups", routers.backups);
 app.use("/lists", routers.lists);
 app.use("/", routers.settings);
 
