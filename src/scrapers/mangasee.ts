@@ -22,11 +22,10 @@ interface ChapterResponse {
 }
 
 
-export class MangaseeClass implements Scraper {
-
-	public provider: Provider;
+export class MangaseeClass extends Scraper {
 
 	constructor() {
+		super();
 		this.provider = "Mangasee";
 	}
 
