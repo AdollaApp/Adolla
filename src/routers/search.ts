@@ -3,13 +3,15 @@ import express from "express";
 const router = express.Router();
 
 import Mangasee from "../scrapers/mangasee";
+import { ScraperResponse } from "../types";
 import { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";
 
 router.get("/", async (req, res) => {
-	let query = req.query.q as string;
+	let query = ((req.query.q ?? "") as string).trim();
 	
-	let searchResults = await Mangasee.search(query);
+	let searchResults: ScraperResponse[] = [];
+	searchResults = await Mangasee.search(query);
 	
 	await Promise.all(searchResults.map(setMangaProgress));
 
@@ -18,7 +20,8 @@ router.get("/", async (req, res) => {
 	res.render("search", {
 		reading,
 		query,
-		searchResults
+		searchResults,
+		isSearch: true
 	});
 });
 

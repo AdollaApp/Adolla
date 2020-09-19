@@ -37,6 +37,9 @@
 			<a class="nav-link {{#if isHome}}is-current-nav-item{{/if}}" href="/">
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
 			</a>
+			<a class="nav-link {{#if isSearch}}is-current-nav-item{{/if}}" href="/search/">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+			</a>
 			<a class="nav-link {{#if isLists}}is-current-nav-item{{/if}}" href="/lists">
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
 			</a>
@@ -89,7 +92,7 @@
 				</div>
 				<div class="section search">
 					<label for="search">Search</label>
-					<input type="text" placeholder="Fire Force" id="search" value="{{query}}">
+					<input type="text" placeholder="Fire Force" id="search" value="{{query}}" class="search-input">
 				</div>
 				{{#if reading}}
 				<div class="section reading-side">
