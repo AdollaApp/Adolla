@@ -20,7 +20,7 @@
 				<div class="nav-items">
 					<div class="next">
 						{{#if navigation.nextChapter}}
-						<a href="{{navigation.nextChapter.href}}" class="chapterLink secondary-button">
+						<a href="{{genLink2 @root.data.provider @root.data.constant.slug navigation.nextChapter.hrefString }}" class="chapterLink secondary-button">
 							<span>{{navigation.nextChapter.label}}</span>
 							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="decorative feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
 						</a>
@@ -28,7 +28,7 @@
 					</div>
 					<div class="previous">
 						{{#if navigation.previousChapter}}
-						<a href="{{navigation.previousChapter.href}}" class="chapterLink secondary-button">
+						<a href="{{genLink2 @root.data.provider @root.data.constant.slug navigation.previousChapter.hrefString }}" class="chapterLink secondary-button">
 							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="decorative feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg>
 							<span>{{navigation.previousChapter.label}}</span>
 						</a>
@@ -57,7 +57,7 @@
 			<div class="core">
 				<div class="core-inner">
 					<h3 class="small-title">{{data.constant.title}}</h3>
-					<a class="anchor go-to-main-page" href="/{{data.constant.slug}}">Go to details page</a>
+					<a class="anchor go-to-main-page" href="{{genLink2 data.provider data.constant.slug}}">Go to details page</a>
 				</div>
 			</div>
 		</div>
@@ -69,7 +69,7 @@
 		<div class="scroll chapters">
 			<h3 class="small-title">Chapters</h3>
 			{{#each data.data.chapters}}
-			<a class="chapter {{ isCurrentChapter this.season @root.navigation.currentChapter.season this.chapter @root.navigation.currentChapter.chapter }}" href="{{this.href}}">
+			<a class="chapter {{ isCurrentChapter this.season @root.navigation.currentChapter.season this.chapter @root.navigation.currentChapter.chapter }}" href="{{ genLink2 @root.data.provider @root.data.constant.slug this.hrefString }}">
 				<span class="label">{{this.label}}</span> 
 				{{#if this.progress}}<span class="progress" data-color="{{this.progress.percentageColor}}">{{this.progress.percentage}}%</span>{{/if}}
 			</a>

@@ -1,9 +1,9 @@
 <div class="manga-card">
 	<a class="to-manga" href="
 	{{#if toChapter}}
-	{{genLink2 manga.constant.slug manga.progress.season manga.progress.chapter }}
+	{{genLink2 manga.provider manga.constant.slug manga.progress.hrefString }}
 	{{else}}
-	{{genLink2 manga.constant.slug}}
+	{{genLink2 manga.provider manga.constant.slug}}
 	{{/if}}
 	">
 		{{!-- <img alt="Poster" src="{{manga.constant.posterUrl}}" class="poster"> --}}
@@ -28,7 +28,7 @@
 			<span class="flex">
 				
 				{{#if progress.new}}
-				<a class="to-manga" href="{{#if toChapter}}{{genLink2 manga.constant.slug manga.progress.season manga.progress.chapter }}{{else}}{{genLink2 manga.constant.slug}}{{/if}}">
+				<a class="to-manga" href="{{#if toChapter}}{{genLink2 manga.provider manga.constant.slug manga.progress.season manga.progress.chapter }}{{else}}{{genLink2 manga.provider manga.constant.slug}}{{/if}}">
 					<span class="badge badge-background">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
 					</span>
@@ -39,9 +39,9 @@
 
 				<a class="to-manga" href="
 				{{#if toChapter}}
-					{{genLink2 manga.constant.slug manga.progress.season manga.progress.chapter }}
+					{{genLink2 manga.provider manga.constant.slug manga.progress.season manga.progress.chapter }}
 				{{else}}
-					{{genLink2 manga.constant.slug}}
+					{{genLink2 manga.provider manga.constant.slug}}
 				{{/if}}
 				">
 					<h2 class="title-small">

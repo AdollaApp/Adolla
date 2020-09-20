@@ -1,9 +1,39 @@
 
-import { ScraperData, ScraperError, Chapter, Directory, DirectoryItem, ScraperResponse } from "../types";
+import { ScraperError, Chapter, ScraperResponse } from "../types";
 import fetch from "node-fetch";
 import Fuse from "fuse.js";
 import updateManga from "../util/updateManga";
-import { Provider, Scraper, SearchOptions } from "./types";
+import { Scraper, SearchOptions } from "./types";
+
+
+// Search interfaces
+/** This is for `DirectoryItem`, the values there aren't very useful */
+export enum Directory {
+	Genres = "g",
+	Slug = "i",
+	Title = "s",
+	OngoingPublish = "ps", // Maybe?
+	OngoingPrint = "ss", // Maybe?
+	AlternateTitles = "al"
+}
+/** This is what the API holds in the Directory array. Fun. */
+export interface DirectoryItem {
+	s: string;
+	i: string;
+	o: string;
+	ss: string;
+	ps: string;
+	t: string;
+	v: string;
+	vm: string;
+	y: string;
+	a: string[];
+	al: string[]
+	l: string;
+	lt: number;
+	g: string[];
+	h: boolean;
+}
 
 /** This is a chapter in mangasee API */
 interface ChapterResponse {
@@ -128,14 +158,13 @@ export class MangaseeClass extends Scraper {
 				let chapter = normalizeNumber(ch.Chapter.slice(1)) / 10;
 				let label = `${ch.Type} ${chapter}`;
 				let date = new Date(ch.Date);
-				let href = `/${slug}/${season}-${chapter}/`;
 		
 				return {
 					season,
 					chapter,
 					label,
 					date,
-					href,
+					hrefString: `${season}-${chapter}`,
 					combined: (season * 1e5) + chapter
 				}
 		

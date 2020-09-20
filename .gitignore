@@ -6,3 +6,5 @@ data.json
 data*.json
 .env
 secret-config.json
+chapters.json
+md.json

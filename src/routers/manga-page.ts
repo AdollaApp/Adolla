@@ -16,11 +16,24 @@ interface NewList {
 	name: string;
 }
 
-router.get("/:slug", async (req, res, next) => {
+function getScraperName(slug: string) {
+	let scrapersMapped = {
+		"mangasee": "Mangasee",
+		"mangadex": "Mangadex"
+	};
+	return scrapersMapped[slug] ?? null;
+}
+
+router.get("/:provider/:slug", async (req, res, next) => {
 
 	let param = req.params.slug;
 
-	let data = await updateManga("Mangasee", param, true);
+	let provider = getScraperName(req.params.provider);
+	if(!provider) {
+		next();
+		return;
+	}
+	let data = await updateManga(provider, param, true);
 
 	if(data && data.success) {
 
@@ -55,7 +68,7 @@ router.get("/:slug", async (req, res, next) => {
 	}
 });
 
-router.get("/:slug/:chapter", async (req, res, next) => {
+router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 	let chapterIndicator = req.params.chapter;
 	let slug = req.params.slug;
 	
@@ -67,7 +80,13 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 
 	let [_null, season, chapter]: number[] = chapterMatch.map(v => Number(v)); // Bit of a hack...
 
-	let data = await updateManga("Mangasee", slug, true);
+	let provider = getScraperName(req.params.provider);
+	if(!provider) {
+		next();
+		return;
+	}
+
+	let data = await updateManga(provider, slug, true);
 
 	if(data && data.success) {
 
@@ -119,14 +138,20 @@ router.get("/:slug/:chapter", async (req, res, next) => {
 interface SeasonChapter {season: number, chapter: number};
 
 // Mark as read
-router.post("/:slug/mark-chapters-as/", async (req, res) => {
+router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 
 	// Get relevant values
 	let slug = req.params.slug;
 	let updateValues: SeasonChapter[] = req.body.values;
 
+	let provider = getScraperName(req.params.provider);
+	if(!provider) {
+		next();
+		return;
+	}
+
 	// Get data
-	let data = await updateManga("Mangasee", slug);
+	let data = await updateManga(provider, slug);
 
 	if(data.success === true) { 
 
@@ -196,11 +221,17 @@ router.post("/:slug/mark-chapters-as/", async (req, res) => {
 });
 
 // Set the lists
-router.post("/:slug/set-lists", async (req, res) => {
+router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 
 	let newLists: NewList[] = req.body.lists;
 
 	let currentLists: List[] = await getLists();
+
+	let provider = getScraperName(req.params.provider);
+	if(!provider) {
+		next();
+		return;
+	}
 
 	for(let n of newLists) {
 		// Verify existing list
@@ -219,7 +250,7 @@ router.post("/:slug/set-lists", async (req, res) => {
 		if(!list.entries.find(entry => entry.slug === req.params.slug) && !list.byCreator) {
 			list.entries.push({
 				slug: req.params.slug,
-				provider: "Mangasee"
+				provider
 			});
 			list.last = Date.now();
 		}
@@ -250,7 +281,7 @@ router.post("/:slug/set-lists", async (req, res) => {
 	});
 });
 
-router.post("/:slug/:chapter/set-progress", async (req, res, next) => {
+router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => {
 	let chapterIndicator = req.params.chapter;
 	let slug = req.params.slug;
 	
@@ -268,6 +299,12 @@ router.post("/:slug/:chapter/set-progress", async (req, res, next) => {
 			status: 401,
 			err: "Missing current or total"
 		});
+		return;
+	}
+
+	let provider = getScraperName(req.params.provider);
+	if(!provider) {
+		next();
 		return;
 	}
 
