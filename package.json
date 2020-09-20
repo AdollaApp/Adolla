@@ -24,6 +24,7 @@
 		"express-handlebars": "^5.1.0",
 		"fuse.js": "^6.4.1",
 		"jipdb": "^1.0.4",
+		"mangadex-api": "^3.0.2",
 		"node-fetch": "^2.6.0",
 		"telebot": "^1.4.1",
 		"ts-node": "^8.10.2",

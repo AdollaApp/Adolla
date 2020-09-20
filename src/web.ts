@@ -17,15 +17,17 @@ app.engine("handlebars", handlebars({
 		stringify: (v: any) => JSON.stringify(v),
 		getProgressString(manga: StoredData) {
 			if(manga.progress && manga.success) {
-				// let progressString = 
+				
 				let curChapter = manga.data.chapters.find(c => c.chapter === manga.progress.chapter && c.season === manga.progress.season);
 				return curChapter?.label + (typeof manga?.progress?.percentage !== "undefined" ? ` (${manga.progress.percentage}%)` : "") ?? "Chapter not found";
+			
 			};
 			return "Not started yet";
 		},
-		genLink2(slug: string, season: number = null, episode: number = null) {
-			let href = `/${slug}/`;
-			let seasonLink = season !== null && episode !== null ? `${season}-${episode}/` : "";
+		genLink2(provider: string = "mangasee", slug: string, hrefString: string | null = null, chapter: number = -1) {
+			let href = `/${provider.toLowerCase()}/${slug}/`;
+			let seasonLink = typeof hrefString === "string" || typeof hrefString === "number" ? hrefString : "";
+			if(typeof chapter === "number" && chapter !== -1) seasonLink = `${hrefString}-${chapter}`; // Fallback stuff // TODO: Figure this out. This is related to reading at manga-card.handlebars, line 31
 			return `${href}${seasonLink}`;
 		},
 		isCurrentChapter(season1: number, season2: number, chapter1: number, chapter2: number) {

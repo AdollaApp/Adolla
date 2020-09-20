@@ -1,7 +1,7 @@
 import { ScraperResponse } from "../types";
 
 /** All available scrapers */
-export type Provider = "Mangasee";
+export type Provider = "Mangasee" | "Mangadex";
 
 export interface SearchOptions {
 	resultCount: number;
@@ -14,5 +14,5 @@ export interface SearchOptions {
 export abstract class Scraper {
 	public provider: Provider;
 	public abstract search(query: string, options?: Partial<SearchOptions>): Promise<ScraperResponse[]>;
-	public abstract scrape(query: string, chapter?: number, season?: number): Promise<ScraperResponse>
+	public abstract scrape(query: any, chapter?: number, season?: number): Promise<ScraperResponse>;
 }

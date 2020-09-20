@@ -11,8 +11,6 @@ export interface Chapter {
 	label: string;
 	/** Manga's date */
 	date: Date;
-	/** String to chapter page, for example "/Fire-Brigade-Of-Flames/1-15/" */
-	href: string;
 	/**
 	 * How far along the user is.
 	 * This is everchanging, but also optional
@@ -104,35 +102,6 @@ export interface Progress {
 	percentageColor?: string; // Used in list of chapters
 	/** Is new? */
 	new?: boolean;
-}
-
-// Search interfaces
-/** This is for `DirectoryItem`, the values there aren't very useful */
-export enum Directory {
-	Genres = "g",
-	Slug = "i",
-	Title = "s",
-	OngoingPublish = "ps", // Maybe?
-	OngoingPrint = "ss", // Maybe?
-	AlternateTitles = "al"
-}
-/** This is what the API holds in the Directory array. Fun. */
-export interface DirectoryItem {
-	s: string;
-	i: string;
-	o: string;
-	ss: string;
-	ps: string;
-	t: string;
-	v: string;
-	vm: string;
-	y: string;
-	a: string[];
-	al: string[]
-	l: string;
-	lt: number;
-	g: string[];
-	h: boolean;
 }
 
 /** "List" type. Used for users to store manga */
