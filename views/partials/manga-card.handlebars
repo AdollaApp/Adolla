@@ -6,7 +6,6 @@
 	{{genLink2 manga.provider manga.constant.slug}}
 	{{/if}}
 	">
-		{{!-- <img alt="Poster" src="{{manga.constant.posterUrl}}" class="poster"> --}}
 		<div class="poster-img" style="background-color: var(--border); background-image: url('{{manga.constant.posterUrl}}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 			<img src="{{getScraperIcon manga.provider}}" title={{manga.provider}} alt="{{manga.provider}}" class="provider-image">
 			{{#if toChapter}}

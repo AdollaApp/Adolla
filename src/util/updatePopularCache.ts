@@ -124,12 +124,12 @@ class Updater {
 			for(let slug of Object.keys(cache[provider])) {
 				
 				// Get difference from saved time in MS
-				let diff = Date.now() - cache[provider][slug].savedAt;
+				let diff = Date.now() - (cache[provider]?.[slug]?.savedAt ?? 9e9);
 				
 				// Check if cache is old. How old should be fairly obvious
 				if(diff > (1e3 * 60 * 60) * 24) {
 					cache[provider][slug] = undefined;
-					console.info(chalk.green("[NOTIFS]") + ` Deleting cache for ${slug} since it's ${Math.floor(diff / (60 * 1e3))} minutes old`);
+					console.info(chalk.green("[CLEANUP]") + ` Deleting cache for ${slug} since it's ${Math.floor(diff / (60 * 1e3))} minutes old`);
 				}
 
 			}
