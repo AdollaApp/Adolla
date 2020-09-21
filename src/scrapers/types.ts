@@ -14,5 +14,5 @@ export interface SearchOptions {
 export abstract class Scraper {
 	public provider: Provider;
 	public abstract search(query: string, options?: Partial<SearchOptions>): Promise<ScraperResponse[]>;
-	public abstract scrape(query: any, chapter?: number, season?: number): Promise<ScraperResponse>;
+	public abstract scrape(slug: any, chapterId?: string | number): Promise<ScraperResponse>;
 }

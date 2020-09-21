@@ -59,6 +59,9 @@ app.engine("handlebars", handlebars({
 		ifNotByCreator(list: List, options) {
 			return list.byCreator ? options.inverse() : options.fn();
 		},
+		addOne(num: number) {
+			return (num + 1);
+		},
 		getIconSrc
 	}
 }));

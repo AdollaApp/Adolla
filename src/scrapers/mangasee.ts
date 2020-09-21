@@ -113,7 +113,22 @@ export class MangaseeClass extends Scraper {
 	 * @param chapter 
 	 * @param season 
 	 */
-	public async scrape(slug: string, chapter: number = -1, season: number = -1): Promise<ScraperResponse> {
+	public async scrape(slug: string, chapterId: string | number | null = null): Promise<ScraperResponse> {
+
+
+
+		let season: number;
+		let chapter: number;
+		if(chapterId && typeof chapterId === "string") {
+			let chapterMatch = chapterId.match(/(\d*\.?\d+)-(\d*\.?\d+)/);
+			if(!chapterMatch) {
+				return error(403, "Invalid season chapter string");
+			}
+
+			let nums: number[] = chapterMatch.map(v => Number(v));
+			season = nums[1];
+			chapter = nums[2]; // Bit of a hack...
+		}
 
 		try {
 			// Generate URL and fetch page

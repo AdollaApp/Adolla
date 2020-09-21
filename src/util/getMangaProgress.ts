@@ -1,16 +1,16 @@
 
 import db from "../db";
-import { StoredData, ScraperResponse } from "../types";
+import { ScraperResponse } from "../types";
 
-export default async function getMangaProgress(slug: string, where: string = "last") {
-	let dbString = `reading.${slug}.${where.replace(/\./g, "_")}`;
+export default async function getMangaProgress(provider: string, slug: string, where: string = "last") {
+	let dbString = `reading-new.${provider}.${slug}.${where.replace(/\./g, "_")}`;
 	let entry = db.get(dbString);
 	return entry ?? null;
 }
 
 export async function setMangaProgress(manga: ScraperResponse) {
 	if(manga.success) {
-		manga.progress = await getMangaProgress(manga.constant.slug);
+		manga.progress = await getMangaProgress(manga.provider, manga.constant.slug);
 		manga.realProgress = Object.assign({}, manga.progress);
 
 		// Check if next chapter should be used instead

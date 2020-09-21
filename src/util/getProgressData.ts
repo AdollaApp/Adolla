@@ -6,15 +6,13 @@
 interface ProgressDataOptions {
 	current: number;
 	total: number;
-	season: number;
-	chapter: number;
+	chapterId: string | number;
 }
 
 export default function getProgressData({
 	current,
 	total,
-	season,
-	chapter
+	chapterId
 }: ProgressDataOptions) {
 	
 	return {
@@ -22,7 +20,6 @@ export default function getProgressData({
 		total: total,
 		percentage: Math.round((current / total) * 100),
 		at: Date.now(),
-		season,
-		chapter	
+		chapterId
 	};
 }

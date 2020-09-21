@@ -19,6 +19,12 @@ export interface Chapter {
 	realProgress?: Progress;
 	/** Season and chapter combined for sorting purposes, for example 300012 */
 	combined?: number;
+	/** 
+	 * Href string, really just the chaptor indicator
+	 * For mangasee, this is "x-y".
+	 * MangaDex has a unique ID for each chapter, so that's just a number sequence
+	 */
+	hrefString: string;
 }
 
 /** Used in manga.constant, these are mostly unchanging */

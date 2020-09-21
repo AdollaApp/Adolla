@@ -107,14 +107,6 @@ function scrollReader(pageEl) {
 	}
 }
 
-window.addEventListener("load", () => {
-	loaded = true;
-	document.querySelector(".manga-reader").classList.add("loaded");
-	setTimeout(() => {
-		scrollToPage();
-	}, 100);
-});
-
 // Add click event to floating button
 document.querySelectorAll(".floating-button").forEach(button => {
 	button.addEventListener("click", () => {
@@ -174,3 +166,96 @@ document.querySelector(".pages").addEventListener("click", evt => {
 	// If no button was pressed, toggle each relevant class
 	if(!classes.includes(".secondary-button")) document.querySelectorAll(".toggle-on-tap").forEach(toggle => toggle.classList.toggle("tapped"));
 });
+
+// Generate error for failed images
+let failedImages = [];
+let errorDebounce;
+document.querySelectorAll(".pageImg").forEach(img => {
+
+	img.addEventListener("error", evt => {
+
+		failedImages.push(img.getAttribute("alt"));
+		img.classList.add("hidden");
+
+		if(errorDebounce) {
+			clearTimeout(errorDebounce);
+			delete errorDebounce;
+		}
+		errorDebounce = setTimeout(() => {
+			// alert(`The images for ${failedImages.sort((a,b) => a.split(" ").pop() - b.split(" ").pop()).join(", ")} ${failedImages.length === 1 ? "has" : "have"} failed to load.`);
+			alert(`The images for ${failedImages.length} ${failedImages.length === 1 ? "page has" : "pages have"} failed to load.`);
+			failedImages = [];
+		}, 600);
+
+	});
+
+});
+
+async function initImages() {
+
+	// Generate URL endpoint
+	let loc = location.href;
+	if(!loc.endsWith("/")) loc += "/";
+	let url = `${loc}get-images/`;
+
+	// Fetch array of URLs
+	let imageUrls = await (await fetch(url)).json();
+
+	// Add elements to DOM
+	let wrapper = document.querySelector(".pages");
+	for(let [i, url] of Object.entries(imageUrls.reverse())) {
+		
+		// Generate node
+		let img = document.createElement("img");
+		img.classList.add("pageImg");
+		img.setAttribute("alt", `Page ${Number(i) + i}`);
+
+		// Set source
+		img.src = url;
+
+		// Add to DOM
+		wrapper.insertBefore(img, wrapper.querySelector("*"));
+
+	}
+
+	// Wait for all images to load
+	let loadedCount = 0;
+	let toLoadImages = [...wrapper.querySelectorAll(".pageImg")];
+
+	// Function to set innerHTML
+	function setLoadingText(text) {
+		document.querySelectorAll(".current-loading-progress").forEach(el => {
+			el.innerText = text;
+		});
+	}
+
+	// Load for each one
+	let imageLoaders = toLoadImages.map(img => {
+		
+		return new Promise((resolve, reject) => {
+			img.addEventListener("load", () => {
+				loadedCount++
+				let percentageText = Math.round((loadedCount / toLoadImages.length) * 100) + "%";
+				setLoadingText(percentageText);
+				// console.log(((loadedCount / toLoadTotal) * 100) + "%");
+				resolve();
+			});
+			img.addEventListener("error", reject);
+		});
+
+	});
+
+	await Promise.all(imageLoaders);
+
+	// Remove loading text
+	setLoadingText("");
+	
+	// Update loading section in DOM
+	loaded = true;
+	document.querySelector(".manga-reader").classList.add("loaded");
+	setTimeout(() => {
+		scrollToPage();
+	}, 100);
+
+}
+initImages();
