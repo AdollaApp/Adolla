@@ -64,7 +64,7 @@ class MangadexClass extends Scraper {
 				slug,
 				posterUrl: data.manga.cover_url,
 				alternateTitles: data.manga.alt_names,
-				// @ts-ignore
+				// @ts-ignore MangaDex api has this listed as name, not label
 				genres: data.manga.genres.map(g => g.label),
 				descriptionParagraphs: data.manga.description.split("\r\n").filter(Boolean).filter(c => !c.startsWith("["))
 			},
