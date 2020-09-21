@@ -1,11 +1,16 @@
 
 import db from "../db";
 import { Progress, ScraperResponse } from "../types";
+import getProgressData from "./getProgressData";
 
 export default async function getMangaProgress(provider: string, slug: string, where: string = "last"): Promise<Progress> {
 	let dbString = `reading_new.${provider}.${slug}.${where.replace(/\./g, "_")}`;
 	let entry = db.get(dbString);
-	return entry ?? null;
+	let data = entry ?? null;
+	if(data) {
+		data = getProgressData(data);
+	}
+	return data;
 }
 
 export async function setMangaProgress(manga: ScraperResponse): Promise<ScraperResponse> {
