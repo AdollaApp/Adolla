@@ -18,7 +18,7 @@ app.engine("handlebars", handlebars({
 		getProgressString(manga: StoredData) {
 			if(manga.progress && manga.success) {
 				
-				let curChapter = manga.data.chapters.find(c => c.chapter === manga.progress.chapter && c.season === manga.progress.season);
+				let curChapter = manga.data.chapters.find(c => c.hrefString === manga.progress.chapterId);
 				return curChapter?.label + (typeof manga?.progress?.percentage !== "undefined" ? ` (${manga.progress.percentage}%)` : "") ?? "Chapter not found";
 			
 			};
@@ -52,8 +52,7 @@ app.engine("handlebars", handlebars({
 		},
 		getChapterName(progress: Progress, manga: StoredData) {
 			if(!progress) return "shrug";
-			let { season, chapter } = progress;
-			let current = manga.data.chapters.find(v => v.season === season && v.chapter === chapter);
+			let current = manga.data.chapters.find(v => v.hrefString === progress.chapterId);
 			return current ? current.label : "Unknown chapter";
 		},
 		ifNotByCreator(list: List, options) {

@@ -1,12 +1,12 @@
 {
 	"name": "adolla",
 	"version": "1.0.0",
-	"description": "Adolla is a manga reader for every device with a web browser ",
+	"description": "Adolla is a manga reader for every device with a web browser",
 	"scripts": {
 		"start": "ts-node src/index.ts",
 		"dev": "ts-node src/index.ts",
-		"test-db": "ts-node src/test-db.ts",
-		"clear-cache": "ts-node src/clear-cache.ts"
+		"clear-cache": "ts-node src/clear-cache.ts",
+		"format-data": "ts-node src/format-data.ts"
 	},
 	"keywords": [],
 	"author": "",

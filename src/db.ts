@@ -4,7 +4,7 @@ import Db from "jipdb";
 
 const defaults: Database = {
 	manga_cache: {},
-	reading: {},
+	"reading_new": {},
 	other: {},
 	notified: {},
 	lists: [],

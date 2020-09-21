@@ -5,7 +5,7 @@ const router = express.Router();
 import db from "../db";
 import updateManga from "../util/updateManga";
 import * as scrapers from "../scrapers";
-import { Progress, StoredData, List } from "../types";
+import { Progress, StoredData, List, ScraperData, Chapter } from "../types";
 import getMangaProgress, { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";
 import { getLists } from "../util/lists";
@@ -16,12 +16,17 @@ interface NewList {
 	name: string;
 }
 
-function getScraperName(slug: string) {
-	let scrapersMapped = {
-		"mangasee": "Mangasee",
-		"mangadex": "Mangadex"
-	};
+let scrapersMapped = {
+	"mangasee": "Mangasee",
+	"mangadex": "Mangadex"
+};
+// @ts-ignore TS still doesn't have fromEntries :/
+let scrapersMappedReversed = Object.fromEntries(Object.entries(scrapersMapped).map(v => v.reverse()));
+export function getScraperName(slug: string) {
 	return scrapersMapped[slug] ?? null;
+}
+export function getScraperId(slug: string) {
+	return scrapersMappedReversed[slug] ?? null;
 }
 
 router.get("/:provider/:slug", async (req, res, next) => {
@@ -152,14 +157,13 @@ router.get("/:provider/:slug/:chapter/get-images", async (req, res, next) => {
 	}
 });
 
-interface SeasonChapter {season: number, chapter: number};
 
 // Mark as read
 router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 
 	// Get relevant values
 	let slug = req.params.slug;
-	let updateValues: SeasonChapter[] = req.body.values;
+	let updateValues: (string | number)[] = req.body.values;
 
 	let provider = getScraperName(req.params.provider);
 	if(!provider) {
@@ -174,13 +178,13 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 
 		// Get relevant chapters
 		let chapters = data.data.chapters;
-		let markChapters = updateValues.map(markingChapter => chapters.find(c => c.season === markingChapter.season && c.chapter === markingChapter.chapter));
+		let markChapters = updateValues.map(markingChapter => chapters.find(c => c.hrefString === markingChapter));
 
 		let lastProgressData;
 		for(let chapter of markChapters) {
 
 			// Generate query string, this will be used twice
-			let queryString = `reading.${slug}.${chapter.season}-${chapter.chapter.toString().replace(/\./g, "_")}`;
+			let queryString = `reading_new.${data.provider}.${slug}.${chapter.hrefString}`;
 			
 			// Get existing data
 			let existingData = db.get(queryString);
@@ -206,19 +210,19 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 		}
 
 		// Set last progress data
-		if(lastProgressData) db.set(`reading.${slug}.last`, lastProgressData);
+		if(lastProgressData) db.set(`reading_new.${data.provider}.${slug}.last`, lastProgressData);
 
 		// Remove `reading object if nothing is left`
 		
 		  // Get data
-		let readingData = db.get(`reading.${slug}`);
+		let readingData = db.get(`reading_new.${data.provider}.${slug}`);
 		
 		  // Get keys with proper values
 		let remainingData = Object.entries(readingData).filter(v => v[1]).map(v => v[0]);
 		 
 		  // If the only entry is "last" (and not "1-1" or whatever), remove it
 		if(remainingData[0] === "last" && remainingData.length <= 1) {
-			db.set(`reading.${slug}`, undefined)
+			db.set(`reading_new.${data.provider}.${slug}`, undefined)
 		}
 
 		res.json({
@@ -322,8 +326,8 @@ router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => 
 	});
 
 	// Update db
-	db.set(`reading-new.${provider}.${slug}.${chapterId.toString().replace(/\./g, "_")}`, progressData);
-	db.set(`reading-new.${provider}.${slug}.last`, progressData);
+	db.set(`reading_new.${provider}.${slug}.${chapterId.toString().replace(/\./g, "_")}`, progressData);
+	db.set(`reading_new.${provider}.${slug}.last`, progressData);
 
 	res.json({
 		status: 200
@@ -333,8 +337,9 @@ router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => 
 export default router;
 
 async function setColors(data: StoredData, slug: string) {
-	let lastChapter: Progress = await getMangaProgress(data.provider, slug);
+	let lastChapter = await getMangaProgress(data.provider, slug);
 	data.data.chapters.forEach(ch => {
-		if(ch.progress) ch.progress.percentageColor = (ch.progress && ch.progress.season === lastChapter.season && ch.progress.chapter === lastChapter.chapter) ? "recent" : "neutral";
+		// console.log(ch, lastChapter.progress);
+		if(ch.progress) ch.progress.percentageColor = (ch.progress && ch.progress?.chapterId === lastChapter.chapterId) ? "recent" : "neutral";
 	});
 }
