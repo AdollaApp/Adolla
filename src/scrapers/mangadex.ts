@@ -1,12 +1,17 @@
 
 import { ScraperError, Chapter, ScraperResponse } from "../types";
-import updateManga from "../util/updateManga";
 import { Scraper, SearchOptions } from "./types";
 import md from "mangadex-api";
-import fs from "fs";
+import fetch from "node-fetch";
 
 class MangadexClass extends Scraper {
-	public async scrape(slug: string, chapter: number = -1, season: number = -1): Promise<ScraperResponse> {
+
+	constructor() {
+		super();
+		this.provider = "Mangadex";
+	}
+
+	public async scrape(slug: string, chapterId: number = -1): Promise<ScraperResponse> {
 		
 		let id = Number(slug);
 		
@@ -17,8 +22,6 @@ class MangadexClass extends Scraper {
 		let chapters = data.chapter
 		  .filter(c => c.lang_code.includes("en") || c.lang_code.includes("gb"))
 
-		fs.writeFileSync("chapters.json", JSON.stringify(chapters, null, "\t"));
-		
 		// Get largest volume count
 		let largestVolumeCount = 0;
 		for(let chapter of chapters) {
@@ -36,10 +39,24 @@ class MangadexClass extends Scraper {
 				label: `vol ${volume} ch ${chapter ?? "??"}`,
 				date: new Date(c.timestamp * 1e3),
 				combined: (volume * 1e5) + chapter,
-				hrefString: c.id
+				hrefString: c.id.toString()
 			};
-		});
+		}).sort((a, b) => a.combined - b.combined);
 
+		// Get chapter-relevant data
+		// Just images I think
+		let chapterImages: string[] = [];
+		if(chapterId && chapterId !== null && chapterId !== -1) {
+			let chapter = await md.getChapter(Number(chapterId));
+
+			let imagePromises = chapter.page_array.map(async url => {
+				// @ts-ignore node-fetch's TS does not have buffer in its stuff
+				let base64 = await fetch(url).then(r => r.buffer()).then(buf => `data:image/${url.split(".").pop()};base64,`+buf.toString('base64'));
+				return base64;
+			});
+
+			chapterImages = await Promise.all(imagePromises); // Page array is an array filled with URLs. Perfect!
+		}
 
 		return {
 			constant: {
@@ -52,7 +69,8 @@ class MangadexClass extends Scraper {
 				descriptionParagraphs: data.manga.description.split("\r\n").filter(Boolean).filter(c => !c.startsWith("["))
 			},
 			data: {
-				chapters: newChapters
+				chapters: newChapters,
+				chapterImages
 			},
 			success: true,
 			provider: "Mangadex"

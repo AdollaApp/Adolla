@@ -69,16 +69,8 @@ router.get("/:provider/:slug", async (req, res, next) => {
 });
 
 router.get("/:provider/:slug/:chapter", async (req, res, next) => {
-	let chapterIndicator = req.params.chapter;
+	let chapterId = req.params.chapter;
 	let slug = req.params.slug;
-	
-	let chapterMatch = chapterIndicator.match(/(\d*\.?\d+)-(\d*\.?\d+)/);
-	if(!chapterMatch) {
-		next();
-		return;
-	}
-
-	let [_null, season, chapter]: number[] = chapterMatch.map(v => Number(v)); // Bit of a hack...
 
 	let provider = getScraperName(req.params.provider);
 	if(!provider) {
@@ -86,13 +78,12 @@ router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 		return;
 	}
 
-	let data = await updateManga(provider, slug, true);
+	let data = await updateManga(provider, slug);
 
 	if(data && data.success) {
 
 		// Stuff
-		let manga = await scrapers.Mangasee.scrape(slug, chapter, season); // TODO: implement season & chapter in `updateManga`
-		manga = await setMangaProgress(manga);
+		let manga = await setMangaProgress(data);
 
 		if(!manga.success) {
 			next();
@@ -101,7 +92,7 @@ router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 
 		// Find current, last, and next chapter
 		let chapters = manga.data.chapters;
-		let currentChapter = chapters.find(c => c.season === season && c.chapter === chapter);
+		let currentChapter = chapters.find(c => c.hrefString == chapterId);
 		let nextChapter = chapters[chapters.indexOf(currentChapter) + 1] ?? null;
 		let previousChapter = chapters[chapters.indexOf(currentChapter) - 1] ?? null;
 
@@ -113,7 +104,7 @@ router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 		// See if chapter is same as last chapter
 		await setColors(manga, slug);
 
-		// Get reading
+		// § reading
 		let reading = await getReading(4);
 
 		res.render("manga-chapter", {
@@ -133,6 +124,32 @@ router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 		next();
 	}
 
+});
+
+router.get("/:provider/:slug/:chapter/get-images", async (req, res, next) => {
+	let chapterId = req.params.chapter;
+	let slug = req.params.slug;
+
+	let provider = getScraperName(req.params.provider);
+	if(!provider) {
+		next();
+		return;
+	}
+
+	let data = await updateManga(provider, slug, true, chapterId);
+	if(data && data.success) {
+		// Return images
+		res.json(data.data.chapterImages);
+	} else if(data.success === false) {
+
+		// Something went wrong for some reason
+		res.status(404);
+		res.json({
+			status: 404,
+			err: data.err
+		});
+
+	}
 });
 
 interface SeasonChapter {season: number, chapter: number};
@@ -173,8 +190,7 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 				let progressData = getProgressData({
 					current: 500,
 					total: 500,
-					season: chapter.season,
-					chapter: chapter.chapter
+					chapterId: chapter.hrefString
 				}); // 500 is just a really high number. It has no meaning.
 				
 				// If the action is to remove the read status, override progressData
@@ -282,16 +298,8 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 });
 
 router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => {
-	let chapterIndicator = req.params.chapter;
+	let chapterId = req.params.chapter;
 	let slug = req.params.slug;
-	
-	let chapterMatch = chapterIndicator.match(/(\d*\.?\d+)-(\d*\.?\d+)/);
-	if(!chapterMatch) {
-		next();
-		return;
-	}
-
-	let [_null, season, chapter]: number[] = chapterMatch.map(v => Number(v)); // Bit of a hack...
 
 	if(!req.body.current || !req.body.total) {
 		res.status(403);
@@ -310,13 +318,12 @@ router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => 
 
 	let progressData = getProgressData({
 		...req.body,
-		season,
-		chapter
+		chapterId
 	});
 
 	// Update db
-	db.set(`reading.${slug}.${season}-${chapter.toString().replace(/\./g, "_")}`, progressData);
-	db.set(`reading.${slug}.last`, progressData);
+	db.set(`reading-new.${provider}.${slug}.${chapterId.toString().replace(/\./g, "_")}`, progressData);
+	db.set(`reading-new.${provider}.${slug}.last`, progressData);
 
 	res.json({
 		status: 200
@@ -326,7 +333,7 @@ router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => 
 export default router;
 
 async function setColors(data: StoredData, slug: string) {
-	let lastChapter: Progress = await getMangaProgress(slug);
+	let lastChapter: Progress = await getMangaProgress(data.provider, slug);
 	data.data.chapters.forEach(ch => {
 		if(ch.progress) ch.progress.percentageColor = (ch.progress && ch.progress.season === lastChapter.season && ch.progress.chapter === lastChapter.chapter) ? "recent" : "neutral";
 	});

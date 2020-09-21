@@ -763,6 +763,9 @@ input, textarea {
 	max-height: calc(100vh - env(safe-area-inset-top));
 	overflow-y: hidden;
 }
+.pages .pageImg.hidden {
+	display: none;
+}
 .pages[data-reader-direction="horizontal"] .pageImg {
 	height: calc(100vh - var(--footer-height) - env(safe-area-inset-top) - 50px);
 }
@@ -1190,13 +1193,16 @@ select {
 	align-items: center;
 }
 
-/* Alternative page coounter */
+/* Alternative page counter */
 .current-pages-button {
 	position: fixed;
 	bottom: calc(10px + env(safe-area-inset-bottom));
 	left: 50%;
 	transform: translateX(-50%);
 	z-index: 20;
+}
+.current-pages-button > .current-loading-progress:not(:empty) {
+	margin-left: 20px;
 }
 
 /* Chapter navigation at end of chapter */

@@ -11,9 +11,6 @@
 <section class="manga-reader">
 	<div class="loading"></div>
 	<div class="pages">
-		{{#each data.data.chapterImages}}
-		<img alt="Page" src="{{this}}" class="pageImg">
-		{{/each}}
 		{{#if navigation}}
 		<div class="in-chapter-navigation">
 			<div class="in-chapter-nav-inner">
@@ -41,6 +38,7 @@
 	</div>
 	<div class="current-pages-button toggle-on-tap tapped is-floating-button do-padding">
 		<span class="current-page">0 of 0</span>
+		<span class="current-loading-progress">0%</span>
 	</div>
 </section>
 
