@@ -252,9 +252,15 @@ async function initImages() {
 	// Update loading section in DOM
 	loaded = true;
 	document.querySelector(".manga-reader").classList.add("loaded");
-	setTimeout(() => {
-		scrollToPage();
-	}, 100);
+	
+	// Check whether to scroll to page yet, or not
+	let img = document.querySelector(".pageImg");
+	let checkInterval = setInterval(() => {
+		if(img.scrollHeight > 0) {
+			clearInterval(checkInterval);
+			scrollToPage();
+		}
+	}, 50);
 
 }
 initImages();
