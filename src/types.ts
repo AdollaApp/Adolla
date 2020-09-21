@@ -47,7 +47,7 @@ export interface Database {
 	manga_cache: {
 		[key: string]: MangaMeta;
 	}
-	reading: Reading;
+	reading_new: Reading;
 	other: {
 		host?: string
 	},
@@ -99,10 +99,12 @@ export interface Progress {
 	total: number
 	/** Date timestamp */
 	at: number;
-	/** Season */
-	season: number;
-	/** Chapter */
-	chapter: number;
+	/** 
+	 * Slug format per scraper
+	 * For mangasee that's season-chapter,
+	 * MangaDex has its own ID for each chapter
+	 */
+	chapterId: string | number;
 	/** Progress in percentages */
 	percentage?: number; // Between 0-100
 	percentageColor?: string; // Used in list of chapters

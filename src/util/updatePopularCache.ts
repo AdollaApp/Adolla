@@ -54,12 +54,14 @@ class Updater {
 				chapters.forEach(ch => {
 					ch.combined = ch.season * 1e3 + ch.chapter;
 				});
+				
 				// Sort chapters on location
 				chapters = chapters.sort((a, b) => a.combined - b.combined);	
 
 				// Get reading
-				let reading: Progress = db.get(`reading.${data.constant.slug}.last`);
-				let currentChapter = chapters.find(c => c.season === reading.season && c.chapter === reading.chapter);
+				let dbString = `reading_new.${data.provider}.${data.constant.slug}.last`;
+				let reading: Progress = db.get(dbString);
+				let currentChapter = chapters.find(c => c.hrefString === reading.chapterId);
 				
 				let nextChapter = chapters[chapters.indexOf(currentChapter) + 1];
 
@@ -117,15 +119,19 @@ class Updater {
 		console.info(chalk.yellowBright("[CLEANUP]") + ` Checking each cache entry for old data`);
 
 		// Check each entry and
-		for(let slug of Object.keys(cache)) {
+		for(let provider of Object.keys(cache)) {
 			
-			// Get difference from saved time in MS
-			let diff = Date.now() - cache[slug].savedAt;
-			
-			// Check if cache is old. How old should be fairly obvious
-			if(diff > (1e3 * 60 * 60) * 24) {
-				cache[slug] = undefined;
-				console.info(chalk.green("[NOTIFS]") + ` Deleting cache for ${slug} since it's ${Math.floor(diff / (60 * 1e3))} minutes old`);
+			for(let slug of Object.keys(cache[provider])) {
+				
+				// Get difference from saved time in MS
+				let diff = Date.now() - cache[provider][slug].savedAt;
+				
+				// Check if cache is old. How old should be fairly obvious
+				if(diff > (1e3 * 60 * 60) * 24) {
+					cache[provider][slug] = undefined;
+					console.info(chalk.green("[NOTIFS]") + ` Deleting cache for ${slug} since it's ${Math.floor(diff / (60 * 1e3))} minutes old`);
+				}
+
 			}
 
 		}

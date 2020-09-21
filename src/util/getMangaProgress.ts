@@ -1,22 +1,22 @@
 
 import db from "../db";
-import { ScraperResponse } from "../types";
+import { Progress, ScraperResponse } from "../types";
 
-export default async function getMangaProgress(provider: string, slug: string, where: string = "last") {
-	let dbString = `reading-new.${provider}.${slug}.${where.replace(/\./g, "_")}`;
+export default async function getMangaProgress(provider: string, slug: string, where: string = "last"): Promise<Progress> {
+	let dbString = `reading_new.${provider}.${slug}.${where.replace(/\./g, "_")}`;
 	let entry = db.get(dbString);
 	return entry ?? null;
 }
 
-export async function setMangaProgress(manga: ScraperResponse) {
+export async function setMangaProgress(manga: ScraperResponse): Promise<ScraperResponse> {
 	if(manga.success) {
 		manga.progress = await getMangaProgress(manga.provider, manga.constant.slug);
 		manga.realProgress = Object.assign({}, manga.progress);
 
 		// Check if next chapter should be used instead
 		if(manga.progress && manga.progress.percentage > 90) { // The 90% might be subject to change
-			let { season, chapter } = manga.progress;
-			let currentChapter = manga.data.chapters.find(ch => ch.season === manga.progress.season && ch.chapter === manga.progress.chapter);
+			let { chapterId } = manga.progress;
+			let currentChapter = manga.data.chapters.find(ch => ch.hrefString === chapterId);
 			let nextChapter = manga.data.chapters[manga.data.chapters.indexOf(currentChapter) + 1] ?? null;
 			
 			if(nextChapter) {
@@ -30,8 +30,7 @@ export async function setMangaProgress(manga: ScraperResponse) {
 				manga.progress = {
 					...manga.progress,
 					percentage: 0,
-					season: nextChapter.season,
-					chapter: nextChapter.chapter,
+					chapterId: nextChapter.hrefString,
 					current: 0,
 					total: null, // Unknown
 					at: progressLast > chapterDate ? progressLast : Date.now(), // If the chapter is newer than last read, sort by that. If not, don't.

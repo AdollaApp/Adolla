@@ -8,3 +8,4 @@ data*.json
 secret-config.json
 chapters.json
 md.json
+data-formatted.json

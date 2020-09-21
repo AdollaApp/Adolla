@@ -40,7 +40,7 @@ export default async function updateManga(provider: string, slug: string, ignore
 		delete nData.realProgress;
 		delete nData.progress;
 
-		db.set(dbQuery, data);
+		db.set(dbQuery, nData);
 	} 
 	return await addInfo(data);
 }
@@ -50,7 +50,7 @@ async function addInfo(data: ScraperResponse) {
 	if(data.success) {
 		// This still works thanks to references, somehow
 		let chapterPromises = data.data.chapters.map(async ch => {
-			ch.progress = await getMangaProgress(data.constant.slug, `${ch.season}-${ch.chapter}`);
+			ch.progress = await getMangaProgress(data.provider, data.constant.slug, ch.hrefString);
 			return ch;
 		});
 		await Promise.all(chapterPromises);

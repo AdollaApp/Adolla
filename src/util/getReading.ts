@@ -2,22 +2,41 @@
 import db from "../db";
 import { setMangaProgress } from "../util/getMangaProgress";
 import updateManga from "../util/updateManga";
-import { ScraperResponse, StoredData } from "../types";
-
+import { ScraperResponse } from "../types";
+interface ReadingMeta {
+	/** Really `Provider`, but the DB doesn't have types */
+	provider: string;
+	/** A Manga's slug */
+	slug: string;
+}
 
 export default async function getReading(maxResults: number = Infinity) {
 
 	// Get manga that is being read
-	let readingManga = db.get("reading");
+	let readingManga = db.get("reading_new");
 
-	let readingKeys = Object.keys(readingManga).filter(key => readingManga[key]?.last).sort((b, a) => readingManga[a].last.at - readingManga[b].last.at);
+	let allProviders = Object.keys(readingManga);
+	let readingMeta: ReadingMeta[] = [];
+	for(let provider of allProviders) {
+		for(let slug of Object.keys(readingManga[provider])) {
+			readingMeta.push({
+				provider,
+				slug
+			});
+		}
+	}
 
-	readingKeys = readingKeys.slice(0, maxResults);
+
+	// Sort data
+	readingMeta = readingMeta.sort((a, b) => readingManga[a.provider][a.slug].at - readingManga[b.provider][b.slug].at);
+
+	// Slice down to max results
+	readingMeta = readingMeta.slice(0, maxResults);
 
 
 	// TypeScript doesn't typeguard .filter :/
-	let reading: ScraperResponse[] = await Promise.all(readingKeys.map(async slug => {
-		let manga = await updateManga(readingManga[slug].provider ?? "Mangasee", slug);
+	let reading: ScraperResponse[] = await Promise.all(readingMeta.map(async obj => {
+		let manga = await updateManga(obj.provider ?? "Mangasee", obj.slug);
 		manga = await setMangaProgress(manga);
 		return manga;
 	}));

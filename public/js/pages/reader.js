@@ -237,7 +237,6 @@ async function initImages() {
 				loadedCount++
 				let percentageText = Math.round((loadedCount / toLoadImages.length) * 100) + "%";
 				setLoadingText(percentageText);
-				// console.log(((loadedCount / toLoadTotal) * 100) + "%");
 				resolve();
 			});
 			img.addEventListener("error", reject);

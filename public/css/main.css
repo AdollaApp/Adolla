@@ -1156,7 +1156,7 @@ select {
 .is-footer svg {
 	display: block;
 }
-.selection-actions {
+div.selection-actions {
 	opacity: 0;
 	pointer-events: none;
 	transition: opacity 150ms; 
@@ -1177,15 +1177,15 @@ select {
 	padding: 8px;
 	margin-left: 0;
 }
-.selection-actions .secondary-button .icon {
+divselection-actions .secondary-button .icon {
 	display: none;
 }
-.is-footer .secondary-button .small-title, .selection-actions .secondary-button .small-title {
+.is-footer .secondary-button .small-title, div.selection-actions .secondary-button .small-title {
 	color: var(--text);
 	font-size: 1rem;
 	font-weight: normal;
 }
-.selection-actions .selection-actions-inner {
+div.selection-actions .selection-actions-inner {
 	width: 100%;
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
