@@ -510,6 +510,16 @@ input, textarea {
 	border: 1px solid var(--border-2);
 	box-sizing: border-box;
 }
+.poster-img .provider-image {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 4px;
+	border: 1px solid var(--border);
+	background: var(--body);
+}
 .poster-img .poster-inner {
 	position: absolute;
 	top: 0;
