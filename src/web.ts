@@ -24,6 +24,13 @@ app.engine("handlebars", handlebars({
 			};
 			return "Not started yet";
 		},
+		getScraperIcon(provider: string): string | null {
+			let icons = {
+				"Mangasee": "https://mangasee123.com/media/favicon.png",
+				"Mangadex": "https://mangadex.org/images/misc/navbar.svg"
+			}
+			return icons[provider] ?? "/icons/main-on-white.png";
+		},
 		genLink2(provider: string = "mangasee", slug: string, hrefString: string | null = null, chapter: number = -1) {
 			let href = `/${provider.toLowerCase()}/${slug}/`;
 			let seasonLink = typeof hrefString === "string" || typeof hrefString === "number" ? hrefString : "";
