@@ -1201,8 +1201,14 @@ select {
 	transform: translateX(-50%);
 	z-index: 20;
 }
-.current-pages-button > .current-loading-progress:not(:empty) {
+.current-loading-progress:not(:empty) {
 	margin-left: 20px;
+}
+.current-loading-progress:not(:empty):before {
+	content: "(";
+}
+.current-loading-progress:not(:empty):after {
+	content: ")";
 }
 
 /* Chapter navigation at end of chapter */
