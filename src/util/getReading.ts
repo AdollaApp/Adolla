@@ -19,13 +19,22 @@ export default async function getReading(maxResults: number = Infinity) {
 	let readingMeta: ReadingMeta[] = [];
 	for(let provider of allProviders) {
 		for(let slug of Object.keys(readingManga[provider])) {
-			readingMeta.push({
-				provider,
-				slug
-			});
+			
+			// Check if it actually has any content
+			// If it's "mark as unread" it'll be undefined
+			// Not having an if statement for that would still add it
+			// Obviously, we don't want that
+			if(readingManga[provider][slug] && Object.keys(readingManga[provider][slug]).length > 0) { 
+				readingMeta.push({
+					provider,
+					slug
+				});
+			}
 		}
 	}
 
+
+	console.log(readingMeta);
 
 	// Sort data
 	readingMeta = readingMeta.sort((a, b) => readingManga[a.provider][a.slug].at - readingManga[b.provider][b.slug].at);

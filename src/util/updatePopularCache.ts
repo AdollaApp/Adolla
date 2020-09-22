@@ -61,6 +61,7 @@ class Updater {
 				// Get reading
 				let dbString = `reading_new.${data.provider}.${data.constant.slug}.last`;
 				let reading: Progress = db.get(dbString);
+				if(!reading) return null;
 				let currentChapter = chapters.find(c => c.hrefString === reading.chapterId);
 				
 				let nextChapter = chapters[chapters.indexOf(currentChapter) + 1];
