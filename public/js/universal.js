@@ -46,7 +46,7 @@ if (sw && navigator.onLine) {
 			navigator.serviceWorker.register("/sw.js").then(reg => {
 
 			}, err => {
-				console.log(err)
+				console.error(err)
 			});
 		});
 

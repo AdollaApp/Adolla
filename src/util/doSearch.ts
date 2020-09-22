@@ -20,5 +20,5 @@ export async function doSearch(provider: ProviderId, query: string = "", searchO
 	});
 
 	// Give back results
-	return searchResults || []; // Return empty array if there's an error
+	return searchResults || []; // Return empty array if there's a falsy response
 }

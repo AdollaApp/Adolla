@@ -26,8 +26,14 @@ let scrapersMappedReversed = Object.fromEntries(Object.entries(scrapersMapped).m
 export function getScraperName(slug: string): ProviderId | string {
 	return scrapersMapped[slug] ?? null;
 }
+export function isScraperName(slug: string): slug is Provider {
+	return !!scrapersMappedReversed[slug];
+}
 export function getScraperId(slug: string): Provider | string {
 	return scrapersMappedReversed[slug] ?? slug;
+}
+export function isScraperId(slug: string): slug is ProviderId {
+	return !!scrapersMapped[slug];
 }
 
 router.get("/:provider/:slug", async (req, res, next) => {
