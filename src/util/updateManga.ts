@@ -4,16 +4,19 @@ import db from "../db";
 import { ScraperResponse } from "../types";
 import getMangaProgress from "./getMangaProgress";
 import config from "../config.json";
-import { Scraper } from "../scrapers/types";
+import { Provider, Scraper } from "../scrapers/types";
+import { getScraperId, getScraperName } from "../routers/manga-page";
 
-export default async function updateManga(provider: string, slug: string, ignoreExisting: boolean = false, chapterId: number | string = -1): Promise<ScraperResponse> {
+export default async function updateManga(provider: Provider | string, slug: string, ignoreExisting: boolean = false, chapterId: number | string = -1): Promise<ScraperResponse> {
 
-	let dbQuery = `manga_cache.${provider}.${slug}`;
+	let dbQuery = `data_cache.${getScraperId(provider)}.${slug}`;
 
 	let existing = db.get(dbQuery);
 	if(existing && existing.savedAt > Date.now() - config.cache.duration && !ignoreExisting && chapterId === -1) return await addInfo(existing);
 
-	let scraper: Scraper = scrapers[provider];
+	let scraperName = getScraperName(provider) || provider;
+	let scraper: Scraper | undefined = scrapers[scraperName];
+	
 	if(!scraper) {
 		console.error("No scraper: " + provider);
 		return {

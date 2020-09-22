@@ -4,6 +4,7 @@ import fetch from "node-fetch";
 import Fuse from "fuse.js";
 import updateManga from "../util/updateManga";
 import { Scraper, SearchOptions } from "./types";
+import { getScraperId } from "../routers/manga-page";
 
 
 // Search interfaces
@@ -240,7 +241,7 @@ export class MangaseeClass extends Scraper {
 					chapterImages
 				},
 				success: true,
-				provider: "Mangasee"
+				provider: getScraperId(this.provider)
 			}
 		} catch(err) {
 			//  OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!

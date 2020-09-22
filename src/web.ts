@@ -8,6 +8,7 @@ import bodyParser from "body-parser";
 import routers from "./routers"
 import { StoredData, Chapter, Progress, ScraperResponse, List } from "./types";
 import getIconSrc from "./util/getIconSrc";
+import { getScraperId } from "./routers/manga-page";
 
 const app = express();
 
@@ -26,13 +27,13 @@ app.engine("handlebars", handlebars({
 		},
 		getScraperIcon(provider: string): string | null {
 			let icons = {
-				"Mangasee": "https://mangasee123.com/media/favicon.png",
-				"Mangadex": "https://mangadex.org/images/misc/navbar.svg"
+				"mangasee": "https://mangasee123.com/media/favicon.png",
+				"mangadex": "https://mangadex.org/images/misc/navbar.svg"
 			}
 			return icons[provider] ?? "/icons/main-on-white.png";
 		},
 		genLink2(provider: string = "mangasee", slug: string, hrefString: string | null = null, chapter: number = -1) {
-			let href = `/${provider.toLowerCase()}/${slug}/`;
+			let href = `/${getScraperId(provider)}/${slug}/`;
 			let seasonLink = typeof hrefString === "string" || typeof hrefString === "number" ? hrefString : "";
 			if(typeof chapter === "number" && chapter !== -1) seasonLink = `${hrefString}-${chapter}`; // Fallback stuff // TODO: Figure this out. This is related to reading at manga-card.handlebars, line 31
 			return `${href}${seasonLink}`;

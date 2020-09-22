@@ -3,6 +3,7 @@ import { ScraperError, Chapter, ScraperResponse } from "../types";
 import { Scraper, SearchOptions } from "./types";
 import md from "mangadex-api";
 import fetch from "node-fetch";
+import { getScraperId } from "../routers/manga-page";
 
 class MangadexClass extends Scraper {
 
@@ -73,7 +74,7 @@ class MangadexClass extends Scraper {
 				chapterImages
 			},
 			success: true,
-			provider: "Mangadex"
+			provider: getScraperId(this.provider)
 		}
 	}
 	public async search(query: string, options?: Partial<SearchOptions>) {

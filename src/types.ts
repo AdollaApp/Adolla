@@ -44,7 +44,7 @@ export interface MangaData {
 
 /** Entire database structure */
 export interface Database {
-	manga_cache: {
+	data_cache: {
 		[key: string]: MangaMeta;
 	}
 	reading_new: Reading;
@@ -74,7 +74,7 @@ export type ScraperResponse = StoredData | ScraperError;
 export interface ScraperData {
 	constant: MangaMeta;
 	data: MangaData;
-	provider: Provider; // All possible scrapers. Useful for future proofing
+	provider: ProviderId; // All possible scrapers. Useful for future proofing
 	success: true; // Always true
 }
 /** Error object thrown by scrapers */

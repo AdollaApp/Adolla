@@ -1187,7 +1187,7 @@ div.selection-actions {
 	padding: 8px;
 	margin-left: 0;
 }
-divselection-actions .secondary-button .icon {
+div.selection-actions .secondary-button .icon {
 	display: none;
 }
 .is-footer .secondary-button .small-title, div.selection-actions .secondary-button .small-title {
