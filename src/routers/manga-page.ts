@@ -10,6 +10,7 @@ import getMangaProgress, { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";
 import { getLists } from "../util/lists";
 import getProgressData from "../util/getProgressData";
+import chalk from "chalk";
 
 interface NewList {
 	slug: string;
@@ -184,7 +185,7 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 		for(let chapter of markChapters) {
 
 			// Generate query string, this will be used twice
-			let queryString = `reading_new.${data.provider}.${slug}.${chapter.hrefString}`;
+			let queryString = `reading_new.${data.provider}.${slug}.${chapter.hrefString.replace(/\./g, "_")}`;
 			
 			// Get existing data
 			let existingData = db.get(queryString);
@@ -212,7 +213,7 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 		// Set last progress data
 		if(lastProgressData) db.set(`reading_new.${data.provider}.${slug}.last`, lastProgressData);
 
-		// Remove `reading object if nothing is left`
+		// Remove `reading` object if nothing is left
 		
 		  // Get data
 		let readingData = db.get(`reading_new.${data.provider}.${slug}`);
@@ -221,8 +222,10 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 		let remainingData = Object.entries(readingData).filter(v => v[1]).map(v => v[0]);
 		 
 		  // If the only entry is "last" (and not "1-1" or whatever), remove it
-		if(remainingData[0] === "last" && remainingData.length <= 1) {
-			db.set(`reading_new.${data.provider}.${slug}`, undefined)
+		if((remainingData[0] === "last" && remainingData.length <= 1) || remainingData.length <= 0) {
+			// Remove entry
+			db.set(`reading_new.${data.provider}.${slug}`, undefined);
+			console.info(chalk.green("[DB]") + ` Removing ${data.provider}'s ${slug} from reading`);
 		}
 
 		res.json({
