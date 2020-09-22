@@ -46,6 +46,7 @@ export default async function getReading(maxResults: number = Infinity) {
 	}));
 
 	// TypeScript doesn't typeguard .filter :/
+	console.log(reading.map(v => v.success ? v.progress.at : null))
 	reading = reading.filter(e => e.success === true).sort((a, b) => (b.success ? b.progress.at : 0) - (a.success ? a.progress.at : 0))
 
 	return reading;
