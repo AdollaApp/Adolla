@@ -37,7 +37,7 @@ class MangadexClass extends Scraper {
 			return {
 				season: volume,
 				chapter,
-				label: `vol ${volume} ch ${chapter ?? "??"}`,
+				label: `V${volume} - Chapter ${chapter ?? "??"}`,
 				date: new Date(c.timestamp * 1e3),
 				combined: (volume * 1e5) + chapter,
 				hrefString: c.id.toString()
