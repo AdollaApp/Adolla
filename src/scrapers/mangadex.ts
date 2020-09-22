@@ -3,7 +3,7 @@ import { Chapter, ScraperResponse } from "../types";
 import { Scraper, SearchOptions } from "./types";
 import md from "mangadex-api";
 import fetch from "node-fetch";
-import { getScraperId } from "../routers/manga-page";
+import { getScraperId, isScraperId } from "../routers/manga-page";
 import secretConfig from "../util/secretConfig";
 import chalk from "chalk";
 import updateManga from "../util/updateManga";
@@ -62,7 +62,6 @@ class MangadexClass extends Scraper {
 	
 				// Chapters
 				let chapters = data.chapter
-				  .filter(c => c.lang_code.includes("en") || c.lang_code.includes("gb"))
 	
 				// Get largest volume count
 				let largestVolumeCount = 0;
@@ -70,7 +69,7 @@ class MangadexClass extends Scraper {
 					let volume = Number(chapter.volume);
 					if(volume > largestVolumeCount) largestVolumeCount = volume;
 				}
-				
+
 				// Map chapters to new format
 				let newChapters: Chapter[] = chapters.map(c => {
 					let volume = Number(c.volume) || largestVolumeCount + 1;
@@ -84,7 +83,7 @@ class MangadexClass extends Scraper {
 						hrefString: c.id.toString()
 					};
 				}).sort((a, b) => a.combined - b.combined);
-	
+
 				// Get chapter-relevant data
 				// Just images I think
 				let chapterImages: string[] = [];
@@ -101,6 +100,7 @@ class MangadexClass extends Scraper {
 				}
 	
 				// Return data
+				let provider = getScraperId(this.provider);
 				if(!isDone) { // Check if request hasn't already timed out
 					isDone = true;
 					resolve({
@@ -117,7 +117,7 @@ class MangadexClass extends Scraper {
 							chapterImages
 						},
 						success: true,
-						provider: getScraperId(this.provider)
+						provider: isScraperId(provider) ? provider : null
 					});
 				}
 			} catch(err) {

@@ -1,5 +1,5 @@
 
-import { Provider } from "./scrapers/types";
+import { ProviderId } from "./scrapers/types";
 
 /** This is a single chapter */
 export interface Chapter {
