@@ -61,8 +61,6 @@ async function getReading() {
 		});
 	}
 
-	// prompt(cards);
-
 	return cards;
 }
 
@@ -114,44 +112,4 @@ async function createWidget(item) {
 	widget.addSpacer();
 
 	return widget;
-}
-
-
-
-
-/**
- * Prompt section
- */
-function parseAndPrompt(text) {
-	let json = JSON.parse(text)
-	if (json != null) {
-		prompt(json)
-	} else {
-		let alert = new Alert()
-		alert.title = "Invalid JSON"
-		alert.message = "The string could not be parsed to JSON."
-		alert.present()
-	}
-}
-
-function prompt(json) {
-	let alert = new Alert()
-	alert.addAction("Pretty print")
-	alert.addAction("Browse")
-	alert.presentSheet().then(idx => {
-		if (idx == 0) {
-			prettyPrint(json)
-		} else {
-			browse(json)
-		}
-	})
-}
-
-function prettyPrint(json) {
-	let str = JSON.stringify(json, null, 2)
-	QuickLook.present(str)
-}
-
-function browse(json) {
-	QuickLook.present(json)
 }
