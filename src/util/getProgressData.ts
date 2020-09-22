@@ -9,19 +9,21 @@ interface ProgressDataOptions {
 	current: number;
 	total: number;
 	chapterId: string | number;
+	at?: number;
 }
 
 export default function getProgressData({
 	current,
 	total,
-	chapterId
+	chapterId,
+	at = Date.now()
 }: ProgressDataOptions): Progress {
 	
 	return {
 		current,
 		total,
 		percentage: Math.round((current / total) * 100),
-		at: Date.now(),
+		at,
 		chapterId
 	};
 }
