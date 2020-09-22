@@ -519,6 +519,8 @@ input, textarea {
 	border-radius: 4px;
 	border: 1px solid var(--border);
 	background: var(--body);
+	word-break: break-all;
+	font-size: .5rem;
 }
 .poster-img .poster-inner {
 	position: absolute;

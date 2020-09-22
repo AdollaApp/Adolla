@@ -198,30 +198,6 @@ async function initImages() {
 	if(!loc.endsWith("/")) loc += "/";
 	let url = `${loc}get-images/`;
 
-	// Fetch array of URLs
-	let imageUrls = await (await fetch(url)).json();
-
-	// Add elements to DOM
-	let wrapper = document.querySelector(".pages");
-	for(let [i, url] of Object.entries(imageUrls.reverse())) {
-		
-		// Generate node
-		let img = document.createElement("img");
-		img.classList.add("pageImg");
-		img.setAttribute("alt", `Page ${Number(i) + i}`);
-
-		// Set source
-		img.src = url;
-
-		// Add to DOM
-		wrapper.insertBefore(img, wrapper.querySelector("*"));
-
-	}
-
-	// Wait for all images to load
-	let loadedCount = 0;
-	let toLoadImages = [...wrapper.querySelectorAll(".pageImg")];
-
 	// Function to set innerHTML
 	function setLoadingText(text) {
 		document.querySelectorAll(".current-loading-progress").forEach(el => {
@@ -229,38 +205,69 @@ async function initImages() {
 		});
 	}
 
-	// Load for each one
-	let imageLoaders = toLoadImages.map(img => {
-		
-		return new Promise((resolve, reject) => {
-			img.addEventListener("load", () => {
-				loadedCount++
-				let percentageText = Math.round((loadedCount / toLoadImages.length) * 100) + "%";
-				setLoadingText(percentageText);
-				resolve();
+	try {
+		// Fetch array of URLs
+		let imageUrls = await (await fetch(url)).json();
+
+		// Add elements to DOM
+		let wrapper = document.querySelector(".pages");
+		for(let [i, url] of Object.entries(imageUrls.reverse())) {
+			
+			// Generate node
+			let img = document.createElement("img");
+			img.classList.add("pageImg");
+			img.setAttribute("alt", `Page ${Number(i) + i}`);
+
+			// Set source
+			img.src = url;
+
+			// Add to DOM
+			wrapper.insertBefore(img, wrapper.querySelector("*"));
+
+		}
+
+		// Wait for all images to load
+		let loadedCount = 0;
+		let toLoadImages = [...wrapper.querySelectorAll(".pageImg")];
+
+		// Load for each one
+		let imageLoaders = toLoadImages.map(img => {
+			
+			return new Promise((resolve, reject) => {
+				img.addEventListener("load", () => {
+					loadedCount++
+					let percentageText = Math.round((loadedCount / toLoadImages.length) * 100) + "%";
+					setLoadingText(percentageText);
+					resolve();
+				});
+				img.addEventListener("error", reject);
 			});
-			img.addEventListener("error", reject);
+
 		});
 
-	});
+		await Promise.all(imageLoaders);
 
-	await Promise.all(imageLoaders);
+		// Remove loading text
+		setLoadingText("");
+		
+		// Update loading section in DOM
+		loaded = true;
+		document.querySelector(".manga-reader").classList.add("loaded");
+		
+		// Check whether to scroll to page yet, or not
+		let img = document.querySelector(".pageImg");
+		let checkInterval = setInterval(() => {
+			if(img.scrollHeight > 0) {
+				clearInterval(checkInterval);
+				scrollToPage();
+			}
+		}, 50);
+	} catch(err) {
+		loaded = true;
+		document.querySelector(".manga-reader").classList.add("loaded");
+		setLoadingText("Error");
 
-	// Remove loading text
-	setLoadingText("");
-	
-	// Update loading section in DOM
-	loaded = true;
-	document.querySelector(".manga-reader").classList.add("loaded");
-	
-	// Check whether to scroll to page yet, or not
-	let img = document.querySelector(".pageImg");
-	let checkInterval = setInterval(() => {
-		if(img.scrollHeight > 0) {
-			clearInterval(checkInterval);
-			scrollToPage();
-		}
-	}, 50);
+	}
 
 }
 initImages();

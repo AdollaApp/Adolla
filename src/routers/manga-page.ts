@@ -342,7 +342,6 @@ export default router;
 async function setColors(data: StoredData, slug: string) {
 	let lastChapter = await getMangaProgress(data.provider, slug);
 	data.data.chapters.forEach(ch => {
-		// console.log(ch, lastChapter.progress);
 		if(ch.progress) ch.progress.percentageColor = (ch.progress && ch.progress?.chapterId === lastChapter.chapterId) ? "recent" : "neutral";
 	});
 }

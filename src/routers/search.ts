@@ -2,18 +2,21 @@
 import express from "express";
 const router = express.Router();
 
-import * as scrapers from "../scrapers";
 import { ScraperResponse } from "../types";
+import { doSearch } from "../util/doSearch";
 import { setMangaProgress } from "../util/getMangaProgress";
+import { SearchError } from "../scrapers/types";
 import getReading from "../util/getReading";
 
 router.get("/", async (req, res) => {
 	let query = ((req.query.q ?? "") as string).trim();
 	
-	let searchResults: ScraperResponse[] = [];
-	searchResults = await scrapers.Mangasee.search(query);
+	let searchResults: ScraperResponse[] | SearchError = [];
+	searchResults = await doSearch("mangasee", query);
 	
-	await Promise.all(searchResults.map(setMangaProgress));
+	if(Array.isArray(searchResults)) {
+		await Promise.all(searchResults.map(setMangaProgress));
+	}
 
 	let reading = await getReading(4);
 
