@@ -1,11 +1,11 @@
 
-import { ScraperError, Chapter, ScraperResponse } from "../types";
+import { Chapter, ScraperResponse } from "../types";
 import fetch from "node-fetch";
 import Fuse from "fuse.js";
 import updateManga from "../util/updateManga";
 import { Scraper, SearchOptions } from "./types";
 import { getScraperId } from "../routers/manga-page";
-
+import { error } from "./index";
 
 // Search interfaces
 /** This is for `DirectoryItem`, the values there aren't very useful */
@@ -58,6 +58,7 @@ export class MangaseeClass extends Scraper {
 	constructor() {
 		super();
 		this.provider = "Mangasee";
+		this.canSearch = true;
 	}
 
 	public async search(query: string, options?: Partial<SearchOptions>): Promise<(ScraperResponse)[]> {
@@ -248,19 +249,6 @@ export class MangaseeClass extends Scraper {
 			console.error(err.stack);
 			return error(-1, err);
 		}
-	}
-}
-
-/** 
- * Generate error object easily 
- * @param status The HTTP status code
- * @param err A string describing the error
- */
-function error(status = -1, err = "Unknown"): ScraperError {
-	return {
-		status,
-		err,
-		success: false
 	}
 }
 

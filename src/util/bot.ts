@@ -1,21 +1,7 @@
-import Telebot from "telebot";
-import fs from "fs";
 import chalk from "chalk";
+import Telebot from "telebot";
+import secretConfig from "../util/secretConfig";
 
-interface SecretConfig {
-	telegram?: {
-		bot: string | null;
-		user: string | null;
-	}
-}
-
-let secretConfig: SecretConfig;
-let path = __dirname.split("/").slice(0, -1).join("/") + "/secret-config.json";
-if(fs.existsSync(path)) {
-	secretConfig = JSON.parse(fs.readFileSync(path, "utf-8"));
-} else {
-	console.error(chalk.red("[TELEGRAM]") + ` No secret-config provided. The bot will not prompt you with new chapters.`);
-}
 
 let bot = null;
 if(secretConfig?.telegram?.bot) {
@@ -24,6 +10,8 @@ if(secretConfig?.telegram?.bot) {
 	bot.on("text", message => {
 		console.info(`The Telegram bot has received a message from ID: ${message.from.id} (@${message.from.username})`)
 	});
+} else {
+	console.error(chalk.red("[SECRET]") + ` No bot token provided in secret-config. The bot will not prompt you with new chapters.`);
 }
 
 class Bot {

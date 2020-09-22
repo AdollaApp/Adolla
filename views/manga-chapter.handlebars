@@ -11,6 +11,9 @@
 <section class="manga-reader">
 	<div class="loading"></div>
 	<div class="pages">
+		{{#each data.data.chapterImages}}
+		<img src="{{this}}" alt="{{addOne @index}}" class="pageImg">
+		{{/each}}
 		{{#if navigation}}
 		<div class="in-chapter-navigation">
 			<div class="in-chapter-nav-inner">
