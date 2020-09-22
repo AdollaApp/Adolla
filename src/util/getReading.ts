@@ -34,10 +34,10 @@ export default async function getReading(maxResults: number = Infinity) {
 	}
 
 
-	console.log(readingMeta);
+	console.log(readingManga.mangadex["1"]);
 
 	// Sort data
-	readingMeta = readingMeta.sort((a, b) => readingManga[a.provider][a.slug].at - readingManga[b.provider][b.slug].at);
+	readingMeta = readingMeta.sort((b, a) => readingManga[a.provider][a.slug].last.at - readingManga[b.provider][b.slug].last.at);
 
 	// Slice down to max results
 	readingMeta = readingMeta.slice(0, maxResults);
