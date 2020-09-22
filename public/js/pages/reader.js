@@ -50,8 +50,10 @@ function updatePages() {
 
 	if(loaded) document.body.setAttribute("data-to-page", currentPage);
 
+	let toPage = Number(document.body.getAttribute("data-to-page")) || 0;
+	let pageCountDom = Number(document.body.getAttribute("data-page-count")) || toPage + 1;
 	document.querySelectorAll(".current-page").forEach(span => {
-		span.innerText = `${currentPage} of ${pageCount}`;
+		span.innerText = `${loaded ? currentPage : (toPage !== "false" ? toPage : 0)} of ${loaded ? pageCount : (pageCountDom !== "false" ? pageCountDom : 0)}`;
 	});
 }
 updatePages();

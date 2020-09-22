@@ -31,7 +31,7 @@
 		
 		<meta name="twitter:title" content="{{#ifDev}}DEV {{/ifDev}}Adolla">
 	</head>
-	<body data-to-page="{{getPageProgress navigation.currentChapter.progress}}" {{#ifDev}}data-is-dev="true"{{/ifDev}}>
+	<body data-to-page="{{getPageProgress navigation.currentChapter.progress}}" data-page-count="{{navigation.currentChapter.progress.total}}" {{#ifDev}}data-is-dev="true"{{/ifDev}}>
 		
 		<div class="nav-footer is-footer {{#if isMangaPage}}toggle-on-tap{{/if}}">
 			<a class="nav-link {{#if isHome}}is-current-nav-item{{/if}}" href="/">
