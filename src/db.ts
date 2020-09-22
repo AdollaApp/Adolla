@@ -6,8 +6,8 @@ import chalk from "chalk";
 
 // Configure DB's default values
 const defaults: Database = {
-	manga_cache: {},
-	"reading_new": {},
+	data_cache: {},
+	reading_new: {},
 	other: {},
 	notified: {},
 	lists: [],
@@ -39,23 +39,23 @@ if(oldReading) {
 			}
 		}
 	} = {
-		Mangasee: {} // Mangasee was the default befor ethis update
+		mangasee: {} // Mangasee was the default befor ethis update
 	}
 
 	console.info(chalk.yellowBright("[DB]") + ` Start converting old reading to new`);
 
 	// Generate new objects
 	for(let slug of Object.keys(oldReading)) {
-		newReading.Mangasee[slug] = {
-			...(newReading.Mangasee[slug] ?? {})
+		newReading.mangasee[slug] = {
+			...(newReading.mangasee[slug] ?? {})
 		}
 		for(let chapter of Object.keys(oldReading[slug])) {
 
 			let d = oldReading[slug][chapter];
 			
-			console.info(chalk.green("[DB]") + ` Converting old reading to new: ${slug}`);
+			console.info(chalk.green("[DB]") + ` Converting old reading to new: ${slug}'s ${chapter}`);
 			
-			newReading.Mangasee[slug][chapter] = {
+			newReading.mangasee[slug][chapter] = {
 				current: d.current,
 				total: d.total,
 				at: d.at,
@@ -71,6 +71,9 @@ if(oldReading) {
 	db.set("reading", undefined);
 	db.set("reading_new", newReading);
 
+	// Since this is the old data format, also clear the old data
+	db.set("manga_cache", undefined);
+	console.info(chalk.green("[DB]") + ` Removed old manga cache`);
 }
 
 

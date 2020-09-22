@@ -41,7 +41,7 @@ export async function getLists(): Promise<List[]> {
 
 		// Add data for each item
 		for(let entry of list.entries) {
-			entry.data = await updateManga(entry.provider ?? "Mangasee", entry.slug);
+			entry.data = await updateManga(entry.provider ?? "mangasee", entry.slug);
 		}
 
 	}

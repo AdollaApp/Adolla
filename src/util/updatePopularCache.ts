@@ -7,6 +7,7 @@ import getReading from "./getReading";
 import { Progress } from "../types";
 import Bot from "./bot";
 import chalk from "chalk";
+import { getScraperId } from "../routers/manga-page";
 
 class Updater {
 
@@ -27,7 +28,7 @@ class Updater {
 		
 		await Promise.all(popular.map(obj => obj.success ? obj : null).filter(Boolean).map(async obj => {
 			// Update manga and store new value in cache
-			await updateManga(obj.provider ?? "Mangasee", obj.constant.slug, true);
+			await updateManga(obj.provider ?? "mangasee", obj.constant.slug, true);
 		}));
 
 		console.info(chalk.green("[CACHE]") + " Updated cache for popular manga");
@@ -59,7 +60,7 @@ class Updater {
 				chapters = chapters.sort((a, b) => a.combined - b.combined);	
 
 				// Get reading
-				let dbString = `reading_new.${data.provider}.${data.constant.slug}.last`;
+				let dbString = `reading_new.${getScraperId(data.provider)}.${data.constant.slug}.last`;
 				let reading: Progress = db.get(dbString);
 				if(!reading) return null;
 				let currentChapter = chapters.find(c => c.hrefString === reading.chapterId);
@@ -115,7 +116,7 @@ class Updater {
 
 
 		// Get data
-		let cache = db.get("manga_cache");
+		let cache = db.get("data_cache");
 		
 		console.info(chalk.yellowBright("[CLEANUP]") + ` Checking each cache entry for old data`);
 
@@ -138,7 +139,7 @@ class Updater {
 		}
 
 		// Write to db
-		db.set("manga_cache", cache);
+		db.set("data_cache", cache);
 		console.info(chalk.green("[CLEANUP]") + ` Done cleaning up`);
 
 	}

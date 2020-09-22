@@ -2,6 +2,7 @@ import { ScraperResponse } from "../types";
 
 /** All available scrapers */
 export type Provider = "Mangasee" | "Mangadex";
+export type ProviderId = "mangasee" | "mangadex";
 
 export interface SearchOptions {
 	resultCount: number;

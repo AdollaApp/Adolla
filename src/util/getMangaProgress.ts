@@ -1,10 +1,12 @@
 
 import db from "../db";
+import { getScraperId } from "../routers/manga-page";
+import { Provider } from "../scrapers/types";
 import { Progress, ScraperResponse } from "../types";
 import getProgressData from "./getProgressData";
 
-export default async function getMangaProgress(provider: string, slug: string, where: string = "last"): Promise<Progress> {
-	let dbString = `reading_new.${provider}.${slug}.${where.replace(/\./g, "_")}`;
+export default async function getMangaProgress(provider: Provider, slug: string, where: string = "last"): Promise<Progress> {
+	let dbString = `reading_new.${getScraperId(provider)}.${slug}.${where.replace(/\./g, "_")}`;
 	let entry = db.get(dbString);
 	let data = entry ?? null;
 	if(data) {

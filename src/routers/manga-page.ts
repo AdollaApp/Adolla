@@ -4,13 +4,13 @@ const router = express.Router();
 
 import db from "../db";
 import updateManga from "../util/updateManga";
-import * as scrapers from "../scrapers";
-import { Progress, StoredData, List, ScraperData, Chapter } from "../types";
+import { Progress, StoredData, List } from "../types";
 import getMangaProgress, { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";
 import { getLists } from "../util/lists";
 import getProgressData from "../util/getProgressData";
 import chalk from "chalk";
+import { Provider, ProviderId } from "../scrapers/types";
 
 interface NewList {
 	slug: string;
@@ -23,11 +23,11 @@ let scrapersMapped = {
 };
 // @ts-ignore TS still doesn't have fromEntries :/
 let scrapersMappedReversed = Object.fromEntries(Object.entries(scrapersMapped).map(v => v.reverse()));
-export function getScraperName(slug: string) {
+export function getScraperName(slug: string): ProviderId | string {
 	return scrapersMapped[slug] ?? null;
 }
-export function getScraperId(slug: string) {
-	return scrapersMappedReversed[slug] ?? null;
+export function getScraperId(slug: string): Provider | string {
+	return scrapersMappedReversed[slug] ?? slug;
 }
 
 router.get("/:provider/:slug", async (req, res, next) => {
@@ -181,11 +181,11 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 		let chapters = data.data.chapters;
 		let markChapters = updateValues.map(markingChapter => chapters.find(c => c.hrefString === markingChapter));
 
-		let lastProgressData;
+		let lastProgressData: Progress | null = null;
 		for(let chapter of markChapters) {
 
 			// Generate query string, this will be used twice
-			let queryString = `reading_new.${data.provider}.${slug}.${chapter.hrefString.replace(/\./g, "_")}`;
+			let queryString = `reading_new.${getScraperId(data.provider)}.${slug}.${chapter.hrefString.replace(/\./g, "_")}`;
 			
 			// Get existing data
 			let existingData = db.get(queryString);
@@ -211,12 +211,12 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 		}
 
 		// Set last progress data
-		if(lastProgressData) db.set(`reading_new.${data.provider}.${slug}.last`, lastProgressData);
+		if(lastProgressData) db.set(`reading_new.${getScraperId(data.provider)}.${slug}.last`, lastProgressData);
 
 		// Remove `reading` object if nothing is left
 		
 		  // Get data
-		let readingData = db.get(`reading_new.${data.provider}.${slug}`);
+		let readingData = db.get(`reading_new.${getScraperId(data.provider)}.${slug}`);
 		
 		  // Get keys with proper values
 		let remainingData = Object.entries(readingData).filter(v => v[1]).map(v => v[0]);
@@ -224,7 +224,7 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 		  // If the only entry is "last" (and not "1-1" or whatever), remove it
 		if((remainingData[0] === "last" && remainingData.length <= 1) || remainingData.length <= 0) {
 			// Remove entry
-			db.set(`reading_new.${data.provider}.${slug}`, undefined);
+			db.set(`reading_new.${getScraperId(data.provider)}.${slug}`, undefined);
 			console.info(chalk.green("[DB]") + ` Removing ${data.provider}'s ${slug} from reading`);
 		}
 
@@ -273,7 +273,7 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 		if(!list.entries.find(entry => entry.slug === req.params.slug) && !list.byCreator) {
 			list.entries.push({
 				slug: req.params.slug,
-				provider
+				provider: getScraperId(provider)
 			});
 			list.last = Date.now();
 		}
@@ -329,8 +329,8 @@ router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => 
 	});
 
 	// Update db
-	db.set(`reading_new.${provider}.${slug}.${chapterId.toString().replace(/\./g, "_")}`, progressData);
-	db.set(`reading_new.${provider}.${slug}.last`, progressData);
+	db.set(`reading_new.${getScraperId(provider)}.${slug}.${chapterId.toString().replace(/\./g, "_")}`, progressData);
+	db.set(`reading_new.${getScraperId(provider)}.${slug}.last`, progressData);
 
 	res.json({
 		status: 200
