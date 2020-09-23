@@ -40,7 +40,7 @@ router.get("/:provider/:slug", async (req, res, next) => {
 
 	let param = req.params.slug;
 
-	let provider = getScraperName(req.params.provider);
+	let provider = getScraperName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
@@ -84,7 +84,7 @@ router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 	let chapterId = req.params.chapter;
 	let slug = req.params.slug;
 
-	let provider = getScraperName(req.params.provider);
+	let provider = getScraperName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
@@ -142,7 +142,7 @@ router.get("/:provider/:slug/:chapter/get-images", async (req, res, next) => {
 	let chapterId = req.params.chapter;
 	let slug = req.params.slug;
 
-	let provider = getScraperName(req.params.provider);
+	let provider = getScraperName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
@@ -172,7 +172,7 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 	let slug = req.params.slug;
 	let updateValues: (string | number)[] = req.body.values;
 
-	let provider = getScraperName(req.params.provider);
+	let provider = getScraperName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
@@ -256,7 +256,7 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 
 	let currentLists: List[] = await getLists();
 
-	let provider = getScraperName(req.params.provider);
+	let provider = getScraperName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
@@ -323,7 +323,7 @@ router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => 
 		return;
 	}
 
-	let provider = getScraperName(req.params.provider);
+	let provider = getScraperName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;

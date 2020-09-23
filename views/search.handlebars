@@ -6,6 +6,12 @@
 
 	<div class="search-input">
 		<input type="text" placeholder="Fire Force" id="search-2" value="{{query}}" class="search-input" aria-label="Search">
+		<div class="alt-scrapers">
+			{{#each scrapers}}
+			<a class="secondary-button single-column scraper {{#if isCurrent}}badge-background{{/if}}" href="{{href}}">{{name}}</a>
+			{{/each}}
+			<a class="last"></a>
+		</div>
 	</div>
 
 	<section class="section search-results" data-list-id="search" data-list-type="list">
