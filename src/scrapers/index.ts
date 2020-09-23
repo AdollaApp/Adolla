@@ -21,3 +21,8 @@ export const Mangasee = MangaseeInstance;
 // Import MangaDex
 import MangadexInstance from "./mangadex";
 export const Mangadex = MangadexInstance;
+
+export const scrapers = {
+	Mangasee,
+	Mangadex
+}

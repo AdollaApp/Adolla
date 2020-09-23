@@ -699,8 +699,7 @@ input, textarea {
 }
 
 .secondary-button {
-	/* font-size: 0.8rem; */
-	display: grid;
+	display: inline-grid;
 	grid-template-columns: auto 1fr;
 	align-items: center;
 	grid-gap: 5px;
@@ -712,6 +711,9 @@ input, textarea {
 	box-sizing: border-box;
 	border-radius: 4px;
 	word-break: break-word;
+}
+.secondary-button.single-column {
+	grid-template-columns: 100%;
 }
 @media (hover:hover) {
 	.secondary-button:hover {

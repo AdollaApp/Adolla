@@ -3,7 +3,7 @@ document.querySelectorAll(".search-input").forEach(input => {
 	input.addEventListener("change", event => {
 		let query = event.currentTarget.value.trim();
 		if(query && query.length > 0) {
-			location.href = `/search/?q=${encodeURIComponent(query)}`;
+			location.href = `${!location.pathname.startsWith("/search/") ? "/search/mangasee/" : "" }?q=${encodeURIComponent(query)}`;
 		}
 	});
 })
