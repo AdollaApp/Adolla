@@ -3,12 +3,12 @@
 
 import { ProviderId, Scraper, SearchOptions } from "../scrapers/types";
 import * as scrapers from "../scrapers";
-import { getScraperName } from "../routers/manga-page";
+import { getProviderName } from "../routers/manga-page";
 
 export async function doSearch(provider: ProviderId, query: string = "", searchOptions: Partial<SearchOptions> = {}) {
 	
 	// Get and verify scraper
-	let scraper: Scraper | undefined = scrapers[getScraperName(provider)];
+	let scraper: Scraper | undefined = scrapers[getProviderName(provider)];
 	if(!scraper) {
 		return null;
 	}

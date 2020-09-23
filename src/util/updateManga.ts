@@ -5,16 +5,16 @@ import { ScraperResponse } from "../types";
 import getMangaProgress from "./getMangaProgress";
 import config from "../config.json";
 import { Provider, Scraper } from "../scrapers/types";
-import { getScraperId, getScraperName } from "../routers/manga-page";
+import { getProviderId, getProviderName } from "../routers/manga-page";
 
 export default async function updateManga(provider: Provider | string, slug: string, ignoreExisting: boolean = false, chapterId: number | string = -1): Promise<ScraperResponse> {
 
-	let dbQuery = `data_cache.${getScraperId(provider)}.${slug}`;
+	let dbQuery = `data_cache.${getProviderId(provider)}.${slug}`;
 
 	let existing = db.get(dbQuery);
 	if(existing && existing.savedAt > Date.now() - config.cache.duration && !ignoreExisting && chapterId === -1) return await addInfo(existing);
 
-	let scraperName = getScraperName(provider) || provider;
+	let scraperName = getProviderName(provider) || provider;
 	let scraper: Scraper | undefined = scrapers[scraperName];
 	
 	if(!scraper) {
