@@ -62,6 +62,7 @@ class MangadexClass extends Scraper {
 	
 				// Chapters
 				let chapters = data.chapter
+				  .filter(c => c.lang_code.includes("en") || c.lang_code.includes("gb"));
 	
 				// Get largest volume count
 				let largestVolumeCount = 0;
