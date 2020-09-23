@@ -7,7 +7,7 @@ import { ScraperResponse } from "../types";
 import { doSearch } from "../util/doSearch";
 import { setMangaProgress } from "../util/getMangaProgress";
 import { ProviderId, Scraper, SearchError } from "../scrapers/types";
-import { getScraperId, getScraperName, isScraperId } from "./manga-page";
+import { getProviderId, getProviderName, isProviderId } from "./manga-page";
 import getReading from "../util/getReading";
 
 router.get("/", (req, res) => {
@@ -20,8 +20,8 @@ router.get("/:provider", async (req, res, next) => {
 
 	// Get scraper name
 	let param = req.params.provider.toLowerCase();
-	const provider: ProviderId | null = isScraperId(param) ? param : null;
-	let scraperName = getScraperName(provider);
+	const provider: ProviderId | null = isProviderId(param) ? param : null;
+	let scraperName = getProviderName(provider);
 	if(!scraperName) {
 		next();
 		return;
@@ -47,8 +47,8 @@ router.get("/:provider", async (req, res, next) => {
 
 	  // Get name, id, href, and if whether or not the current scraper
 	let scraperMap = scrapersArray.map(scraper => {
-		let id = getScraperId(scraper.provider);
-		let name = getScraperName(id);
+		let id = getProviderId(scraper.provider);
+		let name = getProviderName(id);
 		return {
 			id,
 			name,

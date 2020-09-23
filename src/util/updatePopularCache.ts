@@ -7,7 +7,7 @@ import getReading from "./getReading";
 import { Progress } from "../types";
 import Bot from "./bot";
 import chalk from "chalk";
-import { getScraperId } from "../routers/manga-page";
+import { getProviderId } from "../routers/manga-page";
 
 class Updater {
 
@@ -60,7 +60,7 @@ class Updater {
 				chapters = chapters.sort((a, b) => a.combined - b.combined);	
 
 				// Get reading
-				let dbString = `reading_new.${getScraperId(data.provider)}.${data.constant.slug}.last`;
+				let dbString = `reading_new.${getProviderId(data.provider)}.${data.constant.slug}.last`;
 				let reading: Progress = db.get(dbString);
 				if(!reading) return null;
 				let currentChapter = chapters.find(c => c.hrefString === reading.chapterId);

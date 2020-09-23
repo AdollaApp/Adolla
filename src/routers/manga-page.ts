@@ -23,16 +23,16 @@ let scrapersMapped = {
 };
 // @ts-ignore TS still doesn't have fromEntries :/
 let scrapersMappedReversed = Object.fromEntries(Object.entries(scrapersMapped).map(v => v.reverse()));
-export function getScraperName(slug: string): ProviderId | string {
+export function getProviderName(slug: string): ProviderId | string {
 	return scrapersMapped[slug] ?? null;
 }
-export function isScraperName(slug: string): slug is Provider {
+export function isProviderName(slug: string): slug is Provider {
 	return !!scrapersMappedReversed[slug];
 }
-export function getScraperId(slug: string): Provider | string {
+export function getProviderId(slug: string): Provider | string {
 	return scrapersMappedReversed[slug] ?? slug;
 }
-export function isScraperId(slug: string): slug is ProviderId {
+export function isProviderId(slug: string): slug is ProviderId {
 	return !!scrapersMapped[slug];
 }
 
@@ -40,7 +40,7 @@ router.get("/:provider/:slug", async (req, res, next) => {
 
 	let param = req.params.slug;
 
-	let provider = getScraperName(req.params.provider.toLowerCase());
+	let provider = getProviderName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
@@ -84,7 +84,7 @@ router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 	let chapterId = req.params.chapter;
 	let slug = req.params.slug;
 
-	let provider = getScraperName(req.params.provider.toLowerCase());
+	let provider = getProviderName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
@@ -142,7 +142,7 @@ router.get("/:provider/:slug/:chapter/get-images", async (req, res, next) => {
 	let chapterId = req.params.chapter;
 	let slug = req.params.slug;
 
-	let provider = getScraperName(req.params.provider.toLowerCase());
+	let provider = getProviderName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
@@ -172,7 +172,7 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 	let slug = req.params.slug;
 	let updateValues: (string | number)[] = req.body.values;
 
-	let provider = getScraperName(req.params.provider.toLowerCase());
+	let provider = getProviderName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
@@ -191,7 +191,7 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 		for(let chapter of markChapters) {
 
 			// Generate query string, this will be used twice
-			let queryString = `reading_new.${getScraperId(data.provider)}.${slug}.${chapter.hrefString.replace(/\./g, "_")}`;
+			let queryString = `reading_new.${getProviderId(data.provider)}.${slug}.${chapter.hrefString.replace(/\./g, "_")}`;
 			
 			// Get existing data
 			let existingData = db.get(queryString);
@@ -217,12 +217,12 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 		}
 
 		// Set last progress data
-		if(lastProgressData) db.set(`reading_new.${getScraperId(data.provider)}.${slug}.last`, lastProgressData);
+		if(lastProgressData) db.set(`reading_new.${getProviderId(data.provider)}.${slug}.last`, lastProgressData);
 
 		// Remove `reading` object if nothing is left
 		
 		  // Get data
-		let readingData = db.get(`reading_new.${getScraperId(data.provider)}.${slug}`);
+		let readingData = db.get(`reading_new.${getProviderId(data.provider)}.${slug}`);
 		
 		  // Get keys with proper values
 		let remainingData = Object.entries(readingData).filter(v => v[1]).map(v => v[0]);
@@ -230,7 +230,7 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 		  // If the only entry is "last" (and not "1-1" or whatever), remove it
 		if((remainingData[0] === "last" && remainingData.length <= 1) || remainingData.length <= 0) {
 			// Remove entry
-			db.set(`reading_new.${getScraperId(data.provider)}.${slug}`, undefined);
+			db.set(`reading_new.${getProviderId(data.provider)}.${slug}`, undefined);
 			console.info(chalk.green("[DB]") + ` Removing ${data.provider}'s ${slug} from reading`);
 		}
 
@@ -256,7 +256,7 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 
 	let currentLists: List[] = await getLists();
 
-	let provider = getScraperName(req.params.provider.toLowerCase());
+	let provider = getProviderName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
@@ -279,7 +279,7 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 		if(!list.entries.find(entry => entry.slug === req.params.slug) && !list.byCreator) {
 			list.entries.push({
 				slug: req.params.slug,
-				provider: getScraperId(provider)
+				provider: getProviderId(provider)
 			});
 			list.last = Date.now();
 		}
@@ -323,7 +323,7 @@ router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => 
 		return;
 	}
 
-	let provider = getScraperName(req.params.provider.toLowerCase());
+	let provider = getProviderName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
@@ -335,8 +335,8 @@ router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => 
 	});
 
 	// Update db
-	db.set(`reading_new.${getScraperId(provider)}.${slug}.${chapterId.toString().replace(/\./g, "_")}`, progressData);
-	db.set(`reading_new.${getScraperId(provider)}.${slug}.last`, progressData);
+	db.set(`reading_new.${getProviderId(provider)}.${slug}.${chapterId.toString().replace(/\./g, "_")}`, progressData);
+	db.set(`reading_new.${getProviderId(provider)}.${slug}.last`, progressData);
 
 	res.json({
 		status: 200

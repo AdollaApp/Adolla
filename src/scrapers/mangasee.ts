@@ -4,7 +4,7 @@ import fetch from "node-fetch";
 import Fuse from "fuse.js";
 import updateManga from "../util/updateManga";
 import { Scraper, SearchOptions } from "./types";
-import { getScraperId, isScraperId } from "../routers/manga-page";
+import { getProviderId, isProviderId } from "../routers/manga-page";
 import { error } from "./index";
 
 // Search interfaces
@@ -228,7 +228,7 @@ export class MangaseeClass extends Scraper {
 			}
 
 			// Now we return it
-			let providerId = getScraperId(this.provider);
+			let providerId = getProviderId(this.provider);
 			return {
 				constant: {
 					title,
@@ -243,7 +243,7 @@ export class MangaseeClass extends Scraper {
 					chapterImages
 				},
 				success: true,
-				provider: isScraperId(providerId) ? providerId : null
+				provider: isProviderId(providerId) ? providerId : null
 			}
 		} catch(err) {
 			//  OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!

@@ -3,7 +3,7 @@ import { Chapter, ScraperResponse } from "../types";
 import { Scraper, SearchOptions } from "./types";
 import md from "mangadex-api";
 import fetch from "node-fetch";
-import { getScraperId, isScraperId } from "../routers/manga-page";
+import { getProviderId, isProviderId } from "../routers/manga-page";
 import secretConfig from "../util/secretConfig";
 import chalk from "chalk";
 import updateManga from "../util/updateManga";
@@ -101,7 +101,7 @@ class MangadexClass extends Scraper {
 				}
 	
 				// Return data
-				let provider = getScraperId(this.provider);
+				let provider = getProviderId(this.provider);
 				if(!isDone) { // Check if request hasn't already timed out
 					isDone = true;
 					resolve({
@@ -118,7 +118,7 @@ class MangadexClass extends Scraper {
 							chapterImages
 						},
 						success: true,
-						provider: isScraperId(provider) ? provider : null
+						provider: isProviderId(provider) ? provider : null
 					});
 				}
 			} catch(err) {
