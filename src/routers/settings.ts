@@ -1,13 +1,14 @@
 import express from "express";
+import db from "../db";
+import fs from "fs";
+import getReading from "../util/getReading";
+import getIconSrc, { iconNames, iconNamesReversed } from "../util/getIconSrc";
+
 const router = express.Router();
 
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-import db from "../db";
-import fs from "fs";
-import getReading from "../util/getReading";
-import getIconSrc, { iconNames, iconNamesReversed } from "../util/getIconSrc";
 
 router.get("/settings/", async (req, res) => {
 
@@ -56,13 +57,20 @@ router.get("/settings/restore-backup/:filename", async (req, res) => {
 
 		// Merge reading
 		let r = db.get("reading_new") || {};
-		for(let provider of Object.keys(reading)) {
-			if(!r[provider]) r[provider] = {}
-			for(let slug of Object.keys(reading[provider])) {
-				r[provider][slug] = {
-					...r[provider][slug],
-					...reading[provider][slug]
-				};
+		if(reading.mangasee) {
+			for(let provider of Object.keys(reading)) {
+				if(!r[provider]) r[provider] = {}
+				for(let slug of Object.keys(reading[provider])) {
+					r[provider][slug] = {
+						...r[provider][slug],
+						...reading[provider][slug]
+					};
+				}
+			}
+		} else {
+			r.mangasee = {
+				...r.mangasee,
+				...reading
 			}
 		}
 		db.set("reading_new", r);
