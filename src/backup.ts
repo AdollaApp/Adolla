@@ -16,7 +16,7 @@ class Backup {
 
 	public async createBackup() {
 		console.info(chalk.yellowBright("[BACKUP]") + ` Making backup at ${new Date().toLocaleString("it")}`);
-		let reading = db.get("reading");
+		let reading = db.get("reading_new");
 		let lists: List[] = db.get("lists");
 		
 		let now = Date.now();

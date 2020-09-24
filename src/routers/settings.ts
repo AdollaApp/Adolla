@@ -55,15 +55,17 @@ router.get("/settings/restore-backup/:filename", async (req, res) => {
 		let lists = backup.lists ?? [];
 
 		// Merge reading
-		let r = db.get("reading")
-		for(let slug of Object.keys(reading)) {
-			if(!r[slug]) r[slug] = {}
-			r[slug] = {
-				...r[slug],
-				...reading[slug]
-			};
+		let r = db.get("reading_new") || {};
+		for(let provider of Object.keys(reading)) {
+			if(!r[provider]) r[provider] = {}
+			for(let slug of Object.keys(reading[provider])) {
+				r[provider][slug] = {
+					...r[provider][slug],
+					...reading[provider][slug]
+				};
+			}
 		}
-		db.set("reading", r);
+		db.set("reading_new", r);
 
 		// Set lists
 		db.set("lists", lists);
