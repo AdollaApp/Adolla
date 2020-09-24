@@ -69,7 +69,7 @@ router.get("/settings/restore-backup/:filename", async (req, res) => {
 			}
 		} else {
 			r.mangasee = {
-				...r.mangasee,
+				...(r.mangasee || {}),
 				...reading
 			}
 		}
