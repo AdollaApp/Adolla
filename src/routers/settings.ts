@@ -48,10 +48,10 @@ router.get("/settings/", async (req, res) => {
 
 router.get("/settings/restore-backup/:filename", async (req, res) => {
 	try {
-		
+
 		let filename = req.params.filename;
 		let backup = JSON.parse(fs.readFileSync(`backups/${filename}`, "utf-8"));
-		
+
 		let reading = backup.reading ?? {};
 		let lists = backup.lists ?? [];
 
