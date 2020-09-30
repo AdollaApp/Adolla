@@ -29,7 +29,7 @@
 		<div class="backups">
 		{{#each backups}}
 		<div class="backup" data-backup="{{fileName}}">
-			<span>{{label}}</span>
+			<span>{{label}} <span class="secondary">({{size}})</span></span>
 			<button class="badge-background">Restore</button>
 		</div>
 		{{/each}}
