@@ -34,7 +34,8 @@ router.get("/settings/", async (req, res) => {
 		return {
 			fileName,
 			label,
-			date: d
+			date: d,
+			size: fs.readFileSync(`backups/${fileName}`, "utf-8").length
 		};
 	}).sort((a, b) => b.date.getTime() - a.date.getTime());
 
