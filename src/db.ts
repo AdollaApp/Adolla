@@ -13,7 +13,7 @@ const defaults: Database = {
 	lists: [],
 	settings: {
 		icon: "White",
-		"show-nsfw": false
+		"show-nsfw": "no"
 	}
 }
 
