@@ -227,6 +227,9 @@ export class MangaseeClass extends Scraper {
 
 			}
 
+			// NSFW
+			const nsfw = false; // I don't think Mangasee has hentai
+
 			// Now we return it
 			let providerId = getProviderId(this.provider);
 			return {
@@ -236,7 +239,8 @@ export class MangaseeClass extends Scraper {
 					posterUrl,
 					alternateTitles,
 					descriptionParagraphs,
-					genres
+					genres,
+					nsfw
 				},
 				data: {
 					chapters,
