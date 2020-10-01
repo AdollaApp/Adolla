@@ -1,13 +1,14 @@
 import express from "express";
+import db from "../db";
+import fs from "fs";
+import getReading from "../util/getReading";
+import getIconSrc, { iconNames, iconNamesReversed } from "../util/getIconSrc";
+
 const router = express.Router();
 
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-import db from "../db";
-import fs from "fs";
-import getReading from "../util/getReading";
-import getIconSrc, { iconNames, iconNamesReversed } from "../util/getIconSrc";
 
 router.get("/settings/", async (req, res) => {
 
@@ -33,7 +34,8 @@ router.get("/settings/", async (req, res) => {
 		return {
 			fileName,
 			label,
-			date: d
+			date: d,
+			size: fs.readFileSync(`backups/${fileName}`, "utf-8").length
 		};
 	}).sort((a, b) => b.date.getTime() - a.date.getTime());
 
@@ -47,23 +49,32 @@ router.get("/settings/", async (req, res) => {
 
 router.get("/settings/restore-backup/:filename", async (req, res) => {
 	try {
-		
+
 		let filename = req.params.filename;
 		let backup = JSON.parse(fs.readFileSync(`backups/${filename}`, "utf-8"));
-		
+
 		let reading = backup.reading ?? {};
 		let lists = backup.lists ?? [];
 
 		// Merge reading
-		let r = db.get("reading")
-		for(let slug of Object.keys(reading)) {
-			if(!r[slug]) r[slug] = {}
-			r[slug] = {
-				...r[slug],
-				...reading[slug]
-			};
+		let r = db.get("reading_new") || {};
+		if(reading.mangasee) {
+			for(let provider of Object.keys(reading)) {
+				if(!r[provider]) r[provider] = {}
+				for(let slug of Object.keys(reading[provider])) {
+					r[provider][slug] = {
+						...r[provider][slug],
+						...reading[provider][slug]
+					};
+				}
+			}
+		} else {
+			r.mangasee = {
+				...(r.mangasee || {}),
+				...reading
+			}
 		}
-		db.set("reading", r);
+		db.set("reading_new", r);
 
 		// Set lists
 		db.set("lists", lists);

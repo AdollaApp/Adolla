@@ -12,7 +12,7 @@
 					<img class="poster" alt="Poster" src="{{data.constant.posterUrl}}">
 					{{#if data.progress}}
 					<nav class="side-nav">
-						<a href="{{ genLink2 data.constant.slug data.progress.season data.progress.chapter }}" class="small-manga no-margin">
+						<a href="{{ genLink2 data.provider data.constant.slug data.progress.chapterId }}" class="small-manga no-margin">
 							<div class="icon">
 								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play-circle"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
 							</div>
@@ -62,7 +62,7 @@
 					</h3>
 					<div class="chapters">
 						{{#each data.data.chapters}}
-						<a class="chapter" data-combined="{{this.combined}}" data-release-date="{{this.date}}" data-last-read="{{this.progress.at}}" href="{{ genLink2 @root.data.constant.slug this.season this.chapter }}">
+						<a class="chapter" data-href-string="{{this.hrefString}}" data-combined="{{this.combined}}" data-release-date="{{this.date}}" data-last-read="{{this.progress.at}}" href="{{ genLink2 @root.data.provider @root.data.constant.slug this.hrefString }}">
 							<span class="label">
 								<span class="select">
 									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
@@ -86,5 +86,5 @@
 	</div>
 </div>
 
-<script src="/js/lists-editor.js"></script>
-<script src="/js/manga.js"></script>
+<script src="/js/pages/lists-editor.js"></script>
+<script src="/js/pages/manga.js"></script>

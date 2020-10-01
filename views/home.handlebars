@@ -3,7 +3,7 @@
 	<p>Adolla is a manga-reader web app built by <a href="https://jipfr.nl" target="_blank" class="anchor">Jip Fr</a>. The source code is available <a href="https://github.com/jipfr/Adolla" target="_blank" class="anchor">here</a>.</p>
 
 	{{#if reading}}
-	<section class="section continue-reading" data-list-id="continue-reading">
+	<section class="section continue-reading" data-list-id="continue-reading" data-list-type="list">
 		<h2 class="sub-title spread do-spread"><span>Continue reading</span> {{> list-type }}</h2>
 		<div class="manga-grid show-all-wrapper do-show-all">
 			
@@ -19,7 +19,7 @@
 	{{#each lists}}
 	{{> list list=this}}
 	{{/each}}
-	<section class="section popular" data-list-id="popular">
+	<section class="section popular" data-list-id="popular" data-list-type="list">
 		<h2 class="sub-title spread do-spread"><span>Popular right now</span> {{> list-type }}</h2>
 		<div class="manga-grid">
 		{{#each popular}}
@@ -30,6 +30,6 @@
 
 </div>
 
-<script src="/js/home.js"></script>
-<script src="/js/lists.js"></script>
-<script src="/js/list-type.js"></script>
+<script src="/js/pages/home.js"></script>
+<script src="/js/reusable/lists.js"></script>
+<script src="/js/reusable/list-type.js"></script>
