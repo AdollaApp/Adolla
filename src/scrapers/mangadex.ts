@@ -111,7 +111,8 @@ class MangadexClass extends Scraper {
 							posterUrl: data.manga.cover_url,
 							alternateTitles: data.manga.alt_names,
 							genres: data.manga.genres.map(g => g.name),
-							descriptionParagraphs: data.manga.description.split("\r\n").filter(Boolean).filter(c => !c.startsWith("["))
+							descriptionParagraphs: data.manga.description.split("\r\n").filter(Boolean).filter(c => !c.startsWith("[")),
+							nsfw: !!data.manga.hentai
 						},
 						data: {
 							chapters: newChapters,
