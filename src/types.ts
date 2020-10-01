@@ -29,12 +29,20 @@ export interface Chapter {
 
 /** Used in manga.constant, these are mostly unchanging */
 export interface MangaMeta {
+	/** Manga's slug. For Mangasee this is readable (such as Fire-Brigade-Of-Flames), for MD this is an ID */
 	slug: string;
+	/** Full URL to cover art */
 	posterUrl: string;
+	/** Primary name of manga (say, "Tower of God" or "Fire Force") */
 	title: string;
+	/** Alternate titles (in other languages and such) */
 	alternateTitles: string[];
+	/** Array of paragraps. Each item is a paragraph and is shown in a <p> tag */
 	descriptionParagraphs: string[];
+	/** Genres as a string */
 	genres: string[];
+	/** If the manga is SFW or not */
+	nsfw: boolean;
 }
 /** Stored under manga.data, used for more dynamic stuff */
 export interface MangaData {
@@ -59,6 +67,7 @@ export interface Database {
 	lists: List[];
 	settings: {
 		icon: string;
+		"show-nsfw": boolean;
 	}
 }
 /** Save what the user is currently reading */

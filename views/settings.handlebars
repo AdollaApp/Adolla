@@ -20,6 +20,14 @@
 
 	</section>
 
+	<section class="section app-wide-settings">
+		<h2 class="sub-title">App settings</h2>
+		<div class="setting-wrapper toggle no-spread ignore" data-setting="show-nsfw">
+			<input type="checkbox" class="switch" data-true="yes" data-false="no" {{#if showNsfw}}checked{{/if}} />
+			<label>Show NSFW</label>
+		</div>
+	</section>
+
 	<section class="section">
 		<h2 class="sub-title">Reader settings</h2>
 		{{> settings-inner }}

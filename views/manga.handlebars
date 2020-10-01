@@ -29,7 +29,7 @@
 				</div>
 			</div>
 			<div class="top-content">
-				<h1 class="sub-title">{{data.constant.title}}</h1>
+				<h1 class="sub-title">{{#if data.constant.nsfw}}<span class="badge badge-nsfw nsfw-background">NSFW</span>{{/if}}{{data.constant.title}}</h1>
 				<div class="badges">
 					{{#each data.constant.genres}}
 					<span class="badge badge-background">{{this}}</span>

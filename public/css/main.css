@@ -291,6 +291,15 @@ details .manga-grid {
 	--text-secondary: var(--text-on-badge-secondary);
 	/* I don't like using !important, but there's no better way to do priority here */
 }
+.nsfw-background {
+	background: #d04040 !important;
+	color: white !important;
+}
+.badge-nsfw {
+	font-size: 0.8em;
+	margin-right: 10px;
+}
+
 .secondary-badge {
 	box-sizing: border-box;
 	padding: 5px 10px;
@@ -325,8 +334,13 @@ input, textarea {
 .setting-wrapper.toggle {
 	display: flex;
 	flex-wrap: nowrap;
-	justify-content: space-between;
 	align-items: center;
+}
+.setting-wrapper.toggle:not(.no-spread) {
+	justify-content: space-between;
+}
+.setting-wrapper.toggle.no-spread > *:first-child {
+	margin-right: 10px;
 }
 .switch {
 	appearance: none;
@@ -521,6 +535,11 @@ input, textarea {
 	background: var(--body);
 	word-break: break-all;
 	font-size: .5rem;
+}
+.poster-img .badge {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
 }
 .poster-img .poster-inner {
 	position: absolute;

@@ -1,6 +1,7 @@
 
 // JavaScript for the app-wide settings page.
-// At the time of writing, this page only has the settins for "icon"
+// This page has the settins for "icon"
+
 
 document.querySelectorAll(".icon-option:not(.is-current-icon)").forEach(iconWrapper => {
 
@@ -28,6 +29,28 @@ document.querySelectorAll(".icon-option:not(.is-current-icon)").forEach(iconWrap
 			}
 		});
 
+	});
+
+});
+
+// App-wide settings toggles
+// Currently that's just the NSFW filter
+document.querySelectorAll(".app-wide-settings .switch").forEach(switchEl => {
+
+	switchEl.addEventListener("click", () => {
+
+		let nsfwInput = document.querySelector(`[data-setting="show-nsfw"] input`);
+
+		fetch("/settings/set-app-settings", {
+			method: "POST",
+			headers: {
+				"content-type": "application/json"
+			},
+			body: JSON.stringify({
+				"show-nsfw": nsfwInput.getAttribute(`data-${nsfwInput.checked}`)
+			})
+		})
+		
 	});
 
 });

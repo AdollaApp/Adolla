@@ -111,7 +111,8 @@ class MangadexClass extends Scraper {
 							posterUrl: data.manga.cover_url,
 							alternateTitles: data.manga.alt_names,
 							genres: data.manga.genres.map(g => g.name),
-							descriptionParagraphs: data.manga.description.split("\r\n").filter(Boolean).filter(c => !c.startsWith("["))
+							descriptionParagraphs: data.manga.description.split("\r\n").filter(Boolean).filter(c => !c.startsWith("[")),
+							nsfw: !!data.manga.hentai
 						},
 						data: {
 							chapters: newChapters,
@@ -139,8 +140,8 @@ class MangadexClass extends Scraper {
 			}
 		}
 
-		// @ts-ignore Search has the wrong type definitions
 		let searchData = await this.client.search(query); // Get search results
+		console.log(searchData);
 
 		// Map to Adolla style format
 		let resultIds = searchData.titles.map(title => title.id)
