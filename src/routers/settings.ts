@@ -39,11 +39,14 @@ router.get("/settings/", async (req, res) => {
 		};
 	}).sort((a, b) => b.date.getTime() - a.date.getTime());
 
+	console.log(db.get("settings.show-nsfw"));
+
 	res.render("settings", {
 		isSettings: true,
 		icons,
 		reading,
-		backups
+		backups,
+		showNsfw: db.get("settings.show-nsfw") === "yes"
 	});
 });
 
@@ -109,6 +112,17 @@ router.post("/settings/set-icon/", async (req, res) => {
 		});
 
 	}
+
+});
+
+router.post("/settings/set-app-settings", async (req, res) => {
+
+	// Set NSFW setting
+	db.set("settings.show-nsfw", req.body["show-nsfw"] ?? false);
+
+	res.json({
+		status: 200
+	});
 
 });
 

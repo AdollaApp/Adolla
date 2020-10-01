@@ -23,8 +23,6 @@ function getSettings() {
 // Update settings
 function initSettings() {
 
-	let settings = getSettings();
-
 	// Add event listeners for settings (boxes specifically)
 	document.querySelectorAll(".setting-box").forEach(box => {
 		box.addEventListener("click", () => {
@@ -33,7 +31,7 @@ function initSettings() {
 			setSetting(setting, value).then(updateSettings);
 		});
 	});
-	document.querySelectorAll(".setting-wrapper.toggle").forEach(wrapper => {
+	document.querySelectorAll(".setting-wrapper.toggle:not(.ignore)").forEach(wrapper => {
 		let input = wrapper.querySelector(`input[type="checkbox"]`);
 		input.addEventListener("change", () => {
 			setSetting(wrapper.dataset.setting, input.dataset[input.checked])
@@ -85,7 +83,7 @@ function updateSettingToggles(settings) {
 	
 	// Find every key and add selected class
 	for(let settingKey of Object.keys(settings)) {
-		document.querySelectorAll(`.setting-wrapper.toggle[data-setting="${settingKey}"] .switch`).forEach(input => {
+		document.querySelectorAll(`.setting-wrapper.toggle[data-setting="${settingKey}"]:not(.ignore) .switch`).forEach(input => {
 			input.checked = input.dataset.true === settings[settingKey];
 		});
 	}
