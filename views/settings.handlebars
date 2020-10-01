@@ -29,13 +29,13 @@
 		<div class="backups">
 		{{#each backups}}
 		<div class="backup" data-backup="{{fileName}}">
-			<span>{{label}}</span>
+			<span>{{label}} <span class="secondary">({{size}})</span></span>
 			<button class="badge-background">Restore</button>
 		</div>
 		{{/each}}
 	</div>
 </div>
 
-<script src="/js/reader-settings.js"></script>
-<script src="/js/settings.js"></script>
-<script src="/js/backups.js"></script>
+<script src="/js/reusable/reader-settings.js"></script>
+<script src="/js/pages/settings.js"></script>
+<script src="/js/pages/backups.js"></script>

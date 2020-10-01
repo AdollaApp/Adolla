@@ -510,6 +510,18 @@ input, textarea {
 	border: 1px solid var(--border-2);
 	box-sizing: border-box;
 }
+.poster-img .provider-image {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 4px;
+	border: 1px solid var(--border);
+	background: var(--body);
+	word-break: break-all;
+	font-size: .5rem;
+}
 .poster-img .poster-inner {
 	position: absolute;
 	top: 0;
@@ -687,8 +699,7 @@ input, textarea {
 }
 
 .secondary-button {
-	/* font-size: 0.8rem; */
-	display: grid;
+	display: inline-grid;
 	grid-template-columns: auto 1fr;
 	align-items: center;
 	grid-gap: 5px;
@@ -700,6 +711,9 @@ input, textarea {
 	box-sizing: border-box;
 	border-radius: 4px;
 	word-break: break-word;
+}
+.secondary-button.single-column {
+	grid-template-columns: 100%;
 }
 @media (hover:hover) {
 	.secondary-button:hover {
@@ -760,6 +774,11 @@ input, textarea {
 	align-items: center;
 	flex-wrap: nowrap;
 	scroll-snap-type: x mandatory;
+	max-height: calc(100vh - env(safe-area-inset-top));
+	overflow-y: hidden;
+}
+.pages .pageImg.hidden {
+	display: none;
 }
 .pages[data-reader-direction="horizontal"] .pageImg {
 	height: calc(100vh - var(--footer-height) - env(safe-area-inset-top) - 50px);
@@ -1151,7 +1170,7 @@ select {
 .is-footer svg {
 	display: block;
 }
-.selection-actions {
+div.selection-actions {
 	opacity: 0;
 	pointer-events: none;
 	transition: opacity 150ms; 
@@ -1172,15 +1191,15 @@ select {
 	padding: 8px;
 	margin-left: 0;
 }
-.selection-actions .secondary-button .icon {
+div.selection-actions .secondary-button .icon {
 	display: none;
 }
-.is-footer .secondary-button .small-title, .selection-actions .secondary-button .small-title {
+.is-footer .secondary-button .small-title, div.selection-actions .secondary-button .small-title {
 	color: var(--text);
 	font-size: 1rem;
 	font-weight: normal;
 }
-.selection-actions .selection-actions-inner {
+div.selection-actions .selection-actions-inner {
 	width: 100%;
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
@@ -1188,13 +1207,22 @@ select {
 	align-items: center;
 }
 
-/* Alternative page coounter */
+/* Alternative page counter */
 .current-pages-button {
 	position: fixed;
 	bottom: calc(10px + env(safe-area-inset-bottom));
 	left: 50%;
 	transform: translateX(-50%);
 	z-index: 20;
+}
+.current-loading-progress:not(:empty) {
+	margin-left: 20px;
+}
+.current-loading-progress:not(:empty):before {
+	content: "(";
+}
+.current-loading-progress:not(:empty):after {
+	content: ")";
 }
 
 /* Chapter navigation at end of chapter */
@@ -1234,6 +1262,11 @@ select {
 	body {
 		--main-footer-height: 50px;
 		--footer-height: calc(var(--main-footer-height) + env(safe-area-inset-bottom));;
+	}
+
+	/* Hide search in top part */
+	aside.main-sidebar .section.search {
+		display: none;
 	}
 
 	/* Fix settings */

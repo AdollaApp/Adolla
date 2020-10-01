@@ -1,12 +1,13 @@
 
 import cfg from "../config.json";
 import updateManga from "./updateManga";
-import Mangasee from "../scrapers/mangasee";
+import * as scrapers from "../scrapers";
 import db from "../db";
 import getReading from "./getReading";
 import { Progress } from "../types";
 import Bot from "./bot";
 import chalk from "chalk";
+import { getProviderId } from "../routers/manga-page";
 
 class Updater {
 
@@ -23,11 +24,11 @@ class Updater {
 		 * UPDATE "POPULAR" CACHE
 		 */
 		console.info(chalk.yellowBright("[CACHE]") + ` Updating popular cache at ${new Date().toLocaleString()}`);
-		let popular = await Mangasee.search("");
+		let popular = await scrapers.Mangasee.search("");
 		
-		await Promise.all(popular.map(obj => obj.success ? obj.constant.slug : null).filter(Boolean).map(async slug => {
+		await Promise.all(popular.map(obj => obj.success ? obj : null).filter(Boolean).map(async obj => {
 			// Update manga and store new value in cache
-			await updateManga(slug, true);
+			await updateManga(obj.provider ?? "mangasee", obj.constant.slug, true);
 		}));
 
 		console.info(chalk.green("[CACHE]") + " Updated cache for popular manga");
@@ -39,10 +40,11 @@ class Updater {
 		console.info(chalk.yellowBright("[NOTIFS]") + ` Looking for new chapters at ${new Date().toLocaleString()}`);
 		let reading = await getReading();
 		
-		await Promise.all(reading.map(obj => obj.success ? obj.constant.slug : null).filter(Boolean).map(async slug => {
+		await Promise.all(reading.map(obj => obj.success ? obj : null).filter(Boolean).map(async obj => {
 			
 			// Update manga and store new value in cache + variable
-			let data = await updateManga(slug, true);
+	
+			let data = await updateManga(obj.provider, obj.constant.slug, true);
 			
 			// Check for new chapters and notify user
 			if(data.success) {
@@ -53,12 +55,15 @@ class Updater {
 				chapters.forEach(ch => {
 					ch.combined = ch.season * 1e3 + ch.chapter;
 				});
+				
 				// Sort chapters on location
 				chapters = chapters.sort((a, b) => a.combined - b.combined);	
 
 				// Get reading
-				let reading: Progress = db.get(`reading.${data.constant.slug}.last`);
-				let currentChapter = chapters.find(c => c.season === reading.season && c.chapter === reading.chapter);
+				let dbString = `reading_new.${getProviderId(data.provider)}.${data.constant.slug}.last`;
+				let reading: Progress = db.get(dbString);
+				if(!reading) return null;
+				let currentChapter = chapters.find(c => c.hrefString === reading.chapterId);
 				
 				let nextChapter = chapters[chapters.indexOf(currentChapter) + 1];
 
@@ -111,26 +116,30 @@ class Updater {
 
 
 		// Get data
-		let cache = db.get("manga_cache");
+		let cache = db.get("data_cache");
 		
 		console.info(chalk.yellowBright("[CLEANUP]") + ` Checking each cache entry for old data`);
 
 		// Check each entry and
-		for(let slug of Object.keys(cache)) {
+		for(let provider of Object.keys(cache)) {
 			
-			// Get difference from saved time in MS
-			let diff = Date.now() - cache[slug].savedAt;
-			
-			// Check if cache is old. How old should be fairly obvious
-			if(diff > (1e3 * 60 * 60) * 24) {
-				cache[slug] = undefined;
-				console.info(chalk.green("[NOTIFS]") + ` Deleting cache for ${slug} since it's ${Math.floor(diff / (60 * 1e3))} minutes old`);
+			for(let slug of Object.keys(cache[provider])) {
+				
+				// Get difference from saved time in MS
+				let diff = Date.now() - (cache[provider]?.[slug]?.savedAt ?? 9e9);
+				
+				// Check if cache is old. How old should be fairly obvious
+				if(diff > (1e3 * 60 * 60) * 24) {
+					cache[provider][slug] = undefined;
+					console.info(chalk.green("[CLEANUP]") + ` Deleting cache for ${slug} since it's ${Math.floor(diff / (60 * 1e3))} minutes old`);
+				}
+
 			}
 
 		}
 
 		// Write to db
-		db.set("manga_cache", cache);
+		db.set("data_cache", cache);
 		console.info(chalk.green("[CLEANUP]") + ` Done cleaning up`);
 
 	}
