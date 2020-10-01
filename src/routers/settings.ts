@@ -39,8 +39,6 @@ router.get("/settings/", async (req, res) => {
 		};
 	}).sort((a, b) => b.date.getTime() - a.date.getTime());
 
-	console.log(db.get("settings.show-nsfw"));
-
 	res.render("settings", {
 		isSettings: true,
 		icons,

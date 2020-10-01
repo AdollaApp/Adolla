@@ -4,6 +4,7 @@
 	"description": "Adolla is a manga reader for every device with a web browser",
 	"scripts": {
 		"start": "npm run build && node ./dist/index.js",
+		"start-tsc": "ts-node src/index.ts",
 		"dev": "npm start",
 		"clear-cache": "npm run build && node ./dist/clear-cache.ts",
 		"format-data": "npm run build && node ./dist/format-data.ts",
@@ -28,6 +29,7 @@
 		"mangadex-api": "^3.0.5",
 		"node-fetch": "^2.6.1",
 		"telebot": "^1.4.1",
+		"ts-node": "^9.0.0",
 		"typescript": "^4.0.3"
 	},
 	"devDependencies": {
