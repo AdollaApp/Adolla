@@ -334,8 +334,13 @@ input, textarea {
 .setting-wrapper.toggle {
 	display: flex;
 	flex-wrap: nowrap;
-	justify-content: space-between;
 	align-items: center;
+}
+.setting-wrapper.toggle:not(.no-spread) {
+	justify-content: space-between;
+}
+.setting-wrapper.toggle.no-spread > *:first-child {
+	margin-right: 10px;
 }
 .switch {
 	appearance: none;

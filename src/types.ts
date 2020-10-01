@@ -67,6 +67,7 @@ export interface Database {
 	lists: List[];
 	settings: {
 		icon: string;
+		"show-nsfw": boolean;
 	}
 }
 /** Save what the user is currently reading */
