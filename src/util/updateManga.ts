@@ -1,18 +1,28 @@
 
 import * as scrapers from "../scrapers";
 import db from "../db";
-import { ScraperResponse } from "../types";
+import { ScraperError, ScraperResponse } from "../types";
 import getMangaProgress from "./getMangaProgress";
 import config from "../config.json";
 import { Provider, Scraper } from "../scrapers/types";
 import { getProviderId, getProviderName } from "../routers/manga-page";
+
+const nsfwError: ScraperError = {
+	success: false,
+	status: 0,
+	err: "This is NSFW content"
+};
 
 export default async function updateManga(provider: Provider | string, slug: string, ignoreExisting: boolean = false, chapterId: number | string = -1): Promise<ScraperResponse> {
 
 	let dbQuery = `data_cache.${getProviderId(provider)}.${slug}`;
 
 	let existing = db.get(dbQuery);
-	if(existing && existing.savedAt > Date.now() - config.cache.duration && !ignoreExisting && chapterId === -1) return await addInfo(existing);
+	if(existing && existing.savedAt > Date.now() - config.cache.duration && !ignoreExisting && chapterId === -1) {
+		let d = await addInfo(existing);
+		if(d.success && d.constant.nsfw && db.get("settings.show-nsfw") === "no") return nsfwError;
+		return d;
+	}
 
 	let scraperName = getProviderName(provider) || provider;
 	let scraper: Scraper | undefined = scrapers[scraperName];
@@ -45,7 +55,9 @@ export default async function updateManga(provider: Provider | string, slug: str
 
 		db.set(dbQuery, nData);
 	} 
-	return await addInfo(data);
+	let d = await addInfo(data);
+	if(d.success && d.constant.nsfw && db.get("settings.show-nsfw") === "no") return nsfwError;
+	return d;
 }
 
 async function addInfo(data: ScraperResponse) {
