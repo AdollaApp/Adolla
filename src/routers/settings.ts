@@ -1,10 +1,14 @@
 import express from "express";
-const router = express.Router();
-
 import db from "../db";
 import fs from "fs";
 import getReading from "../util/getReading";
 import getIconSrc, { iconNames, iconNamesReversed } from "../util/getIconSrc";
+
+const router = express.Router();
+
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 
 router.get("/settings/", async (req, res) => {
 
@@ -22,11 +26,68 @@ router.get("/settings/", async (req, res) => {
 		}
 	});
 
+	// Get backups
+	let backupFiles = fs.readdirSync("./backups/");
+	let backups = backupFiles.map(fileName => {
+		let d = new Date(Number(fileName.slice(0, -5)));
+		let label = `${days[d.getDay()]}, ${d.getDate().toString().padStart(2, "0")} ${months[d.getMonth()]} ${d.getFullYear()}, ${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
+		return {
+			fileName,
+			label,
+			date: d,
+			size: fs.readFileSync(`backups/${fileName}`, "utf-8").length
+		};
+	}).sort((a, b) => b.date.getTime() - a.date.getTime());
+
 	res.render("settings", {
 		isSettings: true,
 		icons,
-		reading
+		reading,
+		backups
 	});
+});
+
+router.get("/settings/restore-backup/:filename", async (req, res) => {
+	try {
+
+		let filename = req.params.filename;
+		let backup = JSON.parse(fs.readFileSync(`backups/${filename}`, "utf-8"));
+
+		let reading = backup.reading ?? {};
+		let lists = backup.lists ?? [];
+
+		// Merge reading
+		let r = db.get("reading_new") || {};
+		if(reading.mangasee) {
+			for(let provider of Object.keys(reading)) {
+				if(!r[provider]) r[provider] = {}
+				for(let slug of Object.keys(reading[provider])) {
+					r[provider][slug] = {
+						...r[provider][slug],
+						...reading[provider][slug]
+					};
+				}
+			}
+		} else {
+			r.mangasee = {
+				...(r.mangasee || {}),
+				...reading
+			}
+		}
+		db.set("reading_new", r);
+
+		// Set lists
+		db.set("lists", lists);
+
+		res.json({
+			status: 200
+		});
+	} catch(err) {
+		res.json({
+			status: 500,
+			err
+		});
+	}
 });
 
 router.post("/settings/set-icon/", async (req, res) => {

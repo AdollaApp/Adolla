@@ -8,6 +8,7 @@ import bodyParser from "body-parser";
 import routers from "./routers"
 import { StoredData, Chapter, Progress, ScraperResponse, List } from "./types";
 import getIconSrc from "./util/getIconSrc";
+import { getProviderId } from "./routers/manga-page";
 
 const app = express();
 
@@ -17,15 +18,24 @@ app.engine("handlebars", handlebars({
 		stringify: (v: any) => JSON.stringify(v),
 		getProgressString(manga: StoredData) {
 			if(manga.progress && manga.success) {
-				// let progressString = 
-				let curChapter = manga.data.chapters.find(c => c.chapter === manga.progress.chapter && c.season === manga.progress.season);
+				
+				let curChapter = manga.data.chapters.find(c => c.hrefString === manga.progress.chapterId);
 				return curChapter?.label + (typeof manga?.progress?.percentage !== "undefined" ? ` (${manga.progress.percentage}%)` : "") ?? "Chapter not found";
+			
 			};
 			return "Not started yet";
 		},
-		genLink2(slug: string, season: number = null, episode: number = null) {
-			let href = `/${slug}/`;
-			let seasonLink = season !== null && episode !== null ? `${season}-${episode}/` : "";
+		getScraperIcon(provider: string): string | null {
+			let icons = {
+				"mangasee": "https://mangasee123.com/media/favicon.png",
+				"mangadex": "https://mangadex.org/images/misc/navbar.svg"
+			}
+			return icons[provider] ?? "/icons/main-on-white.png";
+		},
+		genLink2(provider: string = "mangasee", slug: string, hrefString: string | null = null, chapter: number = -1) {
+			let href = `/${getProviderId(provider)}/${slug}/`;
+			let seasonLink = typeof hrefString === "string" || typeof hrefString === "number" ? hrefString : "";
+			if(typeof chapter === "number" && chapter !== -1) seasonLink = `${hrefString}-${chapter}`; // Fallback stuff // TODO: Figure this out. This is related to reading at manga-card.handlebars, line 31
 			return `${href}${seasonLink}`;
 		},
 		isCurrentChapter(season1: number, season2: number, chapter1: number, chapter2: number) {
@@ -50,12 +60,14 @@ app.engine("handlebars", handlebars({
 		},
 		getChapterName(progress: Progress, manga: StoredData) {
 			if(!progress) return "shrug";
-			let { season, chapter } = progress;
-			let current = manga.data.chapters.find(v => v.season === season && v.chapter === chapter);
+			let current = manga.data.chapters.find(v => v.hrefString === progress.chapterId);
 			return current ? current.label : "Unknown chapter";
 		},
 		ifNotByCreator(list: List, options) {
 			return list.byCreator ? options.inverse() : options.fn();
+		},
+		addOne(num: number) {
+			return (num + 1);
 		},
 		getIconSrc
 	}
@@ -71,7 +83,6 @@ app.use(bodyParser.json());
 // Routers
 app.use("/", routers.home);
 app.use("/search", routers.search);
-app.use("/backups", routers.backups);
 app.use("/lists", routers.lists);
 app.use("/", routers.settings);
 

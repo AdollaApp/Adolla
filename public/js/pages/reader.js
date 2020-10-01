@@ -5,6 +5,11 @@
 // Load state
 let loaded = false;
 
+document.querySelector(".manga-reader .loading").scrollIntoView({
+	inline: "start",
+	block: "start"
+});
+
 // This is a debounce effect for the page update
 let scrollDebounce;
 function updateScrollDebounce() {
@@ -45,7 +50,11 @@ function updatePages() {
 
 	if(loaded) document.body.setAttribute("data-to-page", currentPage);
 
-	document.querySelector(".chapter-navigation span.current").innerText = `${currentPage} of ${pageCount}`;
+	let toPage = Number(document.body.getAttribute("data-to-page")) || 0;
+	let pageCountDom = Number(document.body.getAttribute("data-page-count")) || toPage + 1;
+	document.querySelectorAll(".current-page").forEach(span => {
+		span.innerText = `${loaded ? currentPage : (toPage !== "false" ? toPage : 0)} of ${loaded ? pageCount : (pageCountDom !== "false" ? pageCountDom : 0)}`;
+	});
 }
 updatePages();
 
@@ -76,108 +85,6 @@ function readerIsHorizontal() {
 	return [...new Set(leftPositions)].length !== 1;
 }
 
-// Settings
-const defaultSettings = {
-	"reader-direction": "horizontal",
-	"vertical-image-size": "auto",
-	"vertical-gap": "yes",
-	"back-location": "bottom-left",
-	"image-scaling": "100%"
-};
-
-// Get current settings
-function getSettings() {
-	// Verify stored settings
-	if(!localStorage.getItem("settings")) localStorage.setItem("settings", JSON.stringify(defaultSettings));
-
-	// Add defaultSettings as default values in case LS is missing some
-	let settings = {
-		...defaultSettings,
-		...JSON.parse(localStorage.getItem("settings"))
-	};
-	return settings;
-}
-
-// Update settings
-function initSettings() {
-
-	let settings = getSettings();
-
-	// Add event listeners for settings (boxes specifically)
-	document.querySelectorAll(".setting-box").forEach(box => {
-		box.addEventListener("click", () => {
-			let setting = box.closest("[data-setting]").dataset.setting;
-			let value = box.dataset.value;
-			setSetting(setting, value).then(updateSettings);
-		});
-	});
-	document.querySelectorAll(".setting-wrapper.toggle").forEach(wrapper => {
-		let input = wrapper.querySelector(`input[type="checkbox"]`);
-		input.addEventListener("change", () => {
-			setSetting(wrapper.dataset.setting, input.dataset[input.checked])
-			  .then(updateSettings);
-		});
-	});
-
-	updateSettings();
-
-}
-
-// Apply settings to DOM so CSS can be adjusted
-function applySettings() {
-	let settings = getSettings();
-	for(let key of Object.keys(settings)) {
-		document.querySelectorAll(".pages").forEach(pages => {
-			pages.setAttribute(`data-${key}`, settings[key]);
-			document.body.setAttribute(`data-reader-${key}`, settings[key]);
-		});
-	}
-}
-
-// Update switches, boxes, etc.
-function updateSettings() {
-	let settings = getSettings();
-	updateSettingBoxes(settings);
-	updateSettingToggles(settings);
-	applySettings();
-	
-	scrollToPage(); // Scroll to page when settings are adjusted
-}
-
-// Update setting boxes in sidebar
-function updateSettingBoxes(settings) {
-	
-	// Clean selected classes
-	document.querySelectorAll(".setting-box.selected").forEach(box => box.classList.remove("selected"));
-
-	// Find every key and add selected class
-	for(let settingKey of Object.keys(settings)) {
-		document.querySelectorAll(`.setting-wrapper[data-setting="${settingKey}"] .setting-box[data-value="${settings[settingKey]}"]`).forEach(el => {
-			el.classList.add("selected");
-		});
-	}
-}
-
-// Update setting toggles in sidebar
-function updateSettingToggles(settings) {
-	
-	// Find every key and add selected class
-	for(let settingKey of Object.keys(settings)) {
-		document.querySelectorAll(`.setting-wrapper.toggle[data-setting="${settingKey}"] .switch`).forEach(input => {
-			input.checked = input.dataset.true === settings[settingKey];
-		});
-	}
-}
-
-// Set setting
-async function setSetting(key, value) {
-	let settings = getSettings();
-	settings[key] = value;
-	localStorage.setItem("settings", JSON.stringify(settings));
-}
-
-initSettings();
-
 // Scroll to page
 function scrollToPage() {
 	let page = Number(document.body.dataset.toPage) || 1;
@@ -201,14 +108,6 @@ function scrollReader(pageEl) {
 		// Deal with iOS padding
 	}
 }
-
-window.addEventListener("load", () => {
-	loaded = true;
-	document.querySelector(".manga-reader").classList.add("loaded");
-	setTimeout(() => {
-		scrollToPage();
-	}, 100);
-});
 
 // Add click event to floating button
 document.querySelectorAll(".floating-button").forEach(button => {
@@ -261,8 +160,116 @@ document.addEventListener("keydown", evt => {
 });
 
 // "Tap to toggle" elements
-document.querySelectorAll(".pageImg").forEach(page => {
-	page.addEventListener("click", () => {
-		document.querySelectorAll(".toggle-on-tap").forEach(toggle => toggle.classList.toggle("tapped"));
-	});
+document.querySelector(".pages").addEventListener("click", evt => {
+	
+	// Get all classes for each element in the path
+	let classes = [...evt.composedPath()].reverse().map(v => Object.values(v.classList ?? {}).join(".")).map(v => v.length > 0 ? "." + v : v).join(" ").trim();
+
+	// If no button was pressed, toggle each relevant class
+	if(!classes.includes(".secondary-button")) document.querySelectorAll(".toggle-on-tap").forEach(toggle => toggle.classList.toggle("tapped"));
 });
+
+// Generate error for failed images
+let failedImages = [];
+let errorDebounce;
+document.querySelectorAll(".pageImg").forEach(img => {
+
+	img.addEventListener("error", evt => {
+
+		failedImages.push(img.getAttribute("alt"));
+		img.classList.add("hidden");
+
+		if(errorDebounce) {
+			clearTimeout(errorDebounce);
+			delete errorDebounce;
+		}
+		errorDebounce = setTimeout(() => {
+			// alert(`The images for ${failedImages.sort((a,b) => a.split(" ").pop() - b.split(" ").pop()).join(", ")} ${failedImages.length === 1 ? "has" : "have"} failed to load.`);
+			alert(`The images for ${failedImages.length} ${failedImages.length === 1 ? "page has" : "pages have"} failed to load.`);
+			failedImages = [];
+		}, 600);
+
+	});
+
+});
+
+async function initImages() {
+
+	// Generate URL endpoint
+	let loc = location.href;
+	if(!loc.endsWith("/")) loc += "/";
+	let url = `${loc}get-images/`;
+
+	// Function to set innerHTML
+	function setLoadingText(text) {
+		document.querySelectorAll(".current-loading-progress").forEach(el => {
+			el.innerText = text;
+		});
+	}
+
+	try {
+		// Fetch array of URLs
+		let imageUrls = await (await fetch(url)).json();
+
+		// Add elements to DOM
+		let wrapper = document.querySelector(".pages");
+		for(let [i, url] of Object.entries(imageUrls.reverse())) {
+			
+			// Generate node
+			let img = document.createElement("img");
+			img.classList.add("pageImg");
+			img.setAttribute("alt", `Page ${Number(i) + i}`);
+
+			// Set source
+			img.src = url;
+
+			// Add to DOM
+			wrapper.insertBefore(img, wrapper.querySelector("*"));
+
+		}
+
+		// Wait for all images to load
+		let loadedCount = 0;
+		let toLoadImages = [...wrapper.querySelectorAll(".pageImg")];
+
+		// Load for each one
+		let imageLoaders = toLoadImages.map(img => {
+			
+			return new Promise((resolve, reject) => {
+				img.addEventListener("load", () => {
+					loadedCount++
+					let percentageText = Math.round((loadedCount / toLoadImages.length) * 100) + "%";
+					setLoadingText(percentageText);
+					resolve();
+				});
+				img.addEventListener("error", reject);
+			});
+
+		});
+
+		await Promise.all(imageLoaders);
+
+		// Remove loading text
+		setLoadingText("");
+		
+		// Update loading section in DOM
+		loaded = true;
+		document.querySelector(".manga-reader").classList.add("loaded");
+		
+		// Check whether to scroll to page yet, or not
+		let img = document.querySelector(".pageImg");
+		let checkInterval = setInterval(() => {
+			if(img.scrollHeight > 0) {
+				clearInterval(checkInterval);
+				scrollToPage();
+			}
+		}, 50);
+	} catch(err) {
+		loaded = true;
+		document.querySelector(".manga-reader").classList.add("loaded");
+		setLoadingText("Error");
+
+	}
+
+}
+initImages();

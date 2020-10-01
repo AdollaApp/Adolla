@@ -1,22 +1,29 @@
 
 import db from "../db";
-import { StoredData, ScraperResponse } from "../types";
+import { getProviderId } from "../routers/manga-page";
+import { ProviderId } from "../scrapers/types";
+import { Progress, ScraperResponse } from "../types";
+import getProgressData from "./getProgressData";
 
-export default async function getMangaProgress(slug: string, where: string = "last") {
-	let dbString = `reading.${slug}.${where.replace(/\./g, "_")}`;
+export default async function getMangaProgress(provider: ProviderId, slug: string, where: string = "last"): Promise<Progress> {
+	let dbString = `reading_new.${getProviderId(provider) || provider}.${slug}.${where.replace(/\./g, "_")}`;
 	let entry = db.get(dbString);
-	return entry ?? null;
+	let data = entry ?? null;
+	if(data) {
+		data = getProgressData(data);
+	}
+	return data;
 }
 
-export async function setMangaProgress(manga: ScraperResponse) {
+export async function setMangaProgress(manga: ScraperResponse): Promise<ScraperResponse> {
 	if(manga.success) {
-		manga.progress = await getMangaProgress(manga.constant.slug);
+		manga.progress = await getMangaProgress(manga.provider, manga.constant.slug);
 		manga.realProgress = Object.assign({}, manga.progress);
 
 		// Check if next chapter should be used instead
 		if(manga.progress && manga.progress.percentage > 90) { // The 90% might be subject to change
-			let { season, chapter } = manga.progress;
-			let currentChapter = manga.data.chapters.find(ch => ch.season === manga.progress.season && ch.chapter === manga.progress.chapter);
+			let { chapterId } = manga.progress;
+			let currentChapter = manga.data.chapters.find(ch => ch.hrefString === chapterId);
 			let nextChapter = manga.data.chapters[manga.data.chapters.indexOf(currentChapter) + 1] ?? null;
 			
 			if(nextChapter) {
@@ -30,8 +37,7 @@ export async function setMangaProgress(manga: ScraperResponse) {
 				manga.progress = {
 					...manga.progress,
 					percentage: 0,
-					season: nextChapter.season,
-					chapter: nextChapter.chapter,
+					chapterId: nextChapter.hrefString,
 					current: 0,
 					total: null, // Unknown
 					at: progressLast > chapterDate ? progressLast : Date.now(), // If the chapter is newer than last read, sort by that. If not, don't.
