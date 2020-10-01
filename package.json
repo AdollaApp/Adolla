@@ -1,12 +1,13 @@
 {
-	"name": "Adolla",
+	"name": "adolla",
 	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
+	"description": "Adolla is a manga reader for every device with a web browser",
 	"scripts": {
-		"start": "ts-node src/index.ts",
-		"dev": "ts-node src/index.ts",
-		"test-db": "ts-node src/test-db.ts"
+		"start": "npm run build && node ./dist/index.js",
+		"dev": "npm start",
+		"clear-cache": "npm run build && node ./dist/clear-cache.ts",
+		"format-data": "npm run build && node ./dist/format-data.ts",
+		"build": "etsc"
 	},
 	"keywords": [],
 	"author": "",
@@ -24,12 +25,13 @@
 		"express-handlebars": "^5.1.0",
 		"fuse.js": "^6.4.1",
 		"jipdb": "^1.0.4",
+		"mangadex-api": "^3.0.4",
 		"node-fetch": "^2.6.0",
-		"telebot": "^1.4.1",
-		"ts-node": "^8.10.2",
-		"typescript": "^4.0.2"
+		"telebot": "^1.4.1"
 	},
 	"devDependencies": {
+		"esbuild": "^0.7.8",
+		"esbuild-node-tsc": "^1.0.2",
 		"nodemon": "^2.0.4"
 	}
 }

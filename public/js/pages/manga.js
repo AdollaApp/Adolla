@@ -115,16 +115,7 @@ function initSelection() {
 				 * @param {Element} chapterEl Chapter element
 				 */
 				function getChapterSeason(chapterEl) {
-					
-					
-					let href = chapterEl.href;
-					let slug = href.split("/").filter(Boolean).pop();
-					let [season, chapter] = slug.split("-");
-					
-					return { 
-						season: Number(season), 
-						chapter: Number(chapter)
-					};
+					return chapterEl.dataset.hrefString;
 				}
 		
 				// Generate URL

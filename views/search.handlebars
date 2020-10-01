@@ -1,14 +1,41 @@
 
+<link rel="stylesheet" href="/css/search.css">
+
 <div class="content-inner">
-	<section class="section search-results" data-list-id="search">
-		<h2 class="sub-title spread do-spread"><span>{{searchResults.length}} search results for "{{query}}"</span>{{> list-type }}</h2>
+	<h1 class="title">Search</h1>
+
+	<div class="search-input">
+		<input type="text" placeholder="Fire Force" id="search-2" value="{{query}}" class="search-input" aria-label="Search">
+		<div class="alt-scrapers">
+			{{#each scrapers}}
+			<a class="secondary-button single-column scraper {{#if isCurrent}}badge-background{{/if}}" href="{{href}}">{{name}}</a>
+			{{/each}}
+			<a class="last"></a>
+		</div>
+	</div>
+
+	<section class="section search-results" data-list-id="search" data-list-type="list">
+		<h2 class="sub-title spread do-spread"><span>
+			{{#if query}}
+			{{searchResults.length}} search result(s) for "{{query}}"
+			{{else}}
+			Popular right now
+			{{/if}}
+		</span>{{> list-type }}</h2>
+		{{#if searchResults.error}}
+		<div class="manga-grid-error">
+			<p class="title-error">{{searchResults.error}}</p>
+		</div>
+		{{else}}
 		<div class="manga-grid">
 			{{#each searchResults}}
 			{{> manga-card manga=this }}
 			{{/each}}
 		</div>
+		{{/if}}
 	</section>
 </div>
 
 
-<script src="/js/list-type.js"></script>
+<script src="/js/pages/search.js"></script>
+<script src="/js/reusable/list-type.js"></script>

@@ -19,6 +19,23 @@
 		</div>
 
 	</section>
+
+	<section class="section">
+		<h2 class="sub-title">Reader settings</h2>
+		{{> settings-inner }}
+	</section>
+	<section class="section">
+		<h2 class="sub-title">Backups</h2>
+		<div class="backups">
+		{{#each backups}}
+		<div class="backup" data-backup="{{fileName}}">
+			<span>{{label}} <span class="secondary">({{size}})</span></span>
+			<button class="badge-background">Restore</button>
+		</div>
+		{{/each}}
+	</div>
 </div>
 
-<script src="/js/settings.js"></script>
+<script src="/js/reusable/reader-settings.js"></script>
+<script src="/js/pages/settings.js"></script>
+<script src="/js/pages/backups.js"></script>
