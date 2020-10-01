@@ -141,7 +141,6 @@ class MangadexClass extends Scraper {
 		}
 
 		let searchData = await this.client.search(query); // Get search results
-		console.log(searchData);
 
 		// Map to Adolla style format
 		let resultIds = searchData.titles.map(title => title.id)
