@@ -238,7 +238,7 @@ async function initImages() {
 			return new Promise((resolve, reject) => {
 				img.addEventListener("load", () => {
 					loadedCount++
-					let percentageText = Math.round((loadedCount / toLoadImages.length) * 100) + "%";
+					let percentageText = Math.round((loadedCount / toLoadImages.length) * 100).toString().padStart(2, "0") + "%";
 					setLoadingText(percentageText);
 					resolve();
 				});

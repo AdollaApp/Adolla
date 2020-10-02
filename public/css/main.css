@@ -17,6 +17,8 @@
 	
 
 	--header-background: var(--badge);
+
+	--hover: #E8EAEC;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -33,6 +35,8 @@
 		--border-dark-2: #2b2b2b;
 
 		--header-background: #0e0e0e;
+
+		--hover: #0E0E0E;
 
 	}
 }
@@ -265,13 +269,6 @@ details .manga-grid {
 	width: 20px;
 	height: 20px;
 	display: block;
-}
-.anchor {
-	color: var(--badge);
-	text-decoration: none;
-}
-.anchor:hover {
-	text-decoration: underline;
 }
 
 .badges .badge {
@@ -731,12 +728,15 @@ input, textarea {
 	border-radius: 4px;
 	word-break: break-word;
 }
+.chapter-navigation .secondary-button {
+	display: grid;	
+}
 .secondary-button.single-column {
 	grid-template-columns: 100%;
 }
 @media (hover:hover) {
 	.secondary-button:hover {
-		background: var(--border);
+		background: var(--hover);
 	}
 }
 .next .secondary-button {
@@ -875,7 +875,7 @@ details.settings-toggle[open] ~ .chapters {
 }
 .setting-box:not(.selected):hover {
 	cursor: pointer;
-	background: var(--border);
+	background: var(--hover);
 }
 .setting-box.selected {
 	background: var(--body);
@@ -1146,7 +1146,7 @@ select {
 	padding: 8px 5px;
 }
 .suggestions .suggestion:hover {
-	background: var(--border);
+	background: var(--hover);
 	cursor: pointer;
 }
 .suggestions > * + * {

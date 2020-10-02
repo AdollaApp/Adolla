@@ -21,6 +21,13 @@ document.querySelectorAll(".toggle-quick-select").forEach(div => {
 	})
 });
 
+// Util
+document.querySelectorAll(".blue-on-click").forEach(el => {
+	el.addEventListener("click", () => {
+		el.classList.add("badge-background");
+	});
+});
+
 // Add class to chapterlink when clicked
 document.querySelectorAll(".chapterLink, a.chapter:not(.no-badge)").forEach(link => {
 	link.addEventListener("click", evt => {

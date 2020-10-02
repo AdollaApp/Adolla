@@ -1,7 +1,8 @@
 
 <div class="floating-button-wrapper toggle-on-tap">
-	<a class="anchor go-to-main-page floating-button is-floating-button" href="{{genLink2 data.provider data.constant.slug}}">
+	<a class="blue-on-click secondary-button go-to-main-page is-floating-button do-padding is-floating-button" href="{{genLink2 data.provider data.constant.slug}}">
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg>
+		Manga details
 	</a>
 	<div class="do-padding is-floating-button">
 		{{navigation.currentChapter.label}}
@@ -15,7 +16,7 @@
 		<img src="{{this}}" alt="{{addOne @index}}" class="pageImg">
 		{{/each}}
 		{{#if navigation}}
-		<div class="in-chapter-navigation">
+		<div class="in-chapter-navigation toggle-on-tap tapped">
 			<div class="in-chapter-nav-inner">
 				<div class="nav-items">
 					<div class="next">
