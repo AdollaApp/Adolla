@@ -166,8 +166,7 @@ document.querySelector(".pages").addEventListener("click", evt => {
 	let classes = [...evt.composedPath()].reverse().map(v => Object.values(v.classList ?? {}).join(".")).map(v => v.length > 0 ? "." + v : v).join(" ").trim();
 
 	// If no button was pressed, toggle each relevant class
-	if(!classes.includes(".secondary-button")) document.querySelectorAll(".toggle-on-tap:not(.toggle-on-tap-alt)").forEach(toggle => toggle.classList.toggle("tapped"));
-	if(!classes.includes(".secondary-button") && getSettings()["do-toggle-alt"] === "yes") document.querySelectorAll(".toggle-on-tap-alt").forEach(toggle => toggle.classList.toggle("tapped"));
+	if(!classes.includes(".secondary-button")) document.querySelectorAll(".toggle-on-tap").forEach(toggle => toggle.classList.toggle("tapped"));
 });
 
 // Generate error for failed images
