@@ -1305,7 +1305,7 @@ div.selection-actions .selection-actions-inner {
 		opacity: 0;
 		pointer-events: none;
 	}
-	.toggle-on-tap.tapped, [data-reader-do-toggle-alt="no"] .toggle-on-tap-alt {
+	.toggle-on-tap.tapped, [data-reader-do-toggle-alt="no"] .toggle-on-tap-alt, body:not([data-reader-do-toggle-alt]) .toggle-on-tap-alt {
 		opacity: 1;
 		pointer-events: initial;
 	}
