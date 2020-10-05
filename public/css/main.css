@@ -75,10 +75,10 @@ body[data-is-dev="true"]::after {
 }
 .mobile-nav {
 	position: fixed;
-	top: 0;
+	top: -5px;
 	left: 0;
 	width: 100%;
-	height: env(safe-area-inset-top);
+	height: calc(env(safe-area-inset-top) + 5px);
 	background: var(--header-background);
 	z-index: 100;
 }
