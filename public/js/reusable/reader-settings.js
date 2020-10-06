@@ -5,7 +5,8 @@ const defaultSettings = {
 	"vertical-gap": "yes",
 	"back-location": "bottom-left",
 	"image-scaling": "100%",
-	"do-toggle-alt": "no"
+	"do-toggle-alt": "no",
+	"show-info-badge": "yes"
 };
 
 // Get current settings
