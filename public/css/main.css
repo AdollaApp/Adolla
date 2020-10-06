@@ -1242,6 +1242,9 @@ div.selection-actions .selection-actions-inner {
 	margin: 0 12px;
 	color: var(--text);
 }
+.current-pages-button .do-margin-right {
+	margin-right: 6px;
+}
 
 /* Chapter navigation at end of chapter */
 .in-chapter-navigation {
