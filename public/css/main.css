@@ -1242,12 +1242,6 @@ div.selection-actions .selection-actions-inner {
 	margin: 0 12px;
 	color: var(--text);
 }
-.current-loading-progress:not(:empty):before {
-	content: "(";
-}
-.current-loading-progress:not(:empty):after {
-	content: ")";
-}
 
 /* Chapter navigation at end of chapter */
 .in-chapter-navigation {
