@@ -4,9 +4,9 @@ const defaultSettings = {
 	"vertical-image-size": "auto",
 	"vertical-gap": "yes",
 	"back-location": "bottom-left",
-	"image-scaling": "100%",
 	"do-toggle-alt": "no",
-	"show-info-badge": "yes"
+	"show-info-badge": "yes",
+	"show-camera-button": "no"
 };
 
 // Get current settings
