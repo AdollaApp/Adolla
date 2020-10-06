@@ -1232,7 +1232,10 @@ div.selection-actions .selection-actions-inner {
 	transform: translateX(-50%);
 	z-index: 20;
 }
-.current-loading-progress:not(:empty) {
+.current-pages-button > * {
+	white-space: nowrap;
+}
+.current-pages-button > *:not(:first-child):not(:empty) {
 	margin-left: 20px;
 }
 .current-loading-progress:not(:empty):before {

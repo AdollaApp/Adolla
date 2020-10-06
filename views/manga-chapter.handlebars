@@ -41,8 +41,14 @@
 		{{/if}}
 	</div>
 	<div class="current-pages-button toggle-on-tap tapped is-floating-button do-padding">
+		{{!-- Pages --}}
 		<span class="current-page">0 of 0</span>
+
+		{{!-- Loading progress, empty after loaded  --}}
 		<span class="current-loading-progress">0%</span>
+		
+		{{!-- Current chapter  --}}
+		<span>{{#if data.data.hasSeasons}}S{{navigation.currentChapter.season}}{{/if}} Ch {{ navigation.currentChapter.chapter }}</span>
 	</div>
 </section>
 

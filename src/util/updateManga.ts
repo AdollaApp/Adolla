@@ -63,12 +63,20 @@ export default async function updateManga(provider: Provider | string, slug: str
 async function addInfo(data: ScraperResponse) {
 
 	if(data.success) {
+		
 		// This still works thanks to references, somehow
+		// Add progress to each chapter
 		let chapterPromises = data.data.chapters.map(async ch => {
 			ch.progress = await getMangaProgress(data.provider, data.constant.slug, ch.hrefString);
 			return ch;
 		});
 		await Promise.all(chapterPromises);
+
+		// Add a boolean to indicate if there is more than one chapter or not
+		let seasonSet = new Set(data.data.chapters.map(c => c.season.toString()));
+		let chapters = Array.from(seasonSet);
+		data.data.hasSeasons = chapters.length > 1;
+
 	}
 
 	return data;
