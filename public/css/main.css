@@ -1235,8 +1235,12 @@ div.selection-actions .selection-actions-inner {
 .current-pages-button > * {
 	white-space: nowrap;
 }
-.current-pages-button > *:not(:first-child):not(:empty) {
-	margin-left: 20px;
+.current-pages-button > *:not(:first-child):not(:empty):before {
+	/* margin-left: 20px; */
+	content: "•";
+	display: inline-block;
+	margin: 0 12px;
+	color: var(--text);
 }
 .current-loading-progress:not(:empty):before {
 	content: "(";
