@@ -160,13 +160,17 @@ document.addEventListener("keydown", evt => {
 });
 
 // "Tap to toggle" elements
-document.querySelector(".pages").addEventListener("click", evt => {
-	
-	// Get all classes for each element in the path
-	let classes = [...evt.composedPath()].reverse().map(v => Object.values(v.classList ?? {}).join(".")).map(v => v.length > 0 ? "." + v : v).join(" ").trim();
+document.querySelectorAll(".pages, .loading").forEach(el => {
 
-	// If no button was pressed, toggle each relevant class
-	if(!classes.includes(".secondary-button")) document.querySelectorAll(".toggle-on-tap").forEach(toggle => toggle.classList.toggle("tapped"));
+	el.addEventListener("click", evt => {
+	
+		// Get all classes for each element in the path
+		let classes = [...evt.composedPath()].reverse().map(v => Object.values(v.classList ?? {}).join(".")).map(v => v.length > 0 ? "." + v : v).join(" ").trim();
+	
+		// If no button was pressed, toggle each relevant class
+		if(!classes.includes(".secondary-button")) document.querySelectorAll(".toggle-on-tap").forEach(toggle => toggle.classList.toggle("tapped"));
+	});
+
 });
 
 // Generate error for failed images
@@ -273,3 +277,24 @@ async function initImages() {
 
 }
 initImages();
+
+// Camera mode
+let reenableCameraDebounce;
+document.querySelectorAll(".is-camera-button").forEach(btn => {
+
+	btn.addEventListener("click", () => {
+
+		document.body.classList.add("is-camera-mode");
+
+		if(reenableCameraDebounce) {
+			clearTimeout(reenableCameraDebounce);
+			delete reenableCameraDebounce;
+		}
+
+		reenableCameraDebounce = setTimeout(() => {
+			document.body.classList.remove("is-camera-mode");
+		}, 10e3);
+
+	});
+
+});
