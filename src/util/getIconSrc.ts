@@ -6,7 +6,8 @@ export const iconNames = {
 	"white-on-blue": "Ocean",
 	"white-on-dark": "Night",
 	"white-on-green": "Forest",
-	"white-on-red": "Crimson"
+	"white-on-red": "Crimson",
+	"gray-on-black": "Black"
 }
 // @ts-ignore TS still doesn't have FromEntires :/
 export const iconNamesReversed = Object.fromEntries(Object.entries(iconNames).map(v => v.reverse()));
