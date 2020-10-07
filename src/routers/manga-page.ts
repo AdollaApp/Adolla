@@ -62,18 +62,32 @@ router.get("/:provider/:slug", async (req, res, next) => {
 		let allLists = await getLists();
 		let lists = allLists.filter(l => l.entries.find(m => m.slug === param));
 
+		  // Convert lists to front-end format
 		const convert = ((l: List) => ({
 			slug: l.slug,
 			name: l.name
 		}));
 
+		// Get progress for manga total
+		let chaptersFinished = data.data.chapters.map(v => v?.progress?.percentage >= 90);
+		let totalChapterCount = data.data.chapters.length;
+		let doneChapterCount = chaptersFinished.filter(Boolean).length;
+
+		
+		// Render
 		res.render("manga", {
 			data,
 			reading,
 			currentSlug: param,
 			lists: lists.filter(l => !l.byCreator).map(convert),
-			allLists: allLists.filter(l => !l.byCreator).map(convert)
+			allLists: allLists.filter(l => !l.byCreator).map(convert),
+			mangaProgress: {
+				total: totalChapterCount,
+				done: doneChapterCount,
+				percentage: (doneChapterCount / totalChapterCount) * 100
+			}
 		});
+
 	} else {
 		console.error("No data found for", param);
 		next();

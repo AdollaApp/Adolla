@@ -40,7 +40,8 @@
 					<p class="description">{{this}}</p>
 					{{/each}}
 				</div>
-				<div class="chapter-lists">
+
+				<div class="manga-page-section">
 					<h3 class="sub-title">Lists</h3>
 					<div class="lists-wrapper">
 						<div class="display-lists"></div>
@@ -50,6 +51,18 @@
 						</div>
 					</div>
 				</div>
+
+				{{#if mangaProgress}}
+				<div class="manga-page-section">
+					<h3 class="sub-title">Progress</h3>
+					<div class="manga-progress">
+						<div class="bar-wrapper">
+							<div class="bar-inner badge-background" style="width: {{mangaProgress.percentage}}%"></div>
+						</div>
+						<p>You've read {{mangaProgress.done}} of {{mangaProgress.total}} chapters ({{mangaProgress.percentage}}%)</p>
+					</div>
+				</div>
+				{{/if}}
 				<div class="chapter-list">
 					<h3 class="sub-title spread">
 						<span>Chapters</span>
