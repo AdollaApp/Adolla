@@ -3,6 +3,7 @@ import db from "../db";
 
 export const iconNames = {
 	"main-on-white": "White",
+	"white-on-gold": "Gold",
 	"white-on-blue": "Ocean",
 	"white-on-dark": "Night",
 	"white-on-green": "Forest",
