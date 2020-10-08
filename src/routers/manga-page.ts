@@ -69,9 +69,9 @@ router.get("/:provider/:slug", async (req, res, next) => {
 		}));
 
 		// Get progress for manga total
-		let chaptersFinished = data.data.chapters.map(v => v?.progress?.percentage >= 90);
+		// let chaptersFinished = data.data.chapters.map(v => v?.progress?.percentage >= 90);
 		let totalChapterCount = data.data.chapters.length;
-		let doneChapterCount = chaptersFinished.filter(Boolean).length;
+		let doneChapterCount = data.data.chapters.reduce((acc, current) => acc + ((current?.progress?.percentage ?? 0) / 100), 0);
 
 		
 		// Render
@@ -83,8 +83,8 @@ router.get("/:provider/:slug", async (req, res, next) => {
 			allLists: allLists.filter(l => !l.byCreator).map(convert),
 			mangaProgress: {
 				total: totalChapterCount,
-				done: doneChapterCount,
-				percentage: (doneChapterCount / totalChapterCount) * 100
+				done: Math.round(doneChapterCount),
+				percentage: Math.round((doneChapterCount / totalChapterCount) * 100)
 			}
 		});
 
