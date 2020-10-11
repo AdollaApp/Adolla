@@ -190,6 +190,9 @@ export class MangaseeClass extends Scraper {
 			// Extract genre array from dom
 			let genres = JSON.parse(html.split(`"genre": `)[1].split("],")[0] + "]");
 		
+			// Get status
+			let status = html.split(`<span class="mlabel">Status:</span>`)[1].split(">")[1].split(" (")[0].trim().toLowerCase();
+
 			// Generate chapter images
 			let chapterImages;
 			if(season >= 0 && chapter >= 0) {
@@ -244,7 +247,8 @@ export class MangaseeClass extends Scraper {
 				},
 				data: {
 					chapters,
-					chapterImages
+					chapterImages,
+					status
 				},
 				success: true,
 				provider: isProviderId(providerId) ? providerId : null

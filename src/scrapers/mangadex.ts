@@ -99,6 +99,10 @@ class MangadexClass extends Scraper {
 	
 					chapterImages = await Promise.all(imagePromises); // Page array is an array filled with URLs. Perfect!
 				}
+
+				// Get series status
+				let mdStatus = [null, "ongoing", "completed", "cancelled", "hiatus"];
+				let status = mdStatus[data.manga.status]; // data.manga.status is an integer, 1-indexed
 	
 				// Return data
 				let provider = getProviderId(this.provider);
@@ -116,7 +120,8 @@ class MangadexClass extends Scraper {
 						},
 						data: {
 							chapters: newChapters,
-							chapterImages
+							chapterImages,
+							status
 						},
 						success: true,
 						provider: isProviderId(provider) ? provider : null

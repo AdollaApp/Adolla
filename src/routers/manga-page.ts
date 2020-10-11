@@ -69,7 +69,6 @@ router.get("/:provider/:slug", async (req, res, next) => {
 		}));
 
 		// Get progress for manga total
-		// let chaptersFinished = data.data.chapters.map(v => v?.progress?.percentage >= 90);
 		let totalChapterCount = data.data.chapters.length;
 		let doneChapterCount = data.data.chapters.reduce((acc, current) => acc + ((current?.progress?.percentage ?? 0) / 100), 0);
 

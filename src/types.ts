@@ -49,6 +49,7 @@ export interface MangaData {
 	chapters: Chapter[];
 	chapterImages?: string[];
 	hasSeasons?: boolean; // if there's more than one "season" in the chapters
+	status: string;
 }
 
 /** Entire database structure */

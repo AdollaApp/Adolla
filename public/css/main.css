@@ -625,8 +625,6 @@ input, textarea {
 	display: flex;
 }
 .bar-wrapper .bar-inner {
-	box-sizing: border-box;
-	padding: 2px 10px;
 	display: flex;
 	align-items: center;
 	border-radius: 100px;
