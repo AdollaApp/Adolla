@@ -1309,6 +1309,17 @@ div.selection-actions .selection-actions-inner {
 	display: flex;
 }
 
+/* Progress on desktop */
+.main-sidebar .current-loading-progress:not(:empty) {
+	margin-left: 20px;
+}
+.main-sidebar .current-loading-progress:not(:empty)::before {
+	content: "(";
+}
+.main-sidebar .current-loading-progress:not(:empty)::after {
+	content: ")";
+}
+
 /* Responsiveness */
 @media screen and (max-width: 700px), (orientation: portrait) {
 
