@@ -194,9 +194,10 @@ export class MangaseeClass extends Scraper {
 			let status = html.split(`<span class="mlabel">Status:</span>`)[1].split(">")[1].split(" (")[0].trim().toLowerCase();
 
 			// Generate chapter images
-			let chapterImages;
+			let chapterImages: string[] = [];
 			if(season >= 0 && chapter >= 0) {
 				// Generate URL for page with chapter data
+				console.log("Generating chapter images".repeat(50));
 				const chapterUrl = `https://mangasee123.com/read-online/${slug}-chapter-${chapter}-index-${season}.html`;
 
 				// Fetch chapter data
@@ -229,6 +230,13 @@ export class MangaseeClass extends Scraper {
 				}
 
 			}
+
+			// Turn chapterImages URLs into base64 strings
+			chapterImages = await Promise.all(chapterImages.map(async url => {
+				// @ts-ignore node-fetch's TS does not have buffer in its definitions
+				let base64 = await fetch(url).then(r => r.buffer()).then(buf => `data:image/${url.split(".").pop()};base64,`+buf.toString('base64'));
+				return base64;
+			}));
 
 			// NSFW
 			const nsfw = false; // I don't think Mangasee has hentai

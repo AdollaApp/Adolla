@@ -6,8 +6,8 @@
 		"start": "npm run build && node ./dist/index.js",
 		"start-tsc": "ts-node src/index.ts",
 		"dev": "npm start",
-		"clear-cache": "npm run build && node ./dist/clear-cache.ts",
-		"format-data": "npm run build && node ./dist/format-data.ts",
+		"clear-cache": "npm run build && node ./dist/clear-cache.js",
+		"format-data": "npm run build && node ./dist/format-data.js",
 		"build": "etsc"
 	},
 	"keywords": [],
