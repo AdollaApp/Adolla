@@ -197,7 +197,6 @@ export class MangaseeClass extends Scraper {
 			let chapterImages: string[] = [];
 			if(season >= 0 && chapter >= 0) {
 				// Generate URL for page with chapter data
-				console.log("Generating chapter images".repeat(50));
 				const chapterUrl = `https://mangasee123.com/read-online/${slug}-chapter-${chapter}-index-${season}.html`;
 
 				// Fetch chapter data
