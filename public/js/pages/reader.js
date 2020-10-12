@@ -280,6 +280,8 @@ initImages();
 
 // Camera mode
 let reenableCameraDebounce;
+let cameraInterval;
+let onScreenImages = [];
 document.querySelectorAll(".is-camera-button").forEach(btn => {
 
 	btn.addEventListener("click", () => {
@@ -291,10 +293,86 @@ document.querySelectorAll(".is-camera-button").forEach(btn => {
 			delete reenableCameraDebounce;
 		}
 
+		if(cameraInterval) {
+			clearInterval(cameraInterval);
+		}
+
+		onScreenImages = [];
+		cameraInterval = setInterval(() => {
+			let images = document.querySelectorAll(".pageImg");
+			for(let image of images) {
+				if(isOnScreen(image) && !onScreenImages.includes(image)) {
+					onScreenImages.push(image);
+				}
+			}
+		}, 500);
+
 		reenableCameraDebounce = setTimeout(() => {
 			document.body.classList.remove("is-camera-mode");
-		}, 10e3);
+			clearInterval(cameraInterval);
+
+			// Get image URLs for every image that was on screen
+			let imgs = [...onScreenImages[0].parentNode.children];
+			let images = onScreenImages.sort((a, b) => imgs.indexOf(a) - imgs.indexOf(b));
+			showBigImage(images);
+
+		}, 5e3);
 
 	});
 
 });
+
+let fileToShare;
+
+/**
+ * Get base64 URL for really big image
+ * Images is an array of image element
+ */
+function showBigImage(images) {
+	let canvas = document.createElement("canvas");
+	let ctx = canvas.getContext("2d");
+	canvas.width = images[0].naturalWidth;
+
+	let heightSum = images.reduce((acc, img) => acc + img.naturalHeight, 0);
+	canvas.height = heightSum;
+
+	let y = 0;
+	for(let i = 0; i < images.length; i++) {
+		let img = images[i];
+		ctx.drawImage(img, 0, y);
+		y += img.naturalHeight;
+	}
+
+	let url = canvas.toDataURL();
+	// let html = `
+	// <div class="img-share">
+	// 	<a href="${url}" download="screenshot.png" onclick="setTimeout(() => {  }, 1e3)"><img src="${url}" class="to-share" style="width: 100%">
+	// </div>
+	// `
+	// let d = document.createElement("div");
+	// d.innerHTML = html;
+	// d.classList.add("do-remove");
+	// document.body.appendChild(d);
+
+	let div = document.createElement("div");
+	div.classList.add("img-share");
+
+		let a = document.createElement("a");
+		a.href = url;
+		a.setAttribute("download", "screenshot.png");
+		a.innerHTML = `<img class="to-share" src="${url}">`;
+
+	div.appendChild(a);
+
+	div.addEventListener("click", () => {
+		div.remove();
+	});
+
+	document.body.appendChild(div);
+
+}
+function isOnScreen(el) {
+	let rect = el.getBoundingClientRect();
+	let viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+	return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+}

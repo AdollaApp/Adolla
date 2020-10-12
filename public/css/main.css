@@ -1318,6 +1318,25 @@ div.selection-actions .selection-actions-inner {
 	content: ")";
 }
 
+/* Image share */
+.img-share {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	overflow-y: auto;
+	box-sizing: border-box;
+	z-index: 999;
+	padding: 20px;
+	padding-top: calc(20px + env(safe-area-inset-top));
+	padding-bottom: calc(20px + env(safe-area-inset-bottom));
+	background: rgba(0, 0, 0, 0.5);
+}
+.img-share .to-share {
+	width: 100%;
+}
+
 /* Responsiveness */
 @media screen and (max-width: 700px), (orientation: portrait) {
 
