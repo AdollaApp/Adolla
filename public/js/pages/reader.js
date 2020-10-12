@@ -344,15 +344,6 @@ function showBigImage(images) {
 	}
 
 	let url = canvas.toDataURL();
-	// let html = `
-	// <div class="img-share">
-	// 	<a href="${url}" download="screenshot.png" onclick="setTimeout(() => {  }, 1e3)"><img src="${url}" class="to-share" style="width: 100%">
-	// </div>
-	// `
-	// let d = document.createElement("div");
-	// d.innerHTML = html;
-	// d.classList.add("do-remove");
-	// document.body.appendChild(d);
 
 	let div = document.createElement("div");
 	div.classList.add("img-share");
