@@ -231,11 +231,11 @@ export class MangaseeClass extends Scraper {
 			}
 
 			// Turn chapterImages URLs into base64 strings
-			chapterImages = await Promise.all(chapterImages.map(async url => {
-				// @ts-ignore node-fetch's TS does not have buffer in its definitions
-				let base64 = await fetch(url).then(r => r.buffer()).then(buf => `data:image/${url.split(".").pop()};base64,`+buf.toString('base64'));
-				return base64;
-			}));
+			// chapterImages = await Promise.all(chapterImages.map(async url => {
+			// 	// @ts-ignore node-fetch's TS does not have buffer in its definitions
+			// 	let base64 = await fetch(url).then(r => r.buffer()).then(buf => `data:image/${url.split(".").pop()};base64,`+buf.toString('base64'));
+			// 	return base64;
+			// }));
 
 			// NSFW
 			const nsfw = false; // I don't think Mangasee has hentai

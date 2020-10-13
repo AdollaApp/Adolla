@@ -222,7 +222,7 @@ async function initImages() {
 			// Generate node
 			let img = document.createElement("img");
 			img.classList.add("pageImg");
-			img.setAttribute("alt", `Page ${Number(i) + i}`);
+			img.setAttribute("alt", `Page ${Number(i) + 1}`);
 
 			// Set source
 			img.src = url;
@@ -279,7 +279,6 @@ async function initImages() {
 initImages();
 
 // Camera mode
-let reenableCameraDebounce;
 let cameraInterval;
 let onScreenImages = [];
 document.querySelectorAll(".is-camera-button").forEach(btn => {
@@ -287,11 +286,6 @@ document.querySelectorAll(".is-camera-button").forEach(btn => {
 	btn.addEventListener("click", () => {
 
 		document.body.classList.add("is-camera-mode");
-
-		if(reenableCameraDebounce) {
-			clearTimeout(reenableCameraDebounce);
-			delete reenableCameraDebounce;
-		}
 
 		if(cameraInterval) {
 			clearInterval(cameraInterval);
@@ -307,16 +301,21 @@ document.querySelectorAll(".is-camera-button").forEach(btn => {
 			}
 		}, 500);
 
-		reenableCameraDebounce = setTimeout(() => {
-			document.body.classList.remove("is-camera-mode");
-			clearInterval(cameraInterval);
-
-			// Get image URLs for every image that was on screen
-			let imgs = [...onScreenImages[0].parentNode.children];
-			let images = onScreenImages.sort((a, b) => imgs.indexOf(a) - imgs.indexOf(b));
-			showBigImage(images);
-
-		}, 5e3);
+		setTimeout(() => {
+			let f = (evt) => {
+			
+				evt.currentTarget.removeEventListener("click", f);
+	
+				document.body.classList.remove("is-camera-mode");
+				clearInterval(cameraInterval);
+	
+				// Get image URLs for every image that was on screen
+				let imgs = [...onScreenImages[0].parentNode.children];
+				let images = onScreenImages.sort((a, b) => imgs.indexOf(a) - imgs.indexOf(b));
+				showBigImage(images);
+			};
+			document.body.addEventListener("click", f);
+		}, 1e3);
 
 	});
 
@@ -328,7 +327,7 @@ let fileToShare;
  * Get base64 URL for really big image
  * Images is an array of image element
  */
-function showBigImage(images) {
+async function showBigImage(images) {
 	let canvas = document.createElement("canvas");
 	let ctx = canvas.getContext("2d");
 	canvas.width = images[0].naturalWidth;
@@ -336,9 +335,32 @@ function showBigImage(images) {
 	let heightSum = images.reduce((acc, img) => acc + img.naturalHeight, 0);
 	canvas.height = heightSum;
 
+	let imgs = await Promise.all(images.map(img => {
+		return new Promise(async resolve => {
+			let newImage;
+			if(!img.src.startsWith("data:image")) {
+				newImage = new Image();
+
+				let blob = await fetch("https://cors-anywhere.herokuapp.com/" + img.src).then(r => r.blob()).then(blob => URL.createObjectURL(blob));
+				console.log(blob);
+				newImage.src = blob;
+				setTimeout(() => {
+					resolve(newImage);
+				}, 1e3);
+			} else {
+				resolve(img);
+			}
+
+			console.log(newImage);
+
+			
+
+		});
+	}));
+
 	let y = 0;
-	for(let i = 0; i < images.length; i++) {
-		let img = images[i];
+	console.log(imgs);
+	for(let img of imgs) {
 		ctx.drawImage(img, 0, y);
 		y += img.naturalHeight;
 	}

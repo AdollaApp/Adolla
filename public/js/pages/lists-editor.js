@@ -113,7 +113,7 @@ function updateSuggestions() {
 	suggestions = allLists.filter(v => !lists.find(e => e.slug === v.slug))
 	
 	// Sort by current matches compared to input
-	let currentValue = clean(document.querySelector(".chapter-lists .input-div input").value);
+	let currentValue = clean(document.querySelector(".lists-wrapper .input-div input").value);
 	suggestions = suggestions.filter(suggestionList => suggestionList.slug.includes(currentValue));
 
 	// Add nodes

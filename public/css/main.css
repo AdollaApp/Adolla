@@ -39,6 +39,9 @@
 		--hover: #0E0E0E;
 
 	}
+	select {
+		filter: invert(1);
+	}
 }
 
 html, body {
@@ -1075,10 +1078,10 @@ details.settings-toggle[open] ~ .chapters {
 select {
 	padding: 4px 8px;
 	border-radius: 4px;
-	border: 1px solid var(--border);
+	border: 1px solid rgba(0, 0, 10, 0.05);
 	font-size: 1em;
-	background: var(--body-offset);
-	color: var(--text);
+	background: #f5f7f9;
+	color: #333;
 }
 
 /* Lists page */
@@ -1477,6 +1480,7 @@ div.selection-actions .selection-actions-inner {
 	}
 	.sub-title.spread > select {
 		margin-top: 10px;
+		width: 100%;
 	}
 }
 @media screen and (max-width: 500px) {
