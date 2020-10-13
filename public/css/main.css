@@ -24,8 +24,8 @@
 @media (prefers-color-scheme: dark) {
 	:root {
 		--body-harsh: black;
-		--body: #191919;
-		--body-offset: #242424;
+		--body: black;
+		--body-offset: #0c0c0c;
 		--text: #c9c9c9;
 		--text-secondary: #a1a1a1;
 
@@ -34,7 +34,7 @@
 		--border-2: #555555;
 		--border-dark-2: #2b2b2b;
 
-		--header-background: #0e0e0e;
+		--header-background: black;
 
 		--hover: #0E0E0E;
 
@@ -1470,6 +1470,7 @@ div.selection-actions .selection-actions-inner {
 	}
 	.manga-top .poster {
 		position: initial;
+		width: 250px;
 	}
 	.manga-card .title-div > span {
 		display: block;
