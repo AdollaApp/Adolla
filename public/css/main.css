@@ -1469,8 +1469,7 @@ div.selection-actions .selection-actions-inner {
 		grid-template-columns: 100%;
 	}
 	.manga-top .poster {
-		position: initial;
-		width: 250px;
+		display: none;
 	}
 	.manga-card .title-div > span {
 		display: block;
