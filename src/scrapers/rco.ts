@@ -1,0 +1,103 @@
+
+import { Chapter, ScraperResponse } from "../types";
+import { Scraper, SearchOptions } from "./types";
+import md from "mangadex-api";
+import fetch from "node-fetch";
+import { getProviderId, isProviderId } from "../routers/manga-page";
+import chalk from "chalk";
+import updateManga from "../util/updateManga";
+import { error } from "./index";
+
+class RCOClass extends Scraper {
+
+	private client: md | null;
+
+	constructor() {
+		super();
+		this.provider = "RCO";
+		this.canSearch = true;
+	}
+
+	public scrape(slug: string, chapterId: number = -1): Promise<ScraperResponse> {
+
+		return new Promise(async resolve => {
+
+			try {
+
+				let mainReq = await fetch(`https://readcomiconline.to/Comic/${slug}`, {
+					headers: {
+						"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36"
+					}
+				});
+				let html = await (mainReq).text();
+				html = html.replace(/\r\n|  |\t/g, "")
+
+				// Get title
+				let title = html.split(`<a Class="bigChar"`)[1].split(">")[1].split("</")[0];
+
+				// Get poster URL
+				let posterUrl = `https://readcomiconline.to` + html.split(`Cover</div>`)[1].trim().split(`src="`)[1].split(`"`)[0];
+
+				// Description
+				let description = html.split(`<p style="text-align: justify;">`)[1].split("</p>")[0].replace(/&rsquo;/g, "'");
+
+				// Get chapters
+				let chaptersHTML = html.split("<tr>").slice(2).map(s => s.split("</tr>")[0]);
+				let chapters: Chapter[] = chaptersHTML.map((str, i) => {
+
+					let [_null, tdOne, tdTwo] = str.split("<td>").map(s => s.split("</td>")[0]);
+					
+					let label = tdOne.split(`">`)[1].split("</")[0].replace(title, "").trim();		
+					let hrefString = tdOne.split(`href="`)[1].split(`"`)[0].split("?")[0].split("/").pop();
+
+					return {
+						label,
+						season: 1,
+						chapter: chaptersHTML.length - i,
+						date: new Date(tdTwo),
+						hrefString
+					}
+				});
+
+
+				// Status
+				let status = html.split(`Status:</span>`)[1].split("<")[0].trim().replace(/&nbsp;/g, "").toLowerCase();
+
+				// Get provider
+				let provider = getProviderId(this.provider);
+
+				resolve({
+					constant: {
+						title,
+						slug,
+						posterUrl,
+						alternateTitles: [],
+						genres: [],
+						descriptionParagraphs: [description],
+						nsfw: false
+					},
+					data: {
+						chapters,
+						chapterImages: [],
+						status
+					},
+					success: true,
+					provider: isProviderId(provider) ? provider : null
+				});
+
+			} catch (err) {
+				console.error(chalk.red("[RCO]") + ` An error occured:`, err);
+				resolve(error(0, err));
+			}
+
+		});
+
+	}
+	public async search(query: string, options?: Partial<SearchOptions>) {
+		return [];
+	}
+}
+
+// Create instance and extend it
+const RCOInstance = new RCOClass();
+export default RCOInstance;

@@ -10,7 +10,6 @@ export const iconNames = {
 	"white-on-red": "Crimson",
 	"white-on-black": "Black"
 }
-// @ts-ignore TS still doesn't have FromEntires :/
 export const iconNamesReversed = Object.fromEntries(Object.entries(iconNames).map(v => v.reverse()));
 
 export default function getIconSrc() {

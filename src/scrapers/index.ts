@@ -22,7 +22,12 @@ export const Mangasee = MangaseeInstance;
 import MangadexInstance from "./mangadex";
 export const Mangadex = MangadexInstance;
 
+// Import ReadComicsOnline
+import RCOInstance 	from "./rco";
+export const RCO = RCOInstance;
+
 export const scrapers = {
 	Mangasee,
-	Mangadex
+	Mangadex,
+	RCO
 }

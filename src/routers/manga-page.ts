@@ -19,12 +19,12 @@ interface NewList {
 
 let scrapersMapped = {
 	"mangasee": "Mangasee",
-	"mangadex": "Mangadex"
+	"mangadex": "Mangadex",
+	"rco": "RCO"
 };
-// @ts-ignore TS still doesn't have fromEntries :/
 let scrapersMappedReversed = Object.fromEntries(Object.entries(scrapersMapped).map(v => v.reverse()));
 export function getProviderName(slug: string): ProviderId | string {
-	return scrapersMapped[slug] ?? null;
+	return scrapersMapped[slug.toLowerCase()] ?? null;
 }
 export function isProviderName(slug: string): slug is Provider {
 	return !!scrapersMappedReversed[slug];
