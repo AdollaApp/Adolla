@@ -768,7 +768,7 @@ input, textarea {
 }
 .manga-reader .loading {
 	position: relative;
-	z-index: 0;
+	z-index: -100;
 	width: 100%;
 	height: calc(100vh - env(safe-area-inset-top));
 	display: flex;

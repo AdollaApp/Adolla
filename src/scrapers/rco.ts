@@ -64,7 +64,11 @@ class RCOClass extends Scraper {
 				let chapterImages = [];
 				if(chapterId !== -1) {
 					
-					let imgReq = await fetch(`https://readcomiconline.to/Comic/${slug}/${chapterId}`);
+					let imgReq = await fetch(`https://readcomiconline.to/Comic/${slug}/${chapterId}`, {
+						headers: {
+							"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36"
+						}
+					});
 					let chapterHTML = await imgReq.text();
 
 					let js = chapterHTML.split(`var lstImages = new Array();`)[1].split(`var currImage = 0;`)[0];
