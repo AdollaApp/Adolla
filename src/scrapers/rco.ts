@@ -116,7 +116,8 @@ class RCOClass extends Scraper {
 			}
 		}
 
-		let searchReq = await fetch("https://readcomiconline.to/Search/Comic", {
+		let searchUrl = "https://readcomiconline.to/Search/Comic";
+		let searchReq = await fetch(searchUrl, {
 			method: "POST",
 			headers: {
 				"content-type": "application/x-www-form-urlencoded",
@@ -124,8 +125,15 @@ class RCOClass extends Scraper {
 			},
 			body: `keyword=${query.split(" ").join("+")}`
 		});
-		let searchHTML = await searchReq.text();
-		let resultIds = searchHTML.split(`<a href="/Comic/`).slice(1).map(v => v.split(`"`)[0]);
+
+		console.log(searchReq)
+		let resultIds = [];
+		if(searchReq.url === searchUrl) {
+			let searchHTML = await searchReq.text();
+			resultIds = searchHTML.split(`<a href="/Comic/`).slice(1).map(v => v.split(`"`)[0]);
+		} else {
+			resultIds = [searchReq.url.split("/").pop()];
+		}
 		
 
 
