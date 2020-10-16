@@ -39,7 +39,7 @@ class RCOClass extends Scraper {
 				let posterUrl = `https://readcomiconline.to` + html.split(`Cover</div>`)[1].trim().split(`src="`)[1].split(`"`)[0];
 
 				// Description
-				let description = html.split(`<p style="text-align: justify;">`)[1].split("</p>")[0].replace(/&rsquo;/g, "'");
+				let descriptionParagraphs = html.split(`<p style="text-align: justify;">`)[1].split("</p>")[0].replace(/&rsquo;/g, "'").split("<br />");
 
 				// Get chapters
 				let chaptersHTML = html.split("<tr>").slice(2).map(s => s.split("</tr>")[0]);
@@ -59,8 +59,22 @@ class RCOClass extends Scraper {
 					}
 				});
 
+				// Get chapter's images
+				let chapterImages = [];
+				if(chapterId !== -1) {
+					
+					let imgReq = await fetch(`https://readcomiconline.to/Comic/${slug}/${chapterId}`);
+					let chapterHTML = await imgReq.text();
 
-				// Status
+					let js = chapterHTML.split(`var lstImages = new Array();`)[1].split(`var currImage = 0;`)[0];
+					let imgSources = js.match(/lstImages\.push\("(.+?)"\);/g).map(snippet => {
+						return snippet.match(/lstImages\.push\("(.+?)"\);/)[1];
+					});
+
+					chapterImages = imgSources;
+				}
+
+				// Series status
 				let status = html.split(`Status:</span>`)[1].split("<")[0].trim().replace(/&nbsp;/g, "").toLowerCase();
 
 				// Get provider
@@ -73,12 +87,12 @@ class RCOClass extends Scraper {
 						posterUrl,
 						alternateTitles: [],
 						genres: [],
-						descriptionParagraphs: [description],
+						descriptionParagraphs,
 						nsfw: false
 					},
 					data: {
 						chapters,
-						chapterImages: [],
+						chapterImages,
 						status
 					},
 					success: true,
