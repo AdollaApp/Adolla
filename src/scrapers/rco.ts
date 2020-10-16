@@ -116,6 +116,7 @@ class RCOClass extends Scraper {
 			}
 		}
 
+		// Fetch search results HTML
 		let searchUrl = "https://readcomiconline.to/Search/Comic";
 		let searchReq = await fetch(searchUrl, {
 			method: "POST",
@@ -126,12 +127,14 @@ class RCOClass extends Scraper {
 			body: `keyword=${query.split(" ").join("+")}`
 		});
 
-		console.log(searchReq)
+		
+		// Map search
 		let resultIds = [];
 		if(searchReq.url === searchUrl) {
 			let searchHTML = await searchReq.text();
 			resultIds = searchHTML.split(`<a href="/Comic/`).slice(1).map(v => v.split(`"`)[0]);
 		} else {
+			// If there's only one result, RCO redirects to the comic's page
 			resultIds = [searchReq.url.split("/").pop()];
 		}
 		
