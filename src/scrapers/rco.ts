@@ -54,10 +54,11 @@ class RCOClass extends Scraper {
 						label,
 						season: 1,
 						chapter: chaptersHTML.length - i,
+						combined: chaptersHTML.length - i,
 						date: new Date(tdTwo),
 						hrefString
 					}
-				});
+				}).sort((a, b) => a.combined - b.combined)
 
 				// Get chapter's images
 				let chapterImages = [];
@@ -108,7 +109,38 @@ class RCOClass extends Scraper {
 
 	}
 	public async search(query: string, options?: Partial<SearchOptions>) {
-		return [];
+		// Verify we can search
+		if(!this.canSearch) {
+			return {
+				error: "Unable to search. Check logs for more information."
+			}
+		}
+
+		let searchReq = await fetch("https://readcomiconline.to/Search/Comic", {
+			method: "POST",
+			headers: {
+				"content-type": "application/x-www-form-urlencoded",
+				"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36"
+			},
+			body: `keyword=${query.split(" ").join("+")}`
+		});
+		let searchHTML = await searchReq.text();
+		let resultIds = searchHTML.split(`<a href="/Comic/`).slice(1).map(v => v.split(`"`)[0]);
+		
+
+
+		// Map to Adolla style format
+		let chapterCount = query === "" ? 5 : options.resultCount;
+
+		// To Adolla data
+		let searchResults = await Promise.all(resultIds
+			.slice(0, chapterCount)
+			.map(id => updateManga("RCO", id.toString()) 
+		));
+		
+		// Return Adolla-formatted search results
+		return searchResults.filter(r => r.success);
+
 	}
 }
 
