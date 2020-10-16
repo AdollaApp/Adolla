@@ -29,14 +29,14 @@
 		--text: #c9c9c9;
 		--text-secondary: #a1a1a1;
 
-		--border: rgba(255, 255, 255, 0.05);
-		--border-dark: rgba(255, 255, 255, 0.1);
+		--border: #2c2c2c;
+		--border-dark: rgba(255, 255, 255, 0.2);
 		--border-2: #555555;
 		--border-dark-2: #2b2b2b;
 
 		--header-background: black;
 
-		--hover: #0E0E0E;
+		--hover: #353535;
 
 	}
 	select {
@@ -305,7 +305,7 @@ details .manga-grid {
 	align-items: center;
 	color: var(--text);
 	background: var(--body-offset);
-	border: 1px solid rgba(0, 0, 0, 0.03);
+	border: 1px solid var(--border);
 	border-radius: 4px;
 }
 .secondary-badge svg {
