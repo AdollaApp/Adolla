@@ -137,33 +137,57 @@ class RCOClass extends Scraper {
 			}
 		}
 
-		// Fetch search results HTML
-		let searchUrl = "https://readcomiconline.to/Search/Comic";
-		let searchReq = await fetch(searchUrl, {
-			family: 6,
-			method: "POST",
-			headers: {
-				"content-type": "application/x-www-form-urlencoded",
-				"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36"
-			},
-			body: `keyword=${query.split(" ").join("+")}`
-		});
-
 		
-		// Map search
 		let resultIds = [];
-		if(searchReq.url === searchUrl) {
-			let searchHTML = await searchReq.text();
-			resultIds = searchHTML.split(`<a href="/Comic/`).slice(1).map(v => v.split(`"`)[0]);
+		if(query === "") {
+			// Fetch popular page
+			let mainReq = await fetch("https://readcomiconline.to/ComicList/MostPopular", {
+				family: 6,
+				headers: {
+					"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36"
+				}
+			});
+			// Get HTML for page
+			let body = await mainReq.text();
+
+			// Get each table row
+			let divs = body.split(`<tr>`).slice(1).map(v => v.split("</tr>")[0].replace(/\r\n|  |\t/g, ""));
+
+			// Extract links
+			resultIds = divs.map(div => {
+				// Get slug from table row
+				let slug = div.split(`href="/Comic/`)[1].split(`"`)[0];
+				return slug;
+			});
+
 		} else {
-			// If there's only one result, RCO redirects to the comic's page
-			resultIds = [searchReq.url.split("/").pop()];
+			// Fetch search results HTML
+			let searchUrl = "https://readcomiconline.to/Search/Comic";
+			let searchReq = await fetch(searchUrl, {
+				family: 6,
+				method: "POST",
+				headers: {
+					"content-type": "application/x-www-form-urlencoded",
+					"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36"
+				},
+				body: `keyword=${query.split(" ").join("+")}`
+			});
+
+			
+			// Map search
+			if(searchReq.url === searchUrl) {
+				let searchHTML = await searchReq.text();
+				resultIds = searchHTML.split(`<a href="/Comic/`).slice(1).map(v => v.split(`"`)[0]);
+			} else {
+				// If there's only one result, RCO redirects to the comic's page
+				resultIds = [searchReq.url.split("/").pop()];
+			}
+			
 		}
-		
 
 
 		// Map to Adolla style format
-		let chapterCount = query === "" ? 5 : options.resultCount;
+		let chapterCount = query === "" ? 15 : options.resultCount;
 
 		// To Adolla data
 		let searchResults = await Promise.all(resultIds
