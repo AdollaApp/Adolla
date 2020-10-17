@@ -768,7 +768,7 @@ input, textarea {
 }
 .manga-reader .loading {
 	position: relative;
-	z-index: -100;
+	z-index: 0;
 	width: 100%;
 	height: calc(100vh - env(safe-area-inset-top));
 	display: flex;
@@ -1010,6 +1010,7 @@ details.settings-toggle[open] ~ .chapters {
 	left: calc(10px + env(safe-area-inset-left));
 	margin-left: -2px;
 	margin-right: -2px;
+	z-index: 20;
 }
 [data-reader-back-location="top-left"] .floating-button-wrapper, [data-reader-back-location="top-right"] .floating-button-wrapper {
 	top: env(safe-area-inset-top);
@@ -1189,7 +1190,6 @@ select {
 	min-height: var(--footer-height);
 	padding: 0 10px;
 	border-bottom: env(safe-area-inset-bottom) solid transparent;
-	z-index: 999;
 	justify-content: space-around;
 	align-items: center;
 	border-top: 1px solid var(--border);
@@ -1428,6 +1428,7 @@ div.selection-actions .selection-actions-inner {
 		bottom: var(--footer-height);
 		height: 50px;
 		padding: 0 10px;
+		z-index: 20;
 	}
 	.chapter-navigation :not(svg).decorative {
 		display: none;

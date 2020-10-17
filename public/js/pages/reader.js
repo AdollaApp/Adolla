@@ -53,7 +53,7 @@ function updatePages() {
 	let toPage = Number(document.body.getAttribute("data-to-page")) || 0;
 	let pageCountDom = Number(document.body.getAttribute("data-page-count")) || toPage + 1;
 	document.querySelectorAll(".current-page").forEach(span => {
-		span.innerText = `${loaded ? currentPage : (toPage !== "false" ? toPage : 0)} of ${loaded ? pageCount : (pageCountDom !== "false" ? pageCountDom : 0)}`;
+		span.innerText = `${loaded ? currentPage : (toPage !== "false" ? toPage : 0)} of ${pageCount ? pageCount : (pageCountDom !== "false" ? pageCountDom : 0)}`;
 	});
 }
 updatePages();
@@ -257,17 +257,17 @@ async function initImages() {
 		setLoadingText("");
 		
 		// Update loading section in DOM
-		document.querySelector(".manga-reader").classList.add("loaded");
+		// document.querySelector(".manga-reader").classList.add("loaded");
 		
-		// Check whether to scroll to page yet, or not
-		let img = document.querySelector(".pageImg");
-		let checkInterval = setInterval(() => {
-			if(img.scrollHeight > 0) {
-				clearInterval(checkInterval);
-				scrollToPage();
-				loaded = true;
-			}
-		}, 50);
+		// // Check whether to scroll to page yet, or not
+		// let img = document.querySelector(".pageImg");
+		// let checkInterval = setInterval(() => {
+		// 	if(img.scrollHeight > 0) {
+		// 		clearInterval(checkInterval);
+		// 		scrollToPage();
+		// 		loaded = true;
+		// 	}
+		// }, 50);
 	} catch(err) {
 		loaded = true;
 		document.querySelector(".manga-reader").classList.add("loaded");

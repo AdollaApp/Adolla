@@ -24,6 +24,7 @@
 		"express": "^4.17.1",
 		"express-handlebars": "^5.1.0",
 		"fuse.js": "^6.4.1",
+		"html-entities": "^1.3.1",
 		"jipdb": "^1.0.4",
 		"mangadex-api": "^3.0.5",
 		"node-fetch-extra": "0.0.3",

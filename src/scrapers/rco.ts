@@ -1,12 +1,16 @@
 
-import { Chapter, ScraperResponse } from "../types";
-import { Scraper, SearchOptions } from "./types";
 import md from "mangadex-api";
 import fetch from "node-fetch-extra";
-import { getProviderId, isProviderId } from "../routers/manga-page";
 import chalk from "chalk";
 import updateManga from "../util/updateManga";
+import { XmlEntities } from "html-entities";
+import { Chapter, ScraperResponse } from "../types";
+import { Scraper, SearchOptions } from "./types";
+import { getProviderId, isProviderId } from "../routers/manga-page";
 import { error } from "./index";
+
+const Entities = new XmlEntities();
+
 
 class RCOClass extends Scraper {
 
@@ -34,17 +38,28 @@ class RCOClass extends Scraper {
 				html = html.replace(/\r\n|  |\t/g, "")
 
 				// Get title
-				let title = html.split(`<a Class="bigChar"`)[1].split(">")[1].split("</")[0];
+				let title = Entities.decode(html.split(`<a Class="bigChar"`)[1].split(">")[1].split("</")[0]);
 
 				// Get poster URL
-				let posterUrl = `https://readcomiconline.to` + html.split(`Cover</div>`)[1].trim().split(`src="`)[1].split(`"`)[0];
+				let posterUrl = "/poster.png";
+				try {
+					posterUrl = html.split(`Cover</div>`)[1].trim().split(`src="`)[1].split(`"`)[0].replace(/https\/\//g, "https://");
+					if(!posterUrl.startsWith("http")) posterUrl = `https://readcomiconline.to` + posterUrl;
+				} catch(err) {
+					posterUrl = "/poster.png";
+				}
 
 				// Description
-				let descriptionParagraphs = html.split(`<p style="text-align: justify;">`)[1].split("</p>")[0].replace(/&rsquo;/g, "'").split("<br />");
+				let descriptionParagraphs = [];
+				try {
+					descriptionParagraphs = Entities.decode(html.split(`<p style="text-align: justify;">`)[1].split("</p>")[0]).split("<br />");
+				} catch(err) {
+					// Something, I'm sure
+				}
 
 				// Get chapters
 				let chaptersHTML = html.split("<tr>").slice(2).map(s => s.split("</tr>")[0]);
-				let chapters: Chapter[] = chaptersHTML.map((str, i) => {
+				let chapters: Chapter[] = chaptersHTML.map((str: string, i: number) => {
 
 					let [_null, tdOne, tdTwo] = str.split("<td>").map(s => s.split("</td>")[0]);
 					
@@ -65,7 +80,7 @@ class RCOClass extends Scraper {
 				let chapterImages = [];
 				if(chapterId !== -1) {
 					
-					let imgReq = await fetch(`https://readcomiconline.to/Comic/${slug}/${chapterId}`, {
+					let imgReq = await fetch(`https://readcomiconline.to/Comic/${slug}/${chapterId}?quality=lq`, {
 						family: 6,
 						headers: {
 							"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36"
