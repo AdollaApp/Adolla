@@ -28,7 +28,8 @@ app.engine("handlebars", handlebars({
 		getScraperIcon(provider: string): string | null {
 			let icons = {
 				"mangasee": "https://mangasee123.com/media/favicon.png",
-				"mangadex": "https://mangadex.org/images/misc/navbar.svg"
+				"mangadex": "https://mangadex.org/images/misc/navbar.svg",
+				"rco": "https://readcomiconline.to/Content/images/favicon.ico"
 			}
 			return icons[provider] ?? "/icons/main-on-white.png";
 		},
