@@ -1,12 +1,10 @@
 
 import chalk from "chalk";
-import fetch from "node-fetch";
+import fetch from "node-fetch-extra";
 
 import updateManga from "../util/updateManga";
 import db from "../db";
 import { List } from "../types";
-
-// TODO: PROPERLY IMPLEMENT PROVIDERS IN LISTS
 
 // Get "recommended" list
 let recommendedLists = [];

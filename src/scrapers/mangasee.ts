@@ -1,6 +1,6 @@
 
 import { Chapter, ScraperResponse } from "../types";
-import fetch from "node-fetch";
+import fetch from "node-fetch-extra";
 import Fuse from "fuse.js";
 import updateManga from "../util/updateManga";
 import { Scraper, SearchOptions } from "./types";

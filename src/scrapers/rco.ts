@@ -2,7 +2,7 @@
 import { Chapter, ScraperResponse } from "../types";
 import { Scraper, SearchOptions } from "./types";
 import md from "mangadex-api";
-import fetch from "node-fetch";
+import fetch from "node-fetch-extra";
 import { getProviderId, isProviderId } from "../routers/manga-page";
 import chalk from "chalk";
 import updateManga from "../util/updateManga";
@@ -25,6 +25,7 @@ class RCOClass extends Scraper {
 			try {
 
 				let mainReq = await fetch(`https://readcomiconline.to/Comic/${slug}`, {
+					family: 6,
 					headers: {
 						"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36"
 					}
@@ -65,6 +66,7 @@ class RCOClass extends Scraper {
 				if(chapterId !== -1) {
 					
 					let imgReq = await fetch(`https://readcomiconline.to/Comic/${slug}/${chapterId}`, {
+						family: 6,
 						headers: {
 							"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36"
 						}
@@ -123,6 +125,7 @@ class RCOClass extends Scraper {
 		// Fetch search results HTML
 		let searchUrl = "https://readcomiconline.to/Search/Comic";
 		let searchReq = await fetch(searchUrl, {
+			family: 6,
 			method: "POST",
 			headers: {
 				"content-type": "application/x-www-form-urlencoded",
