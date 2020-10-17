@@ -257,17 +257,17 @@ async function initImages() {
 		setLoadingText("");
 		
 		// Update loading section in DOM
-		// document.querySelector(".manga-reader").classList.add("loaded");
+		document.querySelector(".manga-reader").classList.add("loaded");
 		
-		// // Check whether to scroll to page yet, or not
-		// let img = document.querySelector(".pageImg");
-		// let checkInterval = setInterval(() => {
-		// 	if(img.scrollHeight > 0) {
-		// 		clearInterval(checkInterval);
-		// 		scrollToPage();
-		// 		loaded = true;
-		// 	}
-		// }, 50);
+		// Check whether to scroll to page yet, or not
+		let img = document.querySelector(".pageImg");
+		let checkInterval = setInterval(() => {
+			if(img.scrollHeight > 0) {
+				clearInterval(checkInterval);
+				scrollToPage();
+				loaded = true;
+			}
+		}, 50);
 	} catch(err) {
 		loaded = true;
 		document.querySelector(".manga-reader").classList.add("loaded");
