@@ -1341,7 +1341,7 @@ div.selection-actions .selection-actions-inner {
 }
 
 /* Responsiveness */
-@media screen and (max-width: 700px), (orientation: portrait) {
+@media screen and (max-width: 900px), (orientation: portrait) {
 
 	/* Set footer height */
 	body {
