@@ -2,7 +2,7 @@
 import { Chapter, ScraperResponse } from "../types";
 import { Scraper, SearchOptions } from "./types";
 import md from "mangadex-api";
-import fetch from "node-fetch";
+import fetch from "node-fetch-extra";
 import { getProviderId, isProviderId } from "../routers/manga-page";
 import secretConfig from "../util/secretConfig";
 import chalk from "chalk";

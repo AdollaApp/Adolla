@@ -24,9 +24,10 @@ export default async function updateManga(provider: Provider | string, slug: str
 		return d;
 	}
 
+
 	let scraperName = getProviderName(provider) || provider;
 	let scraper: Scraper | undefined = scrapers[scraperName];
-	
+
 	if(!scraper) {
 		console.error("No scraper: " + provider);
 		return {

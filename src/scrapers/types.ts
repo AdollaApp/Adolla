@@ -1,8 +1,8 @@
 import { ScraperResponse } from "../types";
 
 /** All available scrapers */
-export type Provider = "Mangasee" | "Mangadex";
-export type ProviderId = "mangasee" | "mangadex";
+export type Provider = "Mangasee" | "Mangadex" | "RCO";
+export type ProviderId = "mangasee" | "mangadex" | "rco";
 
 export interface SearchOptions {
 	resultCount: number;

@@ -6,7 +6,8 @@ const defaultSettings = {
 	"back-location": "bottom-left",
 	"do-toggle-alt": "no",
 	"show-info-badge": "yes",
-	"show-camera-button": "no"
+	"show-camera-button": "no",
+	"enable-keyboard-controls": "no"
 };
 
 // Get current settings

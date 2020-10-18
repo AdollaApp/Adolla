@@ -53,7 +53,7 @@ function updatePages() {
 	let toPage = Number(document.body.getAttribute("data-to-page")) || 0;
 	let pageCountDom = Number(document.body.getAttribute("data-page-count")) || toPage + 1;
 	document.querySelectorAll(".current-page").forEach(span => {
-		span.innerText = `${loaded ? currentPage : (toPage !== "false" ? toPage : 0)} of ${loaded ? pageCount : (pageCountDom !== "false" ? pageCountDom : 0)}`;
+		span.innerText = `${loaded ? currentPage : (toPage !== "false" ? toPage : 0)} of ${pageCount ? pageCount : (pageCountDom !== "false" ? pageCountDom : 0)}`;
 	});
 }
 updatePages();
@@ -118,7 +118,7 @@ document.querySelectorAll(".floating-button").forEach(button => {
 
 // Keyboard controls
 document.addEventListener("keydown", evt => {
-	if(!evt.key.startsWith("Arrow")) return;
+	if(!evt.key.startsWith("Arrow") || getSettings()["enable-keyboard-controls"] === "no") return;
 	evt.preventDefault();
 
 	let isHorizontal = readerIsHorizontal();

@@ -19,12 +19,12 @@ interface NewList {
 
 let scrapersMapped = {
 	"mangasee": "Mangasee",
-	"mangadex": "Mangadex"
+	"mangadex": "Mangadex",
+	"rco": "RCO"
 };
-// @ts-ignore TS still doesn't have fromEntries :/
 let scrapersMappedReversed = Object.fromEntries(Object.entries(scrapersMapped).map(v => v.reverse()));
 export function getProviderName(slug: string): ProviderId | string {
-	return scrapersMapped[slug] ?? null;
+	return scrapersMapped[slug.toLowerCase()] ?? null;
 }
 export function isProviderName(slug: string): slug is Provider {
 	return !!scrapersMappedReversed[slug];
@@ -49,11 +49,11 @@ router.get("/:provider/:slug", async (req, res, next) => {
 
 	if(data && data.success) {
 
-		// See if chapter is same as "last read" chapter
-		await setColors(data, param);
-
 		// Set progress
 		await setMangaProgress(data);
+
+		// See if chapter is same as "last read" chapter
+		await setColors(data, param);
 
 		// Get reading
 		let reading = await getReading(4);
@@ -126,11 +126,11 @@ router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 			manga.data.chapters[i].progress = data.data.chapters[i].progress;
 		}
 
-		// See if chapter is same as last chapter
-		await setColors(manga, slug);
-
 		// § reading
 		let reading = await getReading(4);
+
+		// See if chapter is same as last chapter
+		await setColors(manga, slug);
 
 		res.render("manga-chapter", {
 			data: manga,
