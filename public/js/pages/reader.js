@@ -118,7 +118,7 @@ document.querySelectorAll(".floating-button").forEach(button => {
 
 // Keyboard controls
 document.addEventListener("keydown", evt => {
-	if(!evt.key.startsWith("Arrow")) return;
+	if(!evt.key.startsWith("Arrow") || getSettings()["enable-keyboard-controls"] === "no") return;
 	evt.preventDefault();
 
 	let isHorizontal = readerIsHorizontal();
