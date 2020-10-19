@@ -1471,9 +1471,6 @@ div.selection-actions .selection-actions-inner {
 	.manga-top {
 		grid-template-columns: 100%;
 	}
-	.manga-top .poster {
-		display: none;
-	}
 	.manga-card .title-div > span {
 		display: block;
 	}
