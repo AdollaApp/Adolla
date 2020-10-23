@@ -5,7 +5,7 @@ Easy to use web app to read Manga.
 ## Features
 
 - Easy progress tracking
-- A light and dark theme
+- A light and dark theme (system based)
 - Multiple icons to pick from
 - Automatic backups every 12 hours
 - Lists to store manga in
@@ -14,6 +14,10 @@ Easy to use web app to read Manga.
 - Is a PWA
 - Easy navigation from anywhere in the app
 - Telegram intergration to notify you about new chapters
+- Multiple scrapers to read from:
+	- MangaSee
+	- Mangadex
+	- ReadComicOnline
 
 ## Setup
 
