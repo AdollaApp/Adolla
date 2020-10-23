@@ -6,6 +6,7 @@ import getMangaProgress from "./getMangaProgress";
 import config from "../config.json";
 import { Provider, Scraper } from "../scrapers/types";
 import { getProviderId, getProviderName } from "../routers/manga-page";
+import cache from "../util/cache";
 
 const nsfwError: ScraperError = {
 	success: false,
@@ -15,9 +16,7 @@ const nsfwError: ScraperError = {
 
 export default async function updateManga(provider: Provider | string, slug: string, ignoreExisting: boolean = false, chapterId: number | string = -1): Promise<ScraperResponse> {
 
-	let dbQuery = `data_cache.${getProviderId(provider)}.${slug}`;
-
-	let existing = db.get(dbQuery);
+	let existing = cache?.[getProviderId(provider)]?.[slug];
 	if(existing && existing.savedAt > Date.now() - config.cache.duration && !ignoreExisting && chapterId === -1) {
 		let d = await addInfo(existing);
 		if(d.success && d.constant.nsfw && db.get("settings.show-nsfw") === "no") return nsfwError;
@@ -54,7 +53,10 @@ export default async function updateManga(provider: Provider | string, slug: str
 		delete nData.realProgress;
 		delete nData.progress;
 
-		db.set(dbQuery, nData);
+		let p = getProviderId(provider);
+		if(!cache[p]) cache[p] = []; 
+		cache[getProviderId(p)][slug] = nData;
+		// db.set(dbQuery, nData);
 	} 
 	let d = await addInfo(data);
 	if(d.success && d.constant.nsfw && db.get("settings.show-nsfw") === "no") return nsfwError;

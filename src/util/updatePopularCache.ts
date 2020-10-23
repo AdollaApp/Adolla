@@ -1,12 +1,15 @@
 
+import chalk from "chalk";
+
 import cfg from "../config.json";
 import updateManga from "./updateManga";
 import * as scrapers from "../scrapers";
 import db from "../db";
 import getReading from "./getReading";
-import { Progress } from "../types";
 import Bot from "./bot";
-import chalk from "chalk";
+import cache from "../util/cache";
+
+import { Progress } from "../types";
 import { getProviderId } from "../routers/manga-page";
 
 class Updater {
@@ -116,7 +119,6 @@ class Updater {
 
 
 		// Get data
-		let cache = db.get("data_cache");
 		
 		console.info(chalk.yellowBright("[CLEANUP]") + ` Checking each cache entry for old data`);
 
@@ -139,7 +141,6 @@ class Updater {
 		}
 
 		// Write to db
-		db.set("data_cache", cache);
 		console.info(chalk.green("[CLEANUP]") + ` Done cleaning up`);
 
 	}

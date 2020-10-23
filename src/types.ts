@@ -54,9 +54,6 @@ export interface MangaData {
 
 /** Entire database structure */
 export interface Database {
-	data_cache: {
-		[key: string]: MangaMeta;
-	}
 	reading_new: Reading;
 	other: {
 		host?: string

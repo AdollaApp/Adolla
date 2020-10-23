@@ -6,7 +6,6 @@ import chalk from "chalk";
 
 // Configure DB's default values
 const defaults: Database = {
-	data_cache: {},
 	reading_new: {},
 	other: {},
 	notified: {},
@@ -19,6 +18,8 @@ const defaults: Database = {
 
 // Iniate new DB
 const db = new Db("data.json", defaults);
+
+db.set("data_cache", undefined);
 
 // Update reading format
 let oldReading = db.get("reading");
