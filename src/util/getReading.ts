@@ -25,10 +25,12 @@ export default async function getReading(maxResults: number = Infinity) {
 			// Not having an if statement for that would still add it
 			// Obviously, we don't want that
 			if(readingManga[provider][slug] && Object.keys(readingManga[provider][slug]).length > 0) { 
-				readingMeta.push({
-					provider,
-					slug
-				});
+				if(db.get(`hide_read.${provider}.${slug}`) !== true) {
+					readingMeta.push({
+						provider,
+						slug
+					});
+				}
 			}
 		}
 	}

@@ -227,6 +227,9 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 				db.set(queryString, progressData);
 			}
 
+			let progressDataNew = db.get(queryString);
+			if(queryString) lastProgressData = progressDataNew;
+
 		}
 
 		// Set last progress data
@@ -323,6 +326,15 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 	});
 });
 
+router.post("/:provider/:slug/hide-series", async (req, res) => {
+
+	db.set(`hide_read.${getProviderId(req.params.provider)}.${req.params.slug}`, true);
+
+	res.json({
+		status: 200
+	});
+});
+
 router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => {
 	let chapterId = req.params.chapter;
 	let slug = req.params.slug;
@@ -348,6 +360,7 @@ router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => 
 	});
 
 	// Update db
+	db.set(`hide_read.${getProviderId(provider)}.${slug}`, false);
 	db.set(`reading_new.${getProviderId(provider)}.${slug}.${chapterId.toString().replace(/\./g, "_")}`, progressData);
 	db.set(`reading_new.${getProviderId(provider)}.${slug}.last`, progressData);
 
