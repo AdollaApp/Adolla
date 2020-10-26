@@ -722,6 +722,7 @@ input, textarea {
 	grid-gap: 10px 5px;
 	color: var(--text);
 	align-items: center;
+	border-top: 1px solid var(--border);
 }
 .chapter-navigation .current {
 	text-align: center;
@@ -768,7 +769,7 @@ input, textarea {
 .manga-reader:not(.loaded) {
 	width: 100%;
 }
-.manga-reader .loading {
+.loading {
 	position: relative;
 	z-index: 0;
 	width: 100%;
@@ -777,7 +778,7 @@ input, textarea {
 	justify-content: center;
 	align-items: center;
 }
-.manga-reader .loading::before {
+.loading::before {
 	content: "";
 	display: block;
 	width: 25px;
@@ -1228,6 +1229,7 @@ div.selection-actions {
 	bottom: var(--footer-height);
 	width: 100%;
 	background: var(--body-offset);
+	border-top: 1px solid var(--border);
 }
 
 .is-footer .secondary-button, .is-secondary-footer .secondary-button {
