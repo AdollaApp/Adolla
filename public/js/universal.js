@@ -69,28 +69,28 @@ if (sw && navigator.onLine) {
 }
 
 // Loading state for footer buttons
-// document.querySelectorAll(".nav-footer .nav-link").forEach(link => {
-// 	link.addEventListener("click", () => {
-// 		link.classList.add("loading");
-// 	});
-// });
-
-document.querySelectorAll("a").forEach(anchor => {
-	anchor.addEventListener("click", evt => {
-
-		let path = evt.composedPath();
-		console.log(path);
-		
-		let hasSelect = path.some(item => (item.classList || "").toString().includes("select"));
-		
-		if(hasSelect) return;
-
-
-		document.querySelector(".content-wrapper").innerHTML = `<div class="loading"></div>`;
-		document.querySelector(".loading").scrollIntoView({
-			inline: "start",
-			block: "start"
-		});
-
+document.querySelectorAll(".nav-footer .nav-link").forEach(link => {
+	link.addEventListener("click", () => {
+		link.classList.add("loading");
 	});
 });
+
+// document.querySelectorAll("a").forEach(anchor => {
+// 	anchor.addEventListener("click", evt => {
+
+// 		let path = evt.composedPath();
+// 		console.log(path);
+		
+// 		let hasSelect = path.some(item => (item.classList || "").toString().includes("select"));
+		
+// 		if(hasSelect) return;
+
+
+// 		document.querySelector(".content-wrapper").innerHTML = `<div class="loading"></div>`;
+// 		document.querySelector(".loading").scrollIntoView({
+// 			inline: "start",
+// 			block: "start"
+// 		});
+
+// 	});
+// });
