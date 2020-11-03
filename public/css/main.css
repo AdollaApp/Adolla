@@ -1356,6 +1356,9 @@ div.selection-actions .selection-actions-inner {
 	aside.main-sidebar {
 		display: none;
 	}
+	.content-inner {
+		margin: 40px 0;
+	}
 
 	/* Fix settings */
 	.content-inner .settings.details-inner {
