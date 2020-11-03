@@ -722,7 +722,6 @@ input, textarea {
 	grid-gap: 10px 5px;
 	color: var(--text);
 	align-items: center;
-	border-top: 1px solid var(--border);
 }
 .chapter-navigation .current {
 	text-align: center;
@@ -1210,7 +1209,7 @@ select {
 	background: var(--badge);
 	color: var(--text-on-badge);
 }
-.nav-link:not(.is-current-nav-item).loading {
+.nav-link:not(.is-current-nav-item).link-loading {
 	background: var(--border);
 }
 .is-footer svg {
@@ -1354,7 +1353,7 @@ div.selection-actions .selection-actions-inner {
 	}
 
 	/* Hide search in top part */
-	aside.main-sidebar .section.search {
+	aside.main-sidebar {
 		display: none;
 	}
 
@@ -1433,6 +1432,7 @@ div.selection-actions .selection-actions-inner {
 		height: 50px;
 		padding: 0 10px;
 		z-index: 20;
+		border-top: 1px solid var(--border);
 	}
 	.chapter-navigation :not(svg).decorative {
 		display: none;
