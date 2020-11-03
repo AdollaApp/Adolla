@@ -92,8 +92,8 @@ export class MangaseeClass extends Scraper {
 			
 			// If query is not empty, use fuse to search
 			const fuse = new Fuse(directory, {
-				threshold: 0.2,
-				distance: 100,
+				threshold: 0.3,
+				distance: 200,
 				keys: [Directory.Title, Directory.Genres, Directory.AlternateTitles]
 			});
 			matchedResults = fuse.search(query)

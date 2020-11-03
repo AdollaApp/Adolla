@@ -20,7 +20,7 @@
 	height: 10px;
 }
 
-.search-input {
+.content-wrapper .search-input {
 	margin-bottom: 40px;
 }
 .search-input > input {
