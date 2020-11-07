@@ -79,7 +79,7 @@ class Updater {
 						// A new chapter is out! 
 
 						// Check if user hasn't been notified already
-						let dbString = `notified.${data.constant.slug}.${nextChapter.season}-${nextChapter.chapter}`;
+						let dbString = `notified.${data.constant.slug}.${nextChapter.season.toString().replace(/\./g, "_")}-${nextChapter.chapter.toString().replace(/\./g, "_")}`;
 						let hasNotified = db.get(dbString);
 
 						if(hasNotified) {
@@ -96,7 +96,7 @@ class Updater {
 							let msg = `New chapter for *${data.constant.title}*!`;
 							
 							let host = db.get("other.host");
-							let urlMsg = host ? `Check it out at ${host.replace("localhost", "127.0.0.1")}${data.constant.slug}/${nextChapter.season}-${nextChapter.chapter}/` : ""; 
+							let urlMsg = host ? `Check it out at ${host.replace("localhost", "127.0.0.1")}/${data.provider}/${data.constant.slug}/${nextChapter.season}-${nextChapter.chapter}/` : ""; 
 							
 							Bot.send(`${msg}\n${urlMsg}`);
 							db.set(dbString, true);
