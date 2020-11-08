@@ -114,7 +114,7 @@ body[data-is-dev="true"]::after {
 	margin: 80px 0;
 	padding-bottom: var(--footer-height);
 }
-.content-inner .section:not(.decreased-margin) {
+.content-inner .section:not(.decreased-margin) + .section:not(.decreased-margin) {
 	margin: 50px 0;
 }
 .content-inner .section.decreased-margin {
