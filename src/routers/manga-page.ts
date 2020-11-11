@@ -4,7 +4,7 @@ const router = express.Router();
 
 import db from "../db";
 import updateManga from "../util/updateManga";
-import { Progress, StoredData, List } from "../types";
+import { Progress, StoredData, List, Reading } from "../types";
 import getMangaProgress, { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";
 import { getLists } from "../util/lists";
@@ -218,10 +218,12 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 				}); // 500 is just a really high number. It has no meaning.
 				
 				// If the action is to remove the read status, override progressData
-				if(req.body.action === "remove-read-status") progressData = undefined;
-	
-				// Update last
-				lastProgressData = progressData;
+				if(req.body.action === "remove-read-status") {
+					progressData = undefined;
+				} else {
+					// Update last
+					lastProgressData = progressData;
+				}
 	
 				// Update db
 				db.set(queryString, progressData);
@@ -230,6 +232,20 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 			let progressDataNew = db.get(queryString);
 			if(queryString) lastProgressData = progressDataNew;
 
+		}
+
+		// Set last progress data if it's not found
+		let lastReadChapter = db.get(`reading_new.${getProviderId(data.provider)}.${slug}.last`);
+		let lastReadChapterInRead = db.get(`reading_new.${getProviderId(data.provider)}.${slug}.${lastReadChapter.chapterId}`);
+
+		  // The "last" chapter's read data was removed
+		if(!lastReadChapterInRead) {
+			let allReading: Progress[] = Object.values(db.get(`reading_new.${getProviderId(data.provider)}.${slug}`));
+			allReading = allReading.sort((a, b) => b.at - a.at);
+			
+			let newLast = allReading.find(item => item.chapterId !== lastReadChapter.chapterId);
+			
+			db.set(`reading_new.${getProviderId(data.provider)}.${slug}.last`, newLast);
 		}
 
 		// Set last progress data
