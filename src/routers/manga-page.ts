@@ -236,16 +236,18 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 
 		// Set last progress data if it's not found
 		let lastReadChapter = db.get(`reading_new.${getProviderId(data.provider)}.${slug}.last`);
-		let lastReadChapterInRead = db.get(`reading_new.${getProviderId(data.provider)}.${slug}.${lastReadChapter.chapterId}`);
+		if(lastReadChapter) {
+			let lastReadChapterInRead = db.get(`reading_new.${getProviderId(data.provider)}.${slug}.${lastReadChapter.chapterId}`);
 
-		  // The "last" chapter's read data was removed
-		if(!lastReadChapterInRead) {
-			let allReading: Progress[] = Object.values(db.get(`reading_new.${getProviderId(data.provider)}.${slug}`));
-			allReading = allReading.sort((a, b) => b.at - a.at);
-			
-			let newLast = allReading.find(item => item.chapterId !== lastReadChapter.chapterId);
-			
-			db.set(`reading_new.${getProviderId(data.provider)}.${slug}.last`, newLast);
+			  // The "last" chapter's read data was removed
+			if(!lastReadChapterInRead) {
+				let allReading: Progress[] = Object.values(db.get(`reading_new.${getProviderId(data.provider)}.${slug}`));
+				allReading = allReading.sort((a, b) => b.at - a.at);
+			  
+				let newLast = allReading.find(item => item.chapterId !== lastReadChapter.chapterId);
+			  
+				db.set(`reading_new.${getProviderId(data.provider)}.${slug}.last`, newLast);
+			}
 		}
 
 		// Set last progress data
@@ -390,6 +392,6 @@ export default router;
 async function setColors(data: StoredData, slug: string) {
 	let lastChapter = await getMangaProgress(data.provider, slug);
 	data.data.chapters.forEach(ch => {
-		if(ch.progress) ch.progress.percentageColor = (ch.progress && ch.progress?.chapterId === lastChapter.chapterId) ? "recent" : "neutral";
+		if(ch.progress) ch.progress.percentageColor = (ch.progress && ch.progress?.chapterId === lastChapter?.chapterId) ? "recent" : "neutral";
 	});
 }

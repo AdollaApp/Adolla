@@ -36,7 +36,7 @@ export default async function getReading(maxResults: number = Infinity) {
 	}
 
 	// Sort data
-	readingMeta = readingMeta.sort((b, a) => readingManga[a.provider][a.slug].last.at - readingManga[b.provider][b.slug].last.at);
+	readingMeta = readingMeta.sort((b, a) => readingManga[a.provider][a.slug].last?.at - readingManga[b.provider][b.slug].last?.at);
 
 	// Slice down to max results
 	readingMeta = readingMeta.slice(0, maxResults);
@@ -48,7 +48,7 @@ export default async function getReading(maxResults: number = Infinity) {
 	}));
 
 	// TypeScript doesn't typeguard .filter :/
-	reading = reading.filter(e => e.success === true).sort((a, b) => (b.success ? b.progress.at : 0) - (a.success ? a.progress.at : 0))
+	reading = reading.filter(e => e.success === true).sort((a, b) => (b.success && b.progress ? b.progress?.at : 0) - (a.success && a.progress ? a.progress?.at : 0))
 
 	return reading;
 }
