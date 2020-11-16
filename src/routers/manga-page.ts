@@ -244,7 +244,7 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 				let allReading: Progress[] = Object.values(db.get(`reading_new.${getProviderId(data.provider)}.${slug}`));
 				allReading = allReading.sort((a, b) => b.at - a.at);
 			  
-				let newLast = allReading.find(item => item.chapterId !== lastReadChapter.chapterId);
+				let newLast = allReading.find(item => item && item.chapterId !== lastReadChapter.chapterId);
 			  
 				db.set(`reading_new.${getProviderId(data.provider)}.${slug}.last`, newLast);
 			}
