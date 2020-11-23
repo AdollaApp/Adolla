@@ -27,7 +27,6 @@ Then, to start the app, run `npm start`. This will host the web server.
 
 ## Screenshots
 
-![Alternative app icons on iOS](https://raw.githubusercontent.com/JipFr/jipfr/master/screenshots/adolla/icons.jpg)
 ![Image of the home page](https://raw.githubusercontent.com/JipFr/jipfr/master/screenshots/adolla/0.png)
 ![Lists page](https://raw.githubusercontent.com/JipFr/jipfr/master/screenshots/adolla/1.png)
 ![Backups page](https://raw.githubusercontent.com/JipFr/jipfr/master/screenshots/adolla/2.png)
@@ -42,3 +41,4 @@ Then, to start the app, run `npm start`. This will host the web server.
 ![Mobile, dark](https://raw.githubusercontent.com/JipFr/jipfr/master/screenshots/adolla/mobile_2_dark.png)
 ![Mobile](https://raw.githubusercontent.com/JipFr/jipfr/master/screenshots/adolla/mobile_3_light.png)
 ![Mobile, dark](https://raw.githubusercontent.com/JipFr/jipfr/master/screenshots/adolla/mobile_3_dark.png)
+![Alternative app icons on iOS](https://raw.githubusercontent.com/JipFr/jipfr/master/screenshots/adolla/icons.jpg)
