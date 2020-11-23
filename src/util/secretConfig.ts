@@ -9,10 +9,12 @@ interface SecretConfig {
 	mangadex?: {
 		username: string | null;
 		password: string | null;
-	}
+	},
+	discord_webhook: string | null;
 }
 
 let secretConfig: SecretConfig | null;
+
 let path = __dirname.split("/").slice(0, -1).join("/") + "/secret-config.json";
 if(fs.existsSync(path)) {
 	secretConfig = JSON.parse(fs.readFileSync(path, "utf-8"));

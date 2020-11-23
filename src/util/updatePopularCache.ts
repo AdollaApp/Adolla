@@ -1,5 +1,6 @@
 
 import chalk from "chalk";
+import fetch from "node-fetch-extra";
 
 import cfg from "../config.json";
 import updateManga from "./updateManga";
@@ -8,6 +9,7 @@ import db from "../db";
 import getReading from "./getReading";
 import Bot from "./bot";
 import cache from "../util/cache";
+import secretConfig from "../util/secretConfig";
 
 import { Progress } from "../types";
 import { getProviderId } from "../routers/manga-page";
@@ -87,22 +89,38 @@ class Updater {
 							return;
 						}
 
+						// Generate message
+						let host = db.get("other.host");
+						let msg = `New chapter for **${data.constant.title}**!`;
+						let urlMsg = host ? `Check it out at ${host.replace("localhost", "127.0.0.1")}${data.provider}/${data.constant.slug}/${nextChapter.season}-${nextChapter.chapter}/` : ""; 
+						let msgFull = `${msg}\n${urlMsg}`;
+
+						// Get bot account
 						let bot = Bot.get();
 						if(bot) {
 
 							// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
 							console.info(chalk.green("[NOTIFS]") + ` New chapter found for ${data.constant.title}, notifying user`);
 
-							let msg = `New chapter for *${data.constant.title}*!`;
-							
-							let host = db.get("other.host");
-							let urlMsg = host ? `Check it out at ${host.replace("localhost", "127.0.0.1")}${data.provider}/${data.constant.slug}/${nextChapter.season}-${nextChapter.chapter}/` : ""; 
-							
-							Bot.send(`${msg}\n${urlMsg}`);
+							Bot.send(msgFull);
 							db.set(dbString, true);
 						} else {
 							// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
 							console.info(chalk.red("[NOTIFS]") + ` New chapter found for ${data.constant.title}, not notifying user since bot wasn't configured`);
+						}
+
+						// Discord webhook
+						if(secretConfig.discord_webhook) {
+							fetch(secretConfig.discord_webhook, {
+								method: "POST",
+								headers: {
+									"content-type": "application/json"
+								},
+								body: JSON.stringify({
+									content: msgFull,
+									tts: true
+								})
+							});
 						}
 
 					}
