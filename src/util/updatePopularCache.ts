@@ -92,7 +92,8 @@ class Updater {
 						// Generate message
 						let host = db.get("other.host");
 						let msg = `New chapter for **${data.constant.title}**!`;
-						let urlMsg = host ? `Check it out at ${host.replace("localhost", "127.0.0.1")}${data.provider}/${data.constant.slug}/${nextChapter.season}-${nextChapter.chapter}/` : ""; 
+						let url = `${host.replace("localhost", "127.0.0.1")}${data.provider}/${data.constant.slug}/${nextChapter.season}-${nextChapter.chapter}`;
+						let urlMsg = host ? `Check it out at ${url}/` : ""; 
 						let msgFull = `${msg}\n${urlMsg}`;
 
 						// Get bot account
@@ -117,9 +118,21 @@ class Updater {
 									"content-type": "application/json"
 								},
 								body: JSON.stringify({
-									content: msgFull,
 									avatar_url: "https://raw.githubusercontent.com/JipFr/Adolla/dev/public/icons/white-on-blue.png",
-									username: "Adolla: new chapter"
+									username: "Adolla",
+									embeds: [
+										{
+											"title": `${msg} (${nextChapter.label})`,
+											"description": "Click title to open the chapter",
+											url,
+											"color": 4959182,
+											"author": {
+												"name": "Adolla",
+												"url": "https://jipfr.nl/adolla",
+												"icon_url": "https://raw.githubusercontent.com/JipFr/Adolla/dev/public/icons/white-on-blue.png"
+											}
+										}
+									]
 								})
 							});
 						}
