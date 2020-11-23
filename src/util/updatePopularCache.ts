@@ -118,7 +118,8 @@ class Updater {
 								},
 								body: JSON.stringify({
 									content: msgFull,
-									tts: true
+									avatar_url: "https://raw.githubusercontent.com/JipFr/Adolla/dev/public/icons/white-on-blue.png",
+									username: "Adolla: new chapter"
 								})
 							});
 						}
