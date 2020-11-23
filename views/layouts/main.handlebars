@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Adolla</title>
-		{{#ifDev}}
-		<link rel="apple-touch-icon" href="/apple-touch-icon-dev.png">
-		{{else}}
-		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-		{{/ifDev}}
+		<title>{{#ifDev}}DEV {{/ifDev}}Adolla</title>
+		<link rel="apple-touch-icon" href="{{getIconSrc}}">
 
 
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -29,13 +25,35 @@
 		<meta name="keywords" content="online palette storage">
 		<meta name="theme-color" content="#4babce">
 		
-		<meta property="og:title" content="Adolla">
+		<meta property="og:title" content="{{#ifDev}}DEV {{/ifDev}}Adolla">
 		
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, minimal-ui, viewport-fit=cover">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1, minimal-ui, viewport-fit=cover">
 		
-		<meta name="twitter:title" content="Adolla">
+		<meta name="twitter:title" content="{{#ifDev}}DEV {{/ifDev}}Adolla">
+
+		<link href="/splash-screen/ios-splash-828.png" media="(device-width: 414px)" rel="apple-touch-startup-image">
+		<link href="/splash-screen/ios-splash-1242.png" media="(device-width: 621px)" rel="apple-touch-startup-image">
+
 	</head>
-	<body data-to-page="{{getPageProgress navigation.currentChapter.progress}}" {{#ifDev}}data-is-dev="true"{{/ifDev}}>
+	<body data-to-page="{{getPageProgress navigation.currentChapter.progress}}" data-page-count="{{navigation.currentChapter.progress.total}}" {{#ifDev}}data-is-dev="true"{{/ifDev}}>
+		
+		<div class="mobile-nav toggle-on-tap toggle-on-tap-alt"></div>
+
+		<div class="nav-footer is-footer {{#if isMangaPage}}toggle-on-tap{{/if}}">
+			<a class="nav-link {{#if isHome}}is-current-nav-item{{/if}}" href="/">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+			</a>
+			<a class="nav-link {{#if isSearch}}is-current-nav-item{{/if}}" href="/search/">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+			</a>
+			<a class="nav-link {{#if isLists}}is-current-nav-item{{/if}}" href="/lists">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+			</a>
+			<a class="nav-link {{#if isSettings}}is-current-nav-item{{/if}}" href="/settings">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+			</a>
+		</div>
+
 		<div class="wrapper-all">
 			<aside class="sidebar main-sidebar">
 				<div class="section logo-section">
@@ -49,9 +67,9 @@
 										<stop offset="95%" stop-color="var(--b)" />
 									</linearGradient>
 								</defs>
-								<pattern id="img1" patternUnits="userSpaceOnUse" width="100" height="100">
+								{{!-- <pattern id="img1" patternUnits="userSpaceOnUse" width="100" height="100">
 									<image href="https://cdn.hipwallpaper.com/i/74/54/LDSecF.jpg" x="0" y="0" width="1920" height="1080" />
-								</pattern>
+								</pattern> --}}
 								<path fill="url(#MyGradient)"
 									d="M216 23.86c0-23.8-30.65-32.77-44.15-13.04C48 191.85 224 200 224 288c0 35.63-29.11 64.46-64.85 63.99-35.17-.45-63.15-29.77-63.15-64.94v-85.51c0-21.7-26.47-32.23-41.43-16.5C27.8 213.16 0 261.33 0 320c0 105.87 86.13 192 192 192s192-86.13 192-192c0-170.29-168-193-168-296.14z">
 								</path>
@@ -61,12 +79,12 @@
 					</a>
 				</div>
 				<div class="section nav small-manga-list">
-					<a href="/backups/" class="small-manga {{#if isBackup}}currentManga badge-background{{/if}}">
+					<a href="/settings/" class="small-manga {{#if isSettings}}currentManga badge-background{{/if}}">
 						<div class="icon">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-skip-back"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
 						</div>
 						<div class="content">
-							<h4 class="small-title">Backups</h4>
+							<h4 class="small-title">Settings</h4>
 						</div>
 					</a>
 					<a href="/lists/" class="small-manga {{#if isLists}}currentManga badge-background{{/if}}">
@@ -80,7 +98,7 @@
 				</div>
 				<div class="section search">
 					<label for="search">Search</label>
-					<input type="text" placeholder="Fire Force" id="search" value="{{query}}">
+					<input type="text" placeholder="Fire Force" id="search" value="{{query}}" class="search-input">
 				</div>
 				{{#if reading}}
 				<div class="section reading-side">
@@ -99,11 +117,11 @@
 				{{/if}}
 				{{#if navigation}}
 				<hr>
-				<div class="section chapter-navigation">
-					<div class="current toggle-quick-select"><span class="decorative">Currently on page</span> <span class="current">0 of 0</span></div>
+				<div class="section chapter-navigation toggle-on-tap">
+					<div class="current toggle-quick-select"><span class="decorative">Currently on page</span> <span class="current current-page">0 of 0</span><span class="current-loading-progress decorative">0%</span></div>
 					<div class="next">
 						{{#if navigation.nextChapter}}
-						<a href="{{navigation.nextChapter.href}}" class="chapterLink">
+						<a href="{{genLink2 @root.data.provider @root.data.constant.slug navigation.nextChapter.hrefString }}" class="chapterLink secondary-button">
 							<span>{{navigation.nextChapter.label}}</span>
 							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="decorative feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
 						</a>
@@ -111,7 +129,7 @@
 					</div>
 					<div class="previous">
 						{{#if navigation.previousChapter}}
-						<a href="{{navigation.previousChapter.href}}" class="chapterLink">
+						<a href="{{genLink2 @root.data.provider @root.data.constant.slug navigation.previousChapter.hrefString }}" class="chapterLink secondary-button">
 							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="decorative feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg>
 							<span>{{navigation.previousChapter.label}}</span>
 						</a>

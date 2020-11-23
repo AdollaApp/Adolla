@@ -1,6 +1,6 @@
 
 import chalk from "chalk";
-import fetch from "node-fetch";
+import fetch from "node-fetch-extra";
 
 import updateManga from "../util/updateManga";
 import db from "../db";
@@ -34,12 +34,12 @@ export async function getLists(): Promise<List[]> {
 	lists = lists.filter(l => !l.byCreator);
 
 	// Now combine the lists
-	let updatedLists = Object.assign([], [...recommendedLists, ...lists]);
+	let updatedLists: List[] = Object.assign([], [...recommendedLists, ...lists]);
 	for(let list of updatedLists) {
 
 		// Add data for each item
 		for(let entry of list.entries) {
-			entry.data = await updateManga(entry.slug);
+			entry.data = await updateManga(entry.provider ?? "mangasee", entry.slug);
 		}
 
 	}

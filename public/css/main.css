@@ -4,6 +4,7 @@
 	--text-on-badge-secondary: rgba(255, 255, 255, 0.7);
 }
 :root {
+	--body-harsh: white;
 	--body: #FBFBFB;
 	--body-offset: #f5f7f9;
 	
@@ -16,22 +17,30 @@
 	
 
 	--header-background: var(--badge);
+
+	--hover: #E8EAEC;
 }
 
 @media (prefers-color-scheme: dark) {
 	:root {
-		--body: #191919;
-		--body-offset: #242424;
+		--body-harsh: black;
+		--body: black;
+		--body-offset: #0c0c0c;
 		--text: #c9c9c9;
 		--text-secondary: #a1a1a1;
 
-		--border: rgba(255, 255, 255, 0.05);
-		--border-dark: rgba(255, 255, 255, 0.1);
+		--border: #2c2c2c;
+		--border-dark: rgba(255, 255, 255, 0.2);
 		--border-2: #555555;
 		--border-dark-2: #2b2b2b;
 
-		--header-background: #0e0e0e;
+		--header-background: black;
 
+		--hover: #353535;
+
+	}
+	select {
+		filter: invert(1);
 	}
 }
 
@@ -41,7 +50,8 @@ html, body {
 
 body {
 
-	--footer-height: env(safe-area-inset-bottom);
+	--main-footer-height: 0px;
+	--footer-height: 0px;
 
 	margin: 0;
 	color: var(--text-secondary);
@@ -49,7 +59,6 @@ body {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	font-variant-numeric: tabular-nums;
 	border-top: env(safe-area-inset-top) solid transparent;
-	padding-right: env(safe-area-inset-right);
 }
 body[data-is-dev="true"]::after {
 	content: "DEV";
@@ -66,14 +75,12 @@ body[data-is-dev="true"]::after {
 	padding: 0 30px;
 	padding-bottom: 30px;
 }
-body::before {
-	content: "";
-	display: block;
+.mobile-nav {
 	position: fixed;
-	top: 0;
+	top: -5px;
 	left: 0;
 	width: 100%;
-	height: env(safe-area-inset-top);
+	height: calc(env(safe-area-inset-top) + 5px);
 	background: var(--header-background);
 	z-index: 100;
 }
@@ -97,16 +104,20 @@ body::before {
 	flex-wrap: wrap;
 	justify-content: center;
 	align-items: flex-start;
+
+	padding-right: env(safe-area-inset-right);
+	padding-left: env(safe-area-inset-left);
 }
 .content-inner {
 	width: calc(100% - 40px);
 	max-width: 1000px;
 	margin: 80px 0;
+	padding-bottom: var(--footer-height);
 }
-.content-inner .section:not(.decreased-margin) + .section {
+.content-inner .section:not(.decreased-margin) + .section:not(.decreased-margin) {
 	margin: 50px 0;
 }
-.content-inner .section.decreased-margin + .section {
+.content-inner .section.decreased-margin {
 	margin: 20px 0;
 }
 
@@ -163,6 +174,12 @@ aside hr {
 	background: var(--border);
 	margin: 10px 0;
 }
+details > summary {
+	list-style: none;
+}
+details > summary::-webkit-details-marker {
+	display: none;
+}
 details.settings > summary {
 	list-style: none;
 }
@@ -176,7 +193,7 @@ details > summary .summary-inner {
 	font-weight: bold;
 }
 details > summary:focus {
-	outline: 2px solid var(--badge);
+	outline: 0;
 }
 details .icons {
 	display: flex;
@@ -213,7 +230,7 @@ details.big-summary summary {
 	position: sticky;
 	top: env(safe-area-inset-top);
 	background: var(--body);
-	z-index: 20;
+	z-index: 10;
 }
 details .manga-grid {
 	margin-top: 20px;
@@ -256,13 +273,6 @@ details .manga-grid {
 	height: 20px;
 	display: block;
 }
-.anchor {
-	color: var(--badge);
-	text-decoration: none;
-}
-.anchor:hover {
-	text-decoration: underline;
-}
 
 .badges .badge {
 	margin-bottom: 5px;
@@ -275,12 +285,21 @@ details .manga-grid {
 .badge svg {
 	display: block;
 }
-.badge-background {
+.badge-background, .badge-background .small-title {
 	background: var(--badge) !important;
 	color: var(--text-on-badge) !important;
 	--text-secondary: var(--text-on-badge-secondary);
 	/* I don't like using !important, but there's no better way to do priority here */
 }
+.nsfw-background {
+	background: #d04040 !important;
+	color: white !important;
+}
+.badge-nsfw {
+	font-size: 0.8em;
+	margin-right: 10px;
+}
+
 .secondary-badge {
 	box-sizing: border-box;
 	padding: 5px 10px;
@@ -288,7 +307,7 @@ details .manga-grid {
 	align-items: center;
 	color: var(--text);
 	background: var(--body-offset);
-	border: 1px solid rgba(0, 0, 0, 0.03);
+	border: 1px solid var(--border);
 	border-radius: 4px;
 }
 .secondary-badge svg {
@@ -315,8 +334,13 @@ input, textarea {
 .setting-wrapper.toggle {
 	display: flex;
 	flex-wrap: nowrap;
-	justify-content: space-between;
 	align-items: center;
+}
+.setting-wrapper.toggle:not(.no-spread) {
+	justify-content: space-between;
+}
+.setting-wrapper.toggle.no-spread > *:first-child {
+	margin-right: 10px;
 }
 .switch {
 	appearance: none;
@@ -500,6 +524,23 @@ input, textarea {
 	border: 1px solid var(--border-2);
 	box-sizing: border-box;
 }
+.poster-img .provider-image {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 4px;
+	border: 1px solid var(--border);
+	background: var(--body);
+	word-break: break-all;
+	font-size: .5rem;
+}
+.poster-img .badge {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+}
 .poster-img .poster-inner {
 	position: absolute;
 	top: 0;
@@ -530,7 +571,6 @@ input, textarea {
 .progress-bar-wrapper .progress-bar-line {
 	height: 100%;
 	background: var(--badge);
-	min-width: 10px;
 }
 
 /* Manga layout */
@@ -553,6 +593,48 @@ input, textarea {
 	border: 1px solid var(--border);
 }
 
+.manga-top .side-nav.selection-actions .secondary-button {
+	display: flex;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border: 0;
+	width: 100%;
+	font-size: 1rem;
+	cursor: pointer;
+}
+.manga-top .side-nav.selection-actions .secondary-button .icon {
+	margin-right: 8px;
+}
+
+
+.manga-top .selection-actions .show-on-selection-mode {
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 150ms;
+}
+.is-selection-mode .selection-actions .show-on-selection-mode {
+	opacity: 1;
+	pointer-events: initial;
+}
+
+.manga-page-section {
+	margin-bottom: 40px;
+}
+
+/* Manga progress */
+.bar-wrapper {
+	width: 100%;
+	height: .5rem;
+	border-radius: 100px;
+	background: var(--border);
+	display: flex;
+}
+.bar-wrapper .bar-inner {
+	display: flex;
+	align-items: center;
+	border-radius: 100px;
+}
+
 /* Chapters */
 .chapter-list {
 	margin-top: 40px;
@@ -568,12 +650,40 @@ input, textarea {
 	background: var(--border);
 }
 .chapters .chapter {
-	padding: 12px 15px;
-	margin-left: -15px;
+	padding: 12px 20px;
+	margin-left: -20px;
 	text-decoration: none;
 	display: grid;
 	grid-template-columns: 1fr auto;
 	grid-gap: 5px;
+}
+.chapters .chapter .select {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	margin-right: 10px; 
+}
+.chapters .chapter .select svg {
+	width: 1.2rem;
+	height: 1.2rem;
+	display: block;
+	--size: 8px;
+	padding: var(--size);
+	margin-top: calc(var(--size) * -1);
+	margin-left: calc(var(--size) * -1);
+	margin-bottom: calc(var(--size) * -1);
+	color: var(--text-secondary);
+	background-color: transparent;
+	transition: background-color 150ms;
+	border-radius: 4px;
+}
+.chapters .chapter .select:hover svg {
+	background-color: var(--border);
+}
+.chapters .chapter .label {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
 }
 .chapters .chapter .date {
 	color: var(--text-secondary);
@@ -624,9 +734,8 @@ input, textarea {
 	grid-area: previous;
 }
 
-.chapterLink {
-	/* font-size: 0.8rem; */
-	display: grid;
+.secondary-button {
+	display: inline-grid;
 	grid-template-columns: auto 1fr;
 	align-items: center;
 	grid-gap: 5px;
@@ -639,27 +748,36 @@ input, textarea {
 	border-radius: 4px;
 	word-break: break-word;
 }
+.chapter-navigation .secondary-button {
+	display: grid;	
+}
+.secondary-button.single-column {
+	grid-template-columns: 100%;
+}
 @media (hover:hover) {
-	.chapterLink:hover {
-		background: var(--border);
+	.secondary-button:hover {
+		background: var(--hover);
 	}
 }
-.next .chapterLink {
+.next .secondary-button {
 	grid-template-columns: 1fr auto;
 	text-align: right;
 }
 
 /* Reader */
-.manga-reader .loading {
+.manga-reader:not(.loaded) {
+	width: 100%;
+}
+.loading {
 	position: relative;
 	z-index: 0;
 	width: 100%;
-	height: 200px;
+	height: calc(100vh - env(safe-area-inset-top));
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
-.manga-reader .loading::before {
+.loading::before {
 	content: "";
 	display: block;
 	width: 25px;
@@ -686,7 +804,8 @@ input, textarea {
 
 /* Pages */ 
 .manga-reader.loaded {
-	padding-bottom: var(--footer-height);
+	padding-bottom: calc(var(--footer-height) + 50px);
+	padding-bottom: 0;
 }
 /* Horizontal reader */
 .pages[data-reader-direction="horizontal"] {
@@ -697,9 +816,14 @@ input, textarea {
 	align-items: center;
 	flex-wrap: nowrap;
 	scroll-snap-type: x mandatory;
+	max-height: calc(100vh - env(safe-area-inset-top));
+	overflow-y: hidden;
+}
+.pages .pageImg.hidden {
+	display: none;
 }
 .pages[data-reader-direction="horizontal"] .pageImg {
-	height: calc(100vh - var(--footer-height) - env(safe-area-inset-top));
+	height: calc(100vh - var(--footer-height) - env(safe-area-inset-top) - 50px);
 }
 /* Vertical reader */
 .pages[data-reader-direction="vertical"][data-vertical-gap="yes"] .pageImg {
@@ -708,8 +832,8 @@ input, textarea {
 .pages[data-reader-direction="vertical"][data-vertical-image-size="full-height"] .pageImg, 
 .pages[data-reader-direction="horizontal"] .pageImg {
 	width: 100%;
-	max-height: calc(100vh - var(--footer-height) - env(safe-area-inset-top));
-	height: calc(100vh - var(--footer-height) - env(safe-area-inset-top));
+	max-height: calc(100vh - env(safe-area-inset-top));
+	height: calc(100vh - env(safe-area-inset-top));
 }
 
 [data-reader-reader-direction="vertical"][data-reader-vertical-image-size="full-height"] .manga-reader.loaded, 
@@ -726,7 +850,7 @@ input, textarea {
 }
 
 /* Pages */
-.pageImg {
+.pages > * {
 	width: 100%;
 	min-width: 100%;
 	object-fit: contain;
@@ -764,6 +888,9 @@ input, textarea {
 	justify-content: center;
 	align-items: center;
 }
+details.settings-toggle[open] ~ .chapters {
+	display: none;
+}
 .setting-box svg {
 	width: 100%;
 	height: 24px;
@@ -771,24 +898,15 @@ input, textarea {
 }
 .setting-box:not(.selected):hover {
 	cursor: pointer;
-	background: var(--border);
+	background: var(--hover);
 }
 .setting-box.selected {
 	background: var(--body);
 	color: var(--text);
 }
-.quick-select .setting-box.selected {
+.quick-select .setting-box.selected, .content-inner .setting-box.selected {
 	background: var(--badge);
 	color: var(--text-on-badge);
-}
-.quick-select .quick-sticky {
-	position: sticky;
-	top: 0;
-	z-index: 100;
-	background: var(--body);
-}
-.quick-select details[open] {
-	box-shadow: 0 4px 8px var(--border-dark);
 }
 
 /* Chapter quick select */
@@ -814,14 +932,19 @@ input, textarea {
 	width: 90%;
 	max-width: 320px;
 	transform: translate(-50%, -50%);
-	max-height: calc(80vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+	max-height: calc(90vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
 	overflow-y: auto;
+
+	z-index: 200;
 }
 .quick-select .manga-profile-medium, .quick-select .add-padding {
 	padding: 20px;
 }
 .quick-select .section.add-padding {
 	border-bottom: 1px solid var(--border);
+}
+.quick-select .section.add-padding[open] {
+	border-bottom: 0;
 }
 .quick-select .manga-profile-medium {
 	border-bottom: 1px solid var(--border);
@@ -857,11 +980,15 @@ input, textarea {
 	width: 100vw;
 	height: 100vh;
 	background: rgba(0, 0, 0, 0.2);
+	z-index: 25;
 }
 .quick-select .scroll {
-	/* max-height: 300px; */
-	/* overflow-y: auto; */
+	max-height: 300px;
+	overflow-y: auto;
 	position: relative;
+}
+.quick-select.settings-is-open .chapters {
+	display: none;
 }
 .quick-select .scroll > .chapter:first-child {
 	margin-top: 50px;
@@ -877,14 +1004,15 @@ input, textarea {
 
 /* The oppoite of responsiveness */
 .floating-button-wrapper {
-	position: sticky;
+	position: fixed;
 	display: flex;
 	width: calc(100% - 20px);
-	/* Footer height including padding, normal footer, margin */
-	top: calc(100vh - var(--footer-height) - 50px - 10px);
+	/* Footer height including padding, normal footer, margin, extra footer */
+	top: calc(100vh - var(--main-footer-height) - var(--footer-height) - 50px - 10px);
 	left: calc(10px + env(safe-area-inset-left));
 	margin-left: -2px;
 	margin-right: -2px;
+	z-index: 20;
 }
 [data-reader-back-location="top-left"] .floating-button-wrapper, [data-reader-back-location="top-right"] .floating-button-wrapper {
 	top: env(safe-area-inset-top);
@@ -894,7 +1022,7 @@ input, textarea {
 	justify-content: flex-start;
     flex-direction: row-reverse;
 }
-.floating-button-wrapper > * {
+.is-floating-button {
 	display: none;
 	min-height: 36px;
 	box-sizing: border-box;
@@ -905,7 +1033,10 @@ input, textarea {
 	border: 2px solid var(--border);
 	margin: 10px 0;
 }
-.floating-button-wrapper .do-padding {
+.is-floating-button.do-width {
+	min-width: 36px;
+}
+.is-floating-button.do-padding {
 	padding: 0 10px;
 }
 .floating-button-wrapper > * {
@@ -950,10 +1081,10 @@ input, textarea {
 select {
 	padding: 4px 8px;
 	border-radius: 4px;
-	border: 1px solid var(--border);
+	border: 1px solid rgba(0, 0, 10, 0.05);
 	font-size: 1em;
-	background: var(--body-offset);
-	color: var(--text);
+	background: #f5f7f9;
+	color: #333;
 }
 
 /* Lists page */
@@ -1042,36 +1173,245 @@ select {
 	padding: 8px 5px;
 }
 .suggestions .suggestion:hover {
-	background: var(--border);
+	background: var(--hover);
 	cursor: pointer;
 }
 .suggestions > * + * {
 	border-top: 1px solid var(--border);
 }
 
-/* Toggle on tap */
-.toggle-on-tap {
-	transition: opacity 300ms;
+/* Another footer type situation */
+.is-footer {
+	width: 100%;
+	background: var(--body-offset);
+	box-sizing: border-box;
+	position: fixed;
+	grid-gap: 10px;
+	left: 0;
+	bottom: 0;
+	min-height: var(--footer-height);
+	padding: 0 10px;
+	border-bottom: env(safe-area-inset-bottom) solid transparent;
+	justify-content: space-around;
+	align-items: center;
+	border-top: 1px solid var(--border);
+	display: none;
+	box-sizing: border-box;
+	z-index: 20;
+}
+.is-footer .nav-link {
+	text-decoration: none;
+	color: inherit;
+	padding: 5px 20px;
+	border-radius: 4px;
+}
+.nav-link.is-current-nav-item {
+	background: var(--badge);
+	color: var(--text-on-badge);
+}
+.nav-link:not(.is-current-nav-item).link-loading {
+	background: var(--border);
+}
+.is-footer svg {
+	display: block;
+}
+div.selection-actions {
 	opacity: 0;
 	pointer-events: none;
+	transition: opacity 150ms; 
 }
-.toggle-on-tap.tapped {
-	opacity: 1;
-	pointer-events: initial;
+
+.is-secondary-footer {
+	box-sizing: border-box;
+	padding: 10px;
+	position: fixed;
+	bottom: var(--footer-height);
+	width: 100%;
+	background: var(--body-offset);
+	border-top: 1px solid var(--border);
+}
+
+.is-footer .secondary-button, .is-secondary-footer .secondary-button {
+	display: block;
+	text-align: center;
+	padding: 8px;
+	margin-left: 0;
+}
+div.selection-actions .secondary-button .icon {
+	display: none;
+}
+.is-footer .secondary-button .small-title, div.selection-actions .secondary-button .small-title {
+	color: var(--text);
+	font-size: 1rem;
+	font-weight: normal;
+}
+div.selection-actions .selection-actions-inner {
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 5px;
+	align-items: center;
+}
+
+/* Alternative page counter */
+.current-pages-button {
+	position: fixed;
+	bottom: calc(10px + env(safe-area-inset-bottom));
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 20;
+}
+.current-pages-button > * {
+	white-space: nowrap;
+}
+.current-pages-button > *:not(:first-child):not(:empty):before {
+	/* margin-left: 20px; */
+	content: "•";
+	display: inline-block;
+	margin: 0 12px;
+	color: var(--text);
+}
+.current-pages-button .do-margin-right {
+	margin-right: 6px;
+}
+
+/* Chapter navigation at end of chapter */
+.in-chapter-navigation {
+	box-sizing: border-box;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 80px 20px;
+	padding-bottom: calc(80px + var(--footer-height));
+}
+.in-chapter-navigation .nav-items {
+	display: grid;
+	grid-template-columns: auto auto;
+	grid-template-areas: "previous next";
+	grid-gap: 10px;
+}
+.in-chapter-navigation .nav-items .secondary-button  {
+	background: var(--body-harsh);
+	color: var(--text);
+}
+.in-chapter-navigation .nav-items .secondary-button:hover {
+	background: transparent;
+}
+.in-chapter-navigation .nav-items .next {
+	grid-area: next;
+}
+.in-chapter-navigation .nav-items .previous {
+	grid-area: previous;
+}
+
+/* Camera mode buttons */
+.is-floating-button.is-camera-button {
+	display: none;
+}
+[data-reader-show-camera-button="yes"] .is-floating-button.is-camera-button {
+	display: flex;
+}
+
+/* Progress on desktop */
+.main-sidebar .current-loading-progress:not(:empty) {
+	margin-left: 20px;
+}
+.main-sidebar .current-loading-progress:not(:empty)::before {
+	content: "(";
+}
+.main-sidebar .current-loading-progress:not(:empty)::after {
+	content: ")";
+}
+
+/* Image share */
+.img-share {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	overflow-y: auto;
+	box-sizing: border-box;
+	z-index: 999;
+	padding: 20px;
+	padding-top: calc(20px + env(safe-area-inset-top));
+	padding-bottom: calc(20px + env(safe-area-inset-bottom));
+	background: rgba(0, 0, 0, 0.5);
+}
+.img-share .to-share {
+	width: 100%;
 }
 
 /* Responsiveness */
-@media screen and (max-width: 700px), (orientation: portrait) {
-	.floating-button-wrapper > * {
+@media screen and (max-width: 900px), (orientation: portrait) {
+
+	/* Set footer height */
+	body {
+		--main-footer-height: 50px;
+		--footer-height: calc(var(--main-footer-height) + env(safe-area-inset-bottom));;
+	}
+
+	/* Hide search in top part */
+	aside.main-sidebar {
+		max-width: 0;
+		max-height: 0;
+		padding: 0;
+		margin: 0;
+	}
+	aside.main-sidebar > *:not(.chapter-navigation) {
+		display: none;
+	}
+	.content-inner {
+		margin: 40px 0;
+	}
+
+	/* Fix settings */
+	.content-inner .settings.details-inner {
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	}
+
+	/* Show footer */
+	aside.main-sidebar .section.nav {
+		display: none;
+	}
+	.is-footer {
+		display: flex;
+	}
+
+	/* Toggle on tap */
+	.toggle-on-tap {
+		transition: opacity 300ms;
+		opacity: 0;
+		pointer-events: none;
+	}
+	.toggle-on-tap:not(.toggle-on-tap-alt):not(.current-pages-button).tapped, 
+	[data-reader-do-toggle-alt="yes"] .toggle-on-tap-alt.tapped, 
+	[data-reader-do-toggle-alt="no"] .toggle-on-tap-alt, 
+	body:not([data-reader-do-toggle-alt]) .toggle-on-tap-alt,
+	[data-reader-show-info-badge="yes"] .current-pages-button.tapped {
+		opacity: 1;
+		pointer-events: initial;
+	}
+
+	/* Selection mode */
+	.is-selection-mode .selection-actions {
+		opacity: 1;
+		pointer-events: initial;
+	}
+	.side-nav.selection-actions {
+		display: none;
+	}
+
+	/* Extra margin for chapters */
+	.content-inner .chapters {
+		margin-bottom: calc(50px + calc(env(safe-area-inset-bottom)));
+	}
+
+	/* Floating buttons and stuff */
+	.is-floating-button {
 		display: flex;
 		color: var(--text);
-	}
-	[data-reader-reader-direction="horizontal"] .floating-button-wrapper {
-		margin-bottom: -100%;
-	}
-	[data-reader-reader-direction="vertical"] .manga-reader {
-		/* Deal with tricky back button margins */
-		margin-top: -56px;
 	}
 
 
@@ -1080,29 +1420,14 @@ select {
 		max-width: 100%;
 		overflow-x: auto;
 	}
-	[data-reader-reader-direction="vertical"][data-reader-image-scaling="100%"] .pages .pageImg,
-	[data-reader-reader-direction="vertical"][data-reader-image-scaling="125%"] .pages .pageImg,
-	[data-reader-reader-direction="vertical"][data-reader-image-scaling="150%"] .pages .pageImg,
-	[data-reader-reader-direction="vertical"][data-reader-image-scaling="200%"] .pages .pageImg {
+	[data-reader-reader-direction="vertical"] .pages .pageImg {
 		max-height: initial;
 	}
 	[data-reader-reader-direction="vertical"][data-reader-image-scaling="100%"] .pages .pageImg {
 		width: 100%;
 	}
-	[data-reader-reader-direction="vertical"][data-reader-image-scaling="125%"] .pages .pageImg {
-		width: 125%;
-	}
-	[data-reader-reader-direction="vertical"][data-reader-image-scaling="150%"] .pages .pageImg {
-		width: 150%;
-	}
-	[data-reader-reader-direction="vertical"][data-reader-image-scaling="200%"] .pages .pageImg {
-		width: 200%;
-	}
 
 	/* Chapter navigation */
-	body {
-		--footer-height: calc(50px + env(safe-area-inset-bottom));
-	}
 	.chapter-navigation {
 		width: 100%;
 		background: var(--body-offset);
@@ -1112,15 +1437,16 @@ select {
 		grid-gap: 10px;
 		grid-template-areas: "previous current next";
 		left: 0;
-		bottom: 0;
-		height: var(--footer-height);
+		bottom: var(--footer-height);
+		height: 50px;
 		padding: 0 10px;
-		border-bottom: env(safe-area-inset-bottom) solid transparent;
+		z-index: 20;
+		border-top: 1px solid var(--border);
 	}
 	.chapter-navigation :not(svg).decorative {
 		display: none;
 	}
-	.chapter-navigation .chapterLink {
+	.chapter-navigation .secondary-button {
 		text-align: center;
 	}
 
@@ -1139,13 +1465,14 @@ select {
 	}
 
 	.chapter-list .chapters .chapter {
-		margin-right: -15px;
+		margin-right: -20px;
+		border-radius: 0;
 	}
 
 }
 @media screen and (max-width: 450px) {
 	/* Chevrons in nav */
-	.chapter-navigation .chapterLink  {
+	.chapter-navigation .secondary-button  {
 		grid-template-columns: 100%;
 	}
 	.chapter-navigation svg.decorative {
@@ -1154,9 +1481,6 @@ select {
 	/* Manga page */
 	.manga-top {
 		grid-template-columns: 100%;
-	}
-	.manga-top .poster {
-		position: initial;
 	}
 	.manga-card .title-div > span {
 		display: block;
@@ -1167,6 +1491,7 @@ select {
 	}
 	.sub-title.spread > select {
 		margin-top: 10px;
+		width: 100%;
 	}
 }
 @media screen and (max-width: 500px) {
@@ -1207,4 +1532,9 @@ select {
 	[data-list-type="grid"] .manga-card .manga-meta {
 		display: none;
 	}
+}
+
+/* Camera mode */
+.is-camera-mode .toggle-on-tap {
+	opacity: 0 !important;
 }

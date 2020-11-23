@@ -1,8 +1,40 @@
 
-import { ScraperData, ScraperError, Chapter, Directory, DirectoryItem, ScraperResponse } from "../types";
-import fetch from "node-fetch";
+import { Chapter, ScraperResponse } from "../types";
+import fetch from "node-fetch-extra";
 import Fuse from "fuse.js";
 import updateManga from "../util/updateManga";
+import { Scraper, SearchOptions } from "./types";
+import { getProviderId, isProviderId } from "../routers/manga-page";
+import { error } from "./index";
+
+// Search interfaces
+/** This is for `DirectoryItem`, the values there aren't very useful */
+export enum Directory {
+	Genres = "g",
+	Slug = "i",
+	Title = "s",
+	OngoingPublish = "ps", // Maybe?
+	OngoingPrint = "ss", // Maybe?
+	AlternateTitles = "al"
+}
+/** This is what the API holds in the Directory array. Fun. */
+export interface DirectoryItem {
+	s: string;
+	i: string;
+	o: string;
+	ss: string;
+	ps: string;
+	t: string;
+	v: string;
+	vm: string;
+	y: string;
+	a: string[];
+	al: string[]
+	l: string;
+	lt: number;
+	g: string[];
+	h: boolean;
+}
 
 /** This is a chapter in mangasee API */
 interface ChapterResponse {
@@ -21,13 +53,13 @@ interface ChapterResponse {
 }
 
 
+export class MangaseeClass extends Scraper {
 
-interface SearchOptions {
-	resultCount: number;
-	bThing: number;
-}
-
-class MangaseeClass {
+	constructor() {
+		super();
+		this.provider = "Mangasee";
+		this.canSearch = true;
+	}
 
 	public async search(query: string, options?: Partial<SearchOptions>): Promise<(ScraperResponse)[]> {
 
@@ -60,8 +92,8 @@ class MangaseeClass {
 			
 			// If query is not empty, use fuse to search
 			const fuse = new Fuse(directory, {
-				threshold: 0.2,
-				distance: 100,
+				threshold: 0.3,
+				distance: 200,
 				keys: [Directory.Title, Directory.Genres, Directory.AlternateTitles]
 			});
 			matchedResults = fuse.search(query)
@@ -71,7 +103,7 @@ class MangaseeClass {
 
 		
 		// Get details for each search result
-		let searchResultData: ScraperResponse[] = await Promise.all(matchedResults.map((item: DirectoryItem) => updateManga(item[Directory.Slug])))
+		let searchResultData: ScraperResponse[] = await Promise.all(matchedResults.map((item: DirectoryItem) => updateManga("Mangasee", item[Directory.Slug])))
 
 		// Return all successfull data requests
 		return searchResultData.filter(v => v.success);
@@ -83,7 +115,22 @@ class MangaseeClass {
 	 * @param chapter 
 	 * @param season 
 	 */
-	public async scrape(slug: string, chapter: number = -1, season: number = -1): Promise<ScraperResponse> {
+	public async scrape(slug: string, chapterId: string | number | null = null): Promise<ScraperResponse> {
+
+
+
+		let season: number;
+		let chapter: number;
+		if(chapterId && typeof chapterId === "string") {
+			let chapterMatch = chapterId.match(/(\d*\.?\d+)-(\d*\.?\d+)/);
+			if(!chapterMatch) {
+				return error(403, "Invalid season chapter string");
+			}
+
+			let nums: number[] = chapterMatch.map(v => Number(v));
+			season = nums[1];
+			chapter = nums[2]; // Bit of a hack...
+		}
 
 		try {
 			// Generate URL and fetch page
@@ -128,14 +175,13 @@ class MangaseeClass {
 				let chapter = normalizeNumber(ch.Chapter.slice(1)) / 10;
 				let label = `${ch.Type} ${chapter}`;
 				let date = new Date(ch.Date);
-				let href = `/${slug}/${season}-${chapter}/`;
 		
 				return {
 					season,
 					chapter,
 					label,
 					date,
-					href,
+					hrefString: `${season}-${chapter}`,
 					combined: (season * 1e5) + chapter
 				}
 		
@@ -144,8 +190,11 @@ class MangaseeClass {
 			// Extract genre array from dom
 			let genres = JSON.parse(html.split(`"genre": `)[1].split("],")[0] + "]");
 		
+			// Get status
+			let status = html.split(`<span class="mlabel">Status:</span>`)[1].split(">")[1].split(" (")[0].trim().toLowerCase();
+
 			// Generate chapter images
-			let chapterImages;
+			let chapterImages: string[] = [];
 			if(season >= 0 && chapter >= 0) {
 				// Generate URL for page with chapter data
 				const chapterUrl = `https://mangasee123.com/read-online/${slug}-chapter-${chapter}-index-${season}.html`;
@@ -181,7 +230,18 @@ class MangaseeClass {
 
 			}
 
+			// Turn chapterImages URLs into base64 strings
+			// chapterImages = await Promise.all(chapterImages.map(async url => {
+			// 	// @ts-ignore node-fetch's TS does not have buffer in its definitions
+			// 	let base64 = await fetch(url).then(r => r.buffer()).then(buf => `data:image/${url.split(".").pop()};base64,`+buf.toString('base64'));
+			// 	return base64;
+			// }));
+
+			// NSFW
+			const nsfw = false; // I don't think Mangasee has hentai
+
 			// Now we return it
+			let providerId = getProviderId(this.provider);
 			return {
 				constant: {
 					title,
@@ -189,33 +249,22 @@ class MangaseeClass {
 					posterUrl,
 					alternateTitles,
 					descriptionParagraphs,
-					genres
+					genres,
+					nsfw
 				},
 				data: {
 					chapters,
-					chapterImages
+					chapterImages,
+					status
 				},
 				success: true,
-				provider: "Mangasee"
+				provider: isProviderId(providerId) ? providerId : null
 			}
 		} catch(err) {
 			//  OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!
 			console.error(err.stack);
 			return error(-1, err);
 		}
-	}
-}
-
-/** 
- * Generate error object easily 
- * @param status The HTTP status code
- * @param err A string describing the error
- */
-function error(status = -1, err = "Unknown"): ScraperError {
-	return {
-		status,
-		err,
-		success: false
 	}
 }
 

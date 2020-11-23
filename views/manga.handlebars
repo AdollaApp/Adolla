@@ -12,7 +12,7 @@
 					<img class="poster" alt="Poster" src="{{data.constant.posterUrl}}">
 					{{#if data.progress}}
 					<nav class="side-nav">
-						<a href="{{ genLink2 data.constant.slug data.progress.season data.progress.chapter }}" class="small-manga no-margin">
+						<a href="{{ genLink2 data.provider data.constant.slug data.progress.chapterId }}" class="small-manga no-margin">
 							<div class="icon">
 								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play-circle"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
 							</div>
@@ -23,11 +23,25 @@
 						</a>
 					</nav>
 					{{/if}}
+					<nav class="side-nav">
+						<a href class="small-manga no-margin hide-from-reading">
+							<div class="icon">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye-off"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+							</div>
+							<div class="content do-padding">
+								<h4 class="small-title">Hide from reading</h4>
+							</div>
+						</a>
+					</nav>
+					<nav class="side-nav selection-actions">
+						{{> mark-as-buttons}}
+					</nav>
 				</div>
 			</div>
 			<div class="top-content">
-				<h1 class="sub-title">{{data.constant.title}}</h1>
+				<h1 class="sub-title">{{#if data.constant.nsfw}}<span class="badge badge-nsfw nsfw-background">NSFW</span>{{/if}}{{data.constant.title}}</h1>
 				<div class="badges">
+					<span class="badge badge-background">Series status: {{data.data.status}}</span>
 					{{#each data.constant.genres}}
 					<span class="badge badge-background">{{this}}</span>
 					{{/each}}
@@ -37,7 +51,8 @@
 					<p class="description">{{this}}</p>
 					{{/each}}
 				</div>
-				<div class="chapter-lists">
+
+				<div class="manga-page-section">
 					<h3 class="sub-title">Lists</h3>
 					<div class="lists-wrapper">
 						<div class="display-lists"></div>
@@ -47,6 +62,18 @@
 						</div>
 					</div>
 				</div>
+
+				{{#if mangaProgress}}
+				<div class="manga-page-section">
+					<h3 class="sub-title">Progress</h3>
+					<div class="manga-progress">
+						<div class="bar-wrapper">
+							<div class="bar-inner badge-background" style="width: {{mangaProgress.percentage}}%"></div>
+						</div>
+						<p>You've read {{mangaProgress.done}} of {{mangaProgress.total}} chapters ({{mangaProgress.percentage}}%)</p>
+					</div>
+				</div>
+				{{/if}}
 				<div class="chapter-list">
 					<h3 class="sub-title spread">
 						<span>Chapters</span>
@@ -59,8 +86,14 @@
 					</h3>
 					<div class="chapters">
 						{{#each data.data.chapters}}
-						<a class="chapter" data-combined="{{this.combined}}" data-release-date="{{this.date}}" data-last-read="{{this.progress.at}}" href="{{ genLink2 @root.data.constant.slug this.season this.chapter }}">
-							<span class="label">{{this.label}} <span class="date">{{getChapterDate this}}</span></span> 
+						<a class="chapter" data-href-string="{{this.hrefString}}" data-combined="{{this.combined}}" data-release-date="{{this.date}}" data-last-read="{{this.progress.at}}" href="{{ genLink2 @root.data.provider @root.data.constant.slug this.hrefString }}">
+							<span class="label">
+								<span class="select">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+								</span>
+								{{this.label}} 
+								<span class="date">{{getChapterDate this}}</span>
+							</span> 
 							{{#if this.progress}}<span class="progress" data-color="{{this.progress.percentageColor}}">{{this.progress.percentage}}%</span>{{/if}}
 						</a>
 						{{/each}}
@@ -71,5 +104,11 @@
 	</div>
 </div>
 
-<script src="/js/lists-editor.js"></script>
-<script src="/js/manga.js"></script>
+<div class="selection-actions is-secondary-footer">
+	<div class="selection-actions-inner">
+		{{> mark-as-buttons}}
+	</div>
+</div>
+
+<script src="/js/pages/lists-editor.js"></script>
+<script src="/js/pages/manga.js"></script>

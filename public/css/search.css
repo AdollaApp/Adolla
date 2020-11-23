@@ -1,0 +1,28 @@
+.content-inner .title {
+	margin-bottom: 10px;
+}
+
+.alt-scrapers {
+	display: flex; 
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	margin: 0 -20px;
+	padding: 0 20px;
+}
+.alt-scrapers > .scraper {
+	margin-right: 10px;
+	white-space: nowrap;
+}
+.alt-scrapers .last {
+	/* 10px wide element to have the end of the scrolling div align with the input */
+	display: block;
+	min-width: 10px;
+	height: 10px;
+}
+
+.content-wrapper .search-input {
+	margin-bottom: 40px;
+}
+.search-input > input {
+	margin-bottom: 10px;
+}

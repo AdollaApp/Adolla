@@ -1,0 +1,54 @@
+.section p {
+	margin: 0;
+}
+.section .sub-title {
+	margin-bottom: 10px;
+}
+
+.content-wrapper .section {
+	margin-top: 40px;
+}
+
+.icon-grid {
+	margin-top: 20px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+	grid-gap: 20px 10px;
+}
+.icon-option {
+	width: 100%;
+	text-align: center;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+}
+.icon-option:not(.is-current-icon) {
+	cursor: pointer;
+}
+.icon-option:not(.is-current-icon):hover .text {
+	text-decoration: underline;
+}
+.icon-option.is-current-icon .text {
+	background: var(--badge);
+	color: var(--text-on-badge);
+}
+.icon-option .icon {
+	width: 100%;
+	border-radius: 4px;
+	border: 1px solid var(--border);
+	display: block;
+}
+
+.icon-option .text {
+	margin: 0;
+	margin-top: 10px;
+	padding: 2px 10px;
+	border-radius: 4px;
+}
+
+.settings.details-inner {
+	display: grid;
+	grid-gap: 20px 40px;
+	grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}

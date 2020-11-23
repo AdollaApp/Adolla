@@ -1,4 +1,6 @@
 
+import { ProviderId } from "./scrapers/types";
+
 /** This is a single chapter */
 export interface Chapter {
 	/** Season of chapter */
@@ -9,8 +11,6 @@ export interface Chapter {
 	label: string;
 	/** Manga's date */
 	date: Date;
-	/** String to chapter page, for example "/Fire-Brigade-Of-Flames/1-15/" */
-	href: string;
 	/**
 	 * How far along the user is.
 	 * This is everchanging, but also optional
@@ -19,29 +19,42 @@ export interface Chapter {
 	realProgress?: Progress;
 	/** Season and chapter combined for sorting purposes, for example 300012 */
 	combined?: number;
+	/** 
+	 * Href string, really just the chaptor indicator
+	 * For mangasee, this is "x-y".
+	 * MangaDex has a unique ID for each chapter, so that's just a number sequence
+	 */
+	hrefString: string;
 }
 
 /** Used in manga.constant, these are mostly unchanging */
 export interface MangaMeta {
+	/** Manga's slug. For Mangasee this is readable (such as Fire-Brigade-Of-Flames), for MD this is an ID */
 	slug: string;
+	/** Full URL to cover art */
 	posterUrl: string;
+	/** Primary name of manga (say, "Tower of God" or "Fire Force") */
 	title: string;
+	/** Alternate titles (in other languages and such) */
 	alternateTitles: string[];
+	/** Array of paragraps. Each item is a paragraph and is shown in a <p> tag */
 	descriptionParagraphs: string[];
+	/** Genres as a string */
 	genres: string[];
+	/** If the manga is SFW or not */
+	nsfw: boolean;
 }
 /** Stored under manga.data, used for more dynamic stuff */
 export interface MangaData {
 	chapters: Chapter[];
 	chapterImages?: string[];
+	hasSeasons?: boolean; // if there's more than one "season" in the chapters
+	status: string;
 }
 
 /** Entire database structure */
 export interface Database {
-	manga_cache: {
-		[key: string]: MangaMeta;
-	}
-	reading: Reading;
+	reading_new: Reading;
 	other: {
 		host?: string
 	},
@@ -51,6 +64,10 @@ export interface Database {
 		}
 	}
 	lists: List[];
+	settings: {
+		icon: string;
+		"show-nsfw": "yes" | "no";
+	}
 }
 /** Save what the user is currently reading */
 export interface Reading {
@@ -65,14 +82,14 @@ export type ScraperResponse = StoredData | ScraperError;
 export interface ScraperData {
 	constant: MangaMeta;
 	data: MangaData;
-	provider: "Mangasee"; // All possible scrapers. Useful for future proofing
+	provider: ProviderId; // All possible scrapers. Useful for future proofing
 	success: true; // Always true
 }
 /** Error object thrown by scrapers */
 export interface ScraperError {
 	status: number;
 	err: string;
-	success: false; // Always fale
+	success: false; // Always false
 }
 
 /** Extended ScrapeData with front-end variables */
@@ -90,44 +107,17 @@ export interface Progress {
 	total: number
 	/** Date timestamp */
 	at: number;
-	/** Season */
-	season: number;
-	/** Chapter */
-	chapter: number;
+	/** 
+	 * Slug format per scraper
+	 * For mangasee that's season-chapter,
+	 * MangaDex has its own ID for each chapter
+	 */
+	chapterId: string | number;
 	/** Progress in percentages */
 	percentage?: number; // Between 0-100
 	percentageColor?: string; // Used in list of chapters
 	/** Is new? */
 	new?: boolean;
-}
-
-// Search interfaces
-/** This is for `DirectoryItem`, the values there aren't very useful */
-export enum Directory {
-	Genres = "g",
-	Slug = "i",
-	Title = "s",
-	OngoingPublish = "ps", // Maybe?
-	OngoingPrint = "ss", // Maybe?
-	AlternateTitles = "al"
-}
-/** This is what the API holds in the Directory array. Fun. */
-export interface DirectoryItem {
-	s: string;
-	i: string;
-	o: string;
-	ss: string;
-	ps: string;
-	t: string;
-	v: string;
-	vm: string;
-	y: string;
-	a: string[];
-	al: string[]
-	l: string;
-	lt: number;
-	g: string[];
-	h: boolean;
 }
 
 /** "List" type. Used for users to store manga */
@@ -139,6 +129,7 @@ export interface List {
 	last?: number;
 	entries: {
 		slug: string;
+		provider?: string;
 		data?: ScraperResponse
 	}[];
 }

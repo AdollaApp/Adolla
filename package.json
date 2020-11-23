@@ -1,12 +1,14 @@
 {
-	"name": "manga-5",
+	"name": "adolla",
 	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
+	"description": "Adolla is a manga reader for every device with a web browser",
 	"scripts": {
-		"start": "npx ts-node src/index.ts",
-		"dev": "npx ts-node src/index.ts",
-		"test-db": "npx ts-node src/test-db.ts"
+		"start": "ts-node src/index.ts",
+		"start-es": "npm run build && node ./dist/index.js",
+		"dev": "npm start",
+		"clear-cache": "npm run build && node ./dist/clear-cache.js",
+		"format-data": "npm run build && node ./dist/format-data.js",
+		"build": "etsc"
 	},
 	"keywords": [],
 	"author": "",
@@ -15,7 +17,6 @@
 		"@types/chalk": "^2.2.0",
 		"@types/express": "^4.17.7",
 		"@types/express-handlebars": "^3.1.0",
-		"@types/node-fetch": "^2.5.7",
 		"@types/telebot": "^1.2.1",
 		"body-parser": "^1.19.0",
 		"chalk": "^4.1.0",
@@ -23,13 +24,17 @@
 		"express": "^4.17.1",
 		"express-handlebars": "^5.1.0",
 		"fuse.js": "^6.4.1",
+		"html-entities": "^1.3.1",
 		"jipdb": "^1.0.4",
-		"node-fetch": "^2.6.1",
+		"mangadex-api": "^3.0.5",
+		"node-fetch-extra": "0.0.3",
 		"telebot": "^1.4.1",
-		"ts-node": "^8.10.2"
+		"ts-node": "^9.0.0",
+		"typescript": "^4.0.3"
 	},
 	"devDependencies": {
-		"nodemon": "^2.0.4",
-		"typescript": "^3.9.7"
+		"esbuild": "^0.7.8",
+		"esbuild-node-tsc": "^1.0.2",
+		"nodemon": "^2.0.4"
 	}
 }
