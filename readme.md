@@ -13,7 +13,9 @@ Easy to use web app to read Manga.
 - Standalone iOS support
 - Is a PWA
 - Easy navigation from anywhere in the app
-- Telegram intergration to notify you about new chapters
+- Multiple intergrations to notify you about new chapters
+	- Telegram
+	- Discord webhooks
 - Multiple scrapers to read from:
 	- MangaSee
 	- Mangadex
