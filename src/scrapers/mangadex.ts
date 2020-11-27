@@ -107,6 +107,9 @@ class MangadexClass extends Scraper {
 				// Return data
 				let provider = getProviderId(this.provider);
 				if(!isDone) { // Check if request hasn't already timed out
+					
+					console.info(chalk.blue(" [MD]") + ` Resolving ${data.manga.title} at ${new Date().toLocaleString("it")}`);
+
 					isDone = true;
 					resolve({
 						constant: {

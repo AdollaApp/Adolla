@@ -35,14 +35,16 @@ export async function getLists(): Promise<List[]> {
 
 	// Now combine the lists
 	let updatedLists: List[] = Object.assign([], [...recommendedLists, ...lists]);
-	for(let list of updatedLists) {
-
-		// Add data for each item
-		for(let entry of list.entries) {
+	
+	updatedLists = await Promise.all(updatedLists.map(async list => {
+		list.entries = await Promise.all(list.entries.map(async entry => {
 			entry.data = await updateManga(entry.provider ?? "mangasee", entry.slug);
-		}
-
-	}
+			return entry;
+		}));
+		list.entries = list.entries.filter(entry => entry.data.success);
+		return list;
+	}));
+	
 	
 	// Return both database items and creator's suggestions
 	return updatedLists;

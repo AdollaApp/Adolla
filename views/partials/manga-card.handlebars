@@ -48,7 +48,11 @@
 				{{/if}}
 				">
 					<h2 class="title-small">
+						{{#if manga.constant.title}}
 						{{manga.constant.title}}
+						{{else}}
+						Error for {{manga.constant.slug}}
+						{{/if}}
 					</h2>
 				</a>
 			</span>
