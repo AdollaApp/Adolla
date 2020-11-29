@@ -139,7 +139,7 @@ class MangadexClass extends Scraper {
 			// Return data
 			let provider = getProviderId(this.provider);
 				
-			console.info(chalk.blue(" [MD]") + ` Resolving ${data.title} at ${new Date().toLocaleString("it")}`);
+			// console.info(chalk.blue(" [MD]") + ` Resolving ${data.title} at ${new Date().toLocaleString("it")}`);
 
 			return {
 				constant: {

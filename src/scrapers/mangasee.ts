@@ -266,7 +266,7 @@ export class MangaseeClass extends Scraper {
 			// Now we return it
 			let providerId = getProviderId(this.provider);
 			
-			console.info(chalk.blue(" [MS]") + ` Resolving ${title} at ${new Date().toLocaleString("it")}`);
+			// console.info(chalk.blue(" [MS]") + ` Resolving ${title} at ${new Date().toLocaleString("it")}`);
 								
 			return {
 				constant: {
@@ -307,7 +307,7 @@ export default Mangasee;
  * 
  */
 function normalizeNumber(input: string): number {
-	let str = input;
-	while(str.startsWith("0")) str = str.slice(1);
-	return Number(str);
+	let normalized = Number(input.slice(input.split("").findIndex(v => v !== "0")));
+
+	return normalized;
 }

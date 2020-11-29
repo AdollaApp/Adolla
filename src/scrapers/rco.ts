@@ -99,7 +99,7 @@ class RCOClass extends Scraper {
 				// Get provider
 				let provider = getProviderId(this.provider);
 
-				console.info(chalk.blue("[RCO]") + ` Resolving ${title} at ${new Date().toLocaleString("it")}`);
+				// console.info(chalk.blue("[RCO]") + ` Resolving ${title} at ${new Date().toLocaleString("it")}`);
 
 				resolve({
 					constant: {
