@@ -1,5 +1,5 @@
 
-import { Chapter, ScraperResponse } from "../types";
+import { Chapter, ScraperError, ScraperResponse } from "../types";
 import { Scraper, SearchError, SearchOptions } from "./types";
 import { Mangadex, Tags } from "mangadex-api";
 import fetch from "node-fetch-extra";
@@ -47,120 +47,124 @@ class MangadexClass extends Scraper {
 		}
 	}
 
-	private updateTags() {
-		return new Promise(resolve => {
-			Mangadex.tag.getTags().then(tags => {
-				this.tags = tags;
-				resolve(true);
-			});
-		});
+	private async updateTags() {
+		// A tag is really a genre
+		this.tags = await Mangadex.tag.getTags();
 	}
 
-	public scrape(slug: string, chapterId: number = -1): Promise<ScraperResponse> {
+	public async scrape(slug: string, chapterId: number = -1): Promise<ScraperResponse> {
 		
-		return new Promise(async resolve => {
+		// Set a timeout for how long the request is allowed to take
+		let maxTimeout: Promise<ScraperError> = new Promise(resolve => {
+			setTimeout(() => {
+				resolve(error(0, "This request took too long"));
+			}, 25e3);
+		});
 
-			try {
-				// Prepare for timeout
-				let isDone = false;
-				setTimeout(() => {
-					if(!isDone) {
-						isDone = true;
-						resolve(error(0, "This request took too long"));
-						console.error(chalk.red("[MANGADEX]") + ` A request for '${slug}' at '${chapterId}' took too long and has timed out`);
-					};
-				}, 25e3);
-				
-				// Get ID
-				let id = Number(slug);
-			
-				// Get main data
-				let data = await Mangadex.manga.getManga(id);
+		// Attempt scraping series
+		let scraping = this.doScrape(slug, chapterId);
+		
+		// Get first result of either scraping or timeout
+		let raceResult = await Promise.race([maxTimeout, scraping]);
+
+		// Check if it's the timeout instead of the scraped result
+		if(raceResult.success === false && raceResult.err === "This request took too long") {
+			console.error(chalk.red("[MANGADEX]") + ` A request for '${slug}' at '${chapterId}' took too long and has timed out`);
+		}
+
+		// Return result
+		return raceResult;
+
+	}
+
+	private async doScrape(slug: string, chapterId: number = -1): Promise<ScraperResponse> {
+		try {
 	
-				// Chapters
-				let chaptersData = await Mangadex.manga.getMangaChapters(id);
-				let chapters = chaptersData.chapters
-				  .filter(c => c.language.includes("en") || c.language.includes("gb") || c.language.includes("nl"));
-	
-				// Get largest volume count
-				let largestVolumeCount = 0;
-				for(let chapter of chapters) {
-					let volume = Number(chapter.volume);
-					if(volume > largestVolumeCount) largestVolumeCount = volume;
-				}
+			// Get ID (IDs for MangaDex are always numbers, except they're provided as strings)
+			let id = Number(slug);
+		
+			// Get main data
+			let data = await Mangadex.manga.getManga(id);
 
-				// Map chapters to new format
-				let newChapters: Chapter[] = chapters.map(c => {
-					let volume = Number(c.volume) || largestVolumeCount + 1;
-					let chapter = Number(c.chapter);
-					return {
-						season: volume,
-						chapter,
-						label: `V${volume} - Chapter ${chapter ?? "??"}`,
-						date: new Date(c.timestamp * 1e3),
-						combined: (volume * 1e5) + chapter,
-						hrefString: c.id.toString()
-					};
-				}).sort((a, b) => a.combined - b.combined);
+			// Chapters
+			let chaptersData = await Mangadex.manga.getMangaChapters(id);
+			let chapters = chaptersData.chapters
+			  .filter(c => c.language.includes("en") || c.language.includes("gb") || c.language.includes("nl"));
 
-				// Get chapter-relevant data
-				// Just images I think
-				let chapterImages: string[] = [];
-
-				if(chapterId && chapterId !== null && chapterId !== -1) {
-					let chapter = await Mangadex.chapter.getChapter(Number(chapterId));
-	
-					let imagePromises = chapter.pages.map(async url => {
-						// @ts-ignore node-fetch's TS does not have buffer in its definitions
-						let base64 = await fetch(url).then(r => r.buffer()).then(buf => `data:image/${url.split(".").pop()};base64,`+buf.toString('base64'));
-						return base64;
-					});
-	
-					chapterImages = await Promise.all(imagePromises); // Page array is an array filled with URLs. Perfect!
-				}
-
-				// Get series status
-				let mdStatus = [null, "ongoing", "completed", "cancelled", "hiatus"];
-				let status = mdStatus[data.publication.status]; // data.manga.status is an integer, 1-indexed
-	
-				// Map genres
-				let genres = data.tags.map(num => this.tags?.[num]?.name ?? "Unknown genre");
-
-
-				// Return data
-				let provider = getProviderId(this.provider);
-				if(!isDone) { // Check if request hasn't already timed out
-					
-					console.info(chalk.blue(" [MD]") + ` Resolving ${data.title} at ${new Date().toLocaleString("it")}`);
-
-					isDone = true;
-					resolve({
-						constant: {
-							title: data.title,
-							slug,
-							genres,
-							posterUrl: data.mainCover,
-							alternateTitles: data.altTitles,
-							descriptionParagraphs: data.description.split("\r\n").filter(Boolean).filter(c => !c.startsWith("[")),
-							nsfw: data.isHentai
-						},
-						data: {
-							chapters: newChapters,
-							chapterImages,
-							status
-						},
-						success: true,
-						provider: isProviderId(provider) ? provider : null
-					});
-				}
-			} catch(err) {
-				console.error(chalk.red("[MANGADEX]") + ` An error occured:`, err);
-				resolve(error(0, err));
+			// Get largest volume count
+			let largestVolumeCount = 0;
+			for(let chapter of chapters) {
+				let volume = Number(chapter.volume);
+				if(volume > largestVolumeCount) largestVolumeCount = volume;
 			}
 
-		});
-		
+			// Map chapters to new format
+			let newChapters: Chapter[] = chapters.map(c => {
+				let volume = Number(c.volume) || largestVolumeCount + 1;
+				let chapter = Number(c.chapter);
+				return {
+					season: volume,
+					chapter,
+					label: `V${volume} - Chapter ${chapter ?? "??"}`,
+					date: new Date(c.timestamp * 1e3),
+					combined: (volume * 1e5) + chapter,
+					hrefString: c.id.toString()
+				};
+			}).sort((a, b) => a.combined - b.combined);
+
+			// Get chapter-relevant data
+			// Just images I think
+			let chapterImages: string[] = [];
+
+			if(chapterId && chapterId !== null && chapterId !== -1) {
+				let chapter = await Mangadex.chapter.getChapter(Number(chapterId));
+
+				let imagePromises = chapter.pages.map(async url => {
+					// @ts-ignore node-fetch's TS does not have buffer in its definitions
+					let base64 = await fetch(url).then(r => r.buffer()).then(buf => `data:image/${url.split(".").pop()};base64,`+buf.toString('base64'));
+					return base64;
+				});
+
+				chapterImages = await Promise.all(imagePromises); // Page array is an array filled with URLs. Perfect!
+			}
+
+			// Get series status
+			let mdStatus = [null, "ongoing", "completed", "cancelled", "hiatus"];
+			let status = mdStatus[data.publication.status]; // data.manga.status is an integer, 1-indexed
+
+			// Map genres
+			let genres = data.tags.map(num => this.tags?.[num]?.name ?? "Unknown genre");
+
+
+			// Return data
+			let provider = getProviderId(this.provider);
+				
+			console.info(chalk.blue(" [MD]") + ` Resolving ${data.title} at ${new Date().toLocaleString("it")}`);
+
+			return {
+				constant: {
+					title: data.title,
+					slug,
+					genres,
+					posterUrl: data.mainCover,
+					alternateTitles: data.altTitles,
+					descriptionParagraphs: data.description.split("\r\n").filter(Boolean).filter(c => !c.startsWith("[")),
+					nsfw: data.isHentai
+				},
+				data: {
+					chapters: newChapters,
+					chapterImages,
+					status
+				},
+				success: true,
+				provider: isProviderId(provider) ? provider : null
+			};
+		} catch(err) {
+			console.error(chalk.red("[MANGADEX]") + ` An error occured:`, err);
+			return error(0, err);
+		}
 	}
+
 	public async search(query: string, options?: Partial<SearchOptions>) {
 		
 		const x: SearchError = {
