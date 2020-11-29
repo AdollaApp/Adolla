@@ -135,6 +135,7 @@ class Updater {
 									]
 								})
 							});
+							db.set(dbString, true);
 						}
 
 					}
