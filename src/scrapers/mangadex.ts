@@ -1,7 +1,7 @@
 
 import { Chapter, ScraperResponse } from "../types";
-import { Scraper, SearchOptions } from "./types";
-import md from "mangadex-api";
+import { Scraper, SearchError, SearchOptions } from "./types";
+import { Mangadex } from "mangadex-api";
 import fetch from "node-fetch-extra";
 import { getProviderId, isProviderId } from "../routers/manga-page";
 import secretConfig from "../util/secretConfig";
@@ -11,15 +11,15 @@ import { error } from "./index";
 
 class MangadexClass extends Scraper {
 
-	private client: md | null;
+	private client: Mangadex | null;
 
 	constructor() {
 		super();
 		this.provider = "Mangadex";
 		this.canSearch = false;
+		this.client = new Mangadex();
 		if(secretConfig?.mangadex?.username && secretConfig?.mangadex?.password) {
 			try {
-				this.client = new md();
 				this.client.agent.login(secretConfig.mangadex.username, secretConfig.mangadex.password).then(res => {
 					if(res) {
 						this.canSearch = true;
@@ -58,11 +58,12 @@ class MangadexClass extends Scraper {
 				let id = Number(slug);
 			
 				// Get main data
-				let data = await md.getManga(id);
+				let data = await Mangadex.manga.getManga(id);
 	
 				// Chapters
-				let chapters = data.chapter
-				  .filter(c => c.lang_code.includes("en") || c.lang_code.includes("gb"));
+				let chaptersData = await Mangadex.manga.getMangaChapters(id);
+				let chapters = chaptersData.chapters
+				  .filter(c => c.language.includes("en") || c.language.includes("gb") || c.language.includes("nl"));
 	
 				// Get largest volume count
 				let largestVolumeCount = 0;
@@ -88,10 +89,11 @@ class MangadexClass extends Scraper {
 				// Get chapter-relevant data
 				// Just images I think
 				let chapterImages: string[] = [];
+
 				if(chapterId && chapterId !== null && chapterId !== -1) {
-					let chapter = await md.getChapter(Number(chapterId));
+					let chapter = await Mangadex.chapter.getChapter(Number(chapterId));
 	
-					let imagePromises = chapter.page_array.map(async url => {
+					let imagePromises = chapter.pages.map(async url => {
 						// @ts-ignore node-fetch's TS does not have buffer in its definitions
 						let base64 = await fetch(url).then(r => r.buffer()).then(buf => `data:image/${url.split(".").pop()};base64,`+buf.toString('base64'));
 						return base64;
@@ -102,24 +104,24 @@ class MangadexClass extends Scraper {
 
 				// Get series status
 				let mdStatus = [null, "ongoing", "completed", "cancelled", "hiatus"];
-				let status = mdStatus[data.manga.status]; // data.manga.status is an integer, 1-indexed
+				let status = mdStatus[data.publication.status]; // data.manga.status is an integer, 1-indexed
 	
 				// Return data
 				let provider = getProviderId(this.provider);
 				if(!isDone) { // Check if request hasn't already timed out
 					
-					console.info(chalk.blue(" [MD]") + ` Resolving ${data.manga.title} at ${new Date().toLocaleString("it")}`);
+					console.info(chalk.blue(" [MD]") + ` Resolving ${data.title} at ${new Date().toLocaleString("it")}`);
 
 					isDone = true;
 					resolve({
 						constant: {
-							title: data.manga.title,
+							title: data.title,
 							slug,
-							posterUrl: data.manga.cover_url,
-							alternateTitles: data.manga.alt_names,
-							genres: data.manga.genres.map(g => g.name),
-							descriptionParagraphs: data.manga.description.split("\r\n").filter(Boolean).filter(c => !c.startsWith("[")),
-							nsfw: !!data.manga.hentai
+							posterUrl: data.mainCover,
+							alternateTitles: data.altTitles,
+							genres: data.tags.map(n => n.toString()),
+							descriptionParagraphs: data.description.split("\r\n").filter(Boolean).filter(c => !c.startsWith("[")),
+							nsfw: data.isHentai
 						},
 						data: {
 							chapters: newChapters,
@@ -140,6 +142,11 @@ class MangadexClass extends Scraper {
 	}
 	public async search(query: string, options?: Partial<SearchOptions>) {
 		
+		const x: SearchError = {
+			error: "Unable to search. Check logs for more information."
+		}
+		return x;
+
 		// MangaDex takes a bit sometimes to enable search
 		// Verify we can search MangaDex
 		if(!this.canSearch) {
@@ -163,5 +170,5 @@ class MangadexClass extends Scraper {
 }
 
 // Create instance and extend it
-const Mangadex = new MangadexClass();
-export default Mangadex;
+const Mangadex2 = new MangadexClass();
+export default Mangadex2;

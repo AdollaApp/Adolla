@@ -1,5 +1,4 @@
 
-import md from "mangadex-api";
 import fetch from "node-fetch-extra";
 import chalk from "chalk";
 import updateManga from "../util/updateManga";
@@ -13,8 +12,6 @@ const Entities = new XmlEntities();
 
 
 class RCOClass extends Scraper {
-
-	private client: md | null;
 
 	constructor() {
 		super();
