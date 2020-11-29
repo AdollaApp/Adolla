@@ -1,7 +1,7 @@
 
 import { Chapter, ScraperResponse } from "../types";
 import { Scraper, SearchError, SearchOptions } from "./types";
-import { Mangadex } from "mangadex-api";
+import { Mangadex, Tags } from "mangadex-api";
 import fetch from "node-fetch-extra";
 import { getProviderId, isProviderId } from "../routers/manga-page";
 import secretConfig from "../util/secretConfig";
@@ -12,11 +12,19 @@ import { error } from "./index";
 class MangadexClass extends Scraper {
 
 	private client: Mangadex | null;
+	private tags: Tags | null;
 
 	constructor() {
 		super();
+		
 		this.provider = "Mangadex";
 		this.canSearch = false;
+		this.tags = null;
+		
+		// Update tags
+		this.updateTags()
+
+		// Log in
 		this.client = new Mangadex();
 		if(secretConfig?.mangadex?.username && secretConfig?.mangadex?.password) {
 			try {
@@ -37,6 +45,15 @@ class MangadexClass extends Scraper {
 			this.client = null;
 			console.error(chalk.red("[SECRET]") + ` No mangadex credentials provided in secret-config. Search will be disabled.`);
 		}
+	}
+
+	private updateTags() {
+		return new Promise(resolve => {
+			Mangadex.tag.getTags().then(tags => {
+				this.tags = tags;
+				resolve(true);
+			});
+		});
 	}
 
 	public scrape(slug: string, chapterId: number = -1): Promise<ScraperResponse> {
@@ -106,6 +123,10 @@ class MangadexClass extends Scraper {
 				let mdStatus = [null, "ongoing", "completed", "cancelled", "hiatus"];
 				let status = mdStatus[data.publication.status]; // data.manga.status is an integer, 1-indexed
 	
+				// Map genres
+				let genres = data.tags.map(num => this.tags?.[num]?.name ?? "Unknown genre");
+
+
 				// Return data
 				let provider = getProviderId(this.provider);
 				if(!isDone) { // Check if request hasn't already timed out
@@ -117,9 +138,9 @@ class MangadexClass extends Scraper {
 						constant: {
 							title: data.title,
 							slug,
+							genres,
 							posterUrl: data.mainCover,
 							alternateTitles: data.altTitles,
-							genres: data.tags.map(n => n.toString()),
 							descriptionParagraphs: data.description.split("\r\n").filter(Boolean).filter(c => !c.startsWith("[")),
 							nsfw: data.isHentai
 						},
