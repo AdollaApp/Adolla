@@ -97,22 +97,24 @@ class Updater {
 						let msgFull = `${msg}\n${urlMsg}`;
 
 						// Get bot account
+						let doSet = false;
 						let bot = Bot.get();
 						if(bot) {
 
 							// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
-							console.info(chalk.green("[NOTIFS]") + ` New chapter found for ${data.constant.title}, notifying user`);
+							console.info(chalk.green("[NOTIFS]") + ` New chapter found for ${data.constant.title}, notifying user with Telegram bot`);
 
 							Bot.send(msgFull);
-							db.set(dbString, true);
+							doSet = true
 						} else {
 							// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
-							console.info(chalk.red("[NOTIFS]") + ` New chapter found for ${data.constant.title}, not notifying user since bot wasn't configured`);
+							console.info(chalk.red("[NOTIFS]") + ` New chapter found for ${data.constant.title} but Telegram Bot is not configured`);
 						}
 
 						// Discord webhook
 						if(secretConfig.discord_webhook) {
-							fetch(secretConfig.discord_webhook, {
+							console.info(chalk.green("[NOTIFS]") + ` New chapter found for ${data.constant.title}, notifying user over Discord Webhook`);
+							let webhookNotif = await fetch(secretConfig.discord_webhook, {
 								method: "POST",
 								headers: {
 									"content-type": "application/json"
@@ -135,8 +137,13 @@ class Updater {
 									]
 								})
 							});
-							db.set(dbString, true);
+							console.info(chalk.green("[NOTIFS]") + ` New chapter found for ${data.constant.title}, attempted to notify user over Discord Webhook. HTTP status ${webhookNotif.status}`);
+							doSet = true;
+						} else {
+							console.info(chalk.red("[NOTIFS]") + ` New chapter found for ${data.constant.title} but Discord webhook is not configured`);
 						}
+
+						if(doSet) db.set(dbString, true);
 
 					}
 				}

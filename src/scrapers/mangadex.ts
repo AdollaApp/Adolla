@@ -1,7 +1,7 @@
 
 import { Chapter, ScraperError, ScraperResponse } from "../types";
 import { Scraper, SearchError, SearchOptions } from "./types";
-import { Mangadex, Tags } from "mangadex-api";
+import { Mangadex, Tag } from "mangadex-api";
 import fetch from "node-fetch-extra";
 import { getProviderId, isProviderId } from "../routers/manga-page";
 import secretConfig from "../util/secretConfig";
@@ -12,7 +12,7 @@ import { error } from "./index";
 class MangadexClass extends Scraper {
 
 	private client: Mangadex | null;
-	private tags: Tags | null;
+	private tags: Tag[] | null;
 
 	constructor() {
 		super();
@@ -133,7 +133,7 @@ class MangadexClass extends Scraper {
 			let status = mdStatus[data.publication.status]; // data.manga.status is an integer, 1-indexed
 
 			// Map genres
-			let genres = data.tags.map(num => this.tags?.[num]?.name ?? "Unknown genre");
+			let genres = data.tags.map(num => this.tags.find(tag => tag.id === num)?.name ?? "Unknown genre");
 
 
 			// Return data
