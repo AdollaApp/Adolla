@@ -135,7 +135,6 @@ class MangadexClass extends Scraper {
 			// Map genres
 			let genres = data.tags.map(num => this.tags.find(tag => tag.id === num)?.name ?? "Unknown genre");
 
-
 			// Return data
 			let provider = getProviderId(this.provider);
 				
@@ -166,11 +165,6 @@ class MangadexClass extends Scraper {
 	}
 
 	public async search(query: string, options?: Partial<SearchOptions>) {
-		
-		const x: SearchError = {
-			error: "Unable to search. Check logs for more information."
-		}
-		return x;
 
 		// MangaDex takes a bit sometimes to enable search
 		// Verify we can search MangaDex
