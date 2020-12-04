@@ -28,14 +28,8 @@ class MangadexClass extends Scraper {
 		this.client = new Mangadex();
 		if(secretConfig?.mangadex?.username && secretConfig?.mangadex?.password) {
 			try {
-				this.client.agent.login(secretConfig.mangadex.username, secretConfig.mangadex.password).then(res => {
-					if(res) {
-						this.canSearch = true;
-						console.info(chalk.green("[MANGADEX]") + ` Signed into MangaDex`);	
-					} else {
-						console.error(chalk.red("[MANGADEX]") + ` Failed to sign into MangaDex`);	
-					}
-				});
+				this.doLogin();
+				setInterval(this.doLogin, 1e3 * 60 * 60 * 2);
 			} catch(err) {
 				this.client = null;
 				console.error(chalk.red("[MANGADEX]") + ` An error occured:`, err);
@@ -45,6 +39,17 @@ class MangadexClass extends Scraper {
 			this.client = null;
 			console.error(chalk.red("[SECRET]") + ` No mangadex credentials provided in secret-config. Search will be disabled.`);
 		}
+	}
+
+	private doLogin() {
+		this.client.agent.login(secretConfig.mangadex.username, secretConfig.mangadex.password).then(res => {
+			if(res) {
+				this.canSearch = true;
+				console.info(chalk.green("[MANGADEX]") + ` Signed into MangaDex`);	
+			} else {
+				console.error(chalk.red("[MANGADEX]") + ` Failed to sign into MangaDex`);	
+			}
+		});
 	}
 
 	private async updateTags() {
