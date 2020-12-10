@@ -199,11 +199,6 @@ document.querySelectorAll(".pageImg").forEach(img => {
 
 async function initImages() {
 
-	// Generate URL endpoint
-	let loc = location.href;
-	if(!loc.endsWith("/")) loc += "/";
-	let url = `${loc}get-images/`;
-
 	// Function to set innerHTML
 	function setLoadingText(text) {
 		document.querySelectorAll(".current-loading-progress").forEach(el => {
@@ -213,7 +208,7 @@ async function initImages() {
 
 	try {
 		// Fetch array of URLs
-		let imageUrls = await (await fetch(url)).json();
+		let imageUrls = await getImageUrls(location.href);
 
 		// Add elements to DOM
 		let wrapper = document.querySelector(".pages");
@@ -272,11 +267,48 @@ async function initImages() {
 		loaded = true;
 		document.querySelector(".manga-reader").classList.add("loaded");
 		setLoadingText("Error");
+	}
 
+	// Pre-load other image urls
+	const curChapterAnchor = document.querySelector(".current-chapter");
+	const children = [...curChapterAnchor.parentNode.children];
+	const chapIndex = children.indexOf(curChapterAnchor);
+	const preloadableChapters = children.slice(chapIndex, chapIndex + 5);
+	for(let anchor of preloadableChapters) {
+		getImageUrls(anchor.href);
 	}
 
 }
 initImages();
+
+async function getImageUrls(loc = location.href) {
+	
+	// Prepare storage
+	let key = "image-cache";
+	if(!localStorage.getItem(key)) localStorage.setItem(key, "{}");
+	let cache = JSON.parse(localStorage.getItem(key));
+
+	// Generate URL endpoint
+	if(!loc.endsWith("/")) loc += "/";
+	let url = `${loc.split(location.host)[1]}get-images/`;
+
+	// Check cache
+	if(cache[url]) return cache[url].images;
+
+	// Get data
+	let urls = await (await fetch(url)).json();
+
+	// Store in cache
+	cache = JSON.parse(localStorage.getItem(key));
+	cache[url] = { 
+		at: Date.now(), 
+		images: urls 
+	}
+	localStorage.setItem(key, JSON.stringify(cache));
+
+	// Return data
+	return urls;
+}
 
 // Camera mode
 let cameraInterval;
@@ -342,7 +374,6 @@ async function showBigImage(images) {
 				newImage = new Image();
 
 				let blob = await fetch("https://cors-anywhere.herokuapp.com/" + img.src).then(r => r.blob()).then(blob => URL.createObjectURL(blob));
-				console.log(blob);
 				newImage.src = blob;
 				setTimeout(() => {
 					resolve(newImage);
@@ -350,16 +381,10 @@ async function showBigImage(images) {
 			} else {
 				resolve(img);
 			}
-
-			console.log(newImage);
-
-			
-
 		});
 	}));
 
 	let y = 0;
-	console.log(imgs);
 	for(let img of imgs) {
 		ctx.drawImage(img, 0, y);
 		y += img.naturalHeight;
