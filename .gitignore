@@ -4,6 +4,8 @@ backups/
 .DS_Store
 data.json
 data*.json
+cache.json
+cache*.json
 .env
 secret-config.json
 chapters.json
