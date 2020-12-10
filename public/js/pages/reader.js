@@ -275,7 +275,7 @@ async function initImages() {
 	const chapIndex = children.indexOf(curChapterAnchor);
 	const preloadableChapters = children.slice(chapIndex, chapIndex + 5);
 	for(let anchor of preloadableChapters) {
-		getImageUrls(anchor.href);
+		if(!anchor.href.includes("mangadex")) getImageUrls(anchor.href); // Mangadex isn't cached so
 	}
 
 }
@@ -292,6 +292,13 @@ async function getImageUrls(loc = location.href) {
 	if(!loc.endsWith("/")) loc += "/";
 	let url = `${loc.split(location.host)[1]}get-images/`;
 
+	// Remove old items
+	for(let url of Object.keys(cache)) {
+		if(cache[url] && cache[url].at < Date.now() - 1e3 * 60 * 60) {
+			delete cache[url];
+		}
+	}
+
 	// Check cache
 	if(cache[url]) return cache[url].images;
 
@@ -300,11 +307,19 @@ async function getImageUrls(loc = location.href) {
 
 	// Store in cache
 	cache = JSON.parse(localStorage.getItem(key));
-	cache[url] = { 
-		at: Date.now(), 
-		images: urls 
+	if(!url.includes("mangadex")) { // Mangadex is freaking huge, those are base64 URLs. Let's not store those...
+		cache[url] = { 
+			at: Date.now(), 
+			images: urls 
+		}
 	}
-	localStorage.setItem(key, JSON.stringify(cache));
+
+	// It might overflow
+	try {
+		localStorage.setItem(key, JSON.stringify(cache));
+	} catch(err) {
+		// Nothing at all. Lol.
+	}
 
 	// Return data
 	return urls;
