@@ -140,9 +140,6 @@ class MangadexClass extends Scraper {
 			// Map genres
 			let genres = data.tags.map(num => this.tags.find(tag => tag.id === num)?.name ?? "Unknown genre");
 
-			// Get description paragraphs
-			let descriptionParagraphs = data.description.split("\r\n").filter(Boolean).filter(c => !c.startsWith("["));
-
 			// Return data
 			let provider = getProviderId(this.provider);
 				
@@ -155,7 +152,7 @@ class MangadexClass extends Scraper {
 					genres,
 					posterUrl: data.mainCover,
 					alternateTitles: data.altTitles,
-					descriptionParagraphs,
+					descriptionParagraphs: data.description.split("\r\n").filter(Boolean).filter(c => !c.startsWith("[")),
 					nsfw: data.isHentai
 				},
 				data: {

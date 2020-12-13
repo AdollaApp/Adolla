@@ -2,9 +2,6 @@
 import express from "express";
 const router = express.Router();
 
-import chalk from "chalk";
-import jipdb from "jipdb";
-
 import db from "../db";
 import updateManga from "../util/updateManga";
 import { Progress, StoredData, List } from "../types";
@@ -12,6 +9,7 @@ import getMangaProgress, { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";
 import { getLists } from "../util/lists";
 import getProgressData from "../util/getProgressData";
+import chalk from "chalk";
 import { Provider, ProviderId } from "../scrapers/types";
 
 interface NewList {
@@ -19,12 +17,6 @@ interface NewList {
 	name: string;
 }
 
-// Image cache
-const cacheDb = new jipdb("cache.json", { 
-	"images": {} 
-});
-
-// Scraper IDs
 let scrapersMapped = {
 	"mangasee": "Mangasee",
 	"mangadex": "Mangadex",
@@ -169,53 +161,10 @@ router.get("/:provider/:slug/:chapter/get-images", async (req, res, next) => {
 		return;
 	}
 
-	// Check cache
-	const dbKey = `images.${provider}.${slug}.${chapterId.replace(/\./g, "_")}`;
-	if(cacheDb.get(dbKey)) {
-		let data = cacheDb.get(dbKey);
-		res.json(data.urls.map(url => data.urlStart + url));
-		return;
-	}
-
-	// Helper function
-	function startsSame(strings: string[]) {
-		let isSame = true;
-		let letter = strings[0][0];
-		for(let i = 1; i < strings.length; i++) {
-			if(strings[i][0] !== letter) {
-				isSame = false;
-			}
-		}
-		return isSame;
-	}
-
-	// Get data
 	let data = await updateManga(provider, slug, true, chapterId);
 	if(data && data.success) {
 		// Return images
-		let urls = data.data.chapterImages;
-		let shortenedUrls = urls;
-
-		// Get root url and file names
-		let urlStart = "";
-		while(startsSame(shortenedUrls)) {
-			urlStart += shortenedUrls[0][0];
-			shortenedUrls = shortenedUrls.map(s => s.slice(1));
-		}
-
-		// Filter by length
-		let isValid = shortenedUrls.filter(url => url.length < 200).length > 0;
-		if(isValid) {
-			cacheDb.set(dbKey, {
-				at: Date.now(),
-				urlStart,
-				urls: shortenedUrls
-			});	
-		}
-
-		// Respond
-		res.json(urls);
-
+		res.json(data.data.chapterImages);
 	} else if(data.success === false) {
 
 		// Something went wrong for some reason
