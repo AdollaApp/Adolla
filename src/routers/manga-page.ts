@@ -11,6 +11,7 @@ import { getLists } from "../util/lists";
 import getProgressData from "../util/getProgressData";
 import chalk from "chalk";
 import { Provider, ProviderId } from "../scrapers/types";
+import Database from "jipdb";
 
 interface NewList {
 	slug: string;
@@ -377,10 +378,18 @@ router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => 
 		chapterId
 	});
 
-	// Update db
-	db.set(`hide_read.${getProviderId(provider)}.${slug}`, false);
-	db.set(`reading_new.${getProviderId(provider)}.${slug}.${chapterId.toString().replace(/\./g, "_")}`, progressData);
-	db.set(`reading_new.${getProviderId(provider)}.${slug}.last`, progressData);
+	// Get manga data to see if it's hentai or not
+	let data = await updateManga(provider, req.params.slug);
+	if(data.success) {
+
+		let storeNsfw = db.get("settings.store-nsfw") === "yes";
+		if((storeNsfw && data.constant.nsfw) || !data.constant.nsfw) {
+			// Update db
+			db.set(`hide_read.${getProviderId(provider)}.${slug}`, false);
+			db.set(`reading_new.${getProviderId(provider)}.${slug}.${chapterId.toString().replace(/\./g, "_")}`, progressData);
+			db.set(`reading_new.${getProviderId(provider)}.${slug}.last`, progressData);
+		}
+	}
 
 	res.json({
 		status: 200

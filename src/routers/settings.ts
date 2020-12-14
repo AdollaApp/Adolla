@@ -44,7 +44,8 @@ router.get("/settings/", async (req, res) => {
 		icons,
 		reading,
 		backups,
-		showNsfw: db.get("settings.show-nsfw") === "yes"
+		showNsfw: db.get("settings.show-nsfw") === "yes",
+		storeNsfw: db.get("settings.store-nsfw") === "yes"
 	});
 });
 
@@ -117,6 +118,7 @@ router.post("/settings/set-app-settings", async (req, res) => {
 
 	// Set NSFW setting
 	db.set("settings.show-nsfw", req.body["show-nsfw"] ?? false);
+	db.set("settings.store-nsfw", req.body["store-nsfw"] ?? false);
 
 	res.json({
 		status: 200

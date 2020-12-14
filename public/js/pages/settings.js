@@ -39,7 +39,8 @@ document.querySelectorAll(".app-wide-settings .switch").forEach(switchEl => {
 
 	switchEl.addEventListener("click", () => {
 
-		let nsfwInput = document.querySelector(`[data-setting="show-nsfw"] input`);
+		let showNsfwInput = document.querySelector(`[data-setting="show-nsfw"] input`);
+		let storeNsfwInput = document.querySelector(`[data-setting="store-nsfw"] input`);
 
 		fetch("/settings/set-app-settings", {
 			method: "POST",
@@ -47,7 +48,8 @@ document.querySelectorAll(".app-wide-settings .switch").forEach(switchEl => {
 				"content-type": "application/json"
 			},
 			body: JSON.stringify({
-				"show-nsfw": nsfwInput.getAttribute(`data-${nsfwInput.checked}`)
+				"show-nsfw": showNsfwInput.getAttribute(`data-${showNsfwInput.checked}`),
+				"store-nsfw": storeNsfwInput.getAttribute(`data-${storeNsfwInput.checked}`)
 			})
 		})
 		

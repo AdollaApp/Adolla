@@ -67,6 +67,7 @@ export interface Database {
 	settings: {
 		icon: string;
 		"show-nsfw": "yes" | "no";
+		"store-nsfw": "yes" | "no";
 	}
 }
 /** Save what the user is currently reading */
