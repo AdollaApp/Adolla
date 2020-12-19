@@ -19,6 +19,9 @@ app.engine(
 			stringify(v: Record<string, unknown>) {
 				return JSON.stringify(v);
 			},
+			/**
+			 * Get progress string to show on page, like 23%
+			 */
 			getProgressString(manga: StoredData) {
 				if (manga.progress && manga.success) {
 					const curChapter = manga.data.chapters.find(
@@ -33,6 +36,9 @@ app.engine(
 				}
 				return "Not started yet";
 			},
+			/**
+			 * Get icon for each scraper
+			 */
 			getScraperIcon(provider: string): string | null {
 				const icons = {
 					mangasee: "https://mangasee123.com/media/favicon.png",
@@ -41,6 +47,9 @@ app.engine(
 				};
 				return icons[provider] ?? "/icons/main-on-white.png";
 			},
+			/**
+			 * Generate HREF for links in-app
+			 */
 			genLink2(
 				provider = "mangasee",
 				slug: string,
@@ -56,6 +65,9 @@ app.engine(
 					seasonLink = `${hrefString}-${chapter}`; // Fallback stuff // TODO: Figure this out. This is related to reading at manga-card.handlebars, line 31
 				return `${href}${seasonLink}`;
 			},
+			/**
+			 * Compare season/chapter to other season/chapter and get relevant classes
+			 */
 			isCurrentChapter(
 				season1: number,
 				season2: number,
@@ -66,9 +78,17 @@ app.engine(
 					? "current-chapter badge-background"
 					: "";
 			},
+			/**
+			 * Used for small-manga in the sidebar
+			 * Returns relevant classes to maybe make it blue
+			 */
 			checkSmallHighlight(mangaSlug: string, currentPage: string) {
 				return mangaSlug === currentPage ? "currentManga badge-background" : "";
 			},
+			/**
+			 * Get dd-mm-yyyy format for chapter's date
+			 * Used in chapter list
+			 */
 			getChapterDate(chapter: Chapter) {
 				function pad(v: number, amount = 2) {
 					return v.toString().padStart(amount, "0");
@@ -79,13 +99,25 @@ app.engine(
 					4
 				)}`;
 			},
+			/**
+			 * Get chapter's existing progress
+			 * If it's over 90%, return page number 1 so that people can start the chapter over again
+			 */
 			getPageProgress(progress: Progress | void) {
 				if (!progress) return false;
 				return progress.percentage < 90 ? progress.current : 1;
 			},
+			/**
+			 * If statement, used for development
+			 * AFAIK this is just for the label in the bottom left
+			 */
 			ifDev(options) {
 				return process.env.dev ? options.fn(this) : options.inverse(this);
 			},
+			/**
+			 * Get chapter's name, or label
+			 * Used in the main cards
+			 */
 			getChapterName(progress: Progress, manga: StoredData) {
 				if (!progress) return "shrug";
 				const current = manga.data.chapters.find(
@@ -93,11 +125,11 @@ app.engine(
 				);
 				return current ? current.label : "Unknown chapter";
 			},
+			/**
+			 * If statement for checking if the list is by the creator
+			 */
 			ifNotByCreator(list: List, options) {
 				return list.byCreator ? options.inverse() : options.fn();
-			},
-			addOne(num: number) {
-				return num + 1;
 			},
 			getIconSrc,
 		},
