@@ -40,6 +40,7 @@
 		"esbuild": "^0.7.22",
 		"esbuild-node-tsc": "^1.0.5",
 		"eslint": "^7.16.0",
-		"nodemon": "^2.0.6"
+		"nodemon": "^2.0.6",
+		"prettier": "2.2.1"
 	}
 }
