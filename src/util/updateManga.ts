@@ -20,6 +20,8 @@ export default async function updateManga(
 	chapterId: number | string = -1
 ): Promise<ScraperResponse> {
 	const existing = cache?.[getProviderId(provider)]?.[slug];
+
+	// Verify cache exists and isn't too old
 	if (
 		existing &&
 		existing.savedAt > Date.now() - config.cache.duration &&
@@ -32,6 +34,9 @@ export default async function updateManga(
 		return d;
 	}
 
+	// ! Cache is too old. Get new data
+
+	// Get scrapers
 	const scraperName = getProviderName(provider) || provider;
 	const scraper: Scraper | undefined = scrapers[scraperName];
 
@@ -44,6 +49,7 @@ export default async function updateManga(
 		};
 	}
 
+	// Scrape data
 	const data = await scraper.scrape(slug, chapterId);
 	if (data.success) {
 		const nData = JSON.parse(JSON.stringify(data)); // Clone data
@@ -65,15 +71,20 @@ export default async function updateManga(
 		cache[getProviderId(p)][slug] = nData;
 		// db.set(dbQuery, nData);
 	}
+	// Add other info
 	const d = await addInfo(data);
+
+	// Throw NSFW error if this content is nsfw and the user doesn't want NSFW content
 	if (d.success && d.constant.nsfw && db.get("settings.show-nsfw") === "no")
 		return nsfwError;
+
+	// Return normal data
 	return d;
 }
 
 async function addInfo(data: ScraperResponse) {
 	if (data.success) {
-		// This still works thanks to references, somehow
+		// This still works thanks to references
 		// Add progress to each chapter
 		const chapterPromises = data.data.chapters.map(async (ch) => {
 			ch.progress = await getMangaProgress(

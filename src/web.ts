@@ -135,6 +135,7 @@ app.engine(
 		},
 	})
 );
+
 app.set("view engine", "handlebars");
 app.set("view options", {
 	layout: "main",
