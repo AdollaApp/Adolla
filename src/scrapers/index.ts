@@ -11,7 +11,7 @@ export function error(status = -1, err = "Unknown"): ScraperError {
 		status,
 		err,
 		success: false
-	}
+	};
 }
 
 // Import Mangasee
@@ -30,4 +30,4 @@ export const scrapers = {
 	Mangasee,
 	Mangadex,
 	RCO
-}
+};

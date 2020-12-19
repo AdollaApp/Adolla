@@ -5,7 +5,7 @@ const router = express.Router();
 import getReading from "../util/getReading";
 
 router.get("/", async (req, res) => {
-	let reading = await getReading();
+	const reading = await getReading();
 
 	res.render("not-found", {
 		reading

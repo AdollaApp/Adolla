@@ -11,50 +11,50 @@ import { getProviderId, getProviderName, isProviderId } from "./manga-page";
 import getReading from "../util/getReading";
 
 router.get("/", (req, res) => {
-	let query = ((req.query.q ?? "") as string).trim();
+	const query = ((req.query.q ?? "") as string).trim();
 	res.redirect(`/search/mangasee/${query ? `?q=${encodeURIComponent(query)}` : ""}`);
 });
 
 router.get("/:provider", async (req, res, next) => {
-	let query = ((req.query.q ?? "") as string).trim();
+	const query = ((req.query.q ?? "") as string).trim();
 
 	// Get scraper name
-	let param = req.params.provider.toLowerCase();
+	const param = req.params.provider.toLowerCase();
 	const provider: ProviderId | null = isProviderId(param) ? param : null;
-	let scraperName = getProviderName(provider);
+	const scraperName = getProviderName(provider);
 	if(!scraperName) {
 		next();
 		return;
 	}	
 
+	// !Get search results
 	// Get search results
-	  // Get search results
 	let searchResults: ScraperResponse[] | SearchError = [];
 	searchResults = await doSearch(provider, query);
-	  
-	  // Verify search results
+	
+	// Verify search results
 	if(Array.isArray(searchResults)) {
 		await Promise.all(searchResults.map(setMangaProgress));
 	}
 
-	// Get reading
-	let reading = await getReading(4);
+	// ! Get reading
+	const reading = await getReading(4);
 
-	// Get all scrapers and names
-	  
-	  // Get all scrapers
-	let scrapersArray: Scraper[] = Object.values(scrapers.scrapers);
+	// ! Get all scrapers and names
+	
+	// Get all scrapers
+	const scrapersArray: Scraper[] = Object.values(scrapers.scrapers);
 
-	  // Get name, id, href, and if whether or not the current scraper
-	let scraperMap = scrapersArray.map(scraper => {
-		let id = getProviderId(scraper.provider);
-		let name = getProviderName(id);
+	// Get name, id, href, and if whether or not the current scraper
+	const scraperMap = scrapersArray.map(scraper => {
+		const id = getProviderId(scraper.provider);
+		const name = getProviderName(id);
 		return {
 			id,
 			name,
 			href: `/search/${id}/${query ? `?q=${encodeURIComponent(query)}` : ""}`,
 			isCurrent: id === param
-		}
+		};
 	});
 
 	res.render("search", {

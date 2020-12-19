@@ -1,20 +1,21 @@
 
 // Utility function for search
 
-import { ProviderId, Scraper, SearchOptions } from "../scrapers/types";
+import { ProviderId, Scraper, SearchError, SearchOptions } from "../scrapers/types";
 import * as scrapers from "../scrapers";
 import { getProviderName } from "../routers/manga-page";
+import { ScraperResponse } from "../types";
 
-export async function doSearch(provider: ProviderId, query: string = "", searchOptions: Partial<SearchOptions> = {}) {
+export async function doSearch(provider: ProviderId, query = "", searchOptions: Partial<SearchOptions> = {}): Promise<ScraperResponse[] | SearchError> {
 	
 	// Get and verify scraper
-	let scraper: Scraper | undefined = scrapers[getProviderName(provider)];
+	const scraper: Scraper | undefined = scrapers[getProviderName(provider)];
 	if(!scraper) {
 		return null;
 	}
 
 	// Get search results
-	let searchResults = await scraper.search(query, {
+	const searchResults = await scraper.search(query, {
 		...searchOptions,
 		resultCount: 20
 	});

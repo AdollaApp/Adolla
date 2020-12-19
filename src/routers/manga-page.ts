@@ -11,19 +11,18 @@ import { getLists } from "../util/lists";
 import getProgressData from "../util/getProgressData";
 import chalk from "chalk";
 import { Provider, ProviderId } from "../scrapers/types";
-import Database from "jipdb";
 
 interface NewList {
 	slug: string;
 	name: string;
 }
 
-let scrapersMapped = {
+const scrapersMapped = {
 	"mangasee": "Mangasee",
 	"mangadex": "Mangadex",
 	"rco": "RCO"
 };
-let scrapersMappedReversed = Object.fromEntries(Object.entries(scrapersMapped).map(v => v.reverse()));
+const scrapersMappedReversed = Object.fromEntries(Object.entries(scrapersMapped).map(v => v.reverse()));
 export function getProviderName(slug: string): ProviderId | string {
 	return scrapersMapped[slug.toLowerCase()] ?? null;
 }
@@ -39,14 +38,14 @@ export function isProviderId(slug: string): slug is ProviderId {
 
 router.get("/:provider/:slug", async (req, res, next) => {
 
-	let param = req.params.slug;
+	const param = req.params.slug;
 
-	let provider = getProviderName(req.params.provider.toLowerCase());
+	const provider = getProviderName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
 	}
-	let data = await updateManga(provider, param, true);
+	const data = await updateManga(provider, param, true);
 
 	if(data && data.success) {
 
@@ -57,21 +56,21 @@ router.get("/:provider/:slug", async (req, res, next) => {
 		await setColors(data, param);
 
 		// Get reading
-		let reading = await getReading(4);
+		const reading = await getReading(4);
 
 		// Get lists for manga
-		let allLists = await getLists();
-		let lists = allLists.filter(l => l.entries.find(m => m.slug === param));
+		const allLists = await getLists();
+		const lists = allLists.filter(l => l.entries.find(m => m.slug === param));
 
-		  // Convert lists to front-end format
+		// Convert lists to front-end format
 		const convert = ((l: List) => ({
 			slug: l.slug,
 			name: l.name
 		}));
 
 		// Get progress for manga total
-		let totalChapterCount = data.data.chapters.length;
-		let doneChapterCount = data.data.chapters.reduce((acc, current) => acc + ((current?.progress?.percentage ?? 0) / 100), 0);
+		const totalChapterCount = data.data.chapters.length;
+		const doneChapterCount = data.data.chapters.reduce((acc, current) => acc + ((current?.progress?.percentage ?? 0) / 100), 0);
 
 		
 		// Render
@@ -95,21 +94,21 @@ router.get("/:provider/:slug", async (req, res, next) => {
 });
 
 router.get("/:provider/:slug/:chapter", async (req, res, next) => {
-	let chapterId = req.params.chapter;
-	let slug = req.params.slug;
+	const chapterId = req.params.chapter;
+	const slug = req.params.slug;
 
-	let provider = getProviderName(req.params.provider.toLowerCase());
+	const provider = getProviderName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
 	}
 
-	let data = await updateManga(provider, slug);
+	const data = await updateManga(provider, slug);
 
 	if(data && data.success) {
 
 		// Stuff
-		let manga = await setMangaProgress(data);
+		const manga = await setMangaProgress(data);
 
 		if(!manga.success) {
 			next();
@@ -117,10 +116,10 @@ router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 		}
 
 		// Find current, last, and next chapter
-		let chapters = manga.data.chapters;
-		let currentChapter = chapters.find(c => c.hrefString == chapterId);
-		let nextChapter = chapters[chapters.indexOf(currentChapter) + 1] ?? null;
-		let previousChapter = chapters[chapters.indexOf(currentChapter) - 1] ?? null;
+		const chapters = manga.data.chapters;
+		const currentChapter = chapters.find(c => c.hrefString == chapterId);
+		const nextChapter = chapters[chapters.indexOf(currentChapter) + 1] ?? null;
+		const previousChapter = chapters[chapters.indexOf(currentChapter) - 1] ?? null;
 
 		// Add progress from `data` chapters to `manga` chapters
 		for(let i = 0; i < data.data.chapters.length; i++) {
@@ -128,7 +127,7 @@ router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 		}
 
 		// § reading
-		let reading = await getReading(4);
+		const reading = await getReading(4);
 
 		// See if chapter is same as last chapter
 		await setColors(manga, slug);
@@ -153,16 +152,16 @@ router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 });
 
 router.get("/:provider/:slug/:chapter/get-images", async (req, res, next) => {
-	let chapterId = req.params.chapter;
-	let slug = req.params.slug;
+	const chapterId = req.params.chapter;
+	const slug = req.params.slug;
 
-	let provider = getProviderName(req.params.provider.toLowerCase());
+	const provider = getProviderName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
 	}
 
-	let data = await updateManga(provider, slug, true, chapterId);
+	const data = await updateManga(provider, slug, true, chapterId);
 	if(data && data.success) {
 		// Return images
 		res.json(data.data.chapterImages);
@@ -183,32 +182,32 @@ router.get("/:provider/:slug/:chapter/get-images", async (req, res, next) => {
 router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 
 	// Get relevant values
-	let slug = req.params.slug;
-	let updateValues: (string | number)[] = req.body.values;
+	const slug = req.params.slug;
+	const updateValues: (string | number)[] = req.body.values;
 
-	let provider = getProviderName(req.params.provider.toLowerCase());
+	const provider = getProviderName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
 	}
 
 	// Get data
-	let data = await updateManga(provider, slug);
+	const data = await updateManga(provider, slug);
 
 	if(data.success === true) { 
 
 		// Get relevant chapters
-		let chapters = data.data.chapters;
-		let markChapters = updateValues.map(markingChapter => chapters.find(c => c.hrefString === markingChapter));
+		const chapters = data.data.chapters;
+		const markChapters = updateValues.map(markingChapter => chapters.find(c => c.hrefString === markingChapter));
 
 		let lastProgressData: Progress | null = null;
-		for(let chapter of markChapters) {
+		for(const chapter of markChapters) {
 
 			// Generate query string, this will be used twice
-			let queryString = `reading_new.${getProviderId(data.provider)}.${slug}.${chapter.hrefString.replace(/\./g, "_")}`;
+			const queryString = `reading_new.${getProviderId(data.provider)}.${slug}.${chapter.hrefString.replace(/\./g, "_")}`;
 			
 			// Get existing data
-			let existingData = db.get(queryString);
+			const existingData = db.get(queryString);
 			
 			if(!existingData || (existingData && existingData.percentage !== 100) || req.body.action === "remove-read-status") { // Check if existing data doesn't already have 100%. We don't want to override existing data
 				
@@ -230,23 +229,23 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 				db.set(queryString, progressData);
 			}
 
-			let progressDataNew = db.get(queryString);
+			const progressDataNew = db.get(queryString);
 			if(queryString) lastProgressData = progressDataNew;
 
 		}
 
 		// Set last progress data if it's not found
-		let lastReadChapter = db.get(`reading_new.${getProviderId(data.provider)}.${slug}.last`);
+		const lastReadChapter = db.get(`reading_new.${getProviderId(data.provider)}.${slug}.last`);
 		if(lastReadChapter) {
-			let lastReadChapterInRead = db.get(`reading_new.${getProviderId(data.provider)}.${slug}.${lastReadChapter.chapterId}`);
+			const lastReadChapterInRead = db.get(`reading_new.${getProviderId(data.provider)}.${slug}.${lastReadChapter.chapterId}`);
 
-			  // The "last" chapter's read data was removed
+			// The "last" chapter's read data was removed
 			if(!lastReadChapterInRead) {
 				let allReading: Progress[] = Object.values(db.get(`reading_new.${getProviderId(data.provider)}.${slug}`));
 				allReading = allReading.sort((a, b) => b.at - a.at);
-			  
-				let newLast = allReading.find(item => item && item.chapterId !== lastReadChapter.chapterId);
-			  
+			
+				const newLast = allReading.find(item => item && item.chapterId !== lastReadChapter.chapterId);
+			
 				db.set(`reading_new.${getProviderId(data.provider)}.${slug}.last`, newLast);
 			}
 		}
@@ -254,15 +253,15 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 		// Set last progress data
 		if(lastProgressData) db.set(`reading_new.${getProviderId(data.provider)}.${slug}.last`, lastProgressData);
 
-		// Remove `reading` object if nothing is left
+		// ! Remove `reading` object if nothing is left
 		
-		  // Get data
-		let readingData = db.get(`reading_new.${getProviderId(data.provider)}.${slug}`);
+		// Get data
+		const readingData = db.get(`reading_new.${getProviderId(data.provider)}.${slug}`);
 		
-		  // Get keys with proper values
-		let remainingData = Object.entries(readingData).filter(v => v[1]).map(v => v[0]);
-		 
-		  // If the only entry is "last" (and not "1-1" or whatever), remove it
+		// Get keys with proper values
+		const remainingData = Object.entries(readingData).filter(v => v[1]).map(v => v[0]);
+
+		// If the only entry is "last" (and not "1-1" or whatever), remove it
 		if((remainingData[0] === "last" && remainingData.length <= 1) || remainingData.length <= 0) {
 			// Remove entry
 			db.set(`reading_new.${getProviderId(data.provider)}.${slug}`, undefined);
@@ -287,17 +286,17 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 // Set the lists
 router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 
-	let newLists: NewList[] = req.body.lists;
+	const newLists: NewList[] = req.body.lists;
 
 	let currentLists: List[] = await getLists();
 
-	let provider = getProviderName(req.params.provider.toLowerCase());
+	const provider = getProviderName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
 	}
 
-	for(let n of newLists) {
+	for(const n of newLists) {
 		// Verify existing list
 		if(!currentLists.find(l => l.slug === n.slug)) {
 			// Add new list
@@ -310,7 +309,7 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 		}
 
 		// Add to list
-		let list = currentLists.find(l => l.slug === n.slug);
+		const list = currentLists.find(l => l.slug === n.slug);
 		if(!list.entries.find(entry => entry.slug === req.params.slug) && !list.byCreator) {
 			list.entries.push({
 				slug: req.params.slug,
@@ -322,8 +321,8 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 	}
 
 	// Remove from other list
-	let otherLists = currentLists.filter(l => !newLists.find(newList => newList.slug === l.slug) && !l.byCreator);
-	for(let deleteFrom of otherLists) {
+	const otherLists = currentLists.filter(l => !newLists.find(newList => newList.slug === l.slug) && !l.byCreator);
+	for(const deleteFrom of otherLists) {
 		// Remove every entry from this list since it wasn't mentioned in the updated list
 		while(deleteFrom.entries.find(v => v.slug === req.params.slug)) {
 			deleteFrom.entries.splice(deleteFrom.entries.indexOf(deleteFrom.entries.find(v => v.slug === req.params.slug)), 1);
@@ -355,8 +354,8 @@ router.post("/:provider/:slug/hide-series", async (req, res) => {
 });
 
 router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => {
-	let chapterId = req.params.chapter;
-	let slug = req.params.slug;
+	const chapterId = req.params.chapter;
+	const slug = req.params.slug;
 
 	if(!req.body.current || !req.body.total) {
 		res.status(403);
@@ -367,22 +366,22 @@ router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => 
 		return;
 	}
 
-	let provider = getProviderName(req.params.provider.toLowerCase());
+	const provider = getProviderName(req.params.provider.toLowerCase());
 	if(!provider) {
 		next();
 		return;
 	}
 
-	let progressData = getProgressData({
+	const progressData = getProgressData({
 		...req.body,
 		chapterId
 	});
 
 	// Get manga data to see if it's hentai or not
-	let data = await updateManga(provider, req.params.slug);
+	const data = await updateManga(provider, req.params.slug);
 	if(data.success) {
 
-		let storeNsfw = db.get("settings.store-nsfw") === "yes";
+		const storeNsfw = db.get("settings.store-nsfw") === "yes";
 		if((storeNsfw && data.constant.nsfw) || !data.constant.nsfw) {
 			// Update db
 			db.set(`hide_read.${getProviderId(provider)}.${slug}`, false);
@@ -399,7 +398,7 @@ router.post("/:provider/:slug/:chapter/set-progress", async (req, res, next) => 
 export default router;
 
 async function setColors(data: StoredData, slug: string) {
-	let lastChapter = await getMangaProgress(data.provider, slug);
+	const lastChapter = await getMangaProgress(data.provider, slug);
 	data.data.chapters.forEach(ch => {
 		if(ch.progress) ch.progress.percentageColor = (ch.progress && ch.progress?.chapterId === lastChapter?.chapterId) ? "recent" : "neutral";
 	});

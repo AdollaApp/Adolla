@@ -15,11 +15,11 @@ interface SecretConfig {
 
 let secretConfig: SecretConfig | null;
 
-let path = __dirname.split("/").slice(0, -1).join("/") + "/secret-config.json";
+const path = __dirname.split("/").slice(0, -1).join("/") + "/secret-config.json";
 if(fs.existsSync(path)) {
 	secretConfig = JSON.parse(fs.readFileSync(path, "utf-8"));
 } else {
-	console.error(chalk.red("[SECRET]") + ` No secret-config provided.`);
+	console.error(chalk.red("[SECRET]") + " No secret-config provided.");
 }
 
 export default (secretConfig || null);

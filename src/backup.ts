@@ -16,19 +16,19 @@ class Backup {
 
 	public async createBackup() {
 		console.info(chalk.yellowBright("[BACKUP]") + ` Making backup at ${new Date().toLocaleString("it")}`);
-		let reading = db.get("reading_new");
-		let lists: List[] = db.get("lists");
+		const reading = db.get("reading_new");
+		const lists: List[] = db.get("lists");
 		
-		let now = Date.now();
+		const now = Date.now();
 
 		// Remove stuff
 		lists.forEach(l => {
-			for(let entry of l.entries) {
+			for(const entry of l.entries) {
 				delete entry.data;
 			}
 		});
 
-		let backupJson = {
+		const backupJson = {
 			backupAt: now,
 			reading,
 			lists
@@ -43,10 +43,10 @@ class Backup {
 
 	private async checkTime() {
 
-		let offset = 1e3 * 60 * 60 * 12;
+		const offset = 1e3 * 60 * 60 * 12;
 
-		let lastBackupTime = await this.getLastBackupTime();
-		let difference = Date.now() - lastBackupTime;
+		const lastBackupTime = await this.getLastBackupTime();
+		const difference = Date.now() - lastBackupTime;
 		
 		console.info(chalk.yellowBright("[BACKUP]") + " Running backup check");
 
@@ -56,7 +56,7 @@ class Backup {
 				this.checkTime();
 			}, offset);
 		} else {
-			let timeoutValue = offset - difference;
+			const timeoutValue = offset - difference;
 			setTimeout(() => {
 				this.checkTime();
 			}, timeoutValue);
@@ -65,11 +65,11 @@ class Backup {
 
 	private async getLastBackupTime() {
 		if(!fs.existsSync("backups/")) fs.mkdirSync("backups");
-		let files = fs.readdirSync("backups/").map(fileName => Number(fileName.slice(0, -5)));
-		let last = files.sort((a, b) => b - a)[0] ?? 0;
+		const files = fs.readdirSync("backups/").map(fileName => Number(fileName.slice(0, -5)));
+		const last = files.sort((a, b) => b - a)[0] ?? 0;
 		return last;
 	}
 }
 
-let backup = new Backup();
+const backup = new Backup();
 export default backup;

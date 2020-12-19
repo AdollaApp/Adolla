@@ -12,4 +12,4 @@ export default {
 	notFound,
 	lists,
 	settings
-}
+};

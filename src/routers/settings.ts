@@ -12,25 +12,25 @@ const months = ["January", "February", "March", "April", "May", "June", "July", 
 
 router.get("/settings/", async (req, res) => {
 
-	let reading = await getReading();
+	const reading = await getReading();
 
 	// Get icons
-	let currentIcon = getIconSrc();
-	let icons = fs.readdirSync("./public/icons/").filter(n => !n.includes("DS_Store")).map(fileName => {
-		let src = `/icons/${fileName}`;
+	const currentIcon = getIconSrc();
+	const icons = fs.readdirSync("./public/icons/").filter(n => !n.includes("DS_Store")).map(fileName => {
+		const src = `/icons/${fileName}`;
 		return {
 			file: fileName,
 			src,
 			name: getIconName(fileName),
 			isSelected: src === currentIcon
-		}
+		};
 	});
 
 	// Get backups
-	let backupFiles = fs.readdirSync("./backups/");
-	let backups = backupFiles.map(fileName => {
-		let d = new Date(Number(fileName.slice(0, -5)));
-		let label = `${days[d.getDay()]}, ${d.getDate().toString().padStart(2, "0")} ${months[d.getMonth()]} ${d.getFullYear()}, ${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
+	const backupFiles = fs.readdirSync("./backups/");
+	const backups = backupFiles.map(fileName => {
+		const d = new Date(Number(fileName.slice(0, -5)));
+		const label = `${days[d.getDay()]}, ${d.getDate().toString().padStart(2, "0")} ${months[d.getMonth()]} ${d.getFullYear()}, ${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
 		return {
 			fileName,
 			label,
@@ -52,18 +52,18 @@ router.get("/settings/", async (req, res) => {
 router.get("/settings/restore-backup/:filename", async (req, res) => {
 	try {
 
-		let filename = req.params.filename;
-		let backup = JSON.parse(fs.readFileSync(`backups/${filename}`, "utf-8"));
+		const filename = req.params.filename;
+		const backup = JSON.parse(fs.readFileSync(`backups/${filename}`, "utf-8"));
 
-		let reading = backup.reading ?? {};
-		let lists = backup.lists ?? [];
+		const reading = backup.reading ?? {};
+		const lists = backup.lists ?? [];
 
 		// Merge reading
-		let r = db.get("reading_new") || {};
+		const r = db.get("reading_new") || {};
 		if(reading.mangasee) {
-			for(let provider of Object.keys(reading)) {
-				if(!r[provider]) r[provider] = {}
-				for(let slug of Object.keys(reading[provider])) {
+			for(const provider of Object.keys(reading)) {
+				if(!r[provider]) r[provider] = {};
+				for(const slug of Object.keys(reading[provider])) {
 					r[provider][slug] = {
 						...r[provider][slug],
 						...reading[provider][slug]
@@ -74,7 +74,7 @@ router.get("/settings/restore-backup/:filename", async (req, res) => {
 			r.mangasee = {
 				...(r.mangasee || {}),
 				...reading
-			}
+			};
 		}
 		db.set("reading_new", r);
 
@@ -94,7 +94,7 @@ router.get("/settings/restore-backup/:filename", async (req, res) => {
 
 router.post("/settings/set-icon/", async (req, res) => {
 
-	let newName = req.body.name;
+	const newName = req.body.name;
 	if(iconNamesReversed[newName]) {
 		db.set("settings.icon", newName);
 
@@ -129,16 +129,16 @@ router.post("/settings/set-app-settings", async (req, res) => {
 // Intercept manifest.json
 router.get("/manifest.json", (req, res) => {
 
-	let icons = fs.readdirSync("public/icons").filter(name => !name.includes("DS_Store")).map(fileName => {
+	const icons = fs.readdirSync("public/icons").filter(name => !name.includes("DS_Store")).map(fileName => {
 		return {
 			size: "200x200",
 			src: `/icons/${fileName}`
-		}
+		};
 	});
 
 	res.json({
-		"name": `${!!process.env.dev ? "DEV " : ""}Adolla`,
-		"short_name": `${!!process.env.dev ? "DEV " : ""}Adolla`,
+		"name": `${process.env.dev ? "DEV " : ""}Adolla`,
+		"short_name": `${process.env.dev ? "DEV " : ""}Adolla`,
 		"lang": "EN",
 		"start_url": "/",
 		"display": "standalone",
@@ -156,7 +156,7 @@ router.get("/manifest.json", (req, res) => {
 
 function getIconName(fileName: string) {
 	// Get array with each "section" of file name
-	let str = fileName.split(/-|\./).slice(0, -1).join("-");
+	const str = fileName.split(/-|\./).slice(0, -1).join("-");
 
 	return iconNames[str] ?? "Unknown";
 }

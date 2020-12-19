@@ -10,15 +10,15 @@ interface ReadingMeta {
 	slug: string;
 }
 
-export default async function getReading(maxResults: number = Infinity) {
+export default async function getReading(maxResults = Infinity): Promise<ScraperResponse[]> {
 
 	// Get manga that is being read
-	let readingManga = db.get("reading_new");
+	const readingManga = db.get("reading_new");
 
-	let allProviders = Object.keys(readingManga);
+	const allProviders = Object.keys(readingManga);
 	let readingMeta: ReadingMeta[] = [];
-	for(let provider of allProviders) {
-		for(let slug of Object.keys(readingManga[provider])) {
+	for(const provider of allProviders) {
+		for(const slug of Object.keys(readingManga[provider])) {
 			
 			// Check if it actually has any content
 			// If it's "mark as unread" it'll be undefined
@@ -48,7 +48,7 @@ export default async function getReading(maxResults: number = Infinity) {
 	}));
 
 	// TypeScript doesn't typeguard .filter :/
-	reading = reading.filter(e => e.success === true).sort((a, b) => (b.success && b.progress ? b.progress?.at : 0) - (a.success && a.progress ? a.progress?.at : 0))
+	reading = reading.filter(e => e.success === true).sort((a, b) => (b.success && b.progress ? b.progress?.at : 0) - (a.success && a.progress ? a.progress?.at : 0));
 
 	return reading;
 }

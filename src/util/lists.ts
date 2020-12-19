@@ -12,13 +12,13 @@ async function updateRecommended() {
 	console.info(chalk.yellowBright("[RECOMMENDATIONS]") + ` Updating recommendations at ${new Date().toLocaleString()}`);
 
 	const suggestionsUrl = "https://gist.githubusercontent.com/JipFr/17fabda0f0515965cbe1c73b75b7ed71/raw";
-	let recommended: List[] = await (await fetch(suggestionsUrl)).json();
+	const recommended: List[] = await (await fetch(suggestionsUrl)).json();
 	recommendedLists = recommended.map(recommendedItem => {
 		recommendedItem.byCreator = true;
 		return recommendedItem;
 	});
 
-	console.info(chalk.green("[RECOMMENDATIONS]") + ` Updated recommendations`);
+	console.info(chalk.green("[RECOMMENDATIONS]") + " Updated recommendations");
 
 }
 updateRecommended();

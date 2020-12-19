@@ -9,7 +9,8 @@
 		"clear-cache": "npm run build && node ./dist/clear-cache.js",
 		"format-data": "npm run build && node ./dist/format-data.js",
 		"build": "etsc",
-		"lint": "eslint src/"
+		"lint": "eslint src/",
+		"lint:fix": "eslint src/ --fix"
 	},
 	"keywords": [],
 	"author": "",

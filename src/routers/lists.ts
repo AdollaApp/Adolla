@@ -11,10 +11,10 @@ import { List } from "../types";
 router.get("/", async (req, res) => {
 	
 	// Get lists
-	let lists = await getLists();
+	const lists = await getLists();
 	
 	// Get reading 
-	let reading = await getReading();
+	const reading = await getReading();
 
 	res.render("lists", {
 		reading,
@@ -25,14 +25,15 @@ router.get("/", async (req, res) => {
 
 router.post("/set-home", async (req, res) => {
 
-	let { listId, value } = req.body;
+	const listId = req.body.listId;
+	let value = req.body.value;
 	value = !!value; // Make sure it's a boolean.
 
 	// Get all lists
-	let lists: List[] = await getLists();
+	const lists: List[] = await getLists();
 
 	// Find list and set home value
-	let list = lists.find(l => l.slug === listId);
+	const list = lists.find(l => l.slug === listId);
 	if(list) list.showOnHome = value;
 	
 	// Store lists in database
