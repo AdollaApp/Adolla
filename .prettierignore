@@ -1,0 +1,4 @@
+node_modules/
+backups/
+data.json
+*.handlebars

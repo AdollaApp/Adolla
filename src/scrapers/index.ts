@@ -1,8 +1,7 @@
-
 import { ScraperError } from "../types";
 
-/** 
- * Generate error object easily 
+/**
+ * Generate error object easily
  * @param status The HTTP status code
  * @param err A string describing the error
  */
@@ -10,8 +9,8 @@ export function error(status = -1, err = "Unknown"): ScraperError {
 	return {
 		status,
 		err,
-		success: false
-	}
+		success: false,
+	};
 }
 
 // Import Mangasee
@@ -23,11 +22,11 @@ import MangadexInstance from "./mangadex";
 export const Mangadex = MangadexInstance;
 
 // Import ReadComicsOnline
-import RCOInstance 	from "./rco";
+import RCOInstance from "./rco";
 export const RCO = RCOInstance;
 
 export const scrapers = {
 	Mangasee,
 	Mangadex,
-	RCO
-}
+	RCO,
+};

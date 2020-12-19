@@ -3,7 +3,7 @@
 }
 
 .alt-scrapers {
-	display: flex; 
+	display: flex;
 	flex-wrap: nowrap;
 	overflow-x: auto;
 	margin: 0 -20px;

@@ -8,7 +8,9 @@
 		"dev": "npm start",
 		"clear-cache": "npm run build && node ./dist/clear-cache.js",
 		"format-data": "npm run build && node ./dist/format-data.js",
-		"build": "etsc"
+		"build": "etsc",
+		"lint": "eslint src/",
+		"lint:fix": "prettier --write . && eslint src/ --fix"
 	},
 	"keywords": [],
 	"author": "",
@@ -28,13 +30,18 @@
 		"jipdb": "^1.0.4",
 		"mangadex-api": "^4.2.2",
 		"node-fetch-extra": "0.0.3",
+		"prettier-eslint": "^12.0.0",
 		"telebot": "^1.4.1",
 		"ts-node": "^9.0.0",
 		"typescript": "^4.1.2"
 	},
 	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^4.10.0",
+		"@typescript-eslint/parser": "^4.10.0",
 		"esbuild": "^0.7.22",
 		"esbuild-node-tsc": "^1.0.5",
-		"nodemon": "^2.0.6"
+		"eslint": "^7.16.0",
+		"nodemon": "^2.0.6",
+		"prettier": "2.2.1"
 	}
 }

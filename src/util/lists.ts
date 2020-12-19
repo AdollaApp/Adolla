@@ -1,4 +1,3 @@
-
 import chalk from "chalk";
 import fetch from "node-fetch-extra";
 
@@ -9,43 +8,50 @@ import { List } from "../types";
 // Get "recommended" list
 let recommendedLists = [];
 async function updateRecommended() {
-	console.info(chalk.yellowBright("[RECOMMENDATIONS]") + ` Updating recommendations at ${new Date().toLocaleString()}`);
+	console.info(
+		chalk.yellowBright("[RECOMMENDATIONS]") +
+			` Updating recommendations at ${new Date().toLocaleString()}`
+	);
 
-	const suggestionsUrl = "https://gist.githubusercontent.com/JipFr/17fabda0f0515965cbe1c73b75b7ed71/raw";
-	let recommended: List[] = await (await fetch(suggestionsUrl)).json();
-	recommendedLists = recommended.map(recommendedItem => {
+	const suggestionsUrl =
+		"https://gist.githubusercontent.com/JipFr/17fabda0f0515965cbe1c73b75b7ed71/raw";
+	const recommended: List[] = await (await fetch(suggestionsUrl)).json();
+	recommendedLists = recommended.map((recommendedItem) => {
 		recommendedItem.byCreator = true;
 		return recommendedItem;
 	});
 
-	console.info(chalk.green("[RECOMMENDATIONS]") + ` Updated recommendations`);
-
+	console.info(chalk.green("[RECOMMENDATIONS]") + " Updated recommendations");
 }
 updateRecommended();
 setInterval(updateRecommended, 1e3 * 60 * 60 * 12); // Update every 12 hours
 
-
 export async function getLists(): Promise<List[]> {
-	
 	// Get lists from database
 	let lists: List[] = db.get("lists");
 
 	// Remove creator items from db results. There shouldn't be any, but I hope that this is what fixes Destruc7i0n's bug.
-	lists = lists.filter(l => !l.byCreator);
+	lists = lists.filter((l) => !l.byCreator);
 
 	// Now combine the lists
 	let updatedLists: List[] = Object.assign([], [...recommendedLists, ...lists]);
-	
-	updatedLists = await Promise.all(updatedLists.map(async list => {
-		list.entries = await Promise.all(list.entries.map(async entry => {
-			entry.data = await updateManga(entry.provider ?? "mangasee", entry.slug);
-			return entry;
-		}));
-		list.entries = list.entries.filter(entry => entry.data.success);
-		return list;
-	}));
-	
-	
+
+	updatedLists = await Promise.all(
+		updatedLists.map(async (list) => {
+			list.entries = await Promise.all(
+				list.entries.map(async (entry) => {
+					entry.data = await updateManga(
+						entry.provider ?? "mangasee",
+						entry.slug
+					);
+					return entry;
+				})
+			);
+			list.entries = list.entries.filter((entry) => entry.data.success);
+			return list;
+		})
+	);
+
 	// Return both database items and creator's suggestions
 	return updatedLists;
 }

@@ -1,4 +1,3 @@
-
 import chalk from "chalk";
 import fetch from "node-fetch-extra";
 
@@ -15,7 +14,6 @@ import { Progress } from "../types";
 import { getProviderId } from "../routers/manga-page";
 
 class Updater {
-
 	start() {
 		this.updateCache();
 		setInterval(() => {
@@ -24,165 +22,221 @@ class Updater {
 	}
 
 	private async updateCache() {
-	
 		/**
 		 * UPDATE "POPULAR" CACHE
 		 */
-		console.info(chalk.yellowBright("[CACHE]") + ` Updating popular cache at ${new Date().toLocaleString()}`);
-		let popular = await scrapers.Mangasee.search("");
-		
-		await Promise.all(popular.map(obj => obj.success ? obj : null).filter(Boolean).map(async obj => {
-			// Update manga and store new value in cache
-			await updateManga(obj.provider ?? "mangasee", obj.constant.slug, true);
-		}));
+		console.info(
+			chalk.yellowBright("[CACHE]") +
+				` Updating popular cache at ${new Date().toLocaleString()}`
+		);
+		const popular = await scrapers.Mangasee.search("");
+
+		await Promise.all(
+			popular
+				.map((obj) => (obj.success ? obj : null))
+				.filter(Boolean)
+				.map(async (obj) => {
+					// Update manga and store new value in cache
+					await updateManga(
+						obj.provider ?? "mangasee",
+						obj.constant.slug,
+						true
+					);
+				})
+		);
 
 		console.info(chalk.green("[CACHE]") + " Updated cache for popular manga");
-
 
 		/**
 		 * UPDATE "READING" CACHE
 		 */
-		console.info(chalk.yellowBright("[NOTIFS]") + ` Looking for new chapters at ${new Date().toLocaleString()}`);
-		let reading = await getReading();
-		
-		await Promise.all(reading.map(obj => obj.success ? obj : null).filter(Boolean).map(async obj => {
-			
-			// Update manga and store new value in cache + variable
-	
-			let data = await updateManga(obj.provider, obj.constant.slug, true);
-			
-			// Check for new chapters and notify user
-			if(data.success) {
-				// Now get a potential next chapter
-				let chapters = data.data.chapters;
+		console.info(
+			chalk.yellowBright("[NOTIFS]") +
+				` Looking for new chapters at ${new Date().toLocaleString()}`
+		);
+		const reading = await getReading();
 
-				// Add "combined" value for sorting
-				chapters.forEach(ch => {
-					ch.combined = ch.season * 1e3 + ch.chapter;
-				});
-				
-				// Sort chapters on location
-				chapters = chapters.sort((a, b) => a.combined - b.combined);	
+		await Promise.all(
+			reading
+				.map((obj) => (obj.success ? obj : null))
+				.filter(Boolean)
+				.map(async (obj) => {
+					// Update manga and store new value in cache + variable
 
-				// Get reading
-				let dbString = `reading_new.${getProviderId(data.provider)}.${data.constant.slug}.last`;
-				let reading: Progress = db.get(dbString);
-				if(!reading) return null;
-				let currentChapter = chapters.find(c => c.hrefString === reading.chapterId);
-				
-				let nextChapter = chapters[chapters.indexOf(currentChapter) + 1];
+					const data = await updateManga(obj.provider, obj.constant.slug, true);
 
-				if(nextChapter) {
-					// There is a next chapter!
+					// Check for new chapters and notify user
+					if (data.success) {
+						// Now get a potential next chapter
+						let chapters = data.data.chapters;
 
-					// Compare chapter release dates
-					let chapterReleaseDate = new Date(nextChapter.date).getTime();
-					if(chapterReleaseDate > reading.at) {
-						// A new chapter is out! 
+						// Add "combined" value for sorting
+						chapters.forEach((ch) => {
+							ch.combined = ch.season * 1e3 + ch.chapter;
+						});
 
-						// Check if user hasn't been notified already
-						let dbString = `notified.${data.constant.slug}.${nextChapter.season.toString().replace(/\./g, "_")}-${nextChapter.chapter.toString().replace(/\./g, "_")}`;
-						let hasNotified = db.get(dbString);
+						// Sort chapters on location
+						chapters = chapters.sort((a, b) => a.combined - b.combined);
 
-						if(hasNotified) {
-							console.info(chalk.red("[NOTIFS]") + ` New chapter was found for ${data.constant.title}, user has already been notified`);
-							return;
-						}
+						// Get reading
+						const dbString = `reading_new.${getProviderId(data.provider)}.${
+							data.constant.slug
+						}.last`;
+						const reading: Progress = db.get(dbString);
+						if (!reading) return null;
+						const currentChapter = chapters.find(
+							(c) => c.hrefString === reading.chapterId
+						);
 
-						// Generate message
-						let host = db.get("other.host");
-						let msg = `New chapter for **${data.constant.title}**!`;
-						let url = `${host.replace("localhost", "127.0.0.1")}${data.provider}/${data.constant.slug}/${nextChapter.season}-${nextChapter.chapter}`;
-						let urlMsg = host ? `Check it out at ${url}/` : ""; 
-						let msgFull = `${msg}\n${urlMsg}`;
+						const nextChapter = chapters[chapters.indexOf(currentChapter) + 1];
 
-						// Get bot account
-						let doSet = false;
-						let bot = Bot.get();
-						if(bot) {
+						if (nextChapter) {
+							// There is a next chapter!
 
-							// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
-							console.info(chalk.green("[NOTIFS]") + ` New chapter found for ${data.constant.title}, notifying user with Telegram bot`);
+							// Compare chapter release dates
+							const chapterReleaseDate = new Date(nextChapter.date).getTime();
+							if (chapterReleaseDate > reading.at) {
+								// A new chapter is out!
 
-							Bot.send(msgFull);
-							doSet = true
-						} else {
-							// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
-							console.info(chalk.red("[NOTIFS]") + ` New chapter found for ${data.constant.title} but Telegram Bot is not configured`);
-						}
+								// Check if user hasn't been notified already
+								const dbString = `notified.${
+									data.constant.slug
+								}.${nextChapter.season
+									.toString()
+									.replace(
+										/\./g,
+										"_"
+									)}-${nextChapter.chapter.toString().replace(/\./g, "_")}`;
+								const hasNotified = db.get(dbString);
 
-						// Discord webhook
-						if(secretConfig.discord_webhook) {
-							console.info(chalk.green("[NOTIFS]") + ` New chapter found for ${data.constant.title}, notifying user over Discord Webhook`);
-							let webhookNotif = await fetch(secretConfig.discord_webhook, {
-								method: "POST",
-								headers: {
-									"content-type": "application/json"
-								},
-								body: JSON.stringify({
-									avatar_url: "https://raw.githubusercontent.com/JipFr/Adolla/dev/public/icons/white-on-blue.png",
-									username: "Adolla",
-									embeds: [
+								if (hasNotified) {
+									console.info(
+										chalk.red("[NOTIFS]") +
+											` New chapter was found for ${data.constant.title}, user has already been notified`
+									);
+									return;
+								}
+
+								// Generate message
+								const host = db.get("other.host");
+								const msg = `New chapter for **${data.constant.title}**!`;
+								const url = `${host.replace("localhost", "127.0.0.1")}${
+									data.provider
+								}/${data.constant.slug}/${nextChapter.season}-${
+									nextChapter.chapter
+								}`;
+								const urlMsg = host ? `Check it out at ${url}/` : "";
+								const msgFull = `${msg}\n${urlMsg}`;
+
+								// Get bot account
+								let doSet = false;
+								const bot = Bot.get();
+								if (bot) {
+									// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
+									console.info(
+										chalk.green("[NOTIFS]") +
+											` New chapter found for ${data.constant.title}, notifying user with Telegram bot`
+									);
+
+									Bot.send(msgFull);
+									doSet = true;
+								} else {
+									// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
+									console.info(
+										chalk.red("[NOTIFS]") +
+											` New chapter found for ${data.constant.title} but Telegram Bot is not configured`
+									);
+								}
+
+								// Discord webhook
+								if (secretConfig.discord_webhook) {
+									console.info(
+										chalk.green("[NOTIFS]") +
+											` New chapter found for ${data.constant.title}, notifying user over Discord Webhook`
+									);
+									const webhookNotif = await fetch(
+										secretConfig.discord_webhook,
 										{
-											"title": `${msg} (${nextChapter.label})`,
-											"description": "Click title to open the chapter",
-											url,
-											"color": 4959182,
-											"author": {
-												"name": "Adolla",
-												"url": "https://jipfr.nl/adolla",
-												"icon_url": "https://raw.githubusercontent.com/JipFr/Adolla/dev/public/icons/white-on-blue.png"
-											}
+											method: "POST",
+											headers: {
+												"content-type": "application/json",
+											},
+											body: JSON.stringify({
+												avatar_url:
+													"https://raw.githubusercontent.com/JipFr/Adolla/dev/public/icons/white-on-blue.png",
+												username: "Adolla",
+												embeds: [
+													{
+														title: `${msg} (${nextChapter.label})`,
+														description: "Click title to open the chapter",
+														url,
+														color: 4959182,
+														author: {
+															name: "Adolla",
+															url: "https://jipfr.nl/adolla",
+															icon_url:
+																"https://raw.githubusercontent.com/JipFr/Adolla/dev/public/icons/white-on-blue.png",
+														},
+													},
+												],
+											}),
 										}
-									]
-								})
-							});
-							console.info(chalk.green("[NOTIFS]") + ` New chapter found for ${data.constant.title}, attempted to notify user over Discord Webhook. HTTP status ${webhookNotif.status}`);
-							doSet = true;
-						} else {
-							console.info(chalk.red("[NOTIFS]") + ` New chapter found for ${data.constant.title} but Discord webhook is not configured`);
+									);
+									console.info(
+										chalk.green("[NOTIFS]") +
+											` New chapter found for ${data.constant.title}, attempted to notify user over Discord Webhook. HTTP status ${webhookNotif.status}`
+									);
+									doSet = true;
+								} else {
+									console.info(
+										chalk.red("[NOTIFS]") +
+											` New chapter found for ${data.constant.title} but Discord webhook is not configured`
+									);
+								}
+
+								if (doSet) db.set(dbString, true);
+							}
 						}
-
-						if(doSet) db.set(dbString, true);
-
 					}
-				}
+				})
+		);
 
-			}
-		}));
-
-		console.info(chalk.green("[NOTIFS]") + ` Checked for new chapters, now done`);
+		console.info(
+			chalk.green("[NOTIFS]") + " Checked for new chapters, now done"
+		);
 
 		/**
 		 * Remove old items from cache
 		 */
 
-
 		// Get data
-		
-		console.info(chalk.yellowBright("[CLEANUP]") + ` Checking each cache entry for old data`);
+
+		console.info(
+			chalk.yellowBright("[CLEANUP]") +
+				" Checking each cache entry for old data"
+		);
 
 		// Check each entry and
-		for(let provider of Object.keys(cache)) {
-			
-			for(let slug of Object.keys(cache[provider])) {
-				
+		for (const provider of Object.keys(cache)) {
+			for (const slug of Object.keys(cache[provider])) {
 				// Get difference from saved time in MS
-				let diff = Date.now() - (cache[provider]?.[slug]?.savedAt ?? 9e9);
-				
+				const diff = Date.now() - (cache[provider]?.[slug]?.savedAt ?? 9e9);
+
 				// Check if cache is old. How old should be fairly obvious
-				if(diff > (1e3 * 60 * 60) * 24) {
+				if (diff > 1e3 * 60 * 60 * 24) {
 					cache[provider][slug] = undefined;
-					console.info(chalk.green("[CLEANUP]") + ` Deleting cache for ${slug} since it's ${Math.floor(diff / (60 * 1e3))} minutes old`);
+					console.info(
+						chalk.green("[CLEANUP]") +
+							` Deleting cache for ${slug} since it's ${Math.floor(
+								diff / (60 * 1e3)
+							)} minutes old`
+					);
 				}
-
 			}
-
 		}
 
 		// Write to db
-		console.info(chalk.green("[CLEANUP]") + ` Done cleaning up`);
-
+		console.info(chalk.green("[CLEANUP]") + " Done cleaning up");
 	}
 }
 

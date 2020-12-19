@@ -1,4 +1,4 @@
-if(window.history) {
+if (window.history) {
 	document.querySelector(".not-found .anchor").addEventListener("click", () => {
 		history.back();
 	});

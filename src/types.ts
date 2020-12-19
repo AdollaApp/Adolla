@@ -1,4 +1,3 @@
-
 import { ProviderId } from "./scrapers/types";
 
 /** This is a single chapter */
@@ -19,7 +18,7 @@ export interface Chapter {
 	realProgress?: Progress;
 	/** Season and chapter combined for sorting purposes, for example 300012 */
 	combined?: number;
-	/** 
+	/**
 	 * Href string, really just the chaptor indicator
 	 * For mangasee, this is "x-y".
 	 * MangaDex has a unique ID for each chapter, so that's just a number sequence
@@ -56,25 +55,25 @@ export interface MangaData {
 export interface Database {
 	reading_new: Reading;
 	other: {
-		host?: string
-	},
+		host?: string;
+	};
 	notified: {
 		[key: string]: {
-			[key: string]: true // 
-		}
-	}
+			[key: string]: true; //
+		};
+	};
 	lists: List[];
 	settings: {
 		icon: string;
 		"show-nsfw": "yes" | "no";
 		"store-nsfw": "yes" | "no";
-	}
+	};
 }
 /** Save what the user is currently reading */
 export interface Reading {
 	[key: string]: {
-		[key: string]: Progress
-	}
+		[key: string]: Progress;
+	};
 }
 
 // Scraper interfaces
@@ -105,10 +104,10 @@ export interface Progress {
 	/** Current page */
 	current: number;
 	/** Total pages in chapter */
-	total: number
+	total: number;
 	/** Date timestamp */
 	at: number;
-	/** 
+	/**
 	 * Slug format per scraper
 	 * For mangasee that's season-chapter,
 	 * MangaDex has its own ID for each chapter
@@ -131,6 +130,6 @@ export interface List {
 	entries: {
 		slug: string;
 		provider?: string;
-		data?: ScraperResponse
+		data?: ScraperResponse;
 	}[];
 }

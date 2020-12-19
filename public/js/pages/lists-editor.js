@@ -1,14 +1,16 @@
-
-const clean = str => str.replace(/[\W_]+/g," ").trim().toLowerCase().replace(/ /g, "-");
+const clean = (str) =>
+	str
+		.replace(/[\W_]+/g, " ")
+		.trim()
+		.toLowerCase()
+		.replace(/ /g, "-");
 let suggestions = [];
 
 function updateLists() {
-	
 	const wrapper = document.querySelector(".display-lists");
 	wrapper.innerHTML = "";
 
-	for(let list of lists) {
-
+	for (let list of lists) {
 		// Create node
 		let span = document.createElement("span");
 
@@ -21,7 +23,7 @@ function updateLists() {
 
 		// Add "remove from list" functionality
 		span.querySelector("svg").addEventListener("click", () => {
-			lists = lists.filter(l => l.slug !== list.slug);
+			lists = lists.filter((l) => l.slug !== list.slug);
 			updateLists();
 			setLists();
 		});
@@ -31,28 +33,32 @@ function updateLists() {
 	}
 
 	updateSuggestions();
-
 }
 
 function initLists() {
+	document
+		.querySelector(".lists-wrapper input")
+		.addEventListener("keyup", (evt) => {
+			if (
+				evt.key === "Enter" &&
+				evt.currentTarget.value.length > 0 &&
+				clean(evt.currentTarget.value).length > 0
+			) {
+				// Add this to the lists
+				addList(evt.currentTarget.value);
 
-	document.querySelector(".lists-wrapper input").addEventListener("keyup", evt => {
-		if(evt.key === "Enter" && evt.currentTarget.value.length > 0 && clean(evt.currentTarget.value).length > 0) { // Add this to the lists
-			addList(evt.currentTarget.value);
+				// Reset input
+				evt.currentTarget.value = "";
+			}
 
-			// Reset input
-			evt.currentTarget.value = "";
-		}
-
-		updateSuggestions();
-
-	});
+			updateSuggestions();
+		});
 
 	let input = document.querySelector(".lists-wrapper input");
-	input.addEventListener("focus", evt => {
+	input.addEventListener("focus", (evt) => {
 		input.classList.add("show-suggestions");
 	});
-	input.addEventListener("blur", evt => {
+	input.addEventListener("blur", (evt) => {
 		setTimeout(() => {
 			input.classList.remove("show-suggestions");
 		}, 100);
@@ -64,13 +70,13 @@ initLists();
 
 async function setLists() {
 	let url = location.href;
-	if(!url.endsWith("/")) url += "/";
+	if (!url.endsWith("/")) url += "/";
 	fetch(`${url}set-lists`, {
 		method: "POST",
 		headers: {
-			"content-type": "application/json"
+			"content-type": "application/json",
 		},
-		body: JSON.stringify({ lists })
+		body: JSON.stringify({ lists }),
 	});
 }
 
@@ -80,8 +86,8 @@ function addList(input) {
 	let slug = clean(input);
 
 	// Prevent duplicates
-	let current = lists.find(v => v.slug === slug);
-	if(current) {
+	let current = lists.find((v) => v.slug === slug);
+	if (current) {
 		let input = evt.currentTarget;
 		input.classList.add("shake");
 		setTimeout(() => {
@@ -93,9 +99,9 @@ function addList(input) {
 	// Add to list
 	lists.push({
 		name: input,
-		slug
+		slug,
 	});
-	
+
 	// Now store the updated list
 	setLists();
 
@@ -108,21 +114,23 @@ function addList(input) {
 
 // Update suggestions in DOM
 function updateSuggestions() {
-	
 	// Get all lists the manga isn't already in
-	suggestions = allLists.filter(v => !lists.find(e => e.slug === v.slug))
-	
+	suggestions = allLists.filter((v) => !lists.find((e) => e.slug === v.slug));
+
 	// Sort by current matches compared to input
-	let currentValue = clean(document.querySelector(".lists-wrapper .input-div input").value);
-	suggestions = suggestions.filter(suggestionList => suggestionList.slug.includes(currentValue));
+	let currentValue = clean(
+		document.querySelector(".lists-wrapper .input-div input").value
+	);
+	suggestions = suggestions.filter((suggestionList) =>
+		suggestionList.slug.includes(currentValue)
+	);
 
 	// Add nodes
 	let wrapper = document.querySelector(".suggestions");
 	wrapper.innerHTML = "";
 
 	// Add each suggestion
-	for(let list of suggestions) {
-
+	for (let list of suggestions) {
 		// Create node
 		let node = document.createElement("div");
 
@@ -140,6 +148,5 @@ function updateSuggestions() {
 		node.addEventListener("click", () => {
 			addList(list.name);
 		});
-
 	}
 }
