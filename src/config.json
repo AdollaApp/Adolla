@@ -4,5 +4,6 @@
 	},
 	"cache": {
 		"duration": 1800000
-	}
+	},
+	"disallowedGenres": ["smut", "ecchi", "nsfw", "hentai"]
 }

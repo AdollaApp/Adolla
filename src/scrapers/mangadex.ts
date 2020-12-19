@@ -1,13 +1,15 @@
 
-import { Chapter, ScraperError, ScraperResponse } from "../types";
-import { Scraper, SearchError, SearchOptions } from "./types";
-import { Mangadex, Tag } from "mangadex-api";
-import fetch from "node-fetch-extra";
-import { getProviderId, isProviderId } from "../routers/manga-page";
-import secretConfig from "../util/secretConfig";
 import chalk from "chalk";
+import fetch from "node-fetch-extra";
+import { Mangadex, Tag } from "mangadex-api";
+
+import secretConfig from "../util/secretConfig";
 import updateManga from "../util/updateManga";
+import { Chapter, ScraperError, ScraperResponse } from "../types";
+import { Scraper, SearchOptions } from "./types";
+import { getProviderId, isProviderId } from "../routers/manga-page";
 import { error } from "./index";
+import { disallowedGenres } from "../config.json";
 
 class MangadexClass extends Scraper {
 
@@ -143,9 +145,15 @@ class MangadexClass extends Scraper {
 			// Get description paragraphs
 			const descriptionParagraphs = data.description.split("\r\n").filter(Boolean).filter(c => !c.startsWith("["));
 
+			// See if it's hentai 
+			let nsfw = data.isHentai;
+			for(let genre of genres) {
+				if(disallowedGenres.includes(genre.toLowerCase())) nsfw = true;
+			}
+
 			// Return data
 			let provider = getProviderId(this.provider);
-				
+		
 			// console.info(chalk.blue(" [MD]") + ` Resolving ${data.title} at ${new Date().toLocaleString("it")}`);
 
 			return {
@@ -156,7 +164,7 @@ class MangadexClass extends Scraper {
 					posterUrl: data.mainCover,
 					alternateTitles: data.altTitles,
 					descriptionParagraphs,
-					nsfw: data.isHentai
+					nsfw
 				},
 				data: {
 					chapters: newChapters,
