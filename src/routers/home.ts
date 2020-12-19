@@ -1,4 +1,3 @@
-
 import express from "express";
 const router = express.Router();
 
@@ -9,7 +8,6 @@ import { getLists } from "../util/lists";
 import { doSearch } from "../util/doSearch";
 
 router.get("/", async (req, res) => {
-
 	const url = `http://${req.headers.host}/`;
 	db.set("other.host", url);
 
@@ -19,13 +17,13 @@ router.get("/", async (req, res) => {
 	}); // Empty search sorts by popular
 
 	// Set progress for popular manga
-	if(Array.isArray(popular)) {
+	if (Array.isArray(popular)) {
 		await Promise.all(popular.map(setMangaProgress));
 	}
 	// Get lists
 	let lists = await getLists();
-	lists = lists.filter(list => list.showOnHome);
-	
+	lists = lists.filter((list) => list.showOnHome);
+
 	// Get reading
 	const reading = await getReading();
 

@@ -14,16 +14,16 @@ Easy to use web app to read Manga.
 - Is a PWA
 - Easy navigation from anywhere in the app
 - Multiple intergrations to notify you about new chapters
-	- Telegram
-	- Discord webhooks
+  - Telegram
+  - Discord webhooks
 - Multiple scrapers to read from:
-	- MangaSee
-	- Mangadex
-	- ReadComicOnline
+  - MangaSee
+  - Mangadex
+  - ReadComicOnline
 
 ## Setup
 
-To set this up, clone the repo. Navigate to the project root and install the relevant packages. This can be done with `npm install`. 
+To set this up, clone the repo. Navigate to the project root and install the relevant packages. This can be done with `npm install`.
 
 Then, to start the app, run `npm start`. This will host the web server.
 

@@ -1,4 +1,3 @@
-
 import express from "express";
 const router = express.Router();
 
@@ -9,11 +8,10 @@ import { List } from "../types";
 
 // Main page!
 router.get("/", async (req, res) => {
-	
 	// Get lists
 	const lists = await getLists();
-	
-	// Get reading 
+
+	// Get reading
 	const reading = await getReading();
 
 	res.render("lists", {
@@ -24,7 +22,6 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/set-home", async (req, res) => {
-
 	const listId = req.body.listId;
 	let value = req.body.value;
 	value = !!value; // Make sure it's a boolean.
@@ -33,11 +30,14 @@ router.post("/set-home", async (req, res) => {
 	const lists: List[] = await getLists();
 
 	// Find list and set home value
-	const list = lists.find(l => l.slug === listId);
-	if(list) list.showOnHome = value;
-	
+	const list = lists.find((l) => l.slug === listId);
+	if (list) list.showOnHome = value;
+
 	// Store lists in database
-	db.set("lists", lists.filter(l => !l.byCreator));
+	db.set(
+		"lists",
+		lists.filter((l) => !l.byCreator)
+	);
 
 	res.json({
 		status: 200

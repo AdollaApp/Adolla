@@ -1,4 +1,3 @@
-
 import express from "express";
 const router = express.Router();
 
@@ -22,18 +21,18 @@ router.get("/:provider", async (req, res, next) => {
 	const param = req.params.provider.toLowerCase();
 	const provider: ProviderId | null = isProviderId(param) ? param : null;
 	const scraperName = getProviderName(provider);
-	if(!scraperName) {
+	if (!scraperName) {
 		next();
 		return;
-	}	
+	}
 
 	// !Get search results
 	// Get search results
 	let searchResults: ScraperResponse[] | SearchError = [];
 	searchResults = await doSearch(provider, query);
-	
+
 	// Verify search results
-	if(Array.isArray(searchResults)) {
+	if (Array.isArray(searchResults)) {
 		await Promise.all(searchResults.map(setMangaProgress));
 	}
 
@@ -41,12 +40,12 @@ router.get("/:provider", async (req, res, next) => {
 	const reading = await getReading(4);
 
 	// ! Get all scrapers and names
-	
+
 	// Get all scrapers
 	const scrapersArray: Scraper[] = Object.values(scrapers.scrapers);
 
 	// Get name, id, href, and if whether or not the current scraper
-	const scraperMap = scrapersArray.map(scraper => {
+	const scraperMap = scrapersArray.map((scraper) => {
 		const id = getProviderId(scraper.provider);
 		const name = getProviderName(id);
 		return {

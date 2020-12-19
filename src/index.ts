@@ -1,4 +1,3 @@
-
 import chalk from "chalk";
 
 console.info(chalk.green("[SERVER]") + ` Starting up at ${new Date().toLocaleString("it")}`);

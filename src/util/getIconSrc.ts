@@ -1,4 +1,3 @@
-
 import db from "../db";
 
 export const iconNames = {
@@ -10,7 +9,7 @@ export const iconNames = {
 	"white-on-red": "Crimson",
 	"white-on-black": "Black"
 };
-export const iconNamesReversed = Object.fromEntries(Object.entries(iconNames).map(v => v.reverse()));
+export const iconNamesReversed = Object.fromEntries(Object.entries(iconNames).map((v) => v.reverse()));
 
 export default function getIconSrc(): string {
 	const selectedName = db.get("settings.icon");

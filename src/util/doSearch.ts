@@ -1,4 +1,3 @@
-
 // Utility function for search
 
 import { ProviderId, Scraper, SearchError, SearchOptions } from "../scrapers/types";
@@ -7,10 +6,9 @@ import { getProviderName } from "../routers/manga-page";
 import { ScraperResponse } from "../types";
 
 export async function doSearch(provider: ProviderId, query = "", searchOptions: Partial<SearchOptions> = {}): Promise<ScraperResponse[] | SearchError> {
-	
 	// Get and verify scraper
 	const scraper: Scraper | undefined = scrapers[getProviderName(provider)];
-	if(!scraper) {
+	if (!scraper) {
 		return null;
 	}
 

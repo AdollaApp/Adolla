@@ -2,12 +2,11 @@ import chalk from "chalk";
 import Telebot from "telebot";
 import secretConfig from "../util/secretConfig";
 
-
 let bot = null;
-if(secretConfig?.telegram?.bot) {
+if (secretConfig?.telegram?.bot) {
 	bot = new Telebot(secretConfig.telegram.bot);
 	bot.start();
-	bot.on("text", message => {
+	bot.on("text", (message) => {
 		console.info(`The Telegram bot has received a message from ID: ${message.from.id} (@${message.from.username})`);
 	});
 } else {
@@ -20,7 +19,7 @@ class Bot {
 	}
 	send(message: string) {
 		const bot = this.get();
-		if(bot && secretConfig?.telegram?.user) {
+		if (bot && secretConfig?.telegram?.user) {
 			bot.sendMessage(secretConfig.telegram.user, message, {
 				parseMode: "markdown"
 			});

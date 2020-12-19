@@ -28,42 +28,55 @@ async function getReading() {
 	let body = await req.loadString();
 
 	// Extract data from HTML
-	let entriesHTML = body.split(/<div class="manga-grid show-all-wrapper do-show-all">/)[1];
-	entriesHTML = entriesHTML.split(/<button class="show-all">Show <span class="more-count"><\/span> more<\/button>/)[0];
+	let entriesHTML = body.split(
+		/<div class="manga-grid show-all-wrapper do-show-all">/
+	)[1];
+	entriesHTML = entriesHTML.split(
+		/<button class="show-all">Show <span class="more-count"><\/span> more<\/button>/
+	)[0];
 
 	// Now get card data
-	let cardsHTML = entriesHTML.split(/<div class="manga-card">/).filter(s => s.trim().length > 0);
+	let cardsHTML = entriesHTML
+		.split(/<div class="manga-card">/)
+		.filter((s) => s.trim().length > 0);
 	let cards = [];
 	for (let cardHTML of cardsHTML) {
-
 		// Get link to item
 		let href = cardHTML.split(`href="`)[1].split(`"`)[0].trim();
 
 		// Get poster URL
-		let poster = cardHTML.split(`background-image: url\('`)[1].split(`'`)[0].trim();
+		let poster = cardHTML
+			.split(`background-image: url\('`)[1]
+			.split(`'`)[0]
+			.trim();
 
 		// Get title
-		let title = cardHTML.split(`<h2 class="title-small">`)[1].split("</h2>")[0].trim();
+		let title = cardHTML
+			.split(`<h2 class="title-small">`)[1]
+			.split("</h2>")[0]
+			.trim();
 
 		// Get "next" chapter title
-		let chapterTitle = cardHTML.split(`<div class="poster-text">`)[1].split("</div>")[0].trim();
+		let chapterTitle = cardHTML
+			.split(`<div class="poster-text">`)[1]
+			.split("</div>")[0]
+			.trim();
 
 		// Get provider
 		let provider = href.split("/").filter(Boolean)[0];
 		provider = provider.slice(0, 1).toUpperCase() + provider.slice(1);
-		
+
 		cards.push({
 			href,
 			poster,
 			title,
 			chapterTitle,
-			provider
+			provider,
 		});
 	}
 
 	return cards;
 }
-
 
 async function createWidget(item) {
 	log(item);
@@ -81,10 +94,7 @@ async function createWidget(item) {
 	widget.backgroundColor = new Color("#4babce");
 	let gradient = new LinearGradient();
 	gradient.locations = [0, 1];
-	gradient.colors = [
-		new Color("#4babcec4"),
-		new Color("#4babce88")
-	]
+	gradient.colors = [new Color("#4babcec4"), new Color("#4babce88")];
 	widget.backgroundGradient = gradient;
 
 	// Content
@@ -94,7 +104,7 @@ async function createWidget(item) {
 	let subtitleText = widget.addText(item.provider);
 	subtitleText.font = Font.boldSystemFont(16);
 	subtitleText.textColor = new Color("#c7f0ff");
-	
+
 	// Manga title
 	let titleText = widget.addText(item.title);
 	titleText.font = Font.boldSystemFont(24);
