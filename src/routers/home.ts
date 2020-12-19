@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
 
 	// Get popular manga
 	const popular = await doSearch("mangasee", "", {
-		resultCount: 20
+		resultCount: 20,
 	}); // Empty search sorts by popular
 
 	// Set progress for popular manga
@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
 		popular,
 		reading,
 		lists,
-		isHome: true
+		isHome: true,
 	});
 });
 

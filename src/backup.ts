@@ -13,7 +13,10 @@ class Backup {
 	}
 
 	public async createBackup() {
-		console.info(chalk.yellowBright("[BACKUP]") + ` Making backup at ${new Date().toLocaleString("it")}`);
+		console.info(
+			chalk.yellowBright("[BACKUP]") +
+				` Making backup at ${new Date().toLocaleString("it")}`
+		);
 		const reading = db.get("reading_new");
 		const lists: List[] = db.get("lists");
 
@@ -29,13 +32,16 @@ class Backup {
 		const backupJson = {
 			backupAt: now,
 			reading,
-			lists
+			lists,
 		};
 
 		if (!fs.existsSync("backups/")) fs.mkdirSync("backups");
 		fs.writeFileSync(`backups/${now}.json`, JSON.stringify(backupJson));
 
-		console.info(chalk.green("[BACKUP]") + ` Saved backup at ${new Date().toLocaleString("it")}`);
+		console.info(
+			chalk.green("[BACKUP]") +
+				` Saved backup at ${new Date().toLocaleString("it")}`
+		);
 	}
 
 	private async checkTime() {
@@ -61,7 +67,9 @@ class Backup {
 
 	private async getLastBackupTime() {
 		if (!fs.existsSync("backups/")) fs.mkdirSync("backups");
-		const files = fs.readdirSync("backups/").map((fileName) => Number(fileName.slice(0, -5)));
+		const files = fs
+			.readdirSync("backups/")
+			.map((fileName) => Number(fileName.slice(0, -5)));
 		const last = files.sort((a, b) => b - a)[0] ?? 0;
 		return last;
 	}

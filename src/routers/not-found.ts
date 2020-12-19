@@ -7,7 +7,7 @@ router.get("/", async (req, res) => {
 	const reading = await getReading();
 
 	res.render("not-found", {
-		reading
+		reading,
 	});
 });
 

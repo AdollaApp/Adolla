@@ -6,8 +6,29 @@ import getIconSrc, { iconNames, iconNamesReversed } from "../util/getIconSrc";
 
 const router = express.Router();
 
-const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const days = [
+	"Sunday",
+	"Monday",
+	"Tuesday",
+	"Wednesday",
+	"Thursday",
+	"Friday",
+	"Saturday",
+];
+const months = [
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December",
+];
 
 router.get("/settings/", async (req, res) => {
 	const reading = await getReading();
@@ -23,7 +44,7 @@ router.get("/settings/", async (req, res) => {
 				file: fileName,
 				src,
 				name: getIconName(fileName),
-				isSelected: src === currentIcon
+				isSelected: src === currentIcon,
 			};
 		});
 
@@ -32,12 +53,20 @@ router.get("/settings/", async (req, res) => {
 	const backups = backupFiles
 		.map((fileName) => {
 			const d = new Date(Number(fileName.slice(0, -5)));
-			const label = `${days[d.getDay()]}, ${d.getDate().toString().padStart(2, "0")} ${months[d.getMonth()]} ${d.getFullYear()}, ${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
+			const label = `${days[d.getDay()]}, ${d
+				.getDate()
+				.toString()
+				.padStart(2, "0")} ${
+				months[d.getMonth()]
+			} ${d.getFullYear()}, ${d
+				.getHours()
+				.toString()
+				.padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
 			return {
 				fileName,
 				label,
 				date: d,
-				size: fs.readFileSync(`backups/${fileName}`, "utf-8").length
+				size: fs.readFileSync(`backups/${fileName}`, "utf-8").length,
 			};
 		})
 		.sort((a, b) => b.date.getTime() - a.date.getTime());
@@ -48,7 +77,7 @@ router.get("/settings/", async (req, res) => {
 		reading,
 		backups,
 		showNsfw: db.get("settings.show-nsfw") === "yes",
-		storeNsfw: db.get("settings.store-nsfw") === "yes"
+		storeNsfw: db.get("settings.store-nsfw") === "yes",
 	});
 });
 
@@ -68,14 +97,14 @@ router.get("/settings/restore-backup/:filename", async (req, res) => {
 				for (const slug of Object.keys(reading[provider])) {
 					r[provider][slug] = {
 						...r[provider][slug],
-						...reading[provider][slug]
+						...reading[provider][slug],
 					};
 				}
 			}
 		} else {
 			r.mangasee = {
 				...(r.mangasee || {}),
-				...reading
+				...reading,
 			};
 		}
 		db.set("reading_new", r);
@@ -84,12 +113,12 @@ router.get("/settings/restore-backup/:filename", async (req, res) => {
 		db.set("lists", lists);
 
 		res.json({
-			status: 200
+			status: 200,
 		});
 	} catch (err) {
 		res.json({
 			status: 500,
-			err
+			err,
 		});
 	}
 });
@@ -100,13 +129,13 @@ router.post("/settings/set-icon/", async (req, res) => {
 		db.set("settings.icon", newName);
 
 		res.json({
-			status: 200
+			status: 200,
 		});
 	} else {
 		res.status(404);
 		res.json({
 			status: 404,
-			error: "No icon with that name was found"
+			error: "No icon with that name was found",
 		});
 	}
 });
@@ -117,7 +146,7 @@ router.post("/settings/set-app-settings", async (req, res) => {
 	db.set("settings.store-nsfw", req.body["store-nsfw"] ?? false);
 
 	res.json({
-		status: 200
+		status: 200,
 	});
 });
 
@@ -129,7 +158,7 @@ router.get("/manifest.json", (req, res) => {
 		.map((fileName) => {
 			return {
 				size: "200x200",
-				src: `/icons/${fileName}`
+				src: `/icons/${fileName}`,
 			};
 		});
 
@@ -144,10 +173,10 @@ router.get("/manifest.json", (req, res) => {
 		icons: [
 			{
 				sizes: "200x200",
-				src: "/icon.png"
+				src: "/icon.png",
 			},
-			...icons
-		]
+			...icons,
+		],
 	});
 });
 

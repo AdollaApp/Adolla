@@ -36,19 +36,26 @@ class MangadexClass extends Scraper {
 			}
 		} else {
 			this.client = null;
-			console.error(chalk.red("[SECRET]") + " No mangadex credentials provided in secret-config. Search will be disabled.");
+			console.error(
+				chalk.red("[SECRET]") +
+					" No mangadex credentials provided in secret-config. Search will be disabled."
+			);
 		}
 	}
 
 	private doLogin() {
-		this.client.agent.login(secretConfig.mangadex.username, secretConfig.mangadex.password).then((res) => {
-			if (res) {
-				this.canSearch = true;
-				console.info(chalk.green("[MANGADEX]") + " Signed into MangaDex");
-			} else {
-				console.error(chalk.red("[MANGADEX]") + " Failed to sign into MangaDex");
-			}
-		});
+		this.client.agent
+			.login(secretConfig.mangadex.username, secretConfig.mangadex.password)
+			.then((res) => {
+				if (res) {
+					this.canSearch = true;
+					console.info(chalk.green("[MANGADEX]") + " Signed into MangaDex");
+				} else {
+					console.error(
+						chalk.red("[MANGADEX]") + " Failed to sign into MangaDex"
+					);
+				}
+			});
 	}
 
 	private async updateTags() {
@@ -71,15 +78,24 @@ class MangadexClass extends Scraper {
 		const raceResult = await Promise.race([maxTimeout, scraping]);
 
 		// Check if it's the timeout instead of the scraped result
-		if (raceResult.success === false && raceResult.err === "This request took too long") {
-			console.error(chalk.red("[MANGADEX]") + ` A request for '${slug}' at '${chapterId}' took too long and has timed out`);
+		if (
+			raceResult.success === false &&
+			raceResult.err === "This request took too long"
+		) {
+			console.error(
+				chalk.red("[MANGADEX]") +
+					` A request for '${slug}' at '${chapterId}' took too long and has timed out`
+			);
 		}
 
 		// Return result
 		return raceResult;
 	}
 
-	private async doScrape(slug: string, chapterId = -1): Promise<ScraperResponse> {
+	private async doScrape(
+		slug: string,
+		chapterId = -1
+	): Promise<ScraperResponse> {
 		try {
 			// Get ID (IDs for MangaDex are always numbers, except they're provided as strings)
 			const id = Number(slug);
@@ -89,7 +105,12 @@ class MangadexClass extends Scraper {
 
 			// Chapters
 			const chaptersData = await Mangadex.manga.getMangaChapters(id);
-			const chapters = chaptersData.chapters.filter((c) => c.language.includes("en") || c.language.includes("gb") || c.language.includes("nl"));
+			const chapters = chaptersData.chapters.filter(
+				(c) =>
+					c.language.includes("en") ||
+					c.language.includes("gb") ||
+					c.language.includes("nl")
+			);
 
 			// Get largest volume count
 			let largestVolumeCount = 0;
@@ -109,7 +130,7 @@ class MangadexClass extends Scraper {
 						label: `V${volume} - Chapter ${chapter ?? "??"}`,
 						date: new Date(c.timestamp * 1e3),
 						combined: volume * 1e5 + chapter,
-						hrefString: c.id.toString()
+						hrefString: c.id.toString(),
 					};
 				})
 				.sort((a, b) => a.combined - b.combined);
@@ -124,7 +145,11 @@ class MangadexClass extends Scraper {
 				const imagePromises = chapter.pages.map(async (url) => {
 					const base64 = await fetch(url)
 						.then((r) => r.buffer())
-						.then((buf) => `data:image/${url.split(".").pop()};base64,` + buf.toString("base64"));
+						.then(
+							(buf) =>
+								`data:image/${url.split(".").pop()};base64,` +
+								buf.toString("base64")
+						);
 					return base64;
 				});
 
@@ -136,7 +161,10 @@ class MangadexClass extends Scraper {
 			const status = mdStatus[data.publication.status]; // data.manga.status is an integer, 1-indexed
 
 			// Map genres
-			const genres = data.tags.map((num) => this.tags.find((tag) => tag.id === num)?.name ?? "Unknown genre");
+			const genres = data.tags.map(
+				(num) =>
+					this.tags.find((tag) => tag.id === num)?.name ?? "Unknown genre"
+			);
 
 			// Get description paragraphs
 			const descriptionParagraphs = data.description
@@ -163,15 +191,15 @@ class MangadexClass extends Scraper {
 					posterUrl: data.mainCover,
 					alternateTitles: data.altTitles,
 					descriptionParagraphs,
-					nsfw
+					nsfw,
 				},
 				data: {
 					chapters: newChapters,
 					chapterImages,
-					status
+					status,
 				},
 				success: true,
-				provider: isProviderId(provider) ? provider : null
+				provider: isProviderId(provider) ? provider : null,
 			};
 		} catch (err) {
 			console.error(chalk.red("[MANGADEX]") + " An error occured:", err);
@@ -184,7 +212,7 @@ class MangadexClass extends Scraper {
 		// Verify we can search MangaDex
 		if (!this.canSearch) {
 			return {
-				error: "Unable to search. Check logs for more information."
+				error: "Unable to search. Check logs for more information.",
 			};
 		}
 
@@ -192,7 +220,11 @@ class MangadexClass extends Scraper {
 
 		// Map to Adolla style format
 		const resultIds = searchData.titles.map((title) => title.id);
-		const searchResults = await Promise.all(resultIds.slice(0, query === "" ? 5 : options.resultCount).map((id) => updateManga("Mangadex", id.toString())));
+		const searchResults = await Promise.all(
+			resultIds
+				.slice(0, query === "" ? 5 : options.resultCount)
+				.map((id) => updateManga("Mangadex", id.toString()))
+		);
 
 		// Return Adolla-formatted search results
 		return searchResults.filter((r) => r.success);

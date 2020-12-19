@@ -11,7 +11,9 @@ import getReading from "../util/getReading";
 
 router.get("/", (req, res) => {
 	const query = ((req.query.q ?? "") as string).trim();
-	res.redirect(`/search/mangasee/${query ? `?q=${encodeURIComponent(query)}` : ""}`);
+	res.redirect(
+		`/search/mangasee/${query ? `?q=${encodeURIComponent(query)}` : ""}`
+	);
 });
 
 router.get("/:provider", async (req, res, next) => {
@@ -52,7 +54,7 @@ router.get("/:provider", async (req, res, next) => {
 			id,
 			name,
 			href: `/search/${id}/${query ? `?q=${encodeURIComponent(query)}` : ""}`,
-			isCurrent: id === param
+			isCurrent: id === param,
 		};
 	});
 
@@ -61,7 +63,7 @@ router.get("/:provider", async (req, res, next) => {
 		query,
 		searchResults,
 		isSearch: true,
-		scrapers: scraperMap
+		scrapers: scraperMap,
 	});
 });
 

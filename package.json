@@ -10,7 +10,7 @@
 		"format-data": "npm run build && node ./dist/format-data.js",
 		"build": "etsc",
 		"lint": "eslint src/",
-		"lint:fix": "eslint src/ --fix"
+		"lint:fix": "prettier --write . && eslint src/ --fix"
 	},
 	"keywords": [],
 	"author": "",

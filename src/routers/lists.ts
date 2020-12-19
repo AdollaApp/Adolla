@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 	res.render("lists", {
 		reading,
 		lists,
-		isLists: true
+		isLists: true,
 	});
 });
 
@@ -40,7 +40,7 @@ router.post("/set-home", async (req, res) => {
 	);
 
 	res.json({
-		status: 200
+		status: 200,
 	});
 });
 

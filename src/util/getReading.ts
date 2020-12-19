@@ -9,7 +9,9 @@ interface ReadingMeta {
 	slug: string;
 }
 
-export default async function getReading(maxResults = Infinity): Promise<ScraperResponse[]> {
+export default async function getReading(
+	maxResults = Infinity
+): Promise<ScraperResponse[]> {
 	// Get manga that is being read
 	const readingManga = db.get("reading_new");
 
@@ -21,11 +23,14 @@ export default async function getReading(maxResults = Infinity): Promise<Scraper
 			// If it's "mark as unread" it'll be undefined
 			// Not having an if statement for that would still add it
 			// Obviously, we don't want that
-			if (readingManga[provider][slug] && Object.keys(readingManga[provider][slug]).length > 0) {
+			if (
+				readingManga[provider][slug] &&
+				Object.keys(readingManga[provider][slug]).length > 0
+			) {
 				if (db.get(`hide_read.${provider}.${slug}`) !== true) {
 					readingMeta.push({
 						provider,
-						slug
+						slug,
 					});
 				}
 			}
@@ -33,7 +38,11 @@ export default async function getReading(maxResults = Infinity): Promise<Scraper
 	}
 
 	// Sort data
-	readingMeta = readingMeta.sort((b, a) => readingManga[a.provider][a.slug].last?.at - readingManga[b.provider][b.slug].last?.at);
+	readingMeta = readingMeta.sort(
+		(b, a) =>
+			readingManga[a.provider][a.slug].last?.at -
+			readingManga[b.provider][b.slug].last?.at
+	);
 
 	// Slice down to max results
 	readingMeta = readingMeta.slice(0, maxResults);
@@ -47,7 +56,13 @@ export default async function getReading(maxResults = Infinity): Promise<Scraper
 	);
 
 	// TypeScript doesn't typeguard .filter :/
-	reading = reading.filter((e) => e.success === true).sort((a, b) => (b.success && b.progress ? b.progress?.at : 0) - (a.success && a.progress ? a.progress?.at : 0));
+	reading = reading
+		.filter((e) => e.success === true)
+		.sort(
+			(a, b) =>
+				(b.success && b.progress ? b.progress?.at : 0) -
+				(a.success && a.progress ? a.progress?.at : 0)
+		);
 
 	return reading;
 }

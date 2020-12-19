@@ -10,14 +10,25 @@ import cache from "../util/cache";
 const nsfwError: ScraperError = {
 	success: false,
 	status: 0,
-	err: "This is NSFW content"
+	err: "This is NSFW content",
 };
 
-export default async function updateManga(provider: Provider | string, slug: string, ignoreExisting = false, chapterId: number | string = -1): Promise<ScraperResponse> {
+export default async function updateManga(
+	provider: Provider | string,
+	slug: string,
+	ignoreExisting = false,
+	chapterId: number | string = -1
+): Promise<ScraperResponse> {
 	const existing = cache?.[getProviderId(provider)]?.[slug];
-	if (existing && existing.savedAt > Date.now() - config.cache.duration && !ignoreExisting && chapterId === -1) {
+	if (
+		existing &&
+		existing.savedAt > Date.now() - config.cache.duration &&
+		!ignoreExisting &&
+		chapterId === -1
+	) {
 		const d = await addInfo(existing);
-		if (d.success && d.constant.nsfw && db.get("settings.show-nsfw") === "no") return nsfwError;
+		if (d.success && d.constant.nsfw && db.get("settings.show-nsfw") === "no")
+			return nsfwError;
 		return d;
 	}
 
@@ -29,7 +40,7 @@ export default async function updateManga(provider: Provider | string, slug: str
 		return {
 			err: "No such scraper exists",
 			status: 0,
-			success: false
+			success: false,
 		};
 	}
 
@@ -55,7 +66,8 @@ export default async function updateManga(provider: Provider | string, slug: str
 		// db.set(dbQuery, nData);
 	}
 	const d = await addInfo(data);
-	if (d.success && d.constant.nsfw && db.get("settings.show-nsfw") === "no") return nsfwError;
+	if (d.success && d.constant.nsfw && db.get("settings.show-nsfw") === "no")
+		return nsfwError;
 	return d;
 }
 
@@ -64,13 +76,19 @@ async function addInfo(data: ScraperResponse) {
 		// This still works thanks to references, somehow
 		// Add progress to each chapter
 		const chapterPromises = data.data.chapters.map(async (ch) => {
-			ch.progress = await getMangaProgress(data.provider, data.constant.slug, ch.hrefString);
+			ch.progress = await getMangaProgress(
+				data.provider,
+				data.constant.slug,
+				ch.hrefString
+			);
 			return ch;
 		});
 		await Promise.all(chapterPromises);
 
 		// Add a boolean to indicate if there is more than one chapter or not
-		const seasonSet = new Set(data.data.chapters.map((c) => c.season.toString()));
+		const seasonSet = new Set(
+			data.data.chapters.map((c) => c.season.toString())
+		);
 		const chapters = Array.from(seasonSet);
 		data.data.hasSeasons = chapters.length > 1;
 	}

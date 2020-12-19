@@ -11,5 +11,5 @@ export default {
 	search,
 	notFound,
 	lists,
-	settings
+	settings,
 };

@@ -12,8 +12,8 @@ const defaults: Database = {
 	settings: {
 		icon: "White",
 		"show-nsfw": "no",
-		"store-nsfw": "no"
-	}
+		"store-nsfw": "no",
+	},
 };
 
 // Iniate new DB
@@ -27,7 +27,10 @@ if (oldReading) {
 	console.info(chalk.green("[DB]") + " Storing old reading data");
 
 	// Store old data
-	fs.writeFileSync("./old-reading.json", JSON.stringify(oldReading, null, "\t"));
+	fs.writeFileSync(
+		"./old-reading.json",
+		JSON.stringify(oldReading, null, "\t")
+	);
 
 	// Get new format for reading
 	const newReading: {
@@ -40,26 +43,31 @@ if (oldReading) {
 			};
 		};
 	} = {
-		mangasee: {} // Mangasee was the default befor ethis update
+		mangasee: {}, // Mangasee was the default befor ethis update
 	};
 
-	console.info(chalk.yellowBright("[DB]") + " Start converting old reading to new");
+	console.info(
+		chalk.yellowBright("[DB]") + " Start converting old reading to new"
+	);
 
 	// Generate new objects
 	for (const slug of Object.keys(oldReading)) {
 		newReading.mangasee[slug] = {
-			...(newReading.mangasee[slug] ?? {})
+			...(newReading.mangasee[slug] ?? {}),
 		};
 		for (const chapter of Object.keys(oldReading[slug])) {
 			const d = oldReading[slug][chapter];
 
-			console.info(chalk.green("[DB]") + ` Converting old reading to new: ${slug}'s ${chapter}`);
+			console.info(
+				chalk.green("[DB]") +
+					` Converting old reading to new: ${slug}'s ${chapter}`
+			);
 
 			newReading.mangasee[slug][chapter] = {
 				current: d.current,
 				total: d.total,
 				at: d.at,
-				chapterId: `${d.season}-${d.chapter}`
+				chapterId: `${d.season}-${d.chapter}`,
 			};
 		}
 	}

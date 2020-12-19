@@ -15,7 +15,8 @@ interface SecretConfig {
 
 let secretConfig: SecretConfig | null;
 
-const path = __dirname.split("/").slice(0, -1).join("/") + "/secret-config.json";
+const path =
+	__dirname.split("/").slice(0, -1).join("/") + "/secret-config.json";
 if (fs.existsSync(path)) {
 	secretConfig = JSON.parse(fs.readFileSync(path, "utf-8"));
 } else {

@@ -17,7 +17,7 @@ export enum Directory {
 	Title = "s",
 	OngoingPublish = "ps", // Maybe?
 	OngoingPrint = "ss", // Maybe?
-	AlternateTitles = "al"
+	AlternateTitles = "al",
 }
 /** This is what the API holds in the Directory array. Fun. */
 export interface DirectoryItem {
@@ -61,25 +61,37 @@ export class MangaseeClass extends Scraper {
 		this.canSearch = true;
 	}
 
-	public async search(query: string, options?: Partial<SearchOptions>): Promise<ScraperResponse[]> {
+	public async search(
+		query: string,
+		options?: Partial<SearchOptions>
+	): Promise<ScraperResponse[]> {
 		// This is a better way of destructuring with default values
 		// than doing it at the top. This took... many hours. Thanks Pandawan!
 		const { resultCount } = {
 			resultCount: 40,
-			...options
+			...options,
 		};
 
 		let matchedResults = [];
 		// If the query is empty, sort by popular
 		if (query === "") {
-			const searchUrl = `https://mangasee123.com/search/?sort=vm&desc=true&name=${encodeURIComponent(query)}`;
+			const searchUrl = `https://mangasee123.com/search/?sort=vm&desc=true&name=${encodeURIComponent(
+				query
+			)}`;
 			const searchRes = await fetch(searchUrl);
 			const html = await searchRes.text();
 
 			try {
 				// Parse directory
-				const directory = JSON.parse(html.split("vm.Directory = ")[1].split("];")[0] + "]");
-				matchedResults = directory.sort((a: DirectoryItem, b: DirectoryItem) => normalizeNumber(b.v) - normalizeNumber(a.v)).slice(0, resultCount);
+				const directory = JSON.parse(
+					html.split("vm.Directory = ")[1].split("];")[0] + "]"
+				);
+				matchedResults = directory
+					.sort(
+						(a: DirectoryItem, b: DirectoryItem) =>
+							normalizeNumber(b.v) - normalizeNumber(a.v)
+					)
+					.slice(0, resultCount);
 			} catch (err) {
 				// Error handling.... of sorts
 				// We don't need to do anything since matchedResults is already empty
@@ -87,13 +99,15 @@ export class MangaseeClass extends Scraper {
 			}
 		} else {
 			// Fetch search results
-			const directory = await (await fetch("https://mangasee123.com/_search.php")).json();
+			const directory = await (
+				await fetch("https://mangasee123.com/_search.php")
+			).json();
 
 			// If query is not empty, use fuse to search
 			const fuse = new Fuse(directory, {
 				threshold: 0.3,
 				distance: 200,
-				keys: [Directory.Title, Directory.Genres, Directory.AlternateTitles]
+				keys: [Directory.Title, Directory.Genres, Directory.AlternateTitles],
 			});
 			matchedResults = fuse
 				.search(query)
@@ -102,7 +116,11 @@ export class MangaseeClass extends Scraper {
 		}
 
 		// Get details for each search result
-		const searchResultData: ScraperResponse[] = await Promise.all(matchedResults.map((item: DirectoryItem) => updateManga("Mangasee", item[Directory.Slug])));
+		const searchResultData: ScraperResponse[] = await Promise.all(
+			matchedResults.map((item: DirectoryItem) =>
+				updateManga("Mangasee", item[Directory.Slug])
+			)
+		);
 
 		// Return all successfull data requests
 		return searchResultData.filter((v) => v.success);
@@ -114,7 +132,10 @@ export class MangaseeClass extends Scraper {
 	 * @param chapter
 	 * @param season
 	 */
-	public async scrape(slug: string, chapterId: string | number | null = null): Promise<ScraperResponse> {
+	public async scrape(
+		slug: string,
+		chapterId: string | number | null = null
+	): Promise<ScraperResponse> {
 		// Set a timeout for how long the request is allowed to take
 		const maxTimeout: Promise<ScraperError> = new Promise((resolve) => {
 			setTimeout(() => {
@@ -129,14 +150,23 @@ export class MangaseeClass extends Scraper {
 		const raceResult = await Promise.race([maxTimeout, scraping]);
 
 		// Check if it's the timeout instead of the scraped result
-		if (raceResult.success === false && raceResult.err === "This request took too long") {
-			console.error(chalk.red("[MANGADEX]") + ` A request for '${slug}' at '${chapterId}' took too long and has timed out`);
+		if (
+			raceResult.success === false &&
+			raceResult.err === "This request took too long"
+		) {
+			console.error(
+				chalk.red("[MANGADEX]") +
+					` A request for '${slug}' at '${chapterId}' took too long and has timed out`
+			);
 		}
 
 		// Return result
 		return raceResult;
 	}
-	private async doScrape(slug: string, chapterId: string | number | null = null): Promise<ScraperResponse> {
+	private async doScrape(
+		slug: string,
+		chapterId: string | number | null = null
+	): Promise<ScraperResponse> {
 		let season: number;
 		let chapter: number;
 		if (chapterId && typeof chapterId === "string") {
@@ -158,7 +188,11 @@ export class MangaseeClass extends Scraper {
 
 			// Check if response is valid.
 			// Throw error if not
-			if (!pageRes.ok || pageRes.url.endsWith("undefined") || html.includes("<title>404 Page Not Found</title>")) {
+			if (
+				!pageRes.ok ||
+				pageRes.url.endsWith("undefined") ||
+				html.includes("<title>404 Page Not Found</title>")
+			) {
 				console.error(`${pageRes.status} Throwing error for ${slug}`);
 				return error(pageRes.status, html);
 			}
@@ -166,7 +200,9 @@ export class MangaseeClass extends Scraper {
 			// Shittily extract values from page.
 			// I could be using JSDoc or Cheerio but I'm not.
 			const title = html.split("<h1>")[1].split("</h1>")[0]; // You can tell what this does
-			const posterUrl = html.split('<meta property="og:image" content="')[1].split('"')[0]; // Get poster url from og:image
+			const posterUrl = html
+				.split('<meta property="og:image" content="')[1]
+				.split('"')[0]; // Get poster url from og:image
 			let alternateTitles = [];
 			if (html.includes("Alternate Name(s):"))
 				alternateTitles = html
@@ -187,7 +223,9 @@ export class MangaseeClass extends Scraper {
 
 			// Extract chapter data from script tag in DOM
 			// Then `map` it into a Chapter type
-			const chapterData = JSON.parse(html.split("vm.Chapters = ")[1].split(";")[0]);
+			const chapterData = JSON.parse(
+				html.split("vm.Chapters = ")[1].split(";")[0]
+			);
 			const chapters: Chapter[] = chapterData
 				.map((ch: ChapterResponse) => {
 					const season = Number(ch.Chapter[0]);
@@ -201,16 +239,23 @@ export class MangaseeClass extends Scraper {
 						label,
 						date,
 						hrefString: `${season}-${chapter}`,
-						combined: season * 1e5 + chapter
+						combined: season * 1e5 + chapter,
 					};
 				})
 				.sort((a: Chapter, b: Chapter) => a.combined - b.combined);
 
 			// Extract genre array from dom
-			const genres = JSON.parse(html.split('"genre": ')[1].split("],")[0] + "]");
+			const genres = JSON.parse(
+				html.split('"genre": ')[1].split("],")[0] + "]"
+			);
 
 			// Get status
-			const status = html.split('<span class="mlabel">Status:</span>')[1].split(">")[1].split(" (")[0].trim().toLowerCase();
+			const status = html
+				.split('<span class="mlabel">Status:</span>')[1]
+				.split(">")[1]
+				.split(" (")[0]
+				.trim()
+				.toLowerCase();
 
 			// Generate chapter images
 			let chapterImages: string[] = [];
@@ -226,7 +271,9 @@ export class MangaseeClass extends Scraper {
 				const cdnUrl = chapterBody.split('vm.CurPathName = "')[1].split('"')[0];
 
 				// Get curChapter (which has info on pages and such)
-				const curChapter = JSON.parse(chapterBody.split("vm.CurChapter = ")[1].split("};")[0] + "}");
+				const curChapter = JSON.parse(
+					chapterBody.split("vm.CurChapter = ")[1].split("};")[0] + "}"
+				);
 
 				// Generate URLs
 				chapterImages = [];
@@ -234,15 +281,24 @@ export class MangaseeClass extends Scraper {
 					// Thanks Pandawan, for helping out with floating point funny business!
 
 					// Get 0-paddedchapter string with decimal
-					const [chapterNormal, ...chapterModded] = chapter.toString().split(/(\.)/); // Using a capture group holds the divider in the array. ChapterModded becomes ['.', someDecimalNumber]
-					const chapterString = `${chapterNormal.padStart(4, "0")}${chapterModded.join("")}`;
+					const [chapterNormal, ...chapterModded] = chapter
+						.toString()
+						.split(/(\.)/); // Using a capture group holds the divider in the array. ChapterModded becomes ['.', someDecimalNumber]
+					const chapterString = `${chapterNormal.padStart(
+						4,
+						"0"
+					)}${chapterModded.join("")}`;
 
 					// Get directory and page
-					const directoryString = curChapter.Directory ? `/${curChapter.Directory}` : "";
+					const directoryString = curChapter.Directory
+						? `/${curChapter.Directory}`
+						: "";
 					const pageString = (page + 1).toString().padStart(3, "0");
 
 					// Add page url to array
-					chapterImages.push(`https://${cdnUrl}/manga/${slug}${directoryString}/${chapterString}-${pageString}.png`);
+					chapterImages.push(
+						`https://${cdnUrl}/manga/${slug}${directoryString}/${chapterString}-${pageString}.png`
+					);
 				}
 			}
 
@@ -272,15 +328,15 @@ export class MangaseeClass extends Scraper {
 					alternateTitles,
 					descriptionParagraphs,
 					genres,
-					nsfw
+					nsfw,
 				},
 				data: {
 					chapters,
 					chapterImages,
-					status
+					status,
 				},
 				success: true,
-				provider: isProviderId(providerId) ? providerId : null
+				provider: isProviderId(providerId) ? providerId : null,
 			};
 		} catch (err) {
 			// OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!
@@ -303,7 +359,9 @@ export default Mangasee;
  *
  */
 function normalizeNumber(input: string): number {
-	const normalized = Number(input.slice(input.split("").findIndex((v) => v !== "0")));
+	const normalized = Number(
+		input.slice(input.split("").findIndex((v) => v !== "0"))
+	);
 
 	return normalized;
 }

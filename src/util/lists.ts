@@ -8,9 +8,13 @@ import { List } from "../types";
 // Get "recommended" list
 let recommendedLists = [];
 async function updateRecommended() {
-	console.info(chalk.yellowBright("[RECOMMENDATIONS]") + ` Updating recommendations at ${new Date().toLocaleString()}`);
+	console.info(
+		chalk.yellowBright("[RECOMMENDATIONS]") +
+			` Updating recommendations at ${new Date().toLocaleString()}`
+	);
 
-	const suggestionsUrl = "https://gist.githubusercontent.com/JipFr/17fabda0f0515965cbe1c73b75b7ed71/raw";
+	const suggestionsUrl =
+		"https://gist.githubusercontent.com/JipFr/17fabda0f0515965cbe1c73b75b7ed71/raw";
 	const recommended: List[] = await (await fetch(suggestionsUrl)).json();
 	recommendedLists = recommended.map((recommendedItem) => {
 		recommendedItem.byCreator = true;
@@ -36,7 +40,10 @@ export async function getLists(): Promise<List[]> {
 		updatedLists.map(async (list) => {
 			list.entries = await Promise.all(
 				list.entries.map(async (entry) => {
-					entry.data = await updateManga(entry.provider ?? "mangasee", entry.slug);
+					entry.data = await updateManga(
+						entry.provider ?? "mangasee",
+						entry.slug
+					);
 					return entry;
 				})
 			);

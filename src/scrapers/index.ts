@@ -9,7 +9,7 @@ export function error(status = -1, err = "Unknown"): ScraperError {
 	return {
 		status,
 		err,
-		success: false
+		success: false,
 	};
 }
 
@@ -28,5 +28,5 @@ export const RCO = RCOInstance;
 export const scrapers = {
 	Mangasee,
 	Mangadex,
-	RCO
+	RCO,
 };

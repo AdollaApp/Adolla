@@ -11,12 +11,17 @@ interface ProgressDataOptions {
 	at?: number;
 }
 
-export default function getProgressData({ current, total, chapterId, at = Date.now() }: ProgressDataOptions): Progress {
+export default function getProgressData({
+	current,
+	total,
+	chapterId,
+	at = Date.now(),
+}: ProgressDataOptions): Progress {
 	return {
 		current,
 		total,
 		percentage: Math.round((current / total) * 100),
 		at,
-		chapterId
+		chapterId,
 	};
 }

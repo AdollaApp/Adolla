@@ -21,14 +21,17 @@ class RCOClass extends Scraper {
 			const mainReq = await fetch(`https://readcomiconline.to/Comic/${slug}`, {
 				family: 6,
 				headers: {
-					"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36"
-				}
+					"user-agent":
+						"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36",
+				},
 			});
 			let html = await mainReq.text();
 			html = html.replace(/\r\n| {2}|\t/g, "");
 
 			// Get title
-			const title = Entities.decode(html.split('<a Class="bigChar"')[1].split(">")[1].split("</")[0]);
+			const title = Entities.decode(
+				html.split('<a Class="bigChar"')[1].split(">")[1].split("</")[0]
+			);
 
 			// Get poster URL
 			let posterUrl = "/poster.png";
@@ -42,7 +45,8 @@ class RCOClass extends Scraper {
 					.replace(/https\/\//g, "https://");
 
 				// If the poster path is relative, apply that
-				if (!posterUrl.startsWith("http")) posterUrl = "https://readcomiconline.to" + posterUrl;
+				if (!posterUrl.startsWith("http"))
+					posterUrl = "https://readcomiconline.to" + posterUrl;
 			} catch (err) {
 				posterUrl = "/poster.png";
 			}
@@ -50,7 +54,9 @@ class RCOClass extends Scraper {
 			// Description
 			let descriptionParagraphs = [];
 			try {
-				descriptionParagraphs = Entities.decode(html.split('<p style="text-align: justify;">')[1].split("</p>")[0]).split("<br />");
+				descriptionParagraphs = Entities.decode(
+					html.split('<p style="text-align: justify;">')[1].split("</p>")[0]
+				).split("<br />");
 			} catch (err) {
 				// Something, I'm sure
 			}
@@ -70,10 +76,19 @@ class RCOClass extends Scraper {
 					const tdTwo = tds[2];
 
 					// Get label
-					const label = tdOne.split('">')[1].split("</")[0].replace(title, "").trim();
+					const label = tdOne
+						.split('">')[1]
+						.split("</")[0]
+						.replace(title, "")
+						.trim();
 
 					// Get HREF
-					const hrefString = tdOne.split('href="')[1].split('"')[0].split("?")[0].split("/").pop();
+					const hrefString = tdOne
+						.split('href="')[1]
+						.split('"')[0]
+						.split("?")[0]
+						.split("/")
+						.pop();
 
 					return {
 						label,
@@ -81,7 +96,7 @@ class RCOClass extends Scraper {
 						chapter: chaptersHTML.length - i,
 						combined: chaptersHTML.length - i,
 						date: new Date(tdTwo),
-						hrefString
+						hrefString,
 					};
 				})
 				.sort((a, b) => a.combined - b.combined);
@@ -89,18 +104,26 @@ class RCOClass extends Scraper {
 			// Get chapter's images
 			let chapterImages = [];
 			if (chapterId !== -1) {
-				const imgReq = await fetch(`https://readcomiconline.to/Comic/${slug}/${chapterId}?quality=lq`, {
-					family: 6,
-					headers: {
-						"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36"
+				const imgReq = await fetch(
+					`https://readcomiconline.to/Comic/${slug}/${chapterId}?quality=lq`,
+					{
+						family: 6,
+						headers: {
+							"user-agent":
+								"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36",
+						},
 					}
-				});
+				);
 				const chapterHTML = await imgReq.text();
 
-				const js = chapterHTML.split("var lstImages = new Array();")[1].split("var currImage = 0;")[0];
-				const imgSources = js.match(/lstImages\.push\("(.+?)"\);/g).map((snippet) => {
-					return snippet.match(/lstImages\.push\("(.+?)"\);/)[1];
-				});
+				const js = chapterHTML
+					.split("var lstImages = new Array();")[1]
+					.split("var currImage = 0;")[0];
+				const imgSources = js
+					.match(/lstImages\.push\("(.+?)"\);/g)
+					.map((snippet) => {
+						return snippet.match(/lstImages\.push\("(.+?)"\);/)[1];
+					});
 
 				chapterImages = imgSources;
 			}
@@ -126,15 +149,15 @@ class RCOClass extends Scraper {
 					alternateTitles: [],
 					genres: [],
 					descriptionParagraphs,
-					nsfw: false
+					nsfw: false,
 				},
 				data: {
 					chapters,
 					chapterImages,
-					status
+					status,
 				},
 				success: true,
-				provider: isProviderId(provider) ? provider : null
+				provider: isProviderId(provider) ? provider : null,
 			};
 		} catch (err) {
 			console.error(chalk.red("[RCO]") + " An error occured:", err);
@@ -145,19 +168,23 @@ class RCOClass extends Scraper {
 		// Verify we can search
 		if (!this.canSearch) {
 			return {
-				error: "Unable to search. Check logs for more information."
+				error: "Unable to search. Check logs for more information.",
 			};
 		}
 
 		let resultIds = [];
 		if (query === "") {
 			// Fetch popular page
-			const mainReq = await fetch("https://readcomiconline.to/ComicList/MostPopular", {
-				family: 6,
-				headers: {
-					"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36"
+			const mainReq = await fetch(
+				"https://readcomiconline.to/ComicList/MostPopular",
+				{
+					family: 6,
+					headers: {
+						"user-agent":
+							"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36",
+					},
 				}
-			});
+			);
 			// Get HTML for page
 			const body = await mainReq.text();
 
@@ -181,9 +208,10 @@ class RCOClass extends Scraper {
 				method: "POST",
 				headers: {
 					"content-type": "application/x-www-form-urlencoded",
-					"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36"
+					"user-agent":
+						"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36",
 				},
-				body: `keyword=${query.split(" ").join("+")}`
+				body: `keyword=${query.split(" ").join("+")}`,
 			});
 
 			// Map search
@@ -204,7 +232,11 @@ class RCOClass extends Scraper {
 		const chapterCount = query === "" ? 15 : options.resultCount;
 
 		// To Adolla data
-		const searchResults = await Promise.all(resultIds.slice(0, chapterCount).map((id) => updateManga("RCO", id.toString())));
+		const searchResults = await Promise.all(
+			resultIds
+				.slice(0, chapterCount)
+				.map((id) => updateManga("RCO", id.toString()))
+		);
 
 		// Return Adolla-formatted search results
 		return searchResults.filter((r) => r.success);

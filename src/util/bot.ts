@@ -7,10 +7,15 @@ if (secretConfig?.telegram?.bot) {
 	bot = new Telebot(secretConfig.telegram.bot);
 	bot.start();
 	bot.on("text", (message) => {
-		console.info(`The Telegram bot has received a message from ID: ${message.from.id} (@${message.from.username})`);
+		console.info(
+			`The Telegram bot has received a message from ID: ${message.from.id} (@${message.from.username})`
+		);
 	});
 } else {
-	console.error(chalk.red("[SECRET]") + " No bot token provided in secret-config. The bot will not prompt you with new chapters.");
+	console.error(
+		chalk.red("[SECRET]") +
+			" No bot token provided in secret-config. The bot will not prompt you with new chapters."
+	);
 }
 
 class Bot {
@@ -21,10 +26,14 @@ class Bot {
 		const bot = this.get();
 		if (bot && secretConfig?.telegram?.user) {
 			bot.sendMessage(secretConfig.telegram.user, message, {
-				parseMode: "markdown"
+				parseMode: "markdown",
 			});
 		} else {
-			console.error(secretConfig.telegram.user ? "[TELEGRAM] No bot token found" : "[TELEGRAM] No user ID found");
+			console.error(
+				secretConfig.telegram.user
+					? "[TELEGRAM] No bot token found"
+					: "[TELEGRAM] No user ID found"
+			);
 		}
 	}
 }
