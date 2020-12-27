@@ -106,10 +106,7 @@ class MangadexClass extends Scraper {
 			// Chapters
 			const chaptersData = await Mangadex.manga.getMangaChapters(id);
 			const chapters = chaptersData.chapters.filter(
-				(c) =>
-					c.language.includes("en") ||
-					c.language.includes("gb") ||
-					c.language.includes("nl")
+				(c) => c.language.includes("en") || c.language.includes("gb")
 			);
 
 			// Get largest volume count
@@ -120,7 +117,7 @@ class MangadexClass extends Scraper {
 			}
 
 			// Map chapters to new format
-			const newChapters: Chapter[] = chapters
+			let newChapters: Chapter[] = chapters
 				.map((c) => {
 					const volume = Number(c.volume) || largestVolumeCount + 1;
 					const chapter = Number(c.chapter);
@@ -134,6 +131,18 @@ class MangadexClass extends Scraper {
 					};
 				})
 				.sort((a, b) => a.combined - b.combined);
+
+			// Remove duplciate chapters
+			const existingLabels = [];
+			newChapters = newChapters.filter((c) => {
+				// Check if the label is already used
+				if (existingLabels.includes(c.label)) {
+					return false;
+				}
+
+				existingLabels.push(c.label);
+				return true;
+			});
 
 			// Get chapter-relevant data
 			// Just images I think
