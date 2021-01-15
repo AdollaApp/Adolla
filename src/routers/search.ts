@@ -68,6 +68,7 @@ router.get("/:provider", async (req, res, next) => {
 });
 
 router.get("/:provider/json", async (req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
 	const query = ((req.query.q ?? "") as string).trim();
 
 	// Get scraper name

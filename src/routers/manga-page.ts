@@ -69,6 +69,8 @@ router.get("/:provider/:slug", async (req, res, next) => {
 });
 
 router.get("/:provider/:slug/json", async (req, res) => {
+	res.header("Access-Control-Allow-Origin", "*");
+
 	const param = req.params.slug;
 
 	const provider = getProviderName(req.params.provider.toLowerCase());
@@ -183,6 +185,8 @@ router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 });
 
 router.get("/:provider/:slug/:chapter/json", async (req, res) => {
+	res.header("Access-Control-Allow-Origin", "*");
+
 	const chapterId = req.params.chapter;
 	const slug = req.params.slug;
 
@@ -258,6 +262,11 @@ const imageRouter = async (req, res, next) => {
 		});
 	}
 };
+
+router.get("/:provider/:slug/:chapter/get-images/json", (req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
+	next();
+});
 
 router.get("/:provider/:slug/:chapter/get-images", imageRouter);
 router.get("/:provider/:slug/:chapter/get-images/json", imageRouter);

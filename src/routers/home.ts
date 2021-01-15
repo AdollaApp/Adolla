@@ -22,6 +22,7 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/json", async (req, res) => {
+	res.header("Access-Control-Allow-Origin", "*");
 	const data = await getData();
 	res.json({ data });
 });
