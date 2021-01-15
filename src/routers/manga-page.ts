@@ -48,32 +48,9 @@ router.get("/:provider/:slug", async (req, res, next) => {
 	const data = await updateManga(provider, param, true);
 
 	if (data && data.success) {
-		// Set progress
-		await setMangaProgress(data);
-
-		// See if chapter is same as "last read" chapter
-		await setColors(data, param);
-
-		// Get reading
-		const reading = await getReading(4);
-
-		// Get lists for manga
-		const allLists = await getLists();
-		const lists = allLists.filter((l) =>
-			l.entries.find((m) => m.slug === param)
-		);
-
-		// Convert lists to front-end format
-		const convert = (l: List) => ({
-			slug: l.slug,
-			name: l.name,
-		});
-
-		// Get progress for manga total
-		const totalChapterCount = data.data.chapters.length;
-		const doneChapterCount = data.data.chapters.reduce(
-			(acc, current) => acc + (current?.progress?.percentage ?? 0) / 100,
-			0
+		const { lists, reading, allLists, mangaProgress } = await handleData(
+			data,
+			param
 		);
 
 		// Render
@@ -81,19 +58,82 @@ router.get("/:provider/:slug", async (req, res, next) => {
 			data,
 			reading,
 			currentSlug: param,
-			lists: lists.filter((l) => !l.byCreator).map(convert),
-			allLists: allLists.filter((l) => !l.byCreator).map(convert),
-			mangaProgress: {
-				total: totalChapterCount,
-				done: Math.round(doneChapterCount),
-				percentage: Math.round((doneChapterCount / totalChapterCount) * 100),
-			},
+			lists,
+			allLists,
+			mangaProgress,
 		});
 	} else {
 		console.error("No data found for", param);
 		next();
 	}
 });
+
+router.get("/:provider/:slug/json", async (req, res) => {
+	const param = req.params.slug;
+
+	const provider = getProviderName(req.params.provider.toLowerCase());
+	if (!provider) {
+		res.json({
+			status: 404,
+			error: "Not a provider",
+			data: null,
+		});
+		return;
+	}
+	const data = await updateManga(provider, param, true);
+
+	if (data && data.success) {
+		const newData = await handleData(data, param);
+
+		// Render
+		res.json({
+			data: newData,
+		});
+	}
+});
+
+async function handleData(data, param) {
+	// Set progress
+	await setMangaProgress(data);
+
+	// See if chapter is same as "last read" chapter
+	await setColors(data, param);
+
+	// Get reading
+	const reading = await getReading(4);
+
+	// Get lists for manga
+	const allLists = await getLists();
+	const lists = allLists.filter((l) => l.entries.find((m) => m.slug === param));
+
+	// Convert lists to front-end format
+	const convert = (l: List) => ({
+		slug: l.slug,
+		name: l.name,
+	});
+
+	// Get progress for manga total
+	const totalChapterCount = data.data.chapters.length;
+	const doneChapterCount = data.data.chapters.reduce(
+		(acc, current) => acc + (current?.progress?.percentage ?? 0) / 100,
+		0
+	);
+
+	const mangaProgress = {
+		total: totalChapterCount,
+		done: Math.round(doneChapterCount),
+		percentage: Math.round((doneChapterCount / totalChapterCount) * 100),
+	};
+
+	return {
+		lists: lists.filter((l) => !l.byCreator).map(convert),
+		allLists: allLists.filter((l) => !l.byCreator).map(convert),
+		reading,
+		totalChapterCount,
+		doneChapterCount,
+		mangaProgress,
+	};
+}
 
 router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 	const chapterId = req.params.chapter;
@@ -109,33 +149,23 @@ router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 
 	if (data && data.success) {
 		// Stuff
-		const manga = await setMangaProgress(data);
-
-		if (!manga.success) {
-			next();
-			return;
-		}
+		await setMangaProgress(data);
 
 		// Find current, last, and next chapter
-		const chapters = manga.data.chapters;
+		const chapters = data.data.chapters;
 		const currentChapter = chapters.find((c) => c.hrefString == chapterId);
 		const nextChapter = chapters[chapters.indexOf(currentChapter) + 1] ?? null;
 		const previousChapter =
 			chapters[chapters.indexOf(currentChapter) - 1] ?? null;
 
-		// Add progress from `data` chapters to `manga` chapters
-		for (let i = 0; i < data.data.chapters.length; i++) {
-			manga.data.chapters[i].progress = data.data.chapters[i].progress;
-		}
-
 		// § reading
 		const reading = await getReading(4);
 
 		// See if chapter is same as last chapter
-		await setColors(manga, slug);
+		await setColors(data, slug);
 
 		res.render("manga-chapter", {
-			data: manga,
+			data,
 			navigation: {
 				nextChapter,
 				previousChapter,
@@ -152,7 +182,60 @@ router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 	}
 });
 
-router.get("/:provider/:slug/:chapter/get-images", async (req, res, next) => {
+router.get("/:provider/:slug/:chapter/json", async (req, res) => {
+	const chapterId = req.params.chapter;
+	const slug = req.params.slug;
+
+	const provider = getProviderName(req.params.provider.toLowerCase());
+	if (!provider) {
+		return res.json({
+			status: 404,
+			error: "Provider not found",
+			data: null,
+		});
+	}
+
+	const data = await updateManga(provider, slug);
+
+	if (data && data.success) {
+		// Stuff
+		await setMangaProgress(data);
+
+		// Find current, last, and next chapter
+		const chapters = data.data.chapters;
+		const currentChapter = chapters.find((c) => c.hrefString == chapterId);
+		const nextChapter = chapters[chapters.indexOf(currentChapter) + 1] ?? null;
+		const previousChapter =
+			chapters[chapters.indexOf(currentChapter) - 1] ?? null;
+
+		// § reading
+		const reading = await getReading(4);
+
+		// See if chapter is same as last chapter
+		await setColors(data, slug);
+
+		res.json({
+			data: {
+				data,
+				navigation: {
+					nextChapter,
+					previousChapter,
+					currentChapter,
+				},
+				currentSlug: slug,
+				reading,
+			},
+		});
+	} else {
+		return res.json({
+			status: 404,
+			error: "Manga not found",
+			data: null,
+		});
+	}
+});
+
+const imageRouter = async (req, res, next) => {
 	const chapterId = req.params.chapter;
 	const slug = req.params.slug;
 
@@ -174,7 +257,10 @@ router.get("/:provider/:slug/:chapter/get-images", async (req, res, next) => {
 			err: data.err,
 		});
 	}
-});
+};
+
+router.get("/:provider/:slug/:chapter/get-images", imageRouter);
+router.get("/:provider/:slug/:chapter/get-images/json", imageRouter);
 
 // Mark as read
 router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {

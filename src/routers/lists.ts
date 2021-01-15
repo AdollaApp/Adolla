@@ -21,6 +21,15 @@ router.get("/", async (req, res) => {
 	});
 });
 
+router.get("/json", async (req, res) => {
+	const data = await getLists();
+	res.json({
+		data: {
+			lists: data,
+		},
+	});
+});
+
 router.post("/set-home", async (req, res) => {
 	const listId = req.body.listId;
 	let value = req.body.value;

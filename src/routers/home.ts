@@ -11,6 +11,22 @@ router.get("/", async (req, res) => {
 	const url = `http://${req.headers.host}/`;
 	db.set("other.host", url);
 
+	const { popular, reading, lists } = await getData();
+
+	res.render("home", {
+		popular,
+		reading,
+		lists,
+		isHome: true,
+	});
+});
+
+router.get("/json", async (req, res) => {
+	const data = await getData();
+	res.json({ data });
+});
+
+async function getData() {
 	// Get popular manga
 	const popular = await doSearch("mangasee", "", {
 		resultCount: 20,
@@ -27,12 +43,7 @@ router.get("/", async (req, res) => {
 	// Get reading
 	const reading = await getReading();
 
-	res.render("home", {
-		popular,
-		reading,
-		lists,
-		isHome: true,
-	});
-});
+	return { lists, reading, popular };
+}
 
 export default router;

@@ -67,4 +67,56 @@ router.get("/:provider", async (req, res, next) => {
 	});
 });
 
+router.get("/:provider/json", async (req, res, next) => {
+	const query = ((req.query.q ?? "") as string).trim();
+
+	// Get scraper name
+	const param = req.params.provider.toLowerCase();
+	const provider: ProviderId | null = isProviderId(param) ? param : null;
+	const scraperName = getProviderName(provider);
+	if (!scraperName) {
+		next();
+		return;
+	}
+
+	// !Get search results
+	// Get search results
+	let searchResults: ScraperResponse[] | SearchError = [];
+	searchResults = await doSearch(provider, query);
+
+	// Verify search results
+	if (Array.isArray(searchResults)) {
+		await Promise.all(searchResults.map(setMangaProgress));
+	}
+
+	// ! Get reading
+	const reading = await getReading(4);
+
+	// ! Get all scrapers and names
+
+	// Get all scrapers
+	const scrapersArray: Scraper[] = Object.values(scrapers.scrapers);
+
+	// Get name, id, href, and if whether or not the current scraper
+	const scraperMap = scrapersArray.map((scraper) => {
+		const id = getProviderId(scraper.provider);
+		const name = getProviderName(id);
+		return {
+			id,
+			name,
+			href: `/search/${id}/${query ? `?q=${encodeURIComponent(query)}` : ""}`,
+			isCurrent: id === param,
+		};
+	});
+
+	res.json({
+		data: {
+			reading,
+			query,
+			searchResults,
+			scrapers: scraperMap,
+		},
+	});
+});
+
 export default router;
