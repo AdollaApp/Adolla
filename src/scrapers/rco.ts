@@ -14,6 +14,7 @@ class RCOClass extends Scraper {
 		super();
 		this.provider = "RCO";
 		this.canSearch = true;
+		this.nsfw = false;
 	}
 
 	public async scrape(slug: string, chapterId = -1): Promise<ScraperResponse> {
