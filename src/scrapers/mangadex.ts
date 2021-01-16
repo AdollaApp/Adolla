@@ -19,6 +19,7 @@ class MangadexClass extends Scraper {
 
 		this.provider = "Mangadex";
 		this.canSearch = false;
+		this.nsfw = false;
 		this.tags = [];
 
 		// Update tags

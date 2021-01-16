@@ -8,6 +8,7 @@ import { setMangaProgress } from "../util/getMangaProgress";
 import { ProviderId, Scraper, SearchError } from "../scrapers/types";
 import { getProviderId, getProviderName, isProviderId } from "./manga-page";
 import getReading from "../util/getReading";
+import db from "../db";
 
 router.get("/", (req, res) => {
 	const query = ((req.query.q ?? "") as string).trim();
@@ -47,16 +48,21 @@ router.get("/:provider", async (req, res, next) => {
 	const scrapersArray: Scraper[] = Object.values(scrapers.scrapers);
 
 	// Get name, id, href, and if whether or not the current scraper
-	const scraperMap = scrapersArray.map((scraper) => {
-		const id = getProviderId(scraper.provider);
-		const name = getProviderName(id);
-		return {
-			id,
-			name,
-			href: `/search/${id}/${query ? `?q=${encodeURIComponent(query)}` : ""}`,
-			isCurrent: id === param,
-		};
-	});
+	const scraperMap = scrapersArray
+		.map((scraper) => {
+			const id = getProviderId(scraper.provider);
+			const name = getProviderName(id);
+
+			if (db.get("settings.show-nsfw") === "no" && scraper.nsfw) return null;
+
+			return {
+				id,
+				name,
+				href: `/search/${id}/${query ? `?q=${encodeURIComponent(query)}` : ""}`,
+				isCurrent: id === param,
+			};
+		})
+		.filter(Boolean);
 
 	res.render("search", {
 		reading,

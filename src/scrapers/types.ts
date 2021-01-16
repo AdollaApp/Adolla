@@ -19,6 +19,7 @@ export interface SearchError {
 export abstract class Scraper {
 	public provider: Provider;
 	public canSearch: boolean;
+	public nsfw: boolean;
 
 	public abstract scrape(
 		slug: string | number,

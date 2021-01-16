@@ -12,6 +12,7 @@ export class nhentaiClass extends Scraper {
 		super();
 		this.provider = "nhentai";
 		this.canSearch = true;
+		this.nsfw = true;
 	}
 
 	public async search(query: string, options?: Partial<SearchOptions>) {

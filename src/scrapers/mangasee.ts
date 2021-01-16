@@ -59,6 +59,7 @@ export class MangaseeClass extends Scraper {
 		super();
 		this.provider = "Mangasee";
 		this.canSearch = true;
+		this.nsfw = false;
 	}
 
 	public async search(
