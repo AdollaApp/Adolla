@@ -25,8 +25,13 @@ export const Mangadex = MangadexInstance;
 import RCOInstance from "./rco";
 export const RCO = RCOInstance;
 
+// Import nhentai
+import nhentaiInstance from "./nhentai";
+export const nhentai = nhentaiInstance;
+
 export const scrapers = {
 	Mangasee,
 	Mangadex,
 	RCO,
+	nhentai,
 };

@@ -20,6 +20,7 @@ const scrapersMapped = {
 	mangasee: "Mangasee",
 	mangadex: "Mangadex",
 	rco: "RCO",
+	nhentai: "nhentai",
 };
 const scrapersMappedReversed = Object.fromEntries(
 	Object.entries(scrapersMapped).map((v) => v.reverse())
@@ -509,6 +510,8 @@ router.post(
 			next();
 			return;
 		}
+
+		console.log(123);
 
 		const progressData = getProgressData({
 			...req.body,
