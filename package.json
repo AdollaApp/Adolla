@@ -39,10 +39,12 @@
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "^4.10.0",
 		"@typescript-eslint/parser": "^4.10.0",
-		"esbuild": "^0.7.22",
-		"esbuild-node-tsc": "^1.0.5",
 		"eslint": "^7.16.0",
 		"nodemon": "^2.0.6",
 		"prettier": "2.2.1"
+	},
+	"optionalDependencies": {
+		"esbuild": "^0.7.22",
+		"esbuild-node-tsc": "^1.0.5"
 	}
 }
