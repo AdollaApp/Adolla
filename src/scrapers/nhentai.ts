@@ -5,6 +5,7 @@ import { error } from "./index";
 import { ScraperError, ScraperResponse } from "../types";
 import { Scraper, SearchOptions } from "./types";
 import { getProviderId, isProviderId } from "../routers/manga-page";
+import updateManga from "../util/updateManga";
 
 export class nhentaiClass extends Scraper {
 	constructor() {
@@ -14,8 +15,44 @@ export class nhentaiClass extends Scraper {
 	}
 
 	public async search(query: string, options?: Partial<SearchOptions>) {
-		// TODO; obviously.
-		return [];
+		// This is a better way of destructuring with default values
+		// than doing it at the top. This took... many hours. Thanks Pandawan!
+		const { resultCount } = {
+			resultCount: 40,
+			...options,
+		};
+
+		let pageUrl: string;
+
+		if (query === "") {
+			// Get popular page
+			pageUrl = "https://nhentai.to/";
+		} else {
+			pageUrl = `https://nhentai.to/search?q=${encodeURIComponent(query)}`;
+		}
+
+		// Fetch DOM for relevant page
+		const pageReq = await fetch(pageUrl);
+		const pageHtml = await pageReq.text();
+
+		// Get DOM for popular page
+		const dom = new JSDOM(pageHtml);
+		const document = dom.window.document;
+
+		// Get nodes
+		const anchors = [
+			...document.querySelectorAll(".index-container .gallery a"),
+		];
+
+		// Get IDs from nodes
+		const ids = anchors.map((anchor) => anchor.href.match(/(\d+)/)[1]);
+
+		// Get details for each search result
+		const searchResultData: ScraperResponse[] = await Promise.all(
+			ids.map((id) => updateManga("nhentai", id))
+		);
+
+		return searchResultData;
 	}
 
 	/**
