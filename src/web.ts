@@ -44,6 +44,7 @@ app.engine(
 					mangasee: "https://mangasee123.com/media/favicon.png",
 					mangadex: "https://mangadex.org/images/misc/navbar.svg",
 					rco: "/provider/rco.png",
+					nhentai: "https://nhentai.to/img/logo.650c98bbb08e.svg",
 				};
 				return icons[provider] ?? "/icons/main-on-white.png";
 			},
