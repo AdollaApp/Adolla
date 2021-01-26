@@ -9,6 +9,7 @@ import getReading from "../util/getReading";
 import { getLists } from "../util/lists";
 import getProgressData from "../util/getProgressData";
 import chalk from "chalk";
+import fetch from "node-fetch-extra";
 import { Provider, ProviderId } from "../scrapers/types";
 
 interface NewList {
@@ -272,6 +273,16 @@ router.get("/:provider/:slug/:chapter/get-images/json", (req, res, next) => {
 router.get("/:provider/:slug/:chapter/get-images", imageRouter);
 router.get("/:provider/:slug/:chapter/get-images/json", imageRouter);
 
+/**
+ * Proxy pages
+ */
+router.get("/proxy-image", (req, res) => {
+	const url = decodeURIComponent(req.query.url.toString());
+	fetch(url).then(async (response) => {
+		response.body.pipe(res);
+	});
+});
+
 // Mark as read
 router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 	// Get relevant values
@@ -510,8 +521,6 @@ router.post(
 			next();
 			return;
 		}
-
-		console.log(123);
 
 		const progressData = getProgressData({
 			...req.body,

@@ -150,20 +150,40 @@ class MangadexClass extends Scraper {
 			let chapterImages: string[] = [];
 
 			if (chapterId && chapterId !== null && chapterId !== -1) {
-				const chapter = await Mangadex.chapter.getChapter(Number(chapterId));
+				// const chapter = await Mangadex.chapter.getChapter(Number(chapterId));
+				const chapter = await fetch(
+					`https://mangadex.org/api/v2/chapter/${chapterId}?saver=0&include=manga`,
+					{
+						referrer: `https://mangadex.org/chapter/${chapterId}`,
+					}
+				).then((d) => d.json());
+				const data = chapter.data.chapter;
 
-				const imagePromises = chapter.pages.map(async (url) => {
-					const base64 = await fetch(url)
-						.then((r) => r.buffer())
-						.then(
-							(buf) =>
-								`data:image/${url.split(".").pop()};base64,` +
-								buf.toString("base64")
-						);
-					return base64;
-				});
+				console.log(chapter.data.chapter);
 
-				chapterImages = await Promise.all(imagePromises); // Page array is an array filled with URLs. Perfect!
+				chapterImages = data.pages.map(
+					(url) => `${data.server}${data.hash}/${url}`
+				);
+
+				// const imagePromises = chapter.pages.map(async (url) => {
+				// 	const base64 = await fetch(url)
+				// 		.then((r) => r.buffer())
+				// 		.then(
+				// 			(buf) =>
+				// 				`data:image/${url.split(".").pop()};base64,` +
+				// 				buf.toString("base64")
+				// 		);
+				// 	return base64;
+				// });
+
+				// chapterImages = await Promise.all(imagePromises); // Page array is an array filled with URLs. Perfect!
+				// chapterImages = chapter.fallbackPages.map((url) =>
+				// 	url.replace(
+				// 		/https:\/\/s2\.mangadex\.org/g,
+				// 		"https://dazzling-wing-6deecf.netlify.app"
+				// 	)
+				// );
+				// chapterImages = [];
 			}
 
 			// Get series status
