@@ -239,7 +239,7 @@ async function initImages() {
 			img.setAttribute("alt", `Page ${Number(i) + 1}`);
 
 			// Set source
-			img.src = url.includes("mangadx")
+			img.src = url.includes("mangadex")
 				? `/proxy-image?url=${encodeURIComponent(url)}`
 				: url;
 
