@@ -204,19 +204,10 @@ window.addEventListener("scroll", (evt) => {
 				"style",
 				`--banner-extra: ${Math.abs(scrollTop)}px;/* position: fixed;*/`
 			);
-	} else {
-		// document
-		// 	.querySelector(".banner-wrapper")
-		// 	.setAttribute("style", `position: absolute;`);
 	}
 
 	const elBox = document.querySelector(".banner-wrapper").scrollHeight;
 	const elPos = elBox - scrollTop;
-	// document.querySelector("h1.sub-title").innerText = JSON.stringify(
-	// 	elPos,
-	// 	null,
-	// 	" "
-	// );
 	if (elPos > 100) {
 		document.querySelector(".top-content").classList.remove("show-status");
 	} else {
