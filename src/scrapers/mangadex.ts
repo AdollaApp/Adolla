@@ -159,8 +159,6 @@ class MangadexClass extends Scraper {
 				).then((d) => d.json());
 				const data = chapter.data.chapter;
 
-				console.log(chapter.data.chapter);
-
 				chapterImages = data.pages.map(
 					(url) => `${data.server}${data.hash}/${url}`
 				);
