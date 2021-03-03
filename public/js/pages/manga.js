@@ -200,10 +200,7 @@ window.addEventListener("scroll", (evt) => {
 	if (scrollTop <= 0) {
 		document
 			.querySelector(".banner-wrapper")
-			.setAttribute(
-				"style",
-				`--banner-extra: ${Math.abs(scrollTop)}px;/* position: fixed;*/`
-			);
+			.setAttribute("style", `--banner-extra: ${Math.abs(scrollTop)}px;`);
 	}
 
 	const elBox = document.querySelector(".banner-wrapper").scrollHeight;
