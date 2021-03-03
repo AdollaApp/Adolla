@@ -47,7 +47,7 @@ router.get("/:provider/:slug", async (req, res, next) => {
 		next();
 		return;
 	}
-	const data = await updateManga(provider, param, true);
+	const data = await updateManga(provider, param);
 
 	if (data && data.success) {
 		const { lists, reading, allLists, mangaProgress } = await handleData(

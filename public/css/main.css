@@ -1676,7 +1676,7 @@ div.selection-actions .selection-actions-inner {
 		grid-gap: 40px;
 	}
 	.has-banner .manga-top {
-		grid-gap: calc(180px - env(safe-area-inset-top));
+		grid-gap: calc(280px - env(safe-area-inset-top));
 	}
 	.manga-card .title-div>span {
 		display: block;
@@ -1704,7 +1704,7 @@ div.selection-actions .selection-actions-inner {
 		--banner-extra: 0px;
 		margin-top: calc(env(safe-area-inset-top) * -1);
 		width: 100%;
-		height: calc(180px + env(safe-area-inset-top) + var(--banner-extra));
+		height: calc(280px + env(safe-area-inset-top) + var(--banner-extra));
 		z-index: 105;
 	}
 	.banner {
@@ -1741,12 +1741,12 @@ div.selection-actions .selection-actions-inner {
 		display: block;
 		background: var(--body);
 		width: calc(100% + 40px);
-		height: 20px;
-		top: -20px;
+		height: 25px;
+		top: -25px;
 		position: absolute;
 		left: -20px;
-		border-top-left-radius: 100px;
-		border-top-right-radius: 100px;
+		border-top-left-radius: 200px;
+		border-top-right-radius: 200px;
 		border-top: 1px solid var(--border);
 	}
 	.has-banner .top-content::after {
