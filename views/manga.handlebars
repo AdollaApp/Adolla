@@ -1,4 +1,4 @@
-<div class="content-inner">
+<div class="content-inner {{#if data.constant.banner}}has-banner{{/if}}">
 	<div class="manga-content">
 
 		<script>
@@ -10,32 +10,14 @@
 			<div class="image">
 				<div class="aside-inner">
 					<img class="poster" alt="Poster" src="{{data.constant.posterUrl}}">
-					{{#if data.progress}}
-					<nav class="side-nav">
-						<a href="{{ genLink2 data.provider data.constant.slug data.progress.chapterId }}" class="small-manga no-margin">
-							<div class="icon">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play-circle"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
-							</div>
-							<div class="content do-padding">
-								<p class="sub-title">Continue reading:</p>
-								<h4 class="small-title">{{getChapterName data.progress data }}</h4>
-							</div>
-						</a>
-					</nav>
+					{{#if data.constant.banner}}
+					<div class="banner-wrapper">
+						<img class="banner" alt="Banner" src="{{data.constant.banner}}">
+					</div>
 					{{/if}}
-					<nav class="side-nav">
-						<a href class="small-manga no-margin hide-from-reading">
-							<div class="icon">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye-off"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
-							</div>
-							<div class="content do-padding">
-								<h4 class="small-title">Hide from reading</h4>
-							</div>
-						</a>
-					</nav>
-					<nav class="side-nav selection-actions">
-						{{> mark-as-buttons}}
-					</nav>
+					<div class="hide-on-mobile">
+						{{> sidebar-buttons }}
+					</div>
 				</div>
 			</div>
 			<div class="top-content">
@@ -45,6 +27,9 @@
 					{{#each data.constant.genres}}
 					<span class="badge badge-background">{{this}}</span>
 					{{/each}}
+				</div>
+				<div class="hide-on-desktop">
+					{{> sidebar-buttons }}
 				</div>
 				<div class="description">
 					{{#each data.constant.descriptionParagraphs}}

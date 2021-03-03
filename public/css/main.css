@@ -87,6 +87,10 @@ body[data-is-dev="true"]::after {
 	text-decoration: underline;
 }
 
+.hide-on-desktop {
+	display: none;
+}
+
 /* Layout */
 
 .wrapper-all {
@@ -676,6 +680,10 @@ input, textarea {
 	width: 100%;
 	border-radius: 4px;
 	border: 1px solid var(--border);
+}
+
+.banner {
+	display: none;
 }
 
 .manga-top .side-nav.selection-actions .secondary-button {
@@ -1372,7 +1380,7 @@ select {
 	border-top: 1px solid var(--border);
 	display: none;
 	box-sizing: border-box;
-	z-index: 20;
+	z-index: 130;
 }
 
 .is-footer .nav-link {
@@ -1665,6 +1673,10 @@ div.selection-actions .selection-actions-inner {
 	/* Manga page */
 	.manga-top {
 		grid-template-columns: 100%;
+		grid-gap: 40px;
+	}
+	.has-banner .manga-top {
+		grid-gap: calc(180px - env(safe-area-inset-top));
 	}
 	.manga-card .title-div>span {
 		display: block;
@@ -1676,6 +1688,88 @@ div.selection-actions .selection-actions-inner {
 	.sub-title.spread>select {
 		margin-top: 10px;
 		width: 100%;
+	}
+	.manga-top .aside-inner {
+		position: initial;
+	}
+	.content-inner.has-banner {
+		margin-top: 0;
+	}
+	.poster {
+		display: none;
+	}
+	.banner-wrapper {
+		position: fixed;
+		top: 0;
+		--banner-extra: 0px;
+		margin-top: calc(env(safe-area-inset-top) * -1);
+		width: 100%;
+		height: calc(180px + env(safe-area-inset-top) + var(--banner-extra));
+		z-index: 105;
+	}
+	.banner {
+		display: block;
+		height: 100%;
+		background: var(--border);
+		width: calc(100% + 0px);
+		margin: 0 -20px;
+		object-fit: cover;
+		/* margin-top: calc(env(safe-area-inset-top) * -1); */
+	}
+	.has-banner .banner-wrapper::before {
+		/* iPhone top */
+		content: "";
+		display: block;
+		position: fixed;
+		top: 0;
+		width: calc(100% + 40px);
+		margin-left: -20px;
+		height: env(safe-area-inset-top);
+		background: rgba(0, 0, 0, 0.3);
+	}
+	.has-banner .top-content {
+		position: relative;
+		border-left: 20px solid var(--body);
+		border-right: 20px solid var(--body);
+		background: var(--body);
+		margin-left: -20px;
+		margin-right: -20px;
+		z-index: 110;
+	}
+	.has-banner .top-content::before {
+		content: "";
+		display: block;
+		background: var(--body);
+		width: calc(100% + 40px);
+		height: 20px;
+		top: -20px;
+		position: absolute;
+		left: -20px;
+		border-top-left-radius: 100px;
+		border-top-right-radius: 100px;
+		border-top: 1px solid var(--border);
+	}
+	.has-banner .top-content::after {
+		content: "";
+		display: block;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: env(safe-area-inset-top);
+		background: var(--header-background);
+		z-index: 200;
+		opacity: 0;
+		transition: opacity 200ms;
+	}
+	.has-banner .top-content.show-status::after {
+		opacity: 1;
+	}
+	.hide-on-desktop {
+		display: initial;
+	}
+	.hide-on-mobile {
+		display: none;
 	}
 }
 
