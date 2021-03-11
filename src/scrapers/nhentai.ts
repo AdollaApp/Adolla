@@ -101,7 +101,7 @@ export class nhentaiClass extends Scraper {
 		const document = dom.window.document;
 
 		// Get title
-		const title = document.querySelectorAll("h1")[1].textContent;
+		const title = document.querySelector("#bigcontainer h1").textContent;
 
 		// Get poster URL
 		const posterUrl = document
