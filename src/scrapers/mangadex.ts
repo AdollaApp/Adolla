@@ -162,26 +162,6 @@ class MangadexClass extends Scraper {
 				chapterImages = data.pages.map(
 					(url) => `${data.server}${data.hash}/${url}`
 				);
-
-				// const imagePromises = chapter.pages.map(async (url) => {
-				// 	const base64 = await fetch(url)
-				// 		.then((r) => r.buffer())
-				// 		.then(
-				// 			(buf) =>
-				// 				`data:image/${url.split(".").pop()};base64,` +
-				// 				buf.toString("base64")
-				// 		);
-				// 	return base64;
-				// });
-
-				// chapterImages = await Promise.all(imagePromises); // Page array is an array filled with URLs. Perfect!
-				// chapterImages = chapter.fallbackPages.map((url) =>
-				// 	url.replace(
-				// 		/https:\/\/s2\.mangadex\.org/g,
-				// 		"https://dazzling-wing-6deecf.netlify.app"
-				// 	)
-				// );
-				// chapterImages = [];
 			}
 
 			// Get series status
