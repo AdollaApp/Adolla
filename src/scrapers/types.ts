@@ -1,8 +1,18 @@
 import { ScraperResponse } from "../types";
 
 /** All available scrapers */
-export type Provider = "Mangasee" | "Mangadex" | "RCO" | "nhentai";
-export type ProviderId = "mangasee" | "mangadex" | "rco" | "nhentai";
+export type Provider =
+	| "Mangasee"
+	| "Mangadex"
+	| "RCO"
+	| "nhentai"
+	| "Manganelo";
+export type ProviderId =
+	| "mangasee"
+	| "mangadex"
+	| "rco"
+	| "nhentai"
+	| "manganelo";
 
 export interface SearchOptions {
 	resultCount: number;

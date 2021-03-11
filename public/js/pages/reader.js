@@ -239,9 +239,10 @@ async function initImages() {
 			img.setAttribute("alt", `Page ${Number(i) + 1}`);
 
 			// Set source
-			img.src = url.includes("mangadex")
-				? `/proxy-image?url=${encodeURIComponent(url)}`
-				: url;
+			img.src =
+				url.includes("mangadex") || url.includes("mangakakalot")
+					? `/proxy-image?url=${encodeURIComponent(url)}`
+					: url;
 
 			// Add to DOM
 			wrapper.insertBefore(img, wrapper.querySelector("*"));
