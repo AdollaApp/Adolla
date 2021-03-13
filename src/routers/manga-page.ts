@@ -522,6 +522,8 @@ router.post(
 			return;
 		}
 
+		console.log(123);
+
 		const progressData = getProgressData({
 			...req.body,
 			chapterId,
