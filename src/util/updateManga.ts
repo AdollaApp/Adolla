@@ -115,22 +115,26 @@ async function addInfo(data: ScraperResponse) {
 			}
 		}
 		`;
-		const aniListData = await fetch("https://graphql.anilist.co", {
-			headers: {
-				"content-type": "application/json",
-			},
-			body: JSON.stringify({
-				query,
-				variables: {
-					search: data.constant.title,
-					type: "MANGA",
+		try {
+			const aniListData = await fetch("https://graphql.anilist.co", {
+				headers: {
+					"content-type": "application/json",
 				},
-			}),
-			method: "POST",
-		}).then((d) => d.json());
+				body: JSON.stringify({
+					query,
+					variables: {
+						search: data.constant.title,
+						type: "MANGA",
+					},
+				}),
+				method: "POST",
+			}).then((d) => d.json());
 
-		const banner = aniListData?.data?.Media?.bannerImage ?? null;
-		data.constant.banner = banner;
+			const banner = aniListData?.data?.Media?.bannerImage ?? null;
+			data.constant.banner = banner;
+		} catch (e) {
+			// /shrug
+		}
 	}
 
 	return data;

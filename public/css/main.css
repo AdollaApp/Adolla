@@ -1417,6 +1417,7 @@ div.selection-actions {
 	width: 100%;
 	background: var(--body-offset);
 	border-top: 1px solid var(--border);
+	z-index: 111;
 }
 
 .is-footer .secondary-button, .is-secondary-footer .secondary-button {
