@@ -188,3 +188,26 @@ document.querySelector(".hide-from-reading").addEventListener("click", () => {
 		});
 	}
 });
+
+/**
+ * IOS STATUS BAR
+ */
+
+window.addEventListener("scroll", (evt) => {
+	const scrollTop =
+		(window.pageYOffset || document.scrollTop) - (document.clientTop || 0) || 0;
+
+	if (scrollTop <= 0) {
+		document
+			.querySelector(".banner-wrapper")
+			.setAttribute("style", `--banner-extra: ${Math.abs(scrollTop)}px;`);
+	}
+
+	const elBox = document.querySelector(".banner-wrapper").scrollHeight;
+	const elPos = elBox - scrollTop;
+	if (elPos > 100) {
+		document.querySelector(".top-content").classList.remove("show-status");
+	} else {
+		document.querySelector(".top-content").classList.add("show-status");
+	}
+});

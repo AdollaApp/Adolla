@@ -269,7 +269,9 @@ export class MangaseeClass extends Scraper {
 				const chapterBody = await chapterRes.text();
 
 				// CDN url, like `s6.mangabeast.com`
-				const cdnUrl = chapterBody.split('vm.CurPathName = "')[1].split('"')[0];
+				const cdnUrl = chapterBody
+					.split('vm.CurPathNamez = "')[1]
+					.split('"')[0];
 
 				// Get curChapter (which has info on pages and such)
 				const curChapter = JSON.parse(

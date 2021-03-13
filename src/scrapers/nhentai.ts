@@ -92,73 +92,81 @@ export class nhentaiClass extends Scraper {
 		slug: string,
 		chapterId: string
 	): Promise<ScraperResponse> {
-		// Get HTML
-		const pageReq = await fetch(`https://nhentai.to/g/${slug}`);
-		const pageHtml = await pageReq.text();
+		try {
+			// Get HTML
+			const pageReq = await fetch(`https://nhentai.to/g/${slug}`);
+			const pageHtml = await pageReq.text();
 
-		// Get variables
-		const dom = new JSDOM(pageHtml);
-		const document = dom.window.document;
+			// Get variables
+			const dom = new JSDOM(pageHtml);
+			const document = dom.window.document;
 
-		// Get title
-		const title = document.querySelectorAll("h1")[1].textContent;
+			// Get title
+			const title = document.querySelector("#bigcontainer h1").textContent;
 
-		// Get poster URL
-		const posterUrl = document
-			.querySelector("img[data-src]")
-			.getAttribute("data-src");
+			// Get poster URL
+			const posterUrl = document
+				.querySelector("img[data-src]")
+				.getAttribute("data-src");
 
-		// Get genres from tags
-		const genres = [...document.querySelectorAll(".tag")]
-			.map((v) => v.textContent)
-			.map((str) => str.slice(0, 1).toUpperCase() + str.slice(1));
+			// Get genres from tags
+			const genres = [...document.querySelectorAll(".tag")]
+				.map((v) => v.textContent)
+				.map((str) => str.slice(0, 1).toUpperCase() + str.slice(1));
 
-		// Get alternate titles
-		const alternateTitles = [...document.querySelectorAll("h2")].map(
-			(node) => node.textContent
-		);
+			// Get alternate titles
+			const alternateTitles = [...document.querySelectorAll("h2")].map(
+				(node) => node.textContent
+			);
 
-		// Get all images in series
-		const chapterImages = [
-			...document.querySelectorAll("#thumbnail-container img"),
-		]
-			.map((v) => v.getAttribute("data-src"))
-			.filter(Boolean)
-			.map((url) => url.replace(/t\./g, "."));
+			// Get all images in series
+			const chapterImages = [
+				...document.querySelectorAll("#thumbnail-container img"),
+			]
+				.map((v) => v.getAttribute("data-src"))
+				.filter(Boolean)
+				.map((url) => url.replace(/t\./g, "."));
 
-		// Get series' upload date
-		const date = new Date(
-			document.querySelector("time").getAttribute("datetime")
-		);
+			// Get series' upload date
+			const date = new Date(
+				document.querySelector("time").getAttribute("datetime")
+			);
 
-		// Return it.
-		const providerId = getProviderId(this.provider);
-		return {
-			constant: {
-				title,
-				slug,
-				posterUrl,
-				alternateTitles,
-				descriptionParagraphs: ["nhentai does not provide descriptions."],
-				genres,
-				nsfw: true,
-			},
-			data: {
-				chapters: [
-					{
-						season: 1,
-						chapter: 1,
-						label: "Chapter 1",
-						date,
-						hrefString: "read",
-					},
-				],
-				chapterImages,
-				status: "ended",
-			},
-			success: true,
-			provider: isProviderId(providerId) ? providerId : null,
-		};
+			// Return it.
+			const providerId = getProviderId(this.provider);
+			return {
+				constant: {
+					title,
+					slug,
+					posterUrl,
+					alternateTitles,
+					descriptionParagraphs: ["nhentai does not provide descriptions."],
+					genres,
+					nsfw: true,
+				},
+				data: {
+					chapters: [
+						{
+							season: 1,
+							chapter: 1,
+							label: "Chapter 1",
+							date,
+							hrefString: "read",
+						},
+					],
+					chapterImages,
+					status: "ended",
+				},
+				success: true,
+				provider: isProviderId(providerId) ? providerId : null,
+			};
+		} catch (e) {
+			return {
+				success: false,
+				status: 0,
+				err: e,
+			};
+		}
 	}
 }
 

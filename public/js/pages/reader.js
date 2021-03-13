@@ -239,7 +239,9 @@ async function initImages() {
 			img.setAttribute("alt", `Page ${Number(i) + 1}`);
 
 			// Set source
-			img.src = url;
+			img.src = url.includes("mangadex")
+				? `/proxy-image?url=${encodeURIComponent(url)}`
+				: url;
 
 			// Add to DOM
 			wrapper.insertBefore(img, wrapper.querySelector("*"));
@@ -294,7 +296,7 @@ async function initImages() {
 	const chapIndex = children.indexOf(curChapterAnchor);
 	const preloadableChapters = children.slice(chapIndex, chapIndex + 5);
 	for (let anchor of preloadableChapters) {
-		if (!anchor.href.includes("mangadex")) getImageUrls(anchor.href); // Mangadex isn't cached so
+		getImageUrls(anchor.href);
 	}
 }
 initImages();
@@ -324,13 +326,10 @@ async function getImageUrls(loc = location.href) {
 
 	// Store in cache
 	cache = JSON.parse(localStorage.getItem(key));
-	if (!url.includes("mangadex")) {
-		// Mangadex is freaking huge, those are base64 URLs. Let's not store those...
-		cache[url] = {
-			at: Date.now(),
-			images: urls,
-		};
-	}
+	cache[url] = {
+		at: Date.now(),
+		images: urls,
+	};
 
 	// It might overflow
 	try {

@@ -6,6 +6,7 @@ import config from "../config.json";
 import { Provider, Scraper } from "../scrapers/types";
 import { getProviderId, getProviderName } from "../routers/manga-page";
 import cache from "../util/cache";
+import fetch from "node-fetch-extra";
 
 const nsfwError: ScraperError = {
 	success: false,
@@ -78,6 +79,8 @@ export default async function updateManga(
 	if (d.success && d.constant.nsfw && db.get("settings.show-nsfw") === "no")
 		return nsfwError;
 
+	if (!d.success) return d;
+
 	// Return normal data
 	return d;
 }
@@ -102,6 +105,32 @@ async function addInfo(data: ScraperResponse) {
 		);
 		const chapters = Array.from(seasonSet);
 		data.data.hasSeasons = chapters.length > 1;
+
+		// Find banner for manga
+		const query = `
+		query media($search:String, $type:MediaType) { 
+			Media(search:$search, type:$type){
+				id
+				bannerImage
+			}
+		}
+		`;
+		const aniListData = await fetch("https://graphql.anilist.co", {
+			headers: {
+				"content-type": "application/json",
+			},
+			body: JSON.stringify({
+				query,
+				variables: {
+					search: data.constant.title,
+					type: "MANGA",
+				},
+			}),
+			method: "POST",
+		}).then((d) => d.json());
+
+		const banner = aniListData?.data?.Media?.bannerImage ?? null;
+		data.constant.banner = banner;
 	}
 
 	return data;

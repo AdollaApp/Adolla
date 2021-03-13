@@ -40,8 +40,10 @@ export interface MangaMeta {
 	descriptionParagraphs: string[];
 	/** Genres as a string */
 	genres: string[];
-	/** If the manga is SFW or not */
+	/** If the manga is NSFW or not */
 	nsfw: boolean;
+	/** Optional banner, Twitter-like banner. Taken from anilist */
+	banner?: string;
 }
 /** Stored under manga.data, used for more dynamic stuff */
 export interface MangaData {
