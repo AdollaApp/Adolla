@@ -12,15 +12,33 @@ jobs:
         run: |
           npm install
           npm run build-binaries
-      - name: Store binaries
+      - name: Store binaries Mac
         uses: actions/upload-artifact@v2
         with:
-          name: tmp-folder
+          name: release-mac
           path: |
-            index-linux
             index-macos
+            views
+            dist
+            package.json
+      - name: Store binaries Window
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-windows
+          path: |
             index-win.exe
             views
+            dist
+            package.json
+      - name: Store binaries Linux
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-linux
+          path: |
+            index-linux
+            views
+            dist
+            package.json
       # - name: Archive code coverage results
       #   uses: actions/upload-artifact@v2
       #   with:
