@@ -107,32 +107,44 @@ async function addInfo(data: ScraperResponse) {
 		const chapters = Array.from(seasonSet);
 		data.data.hasSeasons = chapters.length > 1;
 
-		// Find banner for manga
-		const query = `
-		query media($search:String, $type:MediaType) { 
-			Media(search:$search, type:$type){
-				id
-				bannerImage
-			}
-		}
-		`;
 		try {
-			const aniListData = await fetch("https://graphql.anilist.co", {
-				headers: {
-					"content-type": "application/json",
-				},
-				body: JSON.stringify({
-					query,
-					variables: {
-						search: data.constant.title,
-						type: "MANGA",
-					},
-				}),
-				method: "POST",
-			}).then((d) => d.json());
+			if (data.provider === "mangadex" || data.provider === "mangasee") {
+				// Check for pre-existing (cached) banner URL
+				const title = data.constant.title.replace(/\./g, "_"); // Make it DB-proof
+				const dbQuery = `banners.${title}`;
+				const existingBanner = db.get(dbQuery);
+				if (existingBanner) {
+					data.constant.banner = existingBanner;
+					return data;
+				}
 
-			const banner = aniListData?.data?.Media?.bannerImage ?? null;
-			data.constant.banner = banner;
+				// Find banner for manga
+				const query = `
+				query media($search:String, $type:MediaType) { 
+					Media(search:$search, type:$type){
+						id
+						bannerImage
+					}
+				}
+				`;
+				const aniListData = await fetch("https://graphql.anilist.co", {
+					headers: {
+						"content-type": "application/json",
+					},
+					body: JSON.stringify({
+						query,
+						variables: {
+							search: data.constant.title,
+							type: "MANGA",
+						},
+					}),
+					method: "POST",
+				}).then((d) => d.json());
+
+				const banner = aniListData?.data?.Media?.bannerImage ?? null;
+				data.constant.banner = banner;
+				if (banner) db.set(dbQuery, banner);
+			}
 			return data;
 		} catch (err) {
 			console.error(
