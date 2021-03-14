@@ -1,3 +1,5 @@
+import path from "path";
+import os from "os";
 import fs from "fs";
 import { Database, Progress } from "./types";
 import Db from "jipdb";
@@ -17,7 +19,22 @@ const defaults: Database = {
 };
 
 // Iniate new DB
-const db = new Db("data.json", defaults);
+const homePath = path.join(os.homedir(), ".adolla");
+const dbPath = path.join(homePath, "data.json");
+if (!fs.existsSync(homePath)) {
+	fs.mkdirSync(homePath);
+}
+
+// Move db
+if (fs.existsSync("./data.json")) {
+	const data = fs.readFileSync("./data.json", "utf-8");
+	fs.writeFileSync(dbPath, data);
+	fs.renameSync("data.json", "data-archived.json");
+	console.log("MOVED JSON");
+}
+
+// Make db
+const db = new Db(dbPath, defaults);
 
 db.set("data_cache", undefined);
 

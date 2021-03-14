@@ -10,7 +10,8 @@
 		"format-data": "npm run build && node ./dist/format-data.js",
 		"build": "etsc",
 		"lint": "eslint src/",
-		"lint:fix": "prettier --write . && eslint src/ --fix"
+		"lint:fix": "prettier --write . && eslint src/ --fix",
+		"build-binaries": "npm run build && pkg dist/index.js"
 	},
 	"keywords": [],
 	"author": "",
@@ -27,10 +28,11 @@
 		"express-handlebars": "^5.2.0",
 		"fuse.js": "^6.4.3",
 		"html-entities": "^1.3.1",
-		"jipdb": "^1.0.4",
+		"jipdb": "^1.0.5",
 		"jsdom": "^16.4.0",
 		"mangadex-api": "^4.6.4",
 		"node-fetch-extra": "0.0.3",
+		"pkg": "^4.4.9",
 		"prettier-eslint": "^12.0.0",
 		"telebot": "^1.4.1",
 		"ts-node": "^9.0.0",
