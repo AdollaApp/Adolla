@@ -3,7 +3,7 @@ name: Node CI
 on: [push]
 
 jobs:
-  build_and_test:
+  build_and_store:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -19,7 +19,6 @@ jobs:
           path: |
             index-macos
             views
-            dist
             public
             package.json
       - name: Store binaries Window
@@ -29,7 +28,6 @@ jobs:
           path: |
             index-win.exe
             views
-            dist
             public
             package.json
       - name: Store binaries Linux
@@ -39,7 +37,6 @@ jobs:
           path: |
             index-linux
             views
-            dist
             public
             package.json
       #     path: output/test/code-coverage.html
