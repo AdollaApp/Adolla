@@ -1,8 +1,13 @@
 import express from "express";
 import db from "../db";
 import fs from "fs";
+import os from "os";
 import getReading from "../util/getReading";
 import getIconSrc, { iconNames, iconNamesReversed } from "../util/getIconSrc";
+import path from "path";
+
+const homePath = path.join(os.homedir(), ".adolla");
+const backupsPath = path.join(homePath, "backups", "");
 
 const router = express.Router();
 
@@ -49,7 +54,7 @@ router.get("/settings/", async (req, res) => {
 		});
 
 	// Get backups
-	const backupFiles = fs.readdirSync("./backups/");
+	const backupFiles = fs.readdirSync(backupsPath);
 	const backups = backupFiles
 		.map((fileName) => {
 			const d = new Date(Number(fileName.slice(0, -5)));
@@ -66,7 +71,7 @@ router.get("/settings/", async (req, res) => {
 				fileName,
 				label,
 				date: d,
-				size: fs.readFileSync(`backups/${fileName}`, "utf-8").length,
+				size: fs.readFileSync(path.join(backupsPath, fileName), "utf-8").length,
 			};
 		})
 		.sort((a, b) => b.date.getTime() - a.date.getTime());
@@ -84,7 +89,9 @@ router.get("/settings/", async (req, res) => {
 router.get("/settings/restore-backup/:filename", async (req, res) => {
 	try {
 		const filename = req.params.filename;
-		const backup = JSON.parse(fs.readFileSync(`backups/${filename}`, "utf-8"));
+		const backup = JSON.parse(
+			fs.readFileSync(path.join(backupsPath, filename), "utf-8")
+		);
 
 		const reading = backup.reading ?? {};
 		const lists = backup.lists ?? [];

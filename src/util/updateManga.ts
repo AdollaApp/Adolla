@@ -78,11 +78,20 @@ export default async function updateManga(
 	// Add other info
 	const d = await addInfo(data);
 
-	// Throw NSFW error if this content is nsfw and the user doesn't want NSFW content
-	if (d.success && d.constant.nsfw && db.get("settings.show-nsfw") === "no")
-		return nsfwError;
+	if (!d?.success) {
+		if (typeof d?.success === "undefined") {
+			return {
+				success: false,
+				status: -1,
+				err: "Unkown error",
+			};
+		}
+		return d;
+	}
 
-	if (!d.success) return d;
+	// Throw NSFW error if this content is nsfw and the user doesn't want NSFW content
+	if (d.constant.nsfw && db.get("settings.show-nsfw") === "no")
+		return nsfwError;
 
 	// Return normal data
 	return d;

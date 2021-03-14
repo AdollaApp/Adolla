@@ -69,7 +69,7 @@ class MangadexClass extends Scraper {
 		const maxTimeout: Promise<ScraperError> = new Promise((resolve) => {
 			setTimeout(() => {
 				resolve(error(0, "This request took too long"));
-			}, 25e3);
+			}, 10e3);
 		});
 
 		// Attempt scraping series
