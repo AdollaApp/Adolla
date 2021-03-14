@@ -9,6 +9,8 @@ import cache from "../util/cache";
 import fetch from "node-fetch-extra";
 import chalk from "chalk";
 
+const bannerCache = {};
+
 const nsfwError: ScraperError = {
 	success: false,
 	status: 0,
@@ -110,9 +112,7 @@ async function addInfo(data: ScraperResponse) {
 		try {
 			if (data.provider === "mangadex" || data.provider === "mangasee") {
 				// Check for pre-existing (cached) banner URL
-				const title = data.constant.title.replace(/\./g, "_"); // Make it DB-proof
-				const dbQuery = `banners.${title}`;
-				const existingBanner = db.get(dbQuery);
+				const existingBanner = bannerCache[data.constant.title];
 				if (existingBanner) {
 					data.constant.banner = existingBanner;
 					return data;
@@ -143,7 +143,7 @@ async function addInfo(data: ScraperResponse) {
 
 				const banner = aniListData?.data?.Media?.bannerImage ?? null;
 				data.constant.banner = banner;
-				if (banner) db.set(dbQuery, banner);
+				if (banner) bannerCache[data.constant.title] = banner;
 			}
 			return data;
 		} catch (err) {
