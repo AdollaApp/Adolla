@@ -1,6 +1,6 @@
 # Adolla
 
-Easy to use web app to read Manga.
+Easy to use web app to read manga and comics.
 
 ## Features
 
