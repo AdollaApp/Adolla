@@ -20,6 +20,7 @@ jobs:
             index-macos
             views
             dist
+            public
             package.json
       - name: Store binaries Window
         uses: actions/upload-artifact@v2
@@ -29,6 +30,7 @@ jobs:
             index-win.exe
             views
             dist
+            public
             package.json
       - name: Store binaries Linux
         uses: actions/upload-artifact@v2
@@ -38,9 +40,6 @@ jobs:
             index-linux
             views
             dist
+            public
             package.json
-      # - name: Archive code coverage results
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: code-coverage-report
       #     path: output/test/code-coverage.html
