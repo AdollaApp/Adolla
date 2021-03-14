@@ -30,7 +30,7 @@ if (fs.existsSync("./data.json")) {
 	const data = fs.readFileSync("./data.json", "utf-8");
 	fs.writeFileSync(dbPath, data);
 	fs.renameSync("data.json", "data-archived.json");
-	console.log("MOVED JSON");
+	console.log("MOVED! data.json");
 }
 
 // Make db
