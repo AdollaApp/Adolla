@@ -1,0 +1,28 @@
+name: Node CI
+
+on: [push]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install and build binaries
+        run: |
+          npm install
+          npm run build-binaries
+      - name: Store binaries
+        uses: actions/upload-artifact@v2
+        with:
+          name: tmp-folder
+          path: |
+            index-linux
+            index-macos
+            index-win.exe
+            views
+      # - name: Archive code coverage results
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: code-coverage-report
+      #     path: output/test/code-coverage.html
