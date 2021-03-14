@@ -109,6 +109,7 @@ async function addInfo(data: ScraperResponse) {
 		const chapters = Array.from(seasonSet);
 		data.data.hasSeasons = chapters.length > 1;
 
+		// Find banner for manga
 		try {
 			if (data.provider === "mangadex" || data.provider === "mangasee") {
 				// Check for pre-existing (cached) banner URL
