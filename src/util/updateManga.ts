@@ -7,6 +7,7 @@ import { Provider, Scraper } from "../scrapers/types";
 import { getProviderId, getProviderName } from "../routers/manga-page";
 import cache from "../util/cache";
 import fetch from "node-fetch-extra";
+import chalk from "chalk";
 
 const nsfwError: ScraperError = {
 	success: false,
@@ -132,10 +133,15 @@ async function addInfo(data: ScraperResponse) {
 
 			const banner = aniListData?.data?.Media?.bannerImage ?? null;
 			data.constant.banner = banner;
-		} catch (e) {
+			return data;
+		} catch (err) {
+			console.error(
+				chalk.red("[ANILIST]") +
+					` Unable to fetch banner for ${data.constant.title}:`,
+				err
+			);
+			return data;
 			// /shrug
 		}
 	}
-
-	return data;
 }
