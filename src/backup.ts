@@ -23,6 +23,7 @@ class Backup {
 				` Making backup at ${new Date().toLocaleString("it")}`
 		);
 		const reading = db.get("reading_new");
+		const hide_read = db.get("hide_read");
 		const lists: List[] = db.get("lists");
 
 		const now = Date.now();
@@ -38,6 +39,7 @@ class Backup {
 			backupAt: now,
 			reading,
 			lists,
+			hide_read,
 		};
 
 		if (!fs.existsSync(backupsPath)) fs.mkdirSync(backupsPath);

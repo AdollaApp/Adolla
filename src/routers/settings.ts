@@ -95,6 +95,7 @@ router.get("/settings/restore-backup/:filename", async (req, res) => {
 
 		const reading = backup.reading ?? {};
 		const lists = backup.lists ?? [];
+		const hide_read = backup.hide_read || {};
 
 		// Merge reading
 		const r = db.get("reading_new") || {};
@@ -115,6 +116,16 @@ router.get("/settings/restore-backup/:filename", async (req, res) => {
 			};
 		}
 		db.set("reading_new", r);
+
+		// Merge hide_read
+		const hide = db.get("hide_read") || {};
+		for (let provider of Object.keys(hide_read)) {
+			if (!hide[provider]) hide[provider] = {};
+			for (let slug of Object.keys(hide_read[provider])) {
+				hide[provider][slug] = true;
+			}
+		}
+		db.set("hide_read", hide);
 
 		// Set lists
 		db.set("lists", lists);
