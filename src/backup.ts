@@ -1,7 +1,12 @@
+import path from "path";
+import os from "os";
 import fs from "fs";
 import chalk from "chalk";
 import db from "./db";
 import { List } from "./types";
+
+const homePath = path.join(os.homedir(), ".adolla");
+const backupsPath = path.join(homePath, "backups", "");
 
 class Backup {
 	/**
@@ -18,6 +23,7 @@ class Backup {
 				` Making backup at ${new Date().toLocaleString("it")}`
 		);
 		const reading = db.get("reading_new");
+		const hide_read = db.get("hide_read");
 		const lists: List[] = db.get("lists");
 
 		const now = Date.now();
@@ -33,10 +39,14 @@ class Backup {
 			backupAt: now,
 			reading,
 			lists,
+			hide_read,
 		};
 
-		if (!fs.existsSync("backups/")) fs.mkdirSync("backups");
-		fs.writeFileSync(`backups/${now}.json`, JSON.stringify(backupJson));
+		if (!fs.existsSync(backupsPath)) fs.mkdirSync(backupsPath);
+		fs.writeFileSync(
+			path.join(backupsPath, `${now}.json`),
+			JSON.stringify(backupJson)
+		);
 
 		console.info(
 			chalk.green("[BACKUP]") +
@@ -66,9 +76,9 @@ class Backup {
 	}
 
 	private async getLastBackupTime() {
-		if (!fs.existsSync("backups/")) fs.mkdirSync("backups");
+		if (!fs.existsSync(backupsPath)) fs.mkdirSync(backupsPath);
 		const files = fs
-			.readdirSync("backups/")
+			.readdirSync(backupsPath)
 			.map((fileName) => Number(fileName.slice(0, -5)));
 		const last = files.sort((a, b) => b - a)[0] ?? 0;
 		return last;
