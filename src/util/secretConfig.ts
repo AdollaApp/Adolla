@@ -14,6 +14,7 @@ interface SecretConfig {
 		password: string | null;
 	};
 	discord_webhook: string | null;
+	max_reading_to_show_popular: number | null;
 }
 
 let secretConfig: SecretConfig | null;

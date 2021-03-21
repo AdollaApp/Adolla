@@ -18,8 +18,8 @@ import MangaseeInstance from "./mangasee";
 export const Mangasee = MangaseeInstance;
 
 // Import MangaDex
-import MangadexInstance from "./mangadex";
-export const Mangadex = MangadexInstance;
+// import MangadexInstance from "./mangadex";
+// export const Mangadex = MangadexInstance;
 
 // Import ReadComicsOnline
 import RCOInstance from "./rco";
@@ -31,7 +31,7 @@ export const nhentai = nhentaiInstance;
 
 export const scrapers = {
 	Mangasee,
-	Mangadex,
+	// Mangadex,
 	RCO,
 	nhentai,
 };

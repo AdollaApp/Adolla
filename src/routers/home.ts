@@ -6,6 +6,9 @@ import getReading from "../util/getReading";
 import db from "../db";
 import { getLists } from "../util/lists";
 import { doSearch } from "../util/doSearch";
+import secretConfig from "../util/secretConfig";
+import { SearchError } from "../scrapers/types";
+import { ScraperResponse } from "../types";
 
 router.get("/", async (req, res) => {
 	const url = `http://${req.headers.host}/`;
@@ -28,21 +31,34 @@ router.get("/json", async (req, res) => {
 });
 
 async function getData() {
+	// Get lists
+	console.time("lists");
+	let lists = await getLists(true);
+	console.timeEnd("lists");
+
+	// Get reading
+	console.time("reading");
+	const reading = await getReading();
+	console.timeEnd("reading");
+
 	// Get popular manga
-	const popular = await doSearch("mangasee", "", {
-		resultCount: 20,
-	}); // Empty search sorts by popular
+	const maxReading = secretConfig.max_reading_to_show_popular ?? 10;
+	console.time("popular");
+
+	let popular: ScraperResponse[] | SearchError = [];
+	if (reading.length < maxReading) {
+		popular = await doSearch("mangasee", "", {
+			resultCount: 20,
+		}); // Empty search sorts by popular
+	}
+	console.timeEnd("popular");
 
 	// Set progress for popular manga
+	console.time("popular2");
 	if (Array.isArray(popular)) {
 		await Promise.all(popular.map(setMangaProgress));
 	}
-	// Get lists
-	let lists = await getLists();
-	lists = lists.filter((list) => list.showOnHome);
-
-	// Get reading
-	const reading = await getReading();
+	console.timeEnd("popular2");
 
 	return { lists, reading, popular };
 }
