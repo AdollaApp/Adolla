@@ -19,6 +19,7 @@
 	{{#each lists}}
 	{{> list list=this}}
 	{{/each}}
+	{{#if popular}}
 	<section class="section popular" data-list-id="popular" data-list-type="list">
 		<h2 class="sub-title spread do-spread"><span>Popular right now</span> {{> list-type }}</h2>
 		<div class="manga-grid">
@@ -27,6 +28,7 @@
 		{{/each}}
 		</div>
 	</section>
+	{{/if}}
 
 </div>
 
