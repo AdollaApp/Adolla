@@ -174,19 +174,21 @@ function updateSelectionStatus() {
 	}
 }
 
-document.querySelector(".hide-from-reading").addEventListener("click", () => {
-	if (
-		confirm(
-			"Really hide this series from read? It won't show up until you read more of this."
-		)
-	) {
-		let url = location.href;
-		if (!url.endsWith("/")) url += "/";
+document.querySelectorAll(".hide-from-reading").forEach((el) => {
+	el.addEventListener("click", () => {
+		if (
+			confirm(
+				"Really hide this series from read? It won't show up until you read more of this."
+			)
+		) {
+			let url = location.href;
+			if (!url.endsWith("/")) url += "/";
 
-		fetch(`${url}hide-series/`, {
-			method: "POST",
-		});
-	}
+			fetch(`${url}hide-series/`, {
+				method: "POST",
+			});
+		}
+	});
 });
 
 /**
