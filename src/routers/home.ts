@@ -32,18 +32,13 @@ router.get("/json", async (req, res) => {
 
 async function getData() {
 	// Get lists
-	console.time("lists");
 	let lists = await getLists(true);
-	console.timeEnd("lists");
 
 	// Get reading
-	console.time("reading");
 	const reading = await getReading();
-	console.timeEnd("reading");
 
 	// Get popular manga
 	const maxReading = secretConfig.max_reading_to_show_popular ?? 10;
-	console.time("popular");
 
 	let popular: ScraperResponse[] | SearchError = [];
 	if (reading.length < maxReading) {
@@ -51,14 +46,11 @@ async function getData() {
 			resultCount: 20,
 		}); // Empty search sorts by popular
 	}
-	console.timeEnd("popular");
 
 	// Set progress for popular manga
-	console.time("popular2");
 	if (Array.isArray(popular)) {
 		await Promise.all(popular.map(setMangaProgress));
 	}
-	console.timeEnd("popular2");
 
 	return { lists, reading, popular };
 }
