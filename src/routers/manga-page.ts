@@ -5,7 +5,6 @@ import db from "../db";
 import updateManga from "../util/updateManga";
 import { Progress, StoredData, List } from "../types";
 import getMangaProgress, { setMangaProgress } from "../util/getMangaProgress";
-import getReading from "../util/getReading";
 import { getLists } from "../util/lists";
 import getProgressData from "../util/getProgressData";
 import chalk from "chalk";
@@ -50,15 +49,11 @@ router.get("/:provider/:slug", async (req, res, next) => {
 	const data = await updateManga(provider, param);
 
 	if (data && data.success) {
-		const { lists, reading, allLists, mangaProgress } = await handleData(
-			data,
-			param
-		);
+		const { lists, allLists, mangaProgress } = await handleData(data, param);
 
 		// Render
 		res.render("manga", {
 			data,
-			reading,
 			currentSlug: param,
 			lists,
 			allLists,
@@ -103,9 +98,6 @@ async function handleData(data, param) {
 	// See if chapter is same as "last read" chapter
 	await setColors(data, param);
 
-	// Get reading
-	const reading = await getReading(4);
-
 	// Get lists for manga
 	const allLists = await getLists();
 	const lists = allLists.filter((l) => l.entries.find((m) => m.slug === param));
@@ -132,7 +124,6 @@ async function handleData(data, param) {
 	return {
 		lists: lists.filter((l) => !l.byCreator).map(convert),
 		allLists: allLists.filter((l) => !l.byCreator).map(convert),
-		reading,
 		totalChapterCount,
 		doneChapterCount,
 		mangaProgress,
@@ -162,9 +153,6 @@ router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 		const previousChapter =
 			chapters[chapters.indexOf(currentChapter) - 1] ?? null;
 
-		// § reading
-		const reading = await getReading(4);
-
 		// See if chapter is same as last chapter
 		await setColors(data, slug);
 
@@ -178,7 +166,6 @@ router.get("/:provider/:slug/:chapter", async (req, res, next) => {
 			isMangaPage: true,
 			readerSettings: true,
 			currentSlug: slug,
-			reading,
 		});
 	} else {
 		console.error("No data found for", slug);
@@ -214,9 +201,6 @@ router.get("/:provider/:slug/:chapter/json", async (req, res) => {
 		const previousChapter =
 			chapters[chapters.indexOf(currentChapter) - 1] ?? null;
 
-		// § reading
-		const reading = await getReading(4);
-
 		// See if chapter is same as last chapter
 		await setColors(data, slug);
 
@@ -229,7 +213,6 @@ router.get("/:provider/:slug/:chapter/json", async (req, res) => {
 					currentChapter,
 				},
 				currentSlug: slug,
-				reading,
 			},
 		});
 	} else {
@@ -430,8 +413,17 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 		return;
 	}
 
+	console.info(
+		chalk.yellowBright("[LISTS]") +
+			` Setting lists for ${
+				req.params.slug
+			} (${provider}) at ${new Date().toLocaleString(
+				"it"
+			)}. New lists: ${newLists.map((v) => v.slug).join(", ")}`
+	);
+
 	for (const n of newLists) {
-		// Verify existing list
+		// Verify the list we're adding to exists
 		if (!currentLists.find((l) => l.slug === n.slug)) {
 			// Add new list
 			currentLists.push({
@@ -453,6 +445,12 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 				provider: getProviderId(provider),
 			});
 			list.last = Date.now();
+			console.info(
+				chalk.green("[LISTS]") +
+					` Adding ${req.params.slug} (${provider}) to ${list.name} (${
+						list.slug
+					}) at ${new Date().toLocaleString("it")}`
+			);
 		}
 	}
 
@@ -462,15 +460,22 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 	);
 	for (const deleteFrom of otherLists) {
 		// Remove every entry from this list since it wasn't mentioned in the updated list
-		while (deleteFrom.entries.find((v) => v.slug === req.params.slug)) {
-			deleteFrom.entries.splice(
-				deleteFrom.entries.indexOf(
-					deleteFrom.entries.find((v) => v.slug === req.params.slug)
-				),
-				1
-			);
-			deleteFrom.last = Date.now();
-		}
+		let isChanged = false;
+		deleteFrom.entries = deleteFrom.entries.filter((l) => {
+			const isRemoveableEntry = l.slug === req.params.slug;
+			if (isRemoveableEntry) {
+				// When it's the same slug, that means it's getting removed
+				isChanged = true;
+				console.info(
+					chalk.red("[LISTS]") +
+						` Removing ${req.params.slug} (${provider}) from ${
+							deleteFrom.name
+						} (${deleteFrom.slug}) at ${new Date().toLocaleString("it")}`
+				);
+			}
+			return !isRemoveableEntry;
+		});
+		if (isChanged) deleteFrom.last = Date.now();
 	}
 
 	// Remove empty lists
