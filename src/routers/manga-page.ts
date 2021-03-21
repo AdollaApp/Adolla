@@ -413,8 +413,17 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 		return;
 	}
 
+	console.info(
+		chalk.yellowBright("[LISTS]") +
+			` Setting lists for ${
+				req.params.slug
+			} (${provider}) at ${new Date().toLocaleString(
+				"it"
+			)}. New lists: ${newLists.map((v) => v.slug).join(", ")}`
+	);
+
 	for (const n of newLists) {
-		// Verify existing list
+		// Verify the list we're adding to exists
 		if (!currentLists.find((l) => l.slug === n.slug)) {
 			// Add new list
 			currentLists.push({
@@ -436,6 +445,12 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 				provider: getProviderId(provider),
 			});
 			list.last = Date.now();
+			console.info(
+				chalk.green("[LISTS]") +
+					` Adding ${req.params.slug} (${provider}) to ${list.name} (${
+						list.slug
+					}) at ${new Date().toLocaleString("it")}`
+			);
 		}
 	}
 
@@ -445,15 +460,22 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 	);
 	for (const deleteFrom of otherLists) {
 		// Remove every entry from this list since it wasn't mentioned in the updated list
-		while (deleteFrom.entries.find((v) => v.slug === req.params.slug)) {
-			deleteFrom.entries.splice(
-				deleteFrom.entries.indexOf(
-					deleteFrom.entries.find((v) => v.slug === req.params.slug)
-				),
-				1
-			);
-			deleteFrom.last = Date.now();
-		}
+		let isChanged = false;
+		deleteFrom.entries = deleteFrom.entries.filter((l) => {
+			const isRemoveableEntry = l.slug === req.params.slug;
+			if (isRemoveableEntry) {
+				// When it's the same slug, that means it's getting removed
+				isChanged = true;
+				console.info(
+					chalk.red("[LISTS]") +
+						` Removing ${req.params.slug} (${provider}) from ${
+							deleteFrom.name
+						} (${deleteFrom.slug}) at ${new Date().toLocaleString("it")}`
+				);
+			}
+			return !isRemoveableEntry;
+		});
+		if (isChanged) deleteFrom.last = Date.now();
 	}
 
 	// Remove empty lists
