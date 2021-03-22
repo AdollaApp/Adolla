@@ -40,7 +40,6 @@ export async function getLists(justHome: boolean = false): Promise<List[]> {
 
 	updatedLists = await Promise.all(
 		updatedLists.map(async (list) => {
-			console.log(list);
 			list.entries = await Promise.all(
 				list.entries.map(async (entry) => {
 					entry.data = await updateManga(
