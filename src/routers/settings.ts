@@ -6,6 +6,7 @@ import getReading from "../util/getReading";
 import getIconSrc, { iconNames, iconNamesReversed } from "../util/getIconSrc";
 import path from "path";
 import { removeData } from "./lists";
+import { List } from "../types";
 
 const homePath = path.join(os.homedir(), ".adolla");
 const backupsPath = path.join(homePath, "backups", "");
@@ -58,21 +59,56 @@ router.get("/settings/", async (req, res) => {
 	const backupFiles = fs.readdirSync(backupsPath);
 	const backups = backupFiles
 		.map((fileName) => {
+			// Make label
 			const d = new Date(Number(fileName.slice(0, -5)));
-			const label = `${days[d.getDay()]}, ${d
-				.getDate()
-				.toString()
-				.padStart(2, "0")} ${
-				months[d.getMonth()]
-			} ${d.getFullYear()}, ${d
-				.getHours()
-				.toString()
-				.padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
+
+			const day = days[d.getDay()];
+			const month = d.getDate().toString().padStart(2, "0");
+			const monthName = months[d.getMonth()];
+			const year = d.getFullYear();
+
+			const hours = d.getHours().toString().padStart(2, "0");
+			const minutes = d.getMinutes().toString().padStart(2, "0");
+			const time = `${hours}:${minutes}`;
+
+			const label = `${day}, ${month} ${monthName} ${year}, ${time}`;
+
+			// Get list count
+			const backup = JSON.parse(
+				fs.readFileSync(path.join(backupsPath, fileName), "utf-8")
+			);
+			const listCount: List[] = (backup.lists || []).length;
+			const listEntryCount = (backup.lists || []).reduce(
+				(acc: number, list: List) => {
+					return acc + list.entries.length;
+				},
+				0
+			);
+
+			// Get "reading" count
+			const allReading = Object.values(backup.reading)
+				.map((v) => Object.values(v))
+				.flat();
+			const readingCount = allReading.length;
+			let totalChapterCount = 0;
+			for (let series of allReading) {
+				for (let key in series) {
+					if (key === "last") continue;
+					totalChapterCount += series[key]?.percentage / 100 || 0;
+				}
+			}
+			totalChapterCount = Math.round(totalChapterCount);
+
+			// Return full object
 			return {
 				fileName,
 				label,
 				date: d,
-				size: fs.readFileSync(path.join(backupsPath, fileName), "utf-8").length,
+				listCount,
+				listEntryCount,
+				readingCount,
+				totalChapterCount,
+				size: JSON.stringify(backup).length,
 			};
 		})
 		.sort((a, b) => b.date.getTime() - a.date.getTime());

@@ -41,8 +41,17 @@
 		<div class="backups">
 		{{#each backups}}
 		<div class="backup" data-backup="{{fileName}}">
-			<span>{{label}} <span class="secondary">({{size}})</span></span>
-			<button class="badge-background">Restore</button>
+			<div class="backup-left">
+				<p class="title">{{label}}</p>
+				<div class="badge-list display-lists">
+					<div class="tertiary-badge">Reading {{readingCount}} series, read {{totalChapterCount}} chapters</div>
+					<div class="tertiary-badge">{{listCount}} lists, {{listEntryCount}} series in lists</div>
+
+				</div>
+			</div>
+			<div class="backup-right">
+				<button class="badge-background">Restore</button>
+			</div>
 		</div>
 		{{/each}}
 	</div>

@@ -355,6 +355,13 @@ details .manga-grid {
 	margin-right: 5px;
 }
 
+.tertiary-badge {
+	padding: 5px 10px;
+	background: var(--hover);
+	border-radius: 4px;
+	margin-right: 5px;
+}
+
 label~input {
 	margin-top: 5px;
 }
@@ -1232,6 +1239,13 @@ details.settings-toggle[open]~.chapters {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+}
+
+.backup .title {
+	margin: 0;
+	color: var(--text);
+	font-weight: normal;
+	margin-bottom: 5px;
 }
 
 .backup button {
