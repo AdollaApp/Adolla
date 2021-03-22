@@ -44,14 +44,26 @@ router.post("/set-home", async (req, res) => {
 	if (list) list.showOnHome = value;
 
 	// Store lists in database
-	db.set(
-		"lists",
-		lists.filter((l) => !l.byCreator)
-	);
+	db.set("lists", lists.filter((l) => !l.byCreator).map(removeData));
 
 	res.json({
 		status: 200,
 	});
 });
+
+export function removeData(list: List) {
+	let l = Object.assign({}, list);
+
+	// Remove "data" from objects so the db is smaller
+	if (!list.byCreator) {
+		l.entries = l.entries.map((entry) => {
+			return {
+				provider: entry.provider,
+				slug: entry.slug,
+			};
+		});
+	}
+	return list;
+}
 
 export default router;

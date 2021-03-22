@@ -10,6 +10,7 @@ import getProgressData from "../util/getProgressData";
 import chalk from "chalk";
 import fetch from "node-fetch-extra";
 import { Provider, ProviderId } from "../scrapers/types";
+import { removeData } from "./lists";
 
 interface NewList {
 	slug: string;
@@ -485,10 +486,7 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 	currentLists = currentLists.sort((a, b) => (b.last ?? -1) - (a.last ?? -1));
 
 	// Store new value
-	db.set(
-		"lists",
-		currentLists.filter((l) => !l.byCreator)
-	);
+	db.set("lists", currentLists.filter((l) => !l.byCreator).map(removeData));
 
 	res.json({
 		status: 200,

@@ -5,6 +5,7 @@ import os from "os";
 import getReading from "../util/getReading";
 import getIconSrc, { iconNames, iconNamesReversed } from "../util/getIconSrc";
 import path from "path";
+import { removeData } from "./lists";
 
 const homePath = path.join(os.homedir(), ".adolla");
 const backupsPath = path.join(homePath, "backups", "");
@@ -128,7 +129,7 @@ router.get("/settings/restore-backup/:filename", async (req, res) => {
 		db.set("hide_read", hide);
 
 		// Set lists
-		db.set("lists", lists);
+		db.set("lists", lists.map(removeData));
 
 		res.json({
 			status: 200,
