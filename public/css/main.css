@@ -360,6 +360,7 @@ details .manga-grid {
 	background: var(--hover);
 	border-radius: 4px;
 	margin-right: 5px;
+	margin-top: 5px;
 }
 
 label~input {
@@ -1245,7 +1246,6 @@ details.settings-toggle[open]~.chapters {
 	margin: 0;
 	color: var(--text);
 	font-weight: normal;
-	margin-bottom: 5px;
 }
 
 .backup button {
