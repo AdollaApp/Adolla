@@ -3,6 +3,7 @@ import path from "path";
 import chalk from "chalk";
 import fs from "fs";
 import exampleConfig from "../example.secret-config.json";
+import { formatDiagnostic } from "typescript";
 
 interface SecretConfig {
 	telegram?: {
@@ -15,6 +16,7 @@ interface SecretConfig {
 	};
 	discord_webhook: string | null;
 	max_reading_to_show_popular: number | null;
+	port?: number | null;
 }
 
 let secretConfig: SecretConfig | null;
@@ -30,6 +32,7 @@ if (!fs.existsSync(configPath)) {
 
 	if (fs.existsSync(oldPath)) {
 		newConfig = fs.readFileSync(oldPath, "utf-8");
+		fs.renameSync(oldPath, "secret-config-archived.json");
 	} else {
 		newConfig = JSON.stringify(exampleConfig);
 	}

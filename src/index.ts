@@ -19,9 +19,10 @@ import updatePopularCache from "./util/updatePopularCache";
 
 // Import config
 import cfg from "./config.json";
+import secretConfig from "./util/secretConfig";
 
 // Start all
-app.listen(process.env.PORT ?? cfg.http.port ?? 80, () => {
+app.listen(process.env.PORT ?? secretConfig.port ?? cfg.http.port ?? 80, () => {
 	console.info(
 		chalk.green("[SERVER]") +
 			` Web server is live on localhost:${process.env.PORT ?? cfg.http.port}`
