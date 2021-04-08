@@ -25,6 +25,10 @@ export const Mangasee = MangaseeInstance;
 import RCOInstance from "./rco";
 export const RCO = RCOInstance;
 
+// Import Manganelo
+import ManganeloInstance from "./manganelo";
+export const Manganelo = ManganeloInstance;
+
 // Import nhentai
 import nhentaiInstance from "./nhentai";
 export const nhentai = nhentaiInstance;
