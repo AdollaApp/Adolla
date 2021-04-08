@@ -45,6 +45,7 @@ app.engine(
 					mangadex: "https://mangadex.org/images/misc/navbar.svg",
 					rco: "/provider/rco.png",
 					nhentai: "https://nhentai.to/img/logo.650c98bbb08e.svg",
+					manganelo: "https://manganelo.tv/res/img/favicon-96x96.webp",
 				};
 				return icons[provider] ?? "/icons/main-on-white.png";
 			},
