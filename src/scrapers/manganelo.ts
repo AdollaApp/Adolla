@@ -19,7 +19,7 @@ export class manganeloClass extends Scraper {
 		// This is a better way of destructuring with default values
 		// than doing it at the top. This took... many hours. Thanks Pandawan!
 		const { resultCount } = {
-			resultCount: 40,
+			resultCount: 15,
 			...options,
 		};
 
@@ -27,9 +27,9 @@ export class manganeloClass extends Scraper {
 
 		if (query === "") {
 			// Get popular page
-			pageUrl = "https://manganelo.to/";
+			pageUrl = "https://manganelo.tv/genre?type=topview";
 		} else {
-			pageUrl = `https://manganelo.to/search?q=${encodeURIComponent(query)}`;
+			pageUrl = `https://manganelo.tv/search/${encodeURIComponent(query)}`;
 		}
 
 		// Fetch DOM for relevant page
@@ -41,12 +41,10 @@ export class manganeloClass extends Scraper {
 		const document = dom.window.document;
 
 		// Get nodes
-		const anchors = [
-			...document.querySelectorAll(".index-container .gallery a"),
-		];
+		const anchors = [...document.querySelectorAll("a.item-title")];
 
 		// Get IDs from nodes
-		const ids = anchors.map((anchor) => anchor.href.match(/(\d+)/)[1]);
+		const ids = anchors.map((anchor) => anchor.href.split("/").pop());
 
 		// Get details for each search result
 		const searchResultData: ScraperResponse[] = await Promise.all(

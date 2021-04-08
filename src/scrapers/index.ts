@@ -36,6 +36,7 @@ export const nhentai = nhentaiInstance;
 export const scrapers = {
 	Mangasee,
 	// Mangadex,
+	Manganelo,
 	RCO,
 	nhentai,
 };
