@@ -41,7 +41,10 @@ export class manganeloClass extends Scraper {
 		const document = dom.window.document;
 
 		// Get nodes
-		const anchors = [...document.querySelectorAll("a.item-title")];
+		const anchors = [
+			...document.querySelectorAll("a.item-title"),
+			...document.querySelectorAll("a.genres-item-name"),
+		];
 
 		// Get IDs from nodes
 		const ids = anchors.map((anchor) => anchor.href.split("/").pop());
