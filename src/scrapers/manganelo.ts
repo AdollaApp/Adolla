@@ -133,24 +133,27 @@ export class manganeloClass extends Scraper {
 		// Get chapters
 		const chapters: Chapter[] = [
 			...document.querySelectorAll(".row-content-chapter li"),
-		].map(
-			(row): Chapter => {
-				// Find all values
-				const label = row.querySelector("a").textContent.split(":")[0];
-				const slug = row.querySelector("a").href.split("/").pop();
-				const chapter = Number(slug.split("_").pop());
-				const date = new Date(row.querySelector(".chapter-time").textContent);
+		]
+			.reverse() // Their default sorting is large > small — we want the opposite of that
+			.map(
+				(row): Chapter => {
+					// Find all values
+					const label = row.querySelector("a").textContent.split(":")[0];
+					const slug = row.querySelector("a").href.split("/").pop();
+					const chapter = Number(slug.split("_").pop());
+					const date = new Date(row.querySelector(".chapter-time").textContent);
 
-				// Return product of chapter
-				return {
-					label,
-					hrefString: slug,
-					season: 1,
-					chapter,
-					date,
-				};
-			}
-		);
+					// Return product of chapter
+					return {
+						label,
+						hrefString: slug,
+						season: 1,
+						chapter,
+						date,
+						combined: chapter,
+					};
+				}
+			);
 
 		// Find images
 		let chapterImages = [];
