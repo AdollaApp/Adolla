@@ -5,6 +5,7 @@ import getMangaProgress from "./getMangaProgress";
 import config from "../config.json";
 import { Provider, Scraper } from "../scrapers/types";
 import { getProviderId, getProviderName } from "../routers/manga-page";
+import { disallowedGenres } from "../config.json";
 import cache from "../util/cache";
 import fetch from "node-fetch-extra";
 import chalk from "chalk";
@@ -117,6 +118,13 @@ async function addInfo(data: ScraperResponse) {
 		);
 		const chapters = Array.from(seasonSet);
 		data.data.hasSeasons = chapters.length > 1;
+
+		// See if it's hentai or if it's safe
+		for (const genre of data.constant.genres) {
+			if (disallowedGenres.includes(genre.toLowerCase())) {
+				data.constant.nsfw = true;
+			}
+		}
 
 		// Find banner for manga
 		try {

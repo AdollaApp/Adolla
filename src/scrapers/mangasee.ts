@@ -310,7 +310,7 @@ export class MangaseeClass extends Scraper {
 			// 	return base64;
 			// }));
 
-			// See if it's hentai or unsafe
+			// See if it's hentai or if it's safe
 			let nsfw = false; // I don't think Mangasee has hentai
 			for (const genre of genres) {
 				if (disallowedGenres.includes(genre.toLowerCase())) nsfw = true;

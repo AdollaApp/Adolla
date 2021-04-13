@@ -12,7 +12,7 @@ export class manganeloClass extends Scraper {
 		super();
 		this.provider = "Manganelo";
 		this.canSearch = true;
-		this.nsfw = true;
+		this.nsfw = false;
 	}
 
 	public async search(query: string, options?: Partial<SearchOptions>) {
@@ -47,7 +47,9 @@ export class manganeloClass extends Scraper {
 		];
 
 		// Get IDs from nodes
-		const ids = anchors.map((anchor) => anchor.href.split("/").pop());
+		const ids = anchors
+			.map((anchor) => anchor.href.split("/").pop())
+			.slice(0, resultCount);
 
 		// Get details for each search result
 		const searchResultData: ScraperResponse[] = await Promise.all(
