@@ -8,7 +8,6 @@
 	"disallowedGenres": [
 		"smut",
 		"nsfw",
-		"hentai",
-		"adult"
+		"hentai"
 	]
 }
