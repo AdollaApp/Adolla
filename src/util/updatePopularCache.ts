@@ -163,7 +163,7 @@ class Updater {
 											},
 											body: JSON.stringify({
 												avatar_url:
-													"https://raw.githubusercontent.com/JipFr/Adolla/dev/public/icons/white-on-blue.png",
+													"https://raw.githubusercontent.com/AdollaApp/Adolla/master/public/icons/white-on-blue.png",
 												username: "Adolla",
 												embeds: [
 													{
