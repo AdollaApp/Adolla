@@ -27,9 +27,11 @@ export class comicextraClass extends Scraper {
 
 		if (query === "") {
 			// Get popular page
-			pageUrl = "https://nhentai.to/";
+			pageUrl = "https://www.comicextra.com/popular-comic";
 		} else {
-			pageUrl = `https://nhentai.to/search?q=${encodeURIComponent(query)}`;
+			pageUrl = `https://www.comicextra.com/comic-search?key=${encodeURIComponent(
+				query
+			)}`;
 		}
 
 		// Fetch DOM for relevant page
@@ -41,16 +43,17 @@ export class comicextraClass extends Scraper {
 		const document = dom.window.document;
 
 		// Get nodes
-		const anchors = [
-			...document.querySelectorAll(".index-container .gallery a"),
-		];
+		const anchors = [...document.querySelectorAll(".cartoon-box")].map((box) =>
+			box.querySelector("a")
+		);
 
 		// Get IDs from nodes
-		const ids = anchors.map((anchor) => anchor.href.match(/(\d+)/)[1]);
+		const ids = anchors.map((anchor) => anchor.href.split("/comic/").pop());
+		console.log(ids);
 
 		// Get details for each search result
 		const searchResultData: ScraperResponse[] = await Promise.all(
-			ids.map((id) => updateManga("nhentai", id))
+			ids.map((id) => updateManga("comicextra", id))
 		);
 
 		return searchResultData;
@@ -93,12 +96,10 @@ export class comicextraClass extends Scraper {
 		chapterId: string
 	): Promise<ScraperResponse> {
 		try {
-			console.log(slug, chapterId);
 			// Get HTML
 			const pageReq = await fetch(`https://www.comicextra.com/comic/${slug}`);
 			const pageHtml = await pageReq.text();
 
-			console.log(pageHtml);
 			// Get variables
 			const dom = new JSDOM(pageHtml);
 			const document = dom.window.document;
