@@ -49,7 +49,6 @@ export class comicextraClass extends Scraper {
 
 		// Get IDs from nodes
 		const ids = anchors.map((anchor) => anchor.href.split("/comic/").pop());
-		console.log(ids);
 
 		// Get details for each search result
 		const searchResultData: ScraperResponse[] = await Promise.all(
