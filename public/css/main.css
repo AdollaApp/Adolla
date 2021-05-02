@@ -622,6 +622,7 @@ input, textarea {
 	background: black;
 	word-break: break-all;
 	font-size: 0.5rem;
+	object-fit: contain;
 }
 
 .poster-img .badge {
