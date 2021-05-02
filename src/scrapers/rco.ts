@@ -2,7 +2,7 @@ import fetch from "node-fetch-extra";
 import chalk from "chalk";
 import updateManga from "../util/updateManga";
 import { XmlEntities } from "html-entities";
-import { Chapter, ScraperResponse } from "../types";
+import { Chapter, ScraperError, ScraperResponse } from "../types";
 import { Scraper, SearchOptions } from "./types";
 import { getProviderId, isProviderId } from "../routers/manga-page";
 import { error } from "./index";
@@ -17,7 +17,42 @@ class RCOClass extends Scraper {
 		this.nsfw = false;
 	}
 
-	public async scrape(slug: string, chapterId = -1): Promise<ScraperResponse> {
+	public async scrape(
+		slug: string,
+		chapterId: string | number | null = null
+	): Promise<ScraperResponse> {
+		// Set a timeout for how long the request is allowed to take
+		const maxTimeout: Promise<ScraperError> = new Promise((resolve) => {
+			setTimeout(() => {
+				resolve(error(0, "This request took too long"));
+			}, 10e3);
+		});
+
+		// Attempt scraping series
+		const scraping = this.doScrape(slug, chapterId);
+
+		// Get first result of either scraping or timeout
+		const raceResult = await Promise.race([maxTimeout, scraping]);
+
+		// Check if it's the timeout instead of the scraped result
+		if (
+			raceResult.success === false &&
+			raceResult.err === "This request took too long"
+		) {
+			console.error(
+				chalk.red("[RCO]") +
+					` A request for '${slug}' at '${chapterId}' took too long and has timed out`
+			);
+		}
+
+		// Return result
+		return raceResult;
+	}
+
+	private async doScrape(
+		slug: string,
+		chapterId: string | number = -1
+	): Promise<ScraperResponse> {
 		try {
 			const mainReq = await fetch(`https://readcomiconline.to/Comic/${slug}`, {
 				family: 6,

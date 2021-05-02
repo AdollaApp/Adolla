@@ -141,7 +141,7 @@ export class MangaseeClass extends Scraper {
 		const maxTimeout: Promise<ScraperError> = new Promise((resolve) => {
 			setTimeout(() => {
 				resolve(error(0, "This request took too long"));
-			}, 25e3);
+			}, 15e3);
 		});
 
 		// Attempt scraping series
