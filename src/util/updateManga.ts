@@ -125,6 +125,9 @@ async function addInfo(data: ScraperResponse) {
 				data.constant.nsfw = true;
 			}
 		}
+		if (data.constant.descriptionParagraphs.join("\n").includes("sex")) {
+			data.constant.nsfw = true;
+		}
 
 		// Find banner for manga
 		try {
