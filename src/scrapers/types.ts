@@ -6,13 +6,15 @@ export type Provider =
 	| "Mangadex"
 	| "RCO"
 	| "nhentai"
-	| "Manganelo";
+	| "Manganelo"
+	| "ComicExtra";
 export type ProviderId =
 	| "mangasee"
 	| "mangadex"
 	| "rco"
 	| "nhentai"
-	| "manganelo";
+	| "manganelo"
+	| "comicextra";
 
 export interface SearchOptions {
 	resultCount: number;

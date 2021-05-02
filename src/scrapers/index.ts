@@ -29,6 +29,10 @@ export const RCO = RCOInstance;
 import ManganeloInstance from "./manganelo";
 export const Manganelo = ManganeloInstance;
 
+// Import ComicExtra
+import ComicExtraInstance from "./comicextra";
+export const ComicExtra = ComicExtraInstance;
+
 // Import nhentai
 import nhentaiInstance from "./nhentai";
 export const nhentai = nhentaiInstance;
@@ -38,5 +42,6 @@ export const scrapers = {
 	// Mangadex,
 	Manganelo,
 	RCO,
+	ComicExtra,
 	nhentai,
 };
