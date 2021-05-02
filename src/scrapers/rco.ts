@@ -54,7 +54,7 @@ class RCOClass extends Scraper {
 		chapterId: string | number = -1
 	): Promise<ScraperResponse> {
 		try {
-			const mainReq = await fetch(`https://readcomiconline.to/Comic/${slug}`, {
+			const mainReq = await fetch(`https://readcomiconline.li/Comic/${slug}`, {
 				family: 6,
 				headers: {
 					"user-agent":
@@ -82,7 +82,7 @@ class RCOClass extends Scraper {
 
 				// If the poster path is relative, apply that
 				if (!posterUrl.startsWith("http"))
-					posterUrl = "https://readcomiconline.to" + posterUrl;
+					posterUrl = "https://readcomiconline.li" + posterUrl;
 			} catch (err) {
 				posterUrl = "/poster.png";
 			}
@@ -141,7 +141,7 @@ class RCOClass extends Scraper {
 			let chapterImages = [];
 			if (chapterId !== -1) {
 				const imgReq = await fetch(
-					`https://readcomiconline.to/Comic/${slug}/${chapterId}?quality=lq`,
+					`https://readcomiconline.li/Comic/${slug}/${chapterId}?quality=lq`,
 					{
 						family: 6,
 						headers: {
@@ -212,7 +212,7 @@ class RCOClass extends Scraper {
 		if (query === "") {
 			// Fetch popular page
 			const mainReq = await fetch(
-				"https://readcomiconline.to/ComicList/MostPopular",
+				"https://readcomiconline.li/ComicList/MostPopular",
 				{
 					family: 6,
 					headers: {
@@ -238,7 +238,7 @@ class RCOClass extends Scraper {
 			});
 		} else {
 			// Fetch search results HTML
-			const searchUrl = "https://readcomiconline.to/Search/Comic";
+			const searchUrl = "https://readcomiconline.li/Search/Comic";
 			const searchReq = await fetch(searchUrl, {
 				family: 6,
 				method: "POST",
