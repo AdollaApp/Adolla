@@ -963,6 +963,15 @@ input, textarea {
 	display: none;
 }
 
+.pageImg {
+	display: block;
+	object-fit: contain;
+}
+
+.page-container {
+	display: flex;
+}
+
 .pages[data-reader-direction="horizontal"] .pageImg {
 	height: calc(100vh - var(--footer-height) - env(safe-area-inset-top) - 50px);
 }
@@ -993,9 +1002,7 @@ input, textarea {
 .pages>* {
 	width: 100%;
 	min-width: 100%;
-	object-fit: contain;
 	scroll-snap-align: start;
-	display: block;
 	scroll-padding-top: env(safe-area-inset-top);
 	scroll-margin-top: env(safe-area-inset-top);
 }

@@ -8,6 +8,7 @@ const defaultSettings = {
 	"show-info-badge": "yes",
 	"show-camera-button": "no",
 	"enable-keyboard-controls": "no",
+	"double-pages": "no",
 };
 
 // Get current settings
@@ -57,6 +58,9 @@ function applySettings() {
 			document.body.setAttribute(`data-reader-${key}`, settings[key]);
 		});
 	}
+
+	// Update "double pages" for the images
+	if (typeof updateDoublePages !== "undefined") updateDoublePages();
 }
 
 // Update switches, boxes, etc.

@@ -250,22 +250,25 @@ async function initImages() {
 		let toLoadImages = [...wrapper.querySelectorAll(".pageImg")];
 
 		// Load for each one
-		let imageLoaders = toLoadImages.map((img) => {
-			return new Promise((resolve, reject) => {
-				img.addEventListener("load", () => {
-					loadedCount++;
-					let percentageText =
-						Math.round((loadedCount / toLoadImages.length) * 100)
-							.toString()
-							.padStart(2, "0") + "%";
-					setLoadingText(percentageText);
-					resolve();
+		await Promise.all(
+			toLoadImages.map((img) => {
+				return new Promise((resolve, reject) => {
+					img.addEventListener("load", () => {
+						loadedCount++;
+						let percentageText =
+							Math.round((loadedCount / toLoadImages.length) * 100)
+								.toString()
+								.padStart(2, "0") + "%";
+						setLoadingText(percentageText);
+						resolve();
+					});
+					img.addEventListener("error", reject);
 				});
-				img.addEventListener("error", reject);
-			});
-		});
+			})
+		);
 
-		await Promise.all(imageLoaders);
+		// Update doublePages
+		updateDoublePages();
 
 		// Remove loading text
 		setLoadingText("");
@@ -283,6 +286,7 @@ async function initImages() {
 			}
 		}, 50);
 	} catch (err) {
+		console.log(err);
 		loaded = true;
 		document.querySelector(".manga-reader").classList.add("loaded");
 		setLoadingText("Error");
@@ -448,4 +452,47 @@ function isOnScreen(el) {
 		window.innerHeight
 	);
 	return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+}
+
+function updateDoublePages() {
+	const wrapper = document.querySelector(".pages");
+
+	// Get all images
+	const allImages = document.querySelectorAll(".pageImg");
+
+	// Remove left-overs
+	document.querySelectorAll(".page-container").forEach((div) => div.remove());
+
+	// Iniate some other variables
+	const newImageSequences = [[null]];
+	const settings = getSettings();
+	const doDouble = settings["double-pages"] === "yes";
+
+	// Sort all images into the sequence
+	for (const img of allImages) {
+		if (img.naturalHeight > img.naturalWidth && doDouble) {
+			// Vertical images...
+			if (newImageSequences[0].length < 2) {
+				newImageSequences[0].unshift(img);
+			} else {
+				newImageSequences.unshift([img]);
+			}
+		} else {
+			newImageSequences.unshift([img, null]);
+		}
+		img.remove();
+	}
+
+	// Add all sequences to the DOM
+	for (const seq of newImageSequences) {
+		const div = document.createElement("div");
+		div.classList.add("page-container");
+
+		for (let imgEl of seq) {
+			if (imgEl) div.appendChild(imgEl);
+		}
+
+		// Add to DOM
+		wrapper.insertBefore(div, wrapper.querySelector("*"));
+	}
 }
