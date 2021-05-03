@@ -286,7 +286,7 @@ async function initImages() {
 			}
 		}, 50);
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 		loaded = true;
 		document.querySelector(".manga-reader").classList.add("loaded");
 		setLoadingText("Error");
