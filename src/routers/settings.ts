@@ -159,7 +159,7 @@ router.get("/settings/restore-backup/:filename", async (req, res) => {
 		for (let provider of Object.keys(hide_read)) {
 			if (!hide[provider]) hide[provider] = {};
 			for (let slug of Object.keys(hide_read[provider])) {
-				hide[provider][slug] = true;
+				hide[provider][slug] = hide_read[provider][slug];
 			}
 		}
 		db.set("hide_read", hide);
