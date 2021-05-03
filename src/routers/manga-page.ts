@@ -457,7 +457,8 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 		}
 	}
 
-	// Remove from other list
+	// The body sends an array of all the lsits the manga should be in
+	// Find ALL LISTS not mentioned in said array, and remove the series from that
 	const otherLists = currentLists.filter(
 		(l) => !newLists.find((newList) => newList.slug === l.slug) && !l.byCreator
 	);
@@ -475,8 +476,9 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 							deleteFrom.name
 						} (${deleteFrom.slug}) at ${new Date().toLocaleString("it")}`
 				);
+				return true;
 			}
-			return !isRemoveableEntry;
+			return false;
 		});
 		if (isChanged) deleteFrom.last = Date.now();
 	}

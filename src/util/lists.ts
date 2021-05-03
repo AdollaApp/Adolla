@@ -38,8 +38,10 @@ export async function getLists(justHome: boolean = false): Promise<List[]> {
 	let updatedLists: List[] = Object.assign([], [...recommendedLists, ...lists]);
 	updatedLists = updatedLists.filter((l) => (justHome ? l.showOnHome : true));
 
+	// Add data to each and every entry
 	updatedLists = await Promise.all(
 		updatedLists.map(async (list) => {
+			// Add data to all fields
 			list.entries = await Promise.all(
 				list.entries.map(async (entry) => {
 					entry.data = await updateManga(
@@ -49,7 +51,19 @@ export async function getLists(justHome: boolean = false): Promise<List[]> {
 					return entry;
 				})
 			);
-			list.entries = list.entries.filter((entry) => entry.data.success);
+
+			// Filter out failed requests
+			list.entries = list.entries.filter((entry) => {
+				if (!entry.data.success) {
+					console.info(
+						chalk.red("[LISTS]") +
+							` ${entry.slug} (${entry.provider}) has failed to load in ${
+								list.name
+							} (${list.slug}) at ${new Date().toLocaleString("it")}`
+					);
+				}
+				return entry.data.success;
+			});
 			return list;
 		})
 	);
