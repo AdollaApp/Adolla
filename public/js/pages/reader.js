@@ -237,6 +237,7 @@ async function initImages() {
 			let img = document.createElement("img");
 			img.classList.add("pageImg");
 			img.setAttribute("alt", `Page ${Number(i) + 1}`);
+			img.setAttribute("data-i", i);
 
 			// Set source
 			img.src = `/proxy-image?url=${encodeURIComponent(url)}`;
@@ -458,7 +459,9 @@ function updateDoublePages() {
 	const wrapper = document.querySelector(".pages");
 
 	// Get all images
-	const allImages = document.querySelectorAll(".pageImg");
+	const allImages = [...document.querySelectorAll(".pageImg")].sort((a, b) => {
+		return b.getAttribute("data-i") - a.getAttribute("data-i");
+	});
 
 	// Remove left-overs
 	document.querySelectorAll(".page-container").forEach((div) => div.remove());
@@ -468,7 +471,8 @@ function updateDoublePages() {
 	const settings = getSettings();
 	const doDouble =
 		settings["double-pages"] === "yes" &&
-		settings["reader-direction"] === "horizontal";
+		settings["reader-direction"] === "horizontal" &&
+		window.innerWidth > window.innerHeight;
 
 	if (doDouble) {
 		newImageSequences.unshift([null]);
@@ -502,3 +506,14 @@ function updateDoublePages() {
 		wrapper.insertBefore(div, wrapper.querySelector("*"));
 	}
 }
+
+let resizeDebounceDouble = null;
+
+window.addEventListener("resize", () => {
+	if (resizeDebounceDouble) {
+		clearTimeout(resizeDebounceDouble);
+	}
+	resizeDebounceDouble = setTimeout(() => {
+		updateDoublePages();
+	}, 100);
+});
