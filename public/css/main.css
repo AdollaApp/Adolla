@@ -966,10 +966,12 @@ input, textarea {
 .pageImg {
 	display: block;
 	object-fit: contain;
+	max-width: 100%;
 }
 
 .page-container {
-	display: flex;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(1px, 1fr));
 }
 
 .pages[data-reader-direction="horizontal"] .pageImg {

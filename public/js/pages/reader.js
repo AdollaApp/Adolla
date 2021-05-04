@@ -464,9 +464,15 @@ function updateDoublePages() {
 	document.querySelectorAll(".page-container").forEach((div) => div.remove());
 
 	// Iniate some other variables
-	const newImageSequences = [[null]];
+	const newImageSequences = [];
 	const settings = getSettings();
-	const doDouble = settings["double-pages"] === "yes";
+	const doDouble =
+		settings["double-pages"] === "yes" &&
+		settings["reader-direction"] === "horizontal";
+
+	if (doDouble) {
+		newImageSequences.unshift([null]);
+	}
 
 	// Sort all images into the sequence
 	for (const img of allImages) {
