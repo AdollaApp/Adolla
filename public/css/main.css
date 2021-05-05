@@ -380,6 +380,42 @@ input, textarea {
 	-webkit-appearance: none;
 }
 
+/* Announcement banners */
+
+.announcement-banner {
+	box-sizing: border-box;
+	width: 100%;
+	display: grid;
+	align-items: center;
+	grid-template-columns: 1fr auto;
+	grid-gap: 20px;
+	margin-bottom: 20px;
+	padding: 10px;
+	border-radius: 4px;
+}
+
+.announcement-banner * {
+	margin: 0;
+}
+
+.announcement-banner .info {
+	/* font-weight: bold; */
+	margin-top: 5px;
+}
+
+.announcement-banner .remove-announcement svg {
+	display: block;
+}
+
+.remove-announcement {
+	cursor: pointer;
+}
+
+.announcement-banner .secondary {
+	font-weight: normal;
+	color: var(--text-secondary);
+}
+
 /* Switch */
 
 .setting-wrapper.toggle {
