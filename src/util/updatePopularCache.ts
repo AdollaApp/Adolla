@@ -12,6 +12,7 @@ import secretConfig from "../util/secretConfig";
 
 import { Progress } from "../types";
 import { getProviderId } from "../routers/manga-page";
+import { getAnnouncements } from "./getAnnouncements";
 
 class Updater {
 	start() {
@@ -175,7 +176,7 @@ class Updater {
 															name: "Adolla",
 															url: "https://jipfr.nl/adolla",
 															icon_url:
-																"https://raw.githubusercontent.com/JipFr/Adolla/dev/public/icons/white-on-blue.png",
+																"https://raw.githubusercontent.com/AdollaApp/Adolla/public/public/icons/white-on-blue.png",
 														},
 													},
 												],
@@ -237,6 +238,8 @@ class Updater {
 
 		// Write to db
 		console.info(chalk.green("[CLEANUP]") + " Done cleaning up");
+
+		getAnnouncements();
 	}
 }
 

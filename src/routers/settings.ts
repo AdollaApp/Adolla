@@ -22,7 +22,7 @@ const days = [
 	"Friday",
 	"Saturday",
 ];
-const months = [
+export const months = [
 	"January",
 	"February",
 	"March",

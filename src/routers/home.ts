@@ -9,6 +9,7 @@ import { doSearch } from "../util/doSearch";
 import secretConfig from "../util/secretConfig";
 import { SearchError } from "../scrapers/types";
 import { ScraperResponse } from "../types";
+import { getAnnouncements } from "../util/getAnnouncements";
 
 router.get("/", async (req, res) => {
 	const url = `http://${req.headers.host}/`;
@@ -16,10 +17,13 @@ router.get("/", async (req, res) => {
 
 	const { popular, reading, lists } = await getData();
 
+	const announcements = await getAnnouncements();
+
 	res.render("home", {
 		popular,
 		reading,
 		lists,
+		announcements,
 		isHome: true,
 	});
 });
