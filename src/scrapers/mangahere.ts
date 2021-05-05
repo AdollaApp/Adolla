@@ -29,7 +29,9 @@ export class mangahereClass extends Scraper {
 			// Get popular page
 			pageUrl = "http://www.mangahere.cc/ranking/";
 		} else {
-			pageUrl = `http://www.mangahere.cc/search?title=${encodeURIComponent(query)}`;
+			pageUrl = `http://www.mangahere.cc/search?title=${encodeURIComponent(
+				query
+			)}`;
 		}
 
 		// Fetch DOM for relevant page
@@ -96,7 +98,9 @@ export class mangahereClass extends Scraper {
 		chapterId: string
 	): Promise<ScraperResponse> {
 		// Get HTML
-		const pageReq = await fetch(`http://www.mangahere.cc/manga/${slug}`, {headers: {cookie: 'isAdult=1'}});
+		const pageReq = await fetch(`http://www.mangahere.cc/manga/${slug}`, {
+			headers: { cookie: "isAdult=1" },
+		});
 		const pageHtml = await pageReq.text();
 
 		// Get variables
@@ -104,7 +108,8 @@ export class mangahereClass extends Scraper {
 		const document = dom.window.document;
 
 		// Get title
-		const title = document.querySelector(".detail-info-right-title-font").textContent;
+		const title = document.querySelector(".detail-info-right-title-font")
+			.textContent;
 
 		// Get poster URL
 		let posterUrl = document.querySelector(".detail-info-cover-img").src;
@@ -112,7 +117,7 @@ export class mangahereClass extends Scraper {
 			posterUrl = "http://www.mangahere.cc" + posterUrl;
 
 		// Get genres from tags
-		const genreWrapper = document.querySelector(".detail-info-right-tag-list")
+		const genreWrapper = document.querySelector(".detail-info-right-tag-list");
 		const genreLinks = [...genreWrapper.querySelectorAll("a")];
 		const genres = genreLinks.map((v) => v.textContent);
 
@@ -120,32 +125,35 @@ export class mangahereClass extends Scraper {
 		const alternateTitles = [""];
 
 		// Get status
-		const statusWrapper = document.querySelector(".detail-info-right-title-tip");
+		const statusWrapper = document.querySelector(
+			".detail-info-right-title-tip"
+		);
 		const status = statusWrapper.textContent.toLowerCase();
 
 		// Get chapters
 		const chapters: Chapter[] = [
 			...document.querySelectorAll(".detail-main-list li"),
-		]
-			.reverse() // Their default sorting is large > small — we want the opposite of that
-			.map(
-				(row): Chapter => {
-					// Find all values
-					const label = row.querySelector("a .detail-main-list-main .title3").textContent;
-					const slug = row.querySelector("a").href.split("/")[3];
-					const chapter = row.querySelector("a").href.split("/")[6];
-					const date = new Date(row.querySelector("a .detail-main-list-main .title2").textContent);
-					// Return product of chapter
-					return {
-						label,
-						hrefString: slug,
-						season: 1,
-						chapter,
-						date,
-						combined: chapter,
-					};
-				}
-			);
+		].map(
+			(row): Chapter => {
+				// Find all values
+				const label = row.querySelector("a .detail-main-list-main .title3")
+					.textContent;
+				const slug = row.querySelector("a").href.split("/")[3];
+				const chapter = row.querySelector("a").href.split("/")[3].slice(1);
+				const date = new Date(
+					row.querySelector("a .detail-main-list-main .title2").textContent
+				);
+				// Return product of chapter
+				return {
+					label,
+					hrefString: slug,
+					season: 1,
+					chapter,
+					date,
+					combined: Number(chapter),
+				};
+			}
+		);
 
 		// Find images
 		let chapterImages = [];
@@ -160,16 +168,17 @@ export class mangahereClass extends Scraper {
 			const chapterDocument = dom.window.document;
 
 			const images = [
-				...chapterDocument.querySelectorAll(".mangaread-img img")
+				...chapterDocument.querySelectorAll(".mangaread-img img"),
 			];
-			chapterImages = images.map((v) => "http:" + v.getAttribute("data-original"));
+			chapterImages = images.map(
+				(v) => "http:" + v.getAttribute("data-original")
+			);
 		}
 
 		// Find description
 		const descriptionParagraphs = document
 			.querySelector(".fullcontent")
-			.textContent
-			.split(/\n|<br>/g);
+			.textContent.split(/\n|<br>/g);
 
 		// Return it.
 		const providerId = getProviderId(this.provider);
