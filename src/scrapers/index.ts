@@ -45,8 +45,8 @@ export const scrapers = {
 	Mangasee,
 	// Mangadex,
 	Manganelo,
+	Mangahere,
 	RCO,
 	ComicExtra,
 	nhentai,
-	Mangahere,
 };
