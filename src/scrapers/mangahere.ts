@@ -133,27 +133,29 @@ export class mangahereClass extends Scraper {
 		// Get chapters
 		const chapters: Chapter[] = [
 			...document.querySelectorAll(".detail-main-list li"),
-		].map(
-			(row): Chapter => {
-				// Find all values
-				const label = row.querySelector("a .detail-main-list-main .title3")
-					.textContent;
-				const slug = row.querySelector("a").href.split("/")[3];
-				const chapter = row.querySelector("a").href.split("/")[3].slice(1);
-				const date = new Date(
-					row.querySelector("a .detail-main-list-main .title2").textContent
-				);
-				// Return product of chapter
-				return {
-					label,
-					hrefString: slug,
-					season: 1,
-					chapter,
-					date,
-					combined: Number(chapter),
-				};
-			}
-		);
+		]
+			.reverse()
+			.map(
+				(row): Chapter => {
+					// Find all values
+					const label = row.querySelector("a .detail-main-list-main .title3")
+						.textContent;
+					const slug = row.querySelector("a").href.split("/")[3];
+					const chapter = row.querySelector("a").href.split("/")[3].slice(1);
+					const date = new Date(
+						row.querySelector("a .detail-main-list-main .title2").textContent
+					);
+					// Return product of chapter
+					return {
+						label,
+						hrefString: slug,
+						season: 1,
+						chapter,
+						date,
+						combined: Number(chapter),
+					};
+				}
+			);
 
 		// Find images
 		let chapterImages = [];
