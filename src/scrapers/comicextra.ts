@@ -12,7 +12,7 @@ export class comicextraClass extends Scraper {
 		super();
 		this.provider = "ComicExtra";
 		this.canSearch = true;
-		this.nsfw = true;
+		this.nsfw = false;
 	}
 
 	public async search(query: string, options?: Partial<SearchOptions>) {
