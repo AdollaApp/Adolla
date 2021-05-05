@@ -47,7 +47,7 @@ app.engine(
 					nhentai: "https://nhentai.to/img/logo.650c98bbb08e.svg",
 					manganelo: "https://manganelo.tv/res/img/favicon-96x96.webp",
 					comicextra: "https://www.comicextra.com/images/site/front/logo.png",
-					mangahere: "http://www.mangahere.cc/favicon.ico",
+					mangahere: "/proxy-image?url=https://www.mangahere.cc/favicon.ico",
 				};
 				return icons[provider] ?? "/icons/main-on-white.png";
 			},
