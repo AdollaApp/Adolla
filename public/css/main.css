@@ -1687,6 +1687,15 @@ div.selection-actions .selection-actions-inner {
 	}
 }
 
+@media screen and (min-width: 900px), (orientation: landscape) {
+	.wrapper-all.tapped {
+		grid-template-columns: 100%;
+	}
+	.wrapper-all.tapped .main-sidebar {
+		display: none;
+	}
+}
+
 @media screen and (max-width: 450px) {
 	/* Chevrons in nav */
 	.chapter-navigation .secondary-button {
