@@ -28,6 +28,19 @@ router.get("/", async (req, res) => {
 	});
 });
 
+router.post("/dismiss-announcement", (req, res) => {
+	const dismissedAnnouncements = db.get("other.announcements-dismissed") || [];
+	const { id } = req.body;
+
+	if (!dismissedAnnouncements.includes(id)) dismissedAnnouncements.push(id);
+
+	db.set("other.announcements-dismissed", dismissedAnnouncements);
+
+	res.json({
+		status: 200,
+	});
+});
+
 router.get("/json", async (req, res) => {
 	res.header("Access-Control-Allow-Origin", "*");
 	const data = await getData();

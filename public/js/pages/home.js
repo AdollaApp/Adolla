@@ -70,3 +70,25 @@ document.querySelectorAll(".list-type-option").forEach((el) => {
 		requestAnimationFrame(doCheck);
 	});
 });
+
+document.querySelectorAll(".remove-announcement").forEach((button) => {
+	button.addEventListener("click", () => {
+		fetch("/dismiss-announcement", {
+			method: "POST",
+			headers: {
+				"content-type": "application/json",
+			},
+			body: JSON.stringify({
+				id: Number(button.closest("[data-id]").getAttribute("data-id")),
+			}),
+		})
+			.then((d) => d.json())
+			.then((d) => {
+				if (d.status !== 200) {
+					alert(d.error);
+				} else {
+					location.reload();
+				}
+			});
+	});
+});
