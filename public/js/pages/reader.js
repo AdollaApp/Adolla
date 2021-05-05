@@ -189,7 +189,7 @@ document.querySelectorAll(".pages, .loading").forEach((el) => {
 		// If no button was pressed, toggle each relevant class
 		if (!classes.includes(".secondary-button"))
 			document
-				.querySelectorAll(".toggle-on-tap")
+				.querySelectorAll(".toggle-on-tap, .toggle-class-on-tap")
 				.forEach((toggle) => toggle.classList.toggle("tapped"));
 	});
 });
