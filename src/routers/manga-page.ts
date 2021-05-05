@@ -483,9 +483,9 @@ router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 							deleteFrom.name
 						} (${deleteFrom.slug}) at ${new Date().toLocaleString("it")}`
 				);
-				return true;
+				return false;
 			}
-			return false;
+			return true;
 		});
 		if (isChanged) deleteFrom.last = Date.now();
 	}
