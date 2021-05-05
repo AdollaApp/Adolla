@@ -37,9 +37,7 @@ export async function getAnnouncements(): Promise<Announcement[]> {
 
 	for (const announcement of data.data) {
 		const d = new Date(announcement.date);
-		const fmtDate = `${months[
-			d.getMonth()
-		].toLowerCase()} ${d.getDate()} ${d.getFullYear()}`;
+		const fmtDate = `${months[d.getMonth()]} ${d.getDate()} ${d.getFullYear()}`;
 		announcement.readableDate = fmtDate;
 
 		// Notify people
