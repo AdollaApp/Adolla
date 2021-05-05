@@ -16,11 +16,10 @@ export class mangahereClass extends Scraper {
 	}
 
 	public async search(query: string, options?: Partial<SearchOptions>) {
-		//console.log("search", query)
 		// This is a better way of destructuring with default values
 		// than doing it at the top. This took... many hours. Thanks Pandawan!
 		const { resultCount } = {
-			resultCount: 15,
+			resultCount: 12,
 			...options,
 		};
 
@@ -64,7 +63,6 @@ export class mangahereClass extends Scraper {
 	 * The scrape function
 	 */
 	public async scrape(slug: string, chapterId: string) {
-		//console.log("scrape", slug)
 		// Set a timeout for how long the request is allowed to take
 		const maxTimeout: Promise<ScraperError> = new Promise((resolve) => {
 			setTimeout(() => {
@@ -99,7 +97,6 @@ export class mangahereClass extends Scraper {
 	): Promise<ScraperResponse> {
 		// Get HTML
 		const pageReq = await fetch(`http://www.mangahere.cc/manga/${slug}`, {headers: {cookie: 'isAdult=1'}});
-		//console.log(`http://www.mangahere.cc/manga/${slug}`)
 		const pageHtml = await pageReq.text();
 
 		// Get variables
@@ -108,7 +105,6 @@ export class mangahereClass extends Scraper {
 
 		// Get title
 		const title = document.querySelector(".detail-info-right-title-font").textContent;
-		//console.log("title", title)
 
 		// Get poster URL
 		let posterUrl = document.querySelector(".detail-info-cover-img").src;
@@ -119,16 +115,13 @@ export class mangahereClass extends Scraper {
 		const genreWrapper = document.querySelector(".detail-info-right-tag-list")
 		const genreLinks = [...genreWrapper.querySelectorAll("a")];
 		const genres = genreLinks.map((v) => v.textContent);
-		//console.log("genres", genres)
 
 		// Get alternate titles
-		//const altTitleWrapper = [""];
 		const alternateTitles = [""];
 
 		// Get status
 		const statusWrapper = document.querySelector(".detail-info-right-title-tip");
 		const status = statusWrapper.textContent.toLowerCase();
-		//console.log("status", status)
 
 		// Get chapters
 		const chapters: Chapter[] = [
@@ -142,7 +135,6 @@ export class mangahereClass extends Scraper {
 					const slug = row.querySelector("a").href.split("/")[3];
 					const chapter = row.querySelector("a").href.split("/")[6];
 					const date = new Date(row.querySelector("a .detail-main-list-main .title2").textContent);
-					//console.log(row.outerHTML)
 					// Return product of chapter
 					return {
 						label,
@@ -154,7 +146,6 @@ export class mangahereClass extends Scraper {
 					};
 				}
 			);
-			//console.log(JSON.stringify(chapters[0]))
 
 		// Find images
 		let chapterImages = [];
