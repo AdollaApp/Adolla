@@ -114,7 +114,8 @@ export class mangahereClass extends Scraper {
 		// Get poster URL
 		let posterUrl = document.querySelector(".detail-info-cover-img").src;
 		if (posterUrl.startsWith("/"))
-			posterUrl = "http://www.mangahere.cc" + posterUrl;
+			posterUrl = "https://www.mangahere.cc" + posterUrl;
+		posterUrl = `/proxy-image?url=${posterUrl}`;
 
 		// Get genres from tags
 		const genreWrapper = document.querySelector(".detail-info-right-tag-list");
