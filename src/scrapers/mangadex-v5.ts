@@ -99,9 +99,8 @@ export class mangahereClass extends Scraper {
 		const title =
 			data.attributes.title.en || Object.values(data.attributes.title)[0];
 
-		// Get poster URL
-		let posterUrl =
-			"https://ih1.redbubble.net/image.1333412766.9838/fposter,small,wall_texture,product,750x1000.jpg";
+		// Set temporary poster URL :/
+		let posterUrl = "https://i.imgur.com/6TrIues.jpg";
 
 		// Get genres from tags
 		const genres = data.attributes.tags.map((tag) => tag.attributes.name.en);
@@ -118,6 +117,7 @@ export class mangahereClass extends Scraper {
 		let allChapters = [];
 
 		while (offset < total) {
+			// Cycle through pagination
 			const chapterReq = await fetch(
 				`https://api.mangadex.org/manga/${slug}/feed?offset=${offset}&limit=250&locales[]=en`
 			);
@@ -132,6 +132,7 @@ export class mangahereClass extends Scraper {
 			allChapters = [...allChapters, ...mdChapters];
 		}
 
+		// Map fetched chapters into Adolla format
 		const chapters: Chapter[] = allChapters
 			.map(
 				(ch): Chapter => {
@@ -168,13 +169,6 @@ export class mangahereClass extends Scraper {
 						` A MangaDex chapter was requested but chapter was not found`
 				);
 			}
-
-			// const images = [
-			// 	...chapterDocument.querySelectorAll(".mangaread-img img"),
-			// ];
-			// chapterImages = images.map(
-			// 	(v) => "http:" + v.getAttribute("data-original")
-			// );
 		}
 
 		// Find description
