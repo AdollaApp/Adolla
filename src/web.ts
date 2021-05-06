@@ -43,6 +43,8 @@ app.engine(
 				const icons = {
 					mangasee: "https://mangasee123.com/media/favicon.png",
 					mangadex: "https://mangadex.org/images/misc/navbar.svg",
+					mangadex5:
+						"https://pbs.twimg.com/profile_images/1323198105634902018/Ramm0Zfc_400x400.jpg",
 					rco: "/provider/rco.png",
 					nhentai: "https://nhentai.to/img/logo.650c98bbb08e.svg",
 					manganelo: "https://manganelo.tv/res/img/favicon-96x96.webp",

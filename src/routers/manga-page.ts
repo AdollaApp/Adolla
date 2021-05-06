@@ -25,6 +25,7 @@ const scrapersMapped = {
 	manganelo: "Manganelo",
 	comicextra: "ComicExtra",
 	mangahere: "Mangahere",
+	mangadex5: "Mangadex5",
 };
 const scrapersMappedReversed = Object.fromEntries(
 	Object.entries(scrapersMapped).map((v) => v.reverse())

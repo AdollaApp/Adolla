@@ -41,9 +41,13 @@ export const nhentai = nhentaiInstance;
 import MangahereInstance from "./mangahere";
 export const Mangahere = MangahereInstance;
 
+// Import MangaDex V5
+import MangadexInstance from "./mangadex-v5";
+export const Mangadex5 = MangadexInstance;
+
 export const scrapers = {
 	Mangasee,
-	// Mangadex,
+	Mangadex5,
 	Manganelo,
 	Mangahere,
 	RCO,

@@ -57,7 +57,7 @@ router.get("/:provider", async (req, res, next) => {
 
 			return {
 				id,
-				name,
+				name: scraper.searchDisplay ?? name,
 				href: `/search/${id}/${query ? `?q=${encodeURIComponent(query)}` : ""}`,
 				isCurrent: id === param,
 			};
