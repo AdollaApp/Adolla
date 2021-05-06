@@ -10,11 +10,17 @@ import secretConfig from "../util/secretConfig";
 import { SearchError } from "../scrapers/types";
 import { ScraperResponse } from "../types";
 import { getAnnouncements } from "../util/getAnnouncements";
+import { doMangadexMigration } from "../util/migrateMangadex";
 
 router.get("/", async (req, res) => {
+	// Set host
 	const url = `http://${req.headers.host}/`;
 	db.set("other.host", url);
 
+	// Ensure MangaDex migration and do so if not done yet
+	await doMangadexMigration();
+
+	// Get all data neccesary
 	const { popular, reading, lists } = await getData();
 
 	const announcements = await getAnnouncements();
