@@ -190,10 +190,6 @@ export class mangahereClass extends Scraper {
 
 			// Return it.
 			const providerId = getProviderId(this.provider);
-			console.info(
-				chalk.green("[Mangadex]") +
-					` Successfully fetched: ${slug}, ${chapterId}`
-			);
 
 			return {
 				constant: {
