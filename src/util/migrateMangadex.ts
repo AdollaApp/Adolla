@@ -1,13 +1,9 @@
 import chalk from "chalk";
 import fetch from "node-fetch-extra";
 import db from "../db";
-import fs from "fs";
 
 export async function doMangadexMigration() {
-	console.log(1);
 	const reading = db.get("reading_new");
-
-	console.log(Object.keys(reading));
 
 	// The soon-to-be new reading object
 	const mangadex5 = {};
@@ -16,7 +12,11 @@ export async function doMangadexMigration() {
 		if (reading.mangadex) {
 			const md = reading.mangadex;
 			const mdSeriesIds = Object.keys(md).map((n) => Number(n));
-			console.log(mdSeriesIds);
+
+			console.info(
+				chalk.green("[MANGADEX]") + ` Migrating series:`,
+				mdSeriesIds
+			);
 
 			// Get new IDs
 			const newIds = await fetch("https://api.mangadex.org/legacy/mapping", {
@@ -55,7 +55,6 @@ export async function doMangadexMigration() {
 						// HTML... Yay....
 						newChapterIds = JSON.parse(newChapterIds);
 					} else {
-						console.log(newChapterIds);
 						newChapterIds = await fetch(
 							"https://api.mangadex.org/legacy/mapping",
 							{
@@ -68,8 +67,14 @@ export async function doMangadexMigration() {
 						).then((d) => d.json());
 					}
 
-					const seriesId = newIdObj.data.id;
+					const seriesId = newIdObj.data.attributes.newId;
 					const oldSeriesId = newIdObj.data.attributes.legacyId;
+
+					console.info(
+						chalk.green("[MANGADEX]") +
+							` Migrating manga series ${oldSeriesId} -> ${seriesId}`
+					);
+
 					mangadex5[seriesId] = {}; // Prepare series object
 					const chapterIds = {};
 
@@ -77,7 +82,7 @@ export async function doMangadexMigration() {
 					// Now reassign the old data
 					for (let newChapterData of newChapterIds) {
 						if (newChapterData.result === "ok") {
-							const chapterId = newChapterData.data.id;
+							const chapterId = newChapterData.data.attributes.newId;
 							const oldChapterId = newChapterData.data.attributes.legacyId;
 
 							console.info(
@@ -93,23 +98,20 @@ export async function doMangadexMigration() {
 						}
 					}
 
+					// Update last to fit with new IDs
 					mangadex5[seriesId].last = reading.mangadex[oldSeriesId].last;
 					mangadex5[seriesId].last.chapterId =
-						chapterIds[reading.mangadex[oldSeriesId].last.chapterId];
+						chapterIds[reading.mangadex[oldSeriesId].last.chapterId] ||
+						reading.mangadex[oldSeriesId].last.chapterId;
 
-					// console.log(123, legacyChapterIds, newChapterIds);
-					// console.log("—".repeat(200));
 					await sleep(500);
 				}
 			}
 
-			// console.log(mangadex5);
-			// fs.writeFileSync("md5.json", JSON.stringify(mangadex5, null, "\t"));
 			db.set("reading_new.mangadex5", mangadex5);
-			// console.log(convertChapters);
 		}
 	} catch (e) {
-		console.error(e);
+		console.error(chalk.red("[MANGADEX]"), e);
 		// ¯\_(ツ)_/¯
 	}
 }

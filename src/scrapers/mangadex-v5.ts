@@ -212,7 +212,6 @@ export class mangahereClass extends Scraper {
 			};
 		} catch (err) {
 			// OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!
-			// console.error(err.stack);
 			console.error(
 				chalk.red("[Mangadex]") + ` Failed to fetch: ${slug}, ${chapterId}`
 			);
