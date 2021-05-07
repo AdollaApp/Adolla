@@ -20,7 +20,7 @@ export class mangahereClass extends Scraper {
 		// than doing it at the top. This took... many hours. Thanks Pandawan!
 		const { resultCount } = {
 			...options,
-			resultCount: 8,
+			resultCount: 12,
 		};
 
 		let pageUrl: string;
@@ -90,9 +90,8 @@ export class mangahereClass extends Scraper {
 		chapterId: string
 	): Promise<ScraperResponse> {
 		try {
-			// Get data
-			const dataReq = await fetch(`https://api.mangadex.org/manga/${slug}`);
-			let data = await dataReq.json();
+			// Retry because of rate limit
+			let data = await getDataFromURL(`https://api.mangadex.org/manga/${slug}`);
 			data = data.data;
 
 			// Get title
@@ -118,10 +117,9 @@ export class mangahereClass extends Scraper {
 
 			while (offset < total) {
 				// Cycle through pagination
-				const chapterReq = await fetch(
+				const chapterData = await getDataFromURL(
 					`https://api.mangadex.org/manga/${slug}/feed?offset=${offset}&limit=500&locales[]=en`
 				);
-				const chapterData = await chapterReq.json();
 				const mdChapters = chapterData.results
 					.map((v) => (v.result === "ok" ? v.data : null))
 					.filter(Boolean);
@@ -160,9 +158,9 @@ export class mangahereClass extends Scraper {
 				const chapter = allChapters.find((c) => c.id === chapterId);
 
 				if (chapter) {
-					const atHome = await (
-						await fetch(`https://api.mangadex.org/at-home/server/${chapter.id}`)
-					).json();
+					const atHome = await getDataFromURL(
+						`https://api.mangadex.org/at-home/server/${chapter.id}`
+					);
 					const { baseUrl } = atHome;
 					chapterImages = chapter.attributes.data.map(
 						(id) => `${baseUrl}/data/${chapter.attributes.hash}/${id}`
@@ -207,12 +205,37 @@ export class mangahereClass extends Scraper {
 			};
 		} catch (err) {
 			// OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!
+			console.error(err.stack);
 			console.error(
 				chalk.red("[Mangadex]") + ` Failed to fetch: ${slug}, ${chapterId}`
 			);
 			return error(-1, err);
 		}
 	}
+}
+
+async function getDataFromURL(url: string) {
+	let retryCount = 0;
+	let isValid = false;
+	let data;
+
+	while (!isValid && retryCount < 4) {
+		// Get data
+		const dataReq = await fetch(url);
+		let res = (data = await dataReq.text());
+		if (!res.startsWith("<")) {
+			data = JSON.parse(data);
+			isValid = true;
+		} else {
+			retryCount++;
+			await sleep(100 * Math.floor(Math.random() * 50));
+		}
+	}
+	return data;
+}
+
+function sleep(ms: number) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // Generate mangahere object and export it
