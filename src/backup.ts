@@ -58,7 +58,7 @@ class Backup {
 		const offset = 1e3 * 60 * 60 * 12;
 
 		const lastBackupTime = await this.getLastBackupTime();
-		const difference = Date.now() - lastBackupTime;
+		const difference = Date.now() - (lastBackupTime || Date.now());
 
 		console.info(chalk.yellowBright("[BACKUP]") + " Running backup check");
 
