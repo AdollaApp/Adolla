@@ -1,13 +1,11 @@
 import chalk from "chalk";
 import fetch from "node-fetch-extra";
-import { XmlEntities } from "html-entities";
 import { error } from "./index";
 import { Chapter, ScraperError, ScraperResponse } from "../types";
 import { Scraper, SearchOptions } from "./types";
 import { getProviderId, isProviderId } from "../routers/manga-page";
 import updateManga from "../util/updateManga";
 
-const Entities = new XmlEntities();
 export class mangahereClass extends Scraper {
 	constructor() {
 		super();
@@ -178,9 +176,7 @@ export class mangahereClass extends Scraper {
 			}
 
 			// Find description
-			const descriptionParagraphs = Entities.decode(
-				data.attributes.description.en
-			)
+			const descriptionParagraphs = data.attributes.description.en
 				.replace(/\r/g, "")
 				.split("\n")
 				.filter(Boolean);
