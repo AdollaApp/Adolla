@@ -121,7 +121,7 @@ async function addInfo(data: ScraperResponse) {
 		// Clean description paragraphs
 		data.constant.descriptionParagraphs = data.constant.descriptionParagraphs.map(
 			(s) =>
-				Entities.decode(parser.parseString(s))
+				Entities.decode(parser.parseString(s)) // Basic HTML entities and bbcode parser
 					.replace(/&rsquo;/g, "'") // Weird HTML entities
 					.replace(/\[\/?spoiler\]/g, "") // Get rid of [spoiler] tags
 		);
