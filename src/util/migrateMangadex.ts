@@ -108,7 +108,13 @@ export async function doMangadexMigration() {
 				}
 			}
 
+			// Store new mangadex object
 			db.set("reading_new.mangadex5", mangadex5);
+
+			// Now store the old one in a place it will never hurt anyone ever again
+			const legacyMd = db.get("reading_new.mangadex");
+			db.set("other.legacy-md", legacyMd);
+			db.set("reading_new.mangadex", undefined);
 		}
 	} catch (e) {
 		console.error(chalk.red("[MANGADEX]"), e);
