@@ -19,15 +19,15 @@ export class mangahereClass extends Scraper {
 		// This is a better way of destructuring with default values
 		// than doing it at the top. This took... many hours. Thanks Pandawan!
 		const { resultCount } = {
-			resultCount: 12,
 			...options,
+			resultCount: 8,
 		};
 
 		let pageUrl: string;
 
 		if (query === "") {
 			// Get popular page
-			pageUrl = `https://api.mangadex.org/manga&limit=${resultCount}`;
+			pageUrl = `https://api.mangadex.org/manga?limit=${resultCount}`;
 		} else {
 			pageUrl = `https://api.mangadex.org/manga?title=${encodeURIComponent(
 				query
