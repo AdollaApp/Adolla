@@ -8,7 +8,6 @@ import { getProviderId, isProviderId } from "../routers/manga-page";
 import updateManga from "../util/updateManga";
 
 const Entities = new XmlEntities();
-
 export class mangahereClass extends Scraper {
 	constructor() {
 		super();
@@ -140,8 +139,12 @@ export class mangahereClass extends Scraper {
 				.map(
 					(ch): Chapter => {
 						const { attributes: a } = ch;
+						const label = `${a.volume ? `Vol ${a.volume}, ` : ""}chapter ${
+							a.chapter
+						}`;
+
 						return {
-							label: `Vol ${a.volume}, chapter ${a.chapter}`,
+							label: label.slice(0, 1).toUpperCase() + label.slice(1),
 							chapter: a.chapter,
 							season: a.volume || 0,
 							date: a.publishAt,
