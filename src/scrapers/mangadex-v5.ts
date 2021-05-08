@@ -175,6 +175,7 @@ export class mangahereClass extends Scraper {
 
 			// Find description
 			const descriptionParagraphs = data.attributes.description.en
+				.split("[")[0]
 				.replace(/\r/g, "")
 				.split("\n")
 				.filter(Boolean);
