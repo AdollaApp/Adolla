@@ -131,6 +131,13 @@ export class mangahereClass extends Scraper {
 			}
 
 			// Map fetched chapters into Adolla format
+
+			let largestVolume = 0;
+			for (let chapter of allChapters) {
+				if (chapter.attributes.volume > largestVolume)
+					largestVolume = chapter.attributes.volume;
+			}
+
 			const chapters: Chapter[] = allChapters
 				.map(
 					(ch): Chapter => {
@@ -145,7 +152,7 @@ export class mangahereClass extends Scraper {
 							season: a.volume || 0,
 							date: a.publishAt,
 							hrefString: ch.id,
-							combined: a.volume * 1000 + a.chapter,
+							combined: (a.volume || largestVolume) * 1000 + a.chapter,
 						};
 					}
 				)
