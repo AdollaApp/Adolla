@@ -85,10 +85,10 @@ export async function doMangadexMigration() {
 							const chapterId = newChapterData.data.attributes.newId;
 							const oldChapterId = newChapterData.data.attributes.legacyId;
 
-							console.info(
-								chalk.green("[MANGADEX]") +
-									` Migrating chapter ${oldChapterId} -> ${chapterId}`
-							);
+							// console.info(
+							// 	chalk.green("[MANGADEX]") +
+							// 		` Migrating chapter ${oldChapterId} -> ${chapterId}`
+							// );
 
 							chapterIds[oldChapterId] = chapterId;
 
@@ -103,6 +103,11 @@ export async function doMangadexMigration() {
 					mangadex5[seriesId].last.chapterId =
 						chapterIds[reading.mangadex[oldSeriesId].last.chapterId] ||
 						reading.mangadex[oldSeriesId].last.chapterId;
+
+					console.info(
+						chalk.green("[MANGADEX]") +
+							` Series "last": from ${reading.mangadex[oldSeriesId].last.chapterId} -> ${mangadex5[seriesId].last.chapterId}. Please show these to Jip!`
+					);
 
 					await sleep(500);
 				}
