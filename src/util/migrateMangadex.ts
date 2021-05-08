@@ -106,7 +106,7 @@ export async function doMangadexMigration() {
 
 					console.info(
 						chalk.green("[MANGADEX]") +
-							` Series "last": from ${reading.mangadex[oldSeriesId].last.chapterId} -> ${mangadex5[seriesId].last.chapterId}. Please show these to Jip!`
+							` Series (${oldSeriesId} -> ${seriesId}) "last": from ${reading.mangadex[oldSeriesId].last.chapterId} -> ${mangadex5[seriesId].last.chapterId}. Please show these to Jip!`
 					);
 
 					await sleep(500);
