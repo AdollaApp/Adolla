@@ -138,7 +138,7 @@ export class mangahereClass extends Scraper {
 					largestVolume = chapter.attributes.volume;
 			}
 
-			const chapters: Chapter[] = allChapters
+			const chaptersWithDupes: Chapter[] = allChapters
 				.map(
 					(ch, i): Chapter => {
 						const { attributes: a } = ch;
@@ -160,6 +160,15 @@ export class mangahereClass extends Scraper {
 					}
 				)
 				.sort((a, b) => a.combined - b.combined);
+
+			const chapterCombineds = [];
+			const chapters = chaptersWithDupes.filter((chapter) => {
+				if (!chapterCombineds.includes(chapter.combined)) {
+					chapterCombineds.push(chapter.combined);
+					return true;
+				}
+				return false;
+			});
 
 			// Find images
 			let chapterImages = [];
