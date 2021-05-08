@@ -140,11 +140,12 @@ export class mangahereClass extends Scraper {
 
 			const chapters: Chapter[] = allChapters
 				.map(
-					(ch): Chapter => {
+					(ch, i): Chapter => {
 						const { attributes: a } = ch;
-						const label = `${a.volume ? `Vol ${a.volume}, ` : ""}chapter ${
-							a.chapter
-						}`;
+						const label =
+							a.volume || a.chapter
+								? `${a.volume ? `Vol ${a.volume}, ` : ""}chapter ${a.chapter}`
+								: a.title;
 
 						return {
 							label: label.slice(0, 1).toUpperCase() + label.slice(1),
@@ -152,7 +153,9 @@ export class mangahereClass extends Scraper {
 							season: a.volume || 0,
 							date: a.publishAt,
 							hrefString: ch.id,
-							combined: (a.volume || largestVolume) * 1000 + a.chapter,
+							combined: a.chapter
+								? (a.volume || largestVolume) * 1000 + (a.chapter || "")
+								: i,
 						};
 					}
 				)
