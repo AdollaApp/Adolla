@@ -142,7 +142,6 @@ export class mangadexClass extends Scraper {
 			const allReadMdChapters = Object.keys(
 				db.get(`reading_new.mangadex5.${slug}`) || {}
 			);
-			console.log(allReadMdChapters);
 
 			const chaptersWithDupes: Chapter[] = allChapters
 				.map(
