@@ -5,6 +5,7 @@ import { Chapter, ScraperError, ScraperResponse } from "../types";
 import { Scraper, SearchOptions } from "./types";
 import { getProviderId, isProviderId } from "../routers/manga-page";
 import updateManga from "../util/updateManga";
+import db from "../db";
 
 export class mangadexClass extends Scraper {
 	constructor() {
@@ -138,6 +139,11 @@ export class mangadexClass extends Scraper {
 					largestVolume = chapter.attributes.volume;
 			}
 
+			const allReadMdChapters = Object.keys(
+				db.get(`reading_new.mangadex5.${slug}`) || {}
+			);
+			console.log(allReadMdChapters);
+
 			const chaptersWithDupes: Chapter[] = allChapters
 				.map(
 					(ch, i): Chapter => {
@@ -159,16 +165,22 @@ export class mangadexClass extends Scraper {
 						};
 					}
 				)
-				.sort((a, b) => a.combined - b.combined);
+				.sort(
+					(a, b) =>
+						allReadMdChapters.indexOf(b.hrefString) -
+						allReadMdChapters.indexOf(a.hrefString)
+				);
 
 			const chapterCombineds = [];
-			const chapters = chaptersWithDupes.filter((chapter) => {
-				if (!chapterCombineds.includes(chapter.combined)) {
-					chapterCombineds.push(chapter.combined);
-					return true;
-				}
-				return false;
-			});
+			const chapters = chaptersWithDupes
+				.filter((chapter) => {
+					if (!chapterCombineds.includes(chapter.combined)) {
+						chapterCombineds.push(chapter.combined);
+						return true;
+					}
+					return false;
+				})
+				.sort((a, b) => a.combined - b.combined);
 
 			// Find images
 			let chapterImages = [];
