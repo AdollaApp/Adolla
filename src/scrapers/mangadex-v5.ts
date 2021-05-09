@@ -158,8 +158,9 @@ export class mangadexClass extends Scraper {
 							season: a.volume || 0,
 							date: a.publishAt,
 							hrefString: ch.id,
-							combined: a.chapter
-								? (a.volume || largestVolume) * 1000 + (a.chapter || "")
+							combined: Number(a.chapter)
+								? Number(a.volume || largestVolume) * 1000 +
+								  Number(a.chapter || "")
 								: i,
 						};
 					}
