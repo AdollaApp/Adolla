@@ -187,6 +187,8 @@ export class MangaseeClass extends Scraper {
 			const pageRes = await fetch(url);
 			const html = await pageRes.text();
 
+			// if (Math.floor(Math.random() * 2) === 0) throw new Error("lol");
+
 			// Check if response is valid.
 			// Throw error if not
 			if (
