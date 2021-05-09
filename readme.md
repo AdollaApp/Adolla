@@ -19,7 +19,10 @@ Easy to use web app to read manga and comics.
 - Multiple scrapers to read from:
   - MangaSee
   - Mangadex
+  - Manganelo
+  - Mangahere
   - ReadComicOnline
+  - ComicExtra
 
 ## Setup
 
