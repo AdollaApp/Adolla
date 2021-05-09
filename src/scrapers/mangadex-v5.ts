@@ -135,8 +135,8 @@ export class mangadexClass extends Scraper {
 
 			let largestVolume = 0;
 			for (let chapter of allChapters) {
-				if (chapter.attributes.volume > largestVolume)
-					largestVolume = chapter.attributes.volume;
+				if (Number(chapter.attributes.volume) > largestVolume)
+					largestVolume = Number(chapter.attributes.volume);
 			}
 
 			const allReadMdChapters = Object.keys(
