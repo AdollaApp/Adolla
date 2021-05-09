@@ -6,7 +6,7 @@ import { Scraper, SearchOptions } from "./types";
 import { getProviderId, isProviderId } from "../routers/manga-page";
 import updateManga from "../util/updateManga";
 
-export class mangahereClass extends Scraper {
+export class mangadexClass extends Scraper {
 	constructor() {
 		super();
 		this.provider = "Mangadex5";
@@ -258,6 +258,6 @@ function sleep(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// Generate mangahere object and export it
-const mangadex5 = new mangahereClass();
+// Generate mangadex object and export it
+const mangadex5 = new mangadexClass();
 export default mangadex5;
