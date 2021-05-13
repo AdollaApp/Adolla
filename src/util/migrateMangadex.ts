@@ -6,7 +6,7 @@ export async function doMangadexMigration() {
 	const reading = db.get("reading_new");
 
 	// The soon-to-be new reading object
-	const mangadex5 = {};
+	const mangadex5 = db.get("reading_new.mangadex5") ?? {};
 
 	try {
 		if (reading.mangadex) {
