@@ -121,7 +121,7 @@ export class mangadexClass extends Scraper {
 				const chapterData = await getDataFromURL(
 					`https://api.mangadex.org/manga/${slug}/feed?offset=${offset}&limit=500&locales[]=en`
 				);
-				const mdChapters = chapterData.results
+				const mdChapters = (chapterData.results ?? [])
 					.map((v) => (v.result === "ok" ? v.data : null))
 					.filter(Boolean);
 
@@ -249,18 +249,31 @@ export class mangadexClass extends Scraper {
 async function getDataFromURL(url: string) {
 	let retryCount = 0;
 	let isValid = false;
-	let data;
+	let data: any = {};
 
 	while (!isValid && retryCount < 4) {
 		// Get data
 		const dataReq = await fetch(url);
-		let res = (data = await dataReq.text());
-		if (!res.startsWith("<")) {
-			data = JSON.parse(data);
+		if (dataReq.status === 204) {
+			// Empty result.
+			// Just end the loop
 			isValid = true;
+			return data;
 		} else {
-			retryCount++;
-			await sleep(100 * Math.floor(Math.random() * 50));
+			let res = (data = await dataReq.text());
+			if (!res.startsWith("<") && res.trim().length > 0) {
+				try {
+					data = JSON.parse(data);
+					isValid = true;
+				} catch (e) {
+					// Oh well
+					retryCount++;
+					await sleep(100 * Math.floor(Math.random() * 50));
+				}
+			} else {
+				retryCount++;
+				await sleep(100 * Math.floor(Math.random() * 50));
+			}
 		}
 	}
 	return data;
