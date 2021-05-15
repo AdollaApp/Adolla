@@ -33,6 +33,9 @@ router.get("/:provider", async (req, res, next) => {
 	// Get search results
 	let searchResults: ScraperResponse[] | SearchError = [];
 	searchResults = await doSearch(provider, query);
+	if (Array.isArray(searchResults)) {
+		searchResults = searchResults.filter((v) => v.success);
+	}
 
 	// Verify search results
 	if (Array.isArray(searchResults)) {
