@@ -403,9 +403,7 @@ async function showBigImage(images) {
 				if (!img.src.startsWith("data:image")) {
 					newImage = new Image();
 
-					let blob = await fetch(
-						"https://cors-anywhere.herokuapp.com/" + img.src
-					)
+					let blob = await fetch(img.src)
 						.then((r) => r.blob())
 						.then((blob) => URL.createObjectURL(blob));
 					newImage.src = blob;
