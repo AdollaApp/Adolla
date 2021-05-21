@@ -99,9 +99,16 @@ export class nhentaiClass extends Scraper {
 				`https://nhentai.net/api/gallery/${slug}`
 			);
 
+			// Find language, default to unknown
+			const language =
+				data.tags.find((tag) => tag.type === "language")?.name || "unknown";
+
 			// Get title
-			const title =
+			const textTitle =
 				data.title.pretty ?? data.title.english ?? Object.values(data.title)[0];
+			const title = `${
+				language.slice(0, 1).toUpperCase() + language.slice(1, 2)
+			}: ${textTitle}`;
 
 			const alternateTitles: string[] = Object.values(data.title);
 
