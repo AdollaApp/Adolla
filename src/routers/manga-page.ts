@@ -26,6 +26,7 @@ const scrapersMapped = {
 	comicextra: "ComicExtra",
 	mangahere: "Mangahere",
 	mangadex5: "Mangadex5",
+	nhentainet: "nhentainet",
 };
 const scrapersMappedReversed = Object.fromEntries(
 	Object.entries(scrapersMapped).map((v) => v.reverse())
@@ -266,6 +267,7 @@ router.get("/:provider/:slug/:chapter/get-images/json", imageRouter);
  */
 router.get("/proxy-image", (req, res) => {
 	const url = decodeURIComponent(req.query.url.toString());
+	console.log(url);
 
 	res.setHeader(
 		"content-type",

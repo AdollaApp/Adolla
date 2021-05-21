@@ -37,6 +37,10 @@ export const ComicExtra = ComicExtraInstance;
 import nhentaiInstance from "./nhentai";
 export const nhentai = nhentaiInstance;
 
+// Import nhentai.net
+import nhentainetInstance from "./nhentainet";
+export const nhentainet = nhentainetInstance;
+
 // Import Mangahere
 import MangahereInstance from "./mangahere";
 export const Mangahere = MangahereInstance;
@@ -53,4 +57,5 @@ export const scrapers = {
 	RCO,
 	ComicExtra,
 	nhentai,
+	nhentainet,
 };

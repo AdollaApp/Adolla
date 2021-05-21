@@ -47,6 +47,7 @@ app.engine(
 						"https://pbs.twimg.com/profile_images/1323198105634902018/Ramm0Zfc_400x400.jpg",
 					rco: "/provider/rco.png",
 					nhentai: "https://nhentai.to/img/logo.650c98bbb08e.svg",
+					nhentainet: "https://nhentai.net/favicon.ico",
 					manganelo: "https://manganelo.tv/res/img/favicon-96x96.webp",
 					comicextra: "https://www.comicextra.com/images/site/front/logo.png",
 					mangahere: "/proxy-image?url=https://www.mangahere.cc/favicon.ico",
