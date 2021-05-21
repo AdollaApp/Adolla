@@ -26,10 +26,7 @@ async function updateRecommended() {
 updateRecommended();
 setInterval(updateRecommended, 1e3 * 60 * 60 * 12); // Update every 12 hours
 
-export async function getLists(
-	justHome: boolean = false,
-	filterUndefineds: boolean = true
-): Promise<List[]> {
+export async function getLists(justHome: boolean = false): Promise<List[]> {
 	// Get lists from database
 	let lists: List[] = db.get("lists");
 
@@ -56,17 +53,17 @@ export async function getLists(
 			);
 
 			// Check for failed requests
-			list.entries = list.entries.filter((entry) => {
-				if (!entry.data.success) {
-					console.info(
-						chalk.red("[LISTS]") +
-							` ${entry.slug} (${entry.provider}) has failed to load in ${
-								list.name
-							} (${list.slug}) at ${new Date().toLocaleString("it")}`
-					);
-				}
-				return entry.data.success || !filterUndefineds;
-			});
+			// list.entries = list.entries.filter((entry) => {
+			// 	if (!(entry.data.success || !filterUndefineds)) {
+			// 		console.info(
+			// 			chalk.red("[LISTS]") +
+			// 				` ${entry.slug} (${entry.provider}) has failed to load in ${
+			// 					list.name
+			// 				} (${list.slug}) at ${new Date().toLocaleString("it")}`
+			// 		);
+			// 	}
+			// 	return entry.data.success || !filterUndefineds;
+			// });
 			return list;
 		})
 	);

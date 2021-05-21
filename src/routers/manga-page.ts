@@ -417,7 +417,7 @@ router.post("/:provider/:slug/mark-chapters-as/", async (req, res, next) => {
 router.post("/:provider/:slug/set-lists", async (req, res, next) => {
 	const newLists: NewList[] = req.body.lists;
 
-	let currentLists: List[] = await getLists(false, false);
+	let currentLists: List[] = await getLists();
 
 	const provider = getProviderName(req.params.provider.toLowerCase());
 	if (!provider) {
