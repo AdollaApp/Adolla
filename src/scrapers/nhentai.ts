@@ -11,7 +11,7 @@ export class nhentaiClass extends Scraper {
 	constructor() {
 		super();
 		this.provider = "nhentai";
-		this.canSearch = true;
+		this.canSearch = false;
 		this.nsfw = true;
 	}
 
