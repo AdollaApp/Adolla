@@ -267,7 +267,6 @@ router.get("/:provider/:slug/:chapter/get-images/json", imageRouter);
  */
 router.get("/proxy-image", (req, res) => {
 	const url = decodeURIComponent(req.query.url.toString());
-	console.log(url);
 
 	res.setHeader(
 		"content-type",

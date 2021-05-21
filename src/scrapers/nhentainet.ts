@@ -1,7 +1,5 @@
 import chalk from "chalk";
-import fetch from "node-fetch-extra";
-import { JSDOM } from "jsdom";
-import { error } from "./index";
+import { error, getDataFromURL } from "./index";
 import { ScraperError, ScraperResponse } from "../types";
 import { Scraper, SearchOptions } from "./types";
 import { getProviderId, isProviderId } from "../routers/manga-page";
@@ -28,30 +26,24 @@ export class nhentaiClass extends Scraper {
 
 		if (query === "") {
 			// Get popular page
-			pageUrl = "https://nhentai.to/";
+			pageUrl = "https://nhentai.net/api/galleries/search?query=%20";
 		} else {
-			pageUrl = `https://nhentai.to/search?q=${encodeURIComponent(query)}`;
+			pageUrl = `https://nhentai.net/api/galleries/search?query=${encodeURIComponent(
+				query
+			)}`;
 		}
 
-		// Fetch DOM for relevant page
-		const pageReq = await fetch(pageUrl);
-		const pageHtml = await pageReq.text();
+		// Fetch search JSON
+		const searchData = await getDataFromURL(pageUrl);
 
-		// Get DOM for popular page
-		const dom = new JSDOM(pageHtml);
-		const document = dom.window.document;
-
-		// Get nodes
-		const anchors = [
-			...document.querySelectorAll(".index-container .gallery a"),
-		];
-
-		// Get IDs from nodes
-		const ids = anchors.map((anchor) => anchor.href.match(/(\d+)/)[1]);
+		// Find IDs
+		const ids = searchData.result
+			.map((result) => result.id)
+			.slice(0, resultCount);
 
 		// Get details for each search result
 		const searchResultData: ScraperResponse[] = await Promise.all(
-			ids.map((id) => updateManga("nhentai", id))
+			ids.map((id) => updateManga("nhentainet", id))
 		);
 
 		return searchResultData;
@@ -102,11 +94,10 @@ export class nhentaiClass extends Scraper {
 		chapterId: string
 	): Promise<ScraperResponse> {
 		try {
-			console.log(slug);
 			// Get data
-			const data = await (
-				await fetch(`https://nhentai.net/api/gallery/${slug}`)
-			).json();
+			const data = await getDataFromURL(
+				`https://nhentai.net/api/gallery/${slug}`
+			);
 
 			// Get title
 			const title =
@@ -115,7 +106,6 @@ export class nhentaiClass extends Scraper {
 			const alternateTitles: string[] = Object.values(data.title);
 
 			// Get poster url
-			console.log(data);
 			const posterUrlMain = `https://t.nhentai.net/galleries/${
 				data.media_id
 			}/cover.${this.getImageType(data.images.cover.t)}`;
@@ -165,7 +155,6 @@ export class nhentaiClass extends Scraper {
 				provider: isProviderId(providerId) ? providerId : null,
 			};
 		} catch (e) {
-			console.log(e);
 			return {
 				success: false,
 				status: 0,
