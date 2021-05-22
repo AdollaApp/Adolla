@@ -33,6 +33,9 @@ router.get("/:provider", async (req, res, next) => {
 	// Get search results
 	let searchResults: ScraperResponse[] | SearchError = [];
 	searchResults = await doSearch(provider, query);
+	if (Array.isArray(searchResults)) {
+		searchResults = searchResults.filter((v) => v.success);
+	}
 
 	// Verify search results
 	if (Array.isArray(searchResults)) {
@@ -54,10 +57,11 @@ router.get("/:provider", async (req, res, next) => {
 			const name = getProviderName(id);
 
 			if (db.get("settings.show-nsfw") === "no" && scraper.nsfw) return null;
+			if (!scraper.canSearch) return null;
 
 			return {
 				id,
-				name,
+				name: scraper.searchDisplay ?? name,
 				href: `/search/${id}/${query ? `?q=${encodeURIComponent(query)}` : ""}`,
 				isCurrent: id === param,
 			};

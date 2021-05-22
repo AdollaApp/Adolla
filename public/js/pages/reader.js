@@ -92,10 +92,7 @@ function getPageProgress() {
 
 function readerIsHorizontal() {
 	// Returns if the images are vertical or not
-	let leftPositions = [...document.querySelectorAll(".pageImg")].map(
-		(d) => d.getBoundingClientRect().left
-	);
-	return [...new Set(leftPositions)].length !== 1;
+	return getSettings()["reader-direction"] === "horizontal";
 }
 
 // Scroll to page
@@ -406,9 +403,7 @@ async function showBigImage(images) {
 				if (!img.src.startsWith("data:image")) {
 					newImage = new Image();
 
-					let blob = await fetch(
-						"https://cors-anywhere.herokuapp.com/" + img.src
-					)
+					let blob = await fetch(img.src)
 						.then((r) => r.blob())
 						.then((blob) => URL.createObjectURL(blob));
 					newImage.src = blob;

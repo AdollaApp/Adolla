@@ -73,7 +73,7 @@ class Updater {
 
 						// Add "combined" value for sorting
 						chapters.forEach((ch) => {
-							ch.combined = ch.season * 1e3 + ch.chapter;
+							if (!ch.combined) ch.combined = ch.season * 1e3 + ch.chapter;
 						});
 
 						// Sort chapters on location
@@ -97,7 +97,11 @@ class Updater {
 							// Compare chapter release dates
 							const chapterReleaseDate = new Date(nextChapter.date).getTime();
 							if (chapterReleaseDate > reading.at) {
-								// A new chapter is out!
+								// console.log(reading);
+								// console.log(currentChapter);
+								// console.log(nextChapter);
+
+								// ! A new chapter is out!
 
 								// Check if user hasn't been notified already
 								const dbString = `notified.${
@@ -176,7 +180,7 @@ class Updater {
 															name: "Adolla",
 															url: "https://jipfr.nl/adolla",
 															icon_url:
-																"https://raw.githubusercontent.com/AdollaApp/Adolla/public/public/icons/white-on-blue.png",
+																"https://raw.githubusercontent.com/AdollaApp/Adolla/master/public/icons/white-on-blue.png",
 														},
 													},
 												],

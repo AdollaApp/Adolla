@@ -1,3 +1,4 @@
+{{#if manga.constant}}
 <div class="manga-card">
 	<a class="to-manga" href="
 	{{#if toChapter}}
@@ -6,7 +7,7 @@
 	{{genLink2 manga.provider manga.constant.slug}}
 	{{/if}}
 	">
-		<div class="poster-img" style="background-color: var(--border); background-image: url('/proxy-image?url={{manga.constant.posterUrl}}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+		<div class="poster-img" style="background-color: var(--border); background-image: url('{{manga.constant.posterUrl}}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 			<img src="{{getScraperIcon manga.provider}}" title={{manga.provider}} alt="{{manga.provider}}" class="provider-image">
 			{{#if toChapter}}
 			<div class="poster-inner">
@@ -64,3 +65,4 @@
 		</div>
 	</div>
 </div>
+{{/if}}

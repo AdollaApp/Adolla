@@ -1,3 +1,8 @@
+import fetch from "node-fetch-extra";
+import chalk from "chalk";
+import BBCodeParser from "bbcode-parser";
+import { XmlEntities } from "html-entities";
+
 import * as scrapers from "../scrapers";
 import db from "../db";
 import { ScraperError, ScraperResponse } from "../types";
@@ -7,8 +12,9 @@ import { Provider, Scraper } from "../scrapers/types";
 import { getProviderId, getProviderName } from "../routers/manga-page";
 import { disallowedGenres } from "../config.json";
 import cache from "../util/cache";
-import fetch from "node-fetch-extra";
-import chalk from "chalk";
+
+const Entities = new XmlEntities();
+const parser = new BBCodeParser(BBCodeParser.defaultTags());
 
 const bannerCache = {};
 
@@ -111,6 +117,14 @@ async function addInfo(data: ScraperResponse) {
 			return ch;
 		});
 		await Promise.all(chapterPromises);
+
+		// Clean description paragraphs
+		data.constant.descriptionParagraphs = data.constant.descriptionParagraphs.map(
+			(s) =>
+				Entities.decode(parser.parseString(s)) // Basic HTML entities and bbcode parser
+					.replace(/&rsquo;/g, "'") // Weird HTML entities
+					.replace(/\[\/?spoiler\]/g, "") // Get rid of [spoiler] tags
+		);
 
 		// Add a boolean to indicate if there is more than one chapter or not
 		const seasonSet = new Set(

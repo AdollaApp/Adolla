@@ -6,17 +6,21 @@ export type Provider =
 	| "Mangadex"
 	| "RCO"
 	| "nhentai"
+	| "nhentainet"
 	| "Manganelo"
 	| "ComicExtra"
-	| "Mangahere";
+	| "Mangahere"
+	| "Mangadex5";
 export type ProviderId =
 	| "mangasee"
 	| "mangadex"
 	| "rco"
 	| "nhentai"
+	| "nhentainet"
 	| "manganelo"
 	| "comicextra"
-	| "mangahere";
+	| "mangahere"
+	| "mangadex5";
 
 export interface SearchOptions {
 	resultCount: number;
@@ -34,6 +38,7 @@ export abstract class Scraper {
 	public provider: Provider;
 	public canSearch: boolean;
 	public nsfw: boolean;
+	public searchDisplay?: string;
 
 	public abstract scrape(
 		slug: string | number,

@@ -52,18 +52,18 @@ export async function getLists(justHome: boolean = false): Promise<List[]> {
 				})
 			);
 
-			// Filter out failed requests
-			list.entries = list.entries.filter((entry) => {
-				if (!entry.data.success) {
-					console.info(
-						chalk.red("[LISTS]") +
-							` ${entry.slug} (${entry.provider}) has failed to load in ${
-								list.name
-							} (${list.slug}) at ${new Date().toLocaleString("it")}`
-					);
-				}
-				return entry.data.success;
-			});
+			// Check for failed requests
+			// list.entries = list.entries.filter((entry) => {
+			// 	if (!(entry.data.success || !filterUndefineds)) {
+			// 		console.info(
+			// 			chalk.red("[LISTS]") +
+			// 				` ${entry.slug} (${entry.provider}) has failed to load in ${
+			// 					list.name
+			// 				} (${list.slug}) at ${new Date().toLocaleString("it")}`
+			// 		);
+			// 	}
+			// 	return entry.data.success || !filterUndefineds;
+			// });
 			return list;
 		})
 	);

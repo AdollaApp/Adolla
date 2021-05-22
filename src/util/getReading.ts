@@ -18,6 +18,7 @@ export default async function getReading(
 	const allProviders = Object.keys(readingManga);
 	let readingMeta: ReadingMeta[] = [];
 	for (const provider of allProviders) {
+		if (!readingManga[provider]) continue;
 		for (const slug of Object.keys(readingManga[provider])) {
 			// Check if it actually has any content
 			// If it's "mark as unread" it'll be undefined

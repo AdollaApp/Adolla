@@ -9,7 +9,7 @@
 		<div class="manga-top">
 			<div class="image">
 				<div class="aside-inner">
-					<img class="poster" alt="Poster" src="/proxy-image?url={{data.constant.posterUrl}}">
+					<img class="poster" alt="Poster" src="{{data.constant.posterUrl}}">
 					{{#if data.constant.banner}}
 					<div class="banner-wrapper">
 						<img class="banner" alt="Banner" src="{{data.constant.banner}}">
@@ -33,7 +33,7 @@
 				</div>
 				<div class="description">
 					{{#each data.constant.descriptionParagraphs}}
-					<p class="description">{{this}}</p>
+					<p class="description">{{{this}}}</p>
 					{{/each}}
 				</div>
 
