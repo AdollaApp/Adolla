@@ -186,12 +186,10 @@ async function addInfo(data: ScraperResponse) {
 				if (banner) bannerCache[data.constant.title] = banner;
 			} else {
 				data.constant.banner = data.constant.posterUrl;
-				bannerCache[data.constant.title] = data.constant.posterUrl;
 			}
 			return data;
 		} catch (err) {
 			data.constant.banner = data.constant.posterUrl;
-			bannerCache[data.constant.title] = data.constant.posterUrl;
 			console.error(
 				chalk.red("[ANILIST]") +
 					` Unable to fetch banner for ${data.constant.title}:`,
