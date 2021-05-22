@@ -119,7 +119,7 @@ export class mangadexClass extends Scraper {
 			while (offset < total) {
 				// Cycle through pagination
 				const chapterData = await getDataFromURL(
-					`https://api.mangadex.org/manga/${slug}/feed?offset=${offset}&limit=500&locales[]=en`
+					`https://api.mangadex.org/manga/${slug}/feed?offset=${offset}&limit=500&translatedLanguage[]=en`
 				);
 				const mdChapters = (chapterData.results ?? [])
 					.map((v) => (v.result === "ok" ? v.data : null))
@@ -149,7 +149,9 @@ export class mangadexClass extends Scraper {
 						const { attributes: a } = ch;
 						const label =
 							a.volume || a.chapter
-								? `${a.volume ? `Vol ${a.volume}, ` : ""}chapter ${a.chapter}`
+								? `${a.volume ? `Vol ${a.volume}, ` : ""}chapter ${
+										a.chapter ?? "unknown"
+								  }`
 								: a.title;
 
 						return {
