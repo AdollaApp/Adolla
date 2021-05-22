@@ -160,10 +160,10 @@ export class mangadexClass extends Scraper {
 							season: a.volume || 0,
 							date: a.publishAt,
 							hrefString: ch.id,
-							combined: Number(a.chapter)
-								? Number(a.volume || largestVolume) * 1000 +
-								  Number(a.chapter || "")
-								: i,
+							combined: isNaN(Number(a.chapter))
+								? i
+								: Number(a.volume || largestVolume) * 1000 +
+								  Number(a.chapter || ""),
 						};
 					}
 				)
