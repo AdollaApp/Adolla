@@ -145,7 +145,12 @@ async function addInfo(data: ScraperResponse) {
 
 		// Find banner for manga
 		try {
-			if (data.provider === "mangadex" || data.provider === "mangasee") {
+			if (
+				data.provider === "mangadex5" ||
+				data.provider === "mangasee" ||
+				data.provider === "manganelo" ||
+				data.provider === "mangahere"
+			) {
 				// Check for pre-existing (cached) banner URL
 				const existingBanner = bannerCache[data.constant.title];
 				if (existingBanner) {
@@ -179,9 +184,14 @@ async function addInfo(data: ScraperResponse) {
 				const banner = aniListData?.data?.Media?.bannerImage ?? null;
 				data.constant.banner = banner;
 				if (banner) bannerCache[data.constant.title] = banner;
+			} else {
+				data.constant.banner = data.constant.posterUrl;
+				bannerCache[data.constant.title] = data.constant.posterUrl;
 			}
 			return data;
 		} catch (err) {
+			data.constant.banner = data.constant.posterUrl;
+			bannerCache[data.constant.title] = data.constant.posterUrl;
 			console.error(
 				chalk.red("[ANILIST]") +
 					` Unable to fetch banner for ${data.constant.title}:`,
