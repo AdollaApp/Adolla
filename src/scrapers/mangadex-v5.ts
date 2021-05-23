@@ -92,8 +92,10 @@ export class mangadexClass extends Scraper {
 	): Promise<ScraperResponse> {
 		try {
 			// Retry because of rate limit
-			let data = await getDataFromURL(`https://api.mangadex.org/manga/${slug}`);
-			data = data.data;
+			const originalData = await getDataFromURL(
+				`https://api.mangadex.org/manga/${slug}`
+			);
+			const data = originalData.data;
 
 			// Get title
 			const title =
@@ -101,6 +103,20 @@ export class mangadexClass extends Scraper {
 
 			// Set temporary poster URL :/
 			let posterUrl = "https://i.imgur.com/6TrIues.jpg";
+
+			// Find cover (poster)
+			const posterId = originalData.relationships.find(
+				(relation) => relation.type === "cover_art"
+			)?.id;
+			if (posterId) {
+				const posterData = await getDataFromURL(
+					`https://api.mangadex.org/cover?ids[]=${posterId}`
+				);
+				const posterEntry = posterData?.results?.[0]?.data;
+				if (posterEntry) {
+					posterUrl = `https://uploads.mangadex.org/covers/${slug}/${posterEntry.attributes.fileName}.512.jpg`;
+				}
+			}
 
 			// Get genres from tags
 			const genres = data.attributes.tags.map((tag) => tag.attributes.name.en);
