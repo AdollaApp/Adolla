@@ -109,13 +109,7 @@ export class mangadexClass extends Scraper {
 				(relation) => relation.type === "cover_art"
 			)?.id;
 			if (posterId) {
-				const posterData = await getDataFromURL(
-					`https://api.mangadex.org/cover?ids[]=${posterId}`
-				);
-				const posterEntry = posterData?.results?.[0]?.data;
-				if (posterEntry) {
-					posterUrl = `https://uploads.mangadex.org/covers/${slug}/${posterEntry.attributes.fileName}.512.jpg`;
-				}
+				posterUrl = `/mangadex-cover/${slug}/${posterId}`;
 			}
 
 			// Get genres from tags

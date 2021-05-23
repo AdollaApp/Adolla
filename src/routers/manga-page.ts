@@ -11,6 +11,7 @@ import chalk from "chalk";
 import fetch from "node-fetch-extra";
 import { Provider, ProviderId } from "../scrapers/types";
 import { removeData } from "./lists";
+import { getDataFromURL } from "../scrapers";
 
 interface NewList {
 	slug: string;
@@ -32,7 +33,7 @@ const scrapersMappedReversed = Object.fromEntries(
 	Object.entries(scrapersMapped).map((v) => v.reverse())
 );
 export function getProviderName(slug: string): ProviderId | string {
-	return scrapersMapped[slug.toLowerCase()] ?? null;
+	return scrapersMapped[slug?.toLowerCase()] ?? null;
 }
 export function isProviderName(slug: string): slug is Provider {
 	return !!scrapersMappedReversed[slug];
@@ -276,6 +277,24 @@ router.get("/proxy-image", (req, res) => {
 	fetch(url).then(async (response) => {
 		response.body.pipe(res);
 	});
+});
+
+router.get("/mangadex-cover/:slug/:id", async (req, res) => {
+	const posterId = decodeURIComponent(req.params.id.toString());
+	const slug = decodeURIComponent(req.params.slug.toString());
+
+	let url = "https://i.imgur.com/6TrIues.jpg";
+
+	const posterData = await getDataFromURL(
+		`https://api.mangadex.org/cover?ids[]=${posterId}`
+	);
+	const posterEntry = posterData?.results?.[0]?.data;
+
+	if (posterEntry) {
+		url = `https://uploads.mangadex.org/covers/${slug}/${posterEntry.attributes.fileName}.512.jpg`;
+	}
+
+	res.redirect(url);
 });
 
 // Mark as read
