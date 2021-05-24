@@ -104,16 +104,6 @@ class Updater {
 								};
 
 								const chapterReleaseDate = new Date(nextChapter.date).getTime();
-								if (obj.constant.slug === "Tonikaku-Kawaii")
-									console.log(
-										new Date(chapterReleaseDate),
-										new Date(reading[clean(currentChapter.hrefString)].at),
-										chapterReleaseDate,
-										reading[clean(currentChapter.hrefString)].at,
-										chapterReleaseDate >
-											reading[clean(currentChapter.hrefString)].at &&
-											!reading[clean(nextChapter.hrefString)]
-									);
 								if (
 									chapterReleaseDate >
 										reading[clean(currentChapter.hrefString)].at &&
