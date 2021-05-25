@@ -995,6 +995,12 @@ input, textarea {
 	overflow-y: hidden;
 }
 
+.pages[data-reader-direction="vertical"] {
+	max-height: 100vh;
+	overflow-y: auto;
+	scroll-snap-type: y mandatory;
+}
+
 .pages .pageImg.hidden {
 	display: none;
 }
@@ -1017,21 +1023,21 @@ input, textarea {
 
 /* Vertical reader */
 
-.pages[data-reader-direction="vertical"][data-vertical-gap="yes"] .pageImg {
+.pages[data-reader-direction="long-strip"][data-vertical-gap="yes"] .pageImg {
 	margin-bottom: 10px;
 }
 
-.pages[data-reader-direction="vertical"][data-vertical-image-size="full-height"] .pageImg, .pages[data-reader-direction="horizontal"] .pageImg {
+.pages[data-reader-direction="long-strip"][data-vertical-image-size="full-height"] .pageImg, .pages[data-reader-direction="horizontal"] .pageImg, .pages[data-reader-direction="vertical"] .pageImg {
 	width: 100%;
 	max-height: calc(100vh - env(safe-area-inset-top));
 	height: calc(100vh - env(safe-area-inset-top));
 }
 
-[data-reader-reader-direction="vertical"][data-reader-vertical-image-size="full-height"] .manga-reader.loaded, .manga-reader.loaded .pages[data-reader-direction="vertical"][data-vertical-image-size="full-height"], [data-reader-reader-direction="vertical"][data-reader-vertical-image-size="full-width"] .manga-reader.loaded, .manga-reader.loaded .pages[data-reader-direction="vertical"][data-vertical-image-size="full-width"] {
+[data-reader-reader-direction="long-strip"][data-reader-vertical-image-size="full-height"] .manga-reader.loaded, .manga-reader.loaded .pages[data-reader-direction="vertical"][data-vertical-image-size="full-height"], [data-reader-reader-direction="vertical"][data-reader-vertical-image-size="full-width"] .manga-reader.loaded, .manga-reader.loaded .pages[data-reader-direction="vertical"][data-vertical-image-size="full-width"] {
 	width: 100%;
 }
 
-.pages[data-reader-direction="vertical"][data-vertical-image-size="full-width"] .pageImg {
+.pages[data-reader-direction="long-strip"][data-vertical-image-size="full-width"] .pageImg {
 	width: 100%;
 	max-height: auto;
 }
