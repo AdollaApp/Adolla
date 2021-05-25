@@ -1,4 +1,4 @@
-<div class="content-inner {{#if data.constant.banner}}has-banner{{/if}}">
+<div class="content-inner has-banner">
 	<div class="manga-content">
 
 		<script>
@@ -10,11 +10,9 @@
 			<div class="image">
 				<div class="aside-inner">
 					<img class="poster" alt="Poster" src="{{data.constant.posterUrl}}">
-					{{#if data.constant.banner}}
 					<div class="banner-wrapper">
-						<img class="banner" alt="Banner" src="{{data.constant.banner}}">
+						<img class="banner" alt="Banner" src="{{#if data.constant.banner}}{{data.constant.banner}}{{else}}{{data.constant.posterUrl}}{{/if}}">
 					</div>
-					{{/if}}
 					<div class="hide-on-mobile">
 						{{> sidebar-buttons }}
 					</div>
