@@ -6,6 +6,7 @@ import { Chapter, ScraperError, ScraperResponse } from "../types";
 import { Scraper, SearchOptions } from "./types";
 import { getProviderId, isProviderId } from "../routers/manga-page";
 import updateManga from "../util/updateManga";
+import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 
 export class manganeloClass extends Scraper {
 	constructor() {
@@ -143,7 +144,11 @@ export class manganeloClass extends Scraper {
 					const label = row.querySelector("a").textContent.split(":")[0];
 					const slug = row.querySelector("a").href.split("/").pop();
 					const chapter = Number(slug.split("_").pop());
-					const date = new Date(row.querySelector(".chapter-time").textContent);
+					let date = new Date(row.querySelector(".chapter-time").textContent);
+
+					// Make sure date is valid, otherwise set it to now
+					// Thanks for nothing Manganelo
+					if (!date.getTime()) date = new Date();
 
 					// Return product of chapter
 					return {
