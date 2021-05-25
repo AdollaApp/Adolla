@@ -6,7 +6,6 @@ import { Chapter, ScraperError, ScraperResponse } from "../types";
 import { Scraper, SearchOptions } from "./types";
 import { getProviderId, isProviderId } from "../routers/manga-page";
 import updateManga from "../util/updateManga";
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 
 export class manganeloClass extends Scraper {
 	constructor() {
