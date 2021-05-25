@@ -55,6 +55,7 @@ class Backup {
 	}
 
 	private async checkTime() {
+		// See if the last backup was 12 or more hours ago
 		const offset = 1e3 * 60 * 60 * 12;
 
 		const lastBackupTime = await this.getLastBackupTime();
@@ -72,6 +73,33 @@ class Backup {
 			setTimeout(() => {
 				this.checkTime();
 			}, timeoutValue);
+		}
+
+		// Check all backups to see if any have to be removed
+		const allFiles = fs
+			.readdirSync(backupsPath)
+			.map((fileName) => Number(fileName.slice(0, -5)));
+		for (let filename of allFiles) {
+			// Filename is a timestamp
+			let d = new Date(filename);
+			const diff = Date.now() - d.getTime();
+			// If more than 10 days ago...
+			if (diff > 1e3 * 60 * 60 * 24 * 10) {
+				// We also don't want to remove any backups from sundays.
+				// That way we have some older backups
+				if (!(d.getHours() < 12 && d.getDay() === 0)) {
+					console.info(
+						chalk.red("[BACKUP]") +
+							` Removing old backup from ${d.toLocaleString("en-us", {
+								weekday: "long",
+								year: "numeric",
+								month: "long",
+								day: "numeric",
+							})}`
+					);
+					fs.unlinkSync(path.join(homePath, "backups", `${filename}.json`));
+				}
+			}
 		}
 	}
 

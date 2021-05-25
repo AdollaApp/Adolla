@@ -83,123 +83,132 @@ class Updater {
 						const dbString = `reading_new.${getProviderId(data.provider)}.${
 							data.constant.slug
 						}.last`;
-						const reading: Progress = db.get(dbString);
-						if (!reading) return null;
-						const currentChapter = chapters.find(
-							(c) => c.hrefString === reading.chapterId
-						);
+						const readingLast: Progress = db.get(dbString);
+						if (!readingLast) return null;
+						const readingDbString = `reading_new.${getProviderId(
+							data.provider
+						)}.${data.constant.slug}`;
+						const reading = db.get(readingDbString);
 
-						const nextChapter = chapters[chapters.indexOf(currentChapter) + 1];
+						for (let currentChapter of chapters) {
+							const nextChapter =
+								chapters[chapters.indexOf(currentChapter) + 1];
 
-						if (nextChapter) {
-							// There is a next chapter!
+							if (nextChapter && reading[currentChapter.hrefString]) {
+								// There is a next chapter!
 
-							// Compare chapter release dates
-							const chapterReleaseDate = new Date(nextChapter.date).getTime();
-							if (chapterReleaseDate > reading.at) {
-								// console.log(reading);
-								// console.log(currentChapter);
-								// console.log(nextChapter);
+								// Compare chapter release dates
 
-								// ! A new chapter is out!
+								const clean = (str: string) => {
+									return str.toString().replace(/\./g, "_");
+								};
 
-								// Check if user hasn't been notified already
-								const dbString = `notified.${
-									data.constant.slug
-								}.${nextChapter.season
-									.toString()
-									.replace(
-										/\./g,
-										"_"
-									)}-${nextChapter.chapter.toString().replace(/\./g, "_")}`;
-								const hasNotified = db.get(dbString);
+								const chapterReleaseDate = new Date(nextChapter.date).getTime();
+								if (
+									chapterReleaseDate >
+										reading[clean(currentChapter.hrefString)].at &&
+									!reading[clean(nextChapter.hrefString)]
+								) {
+									// ! A new chapter is out!
 
-								if (hasNotified) {
-									console.info(
-										chalk.red("[NOTIFS]") +
-											` New chapter was found for ${data.constant.title}, user has already been notified`
-									);
-									return;
-								}
+									// Check if user hasn't been notified already
+									const dbString = `notified.${
+										data.constant.slug
+									}.${nextChapter.season
+										.toString()
+										.replace(
+											/\./g,
+											"_"
+										)}-${nextChapter.chapter.toString().replace(/\./g, "_")}`;
+									const hasNotified = db.get(dbString);
 
-								// Generate message
-								const host = db.get("other.host");
-								const msg = `New chapter for **${data.constant.title}**!`;
-								const url = `${host.replace("localhost", "127.0.0.1")}${
-									data.provider
-								}/${data.constant.slug}/${nextChapter.season}-${
-									nextChapter.chapter
-								}`;
-								const urlMsg = host ? `Check it out at ${url}/` : "";
-								const msgFull = `${msg}\n${urlMsg}`;
+									if (hasNotified) {
+										console.info(
+											chalk.red("[NOTIFS]") +
+												` New chapter was found for ${data.constant.title}, user has already been notified`
+										);
+										return;
+									}
 
-								// Get bot account
-								let doSet = false;
-								const bot = Bot.get();
-								if (bot) {
-									// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
-									console.info(
-										chalk.green("[NOTIFS]") +
-											` New chapter found for ${data.constant.title}, notifying user with Telegram bot`
-									);
+									// Generate message
+									const host = db.get("other.host");
+									const msg = `New chapter for **${data.constant.title}**!`;
+									const url = `${host.replace("localhost", "127.0.0.1")}${
+										data.provider
+									}/${data.constant.slug}/${nextChapter.season}-${
+										nextChapter.chapter
+									}`;
+									const urlMsg = host ? `Check it out at ${url}/` : "";
+									const msgFull = `${msg}\n${urlMsg}`;
 
-									Bot.send(msgFull);
-									doSet = true;
-								} else {
-									// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
-									console.info(
-										chalk.red("[NOTIFS]") +
-											` New chapter found for ${data.constant.title} but Telegram Bot is not configured`
-									);
-								}
+									// Get bot account
+									let doSet = false;
+									const bot = Bot.get();
+									if (bot) {
+										// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
+										console.info(
+											chalk.green("[NOTIFS]") +
+												` New chapter found for ${data.constant.title}, notifying user with Telegram bot`
+										);
 
-								// Discord webhook
-								if (secretConfig.discord_webhook) {
-									console.info(
-										chalk.green("[NOTIFS]") +
-											` New chapter found for ${data.constant.title}, notifying user over Discord Webhook`
-									);
-									const webhookNotif = await fetch(
-										secretConfig.discord_webhook,
-										{
-											method: "POST",
-											headers: {
-												"content-type": "application/json",
-											},
-											body: JSON.stringify({
-												avatar_url:
-													"https://raw.githubusercontent.com/AdollaApp/Adolla/master/public/icons/white-on-blue.png",
-												username: "Adolla",
-												embeds: [
-													{
-														title: `${msg} (${nextChapter.label})`,
-														description: "Click title to open the chapter",
-														url,
-														color: 4959182,
-														author: {
-															name: "Adolla",
-															url: "https://jipfr.nl/adolla",
-															icon_url:
-																"https://raw.githubusercontent.com/AdollaApp/Adolla/master/public/icons/white-on-blue.png",
+										Bot.send(msgFull);
+										doSet = true;
+									} else {
+										// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
+										console.info(
+											chalk.red("[NOTIFS]") +
+												` New chapter found for ${data.constant.title} but Telegram Bot is not configured`
+										);
+									}
+
+									// Discord webhook
+									if (secretConfig.discord_webhook) {
+										console.info(
+											chalk.green("[NOTIFS]") +
+												` New chapter found for ${data.constant.title}, notifying user over Discord Webhook`
+										);
+										const webhookNotif = await fetch(
+											secretConfig.discord_webhook,
+											{
+												method: "POST",
+												headers: {
+													"content-type": "application/json",
+												},
+												body: JSON.stringify({
+													avatar_url:
+														"https://raw.githubusercontent.com/AdollaApp/Adolla/master/public/icons/white-on-blue.png",
+													username: "Adolla",
+													embeds: [
+														{
+															title: `${msg} (${nextChapter.label})`,
+															description: "Click title to open the chapter",
+															url,
+															color: 4959182,
+															author: {
+																name: "Adolla",
+																url: "https://jipfr.nl/adolla",
+																icon_url:
+																	"https://raw.githubusercontent.com/AdollaApp/Adolla/master/public/icons/white-on-blue.png",
+															},
 														},
-													},
-												],
-											}),
-										}
-									);
-									console.info(
-										chalk.green("[NOTIFS]") +
-											` New chapter found for ${data.constant.title}, attempted to notify user over Discord Webhook. HTTP status ${webhookNotif.status}`
-									);
-									doSet = true;
-								} else {
-									console.info(
-										chalk.red("[NOTIFS]") +
-											` New chapter found for ${data.constant.title} but Discord webhook is not configured`
-									);
-								}
+													],
+												}),
+											}
+										);
+										console.info(
+											chalk.green("[NOTIFS]") +
+												` New chapter found for ${data.constant.title}, attempted to notify user over Discord Webhook. HTTP status ${webhookNotif.status}`
+										);
+										doSet = true;
+									} else {
+										console.info(
+											chalk.red("[NOTIFS]") +
+												` New chapter found for ${data.constant.title} but Discord webhook is not configured`
+										);
+									}
 
-								if (doSet) db.set(dbString, true);
+									if (doSet) db.set(dbString, true);
+								}
 							}
 						}
 					}

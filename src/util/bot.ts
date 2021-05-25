@@ -14,7 +14,7 @@ if (secretConfig?.telegram?.bot) {
 } else {
 	console.error(
 		chalk.red("[SECRET]") +
-			" No bot token provided in secret-config. The bot will not prompt you with new chapters."
+			" There is no Telegram bot token in the secret-config. As a result of that, you won't be notified of new chapters through Telegram."
 	);
 }
 
