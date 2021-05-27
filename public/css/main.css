@@ -1048,6 +1048,9 @@ input, textarea {
 	width: 100%;
 	min-width: 100%;
 	scroll-snap-align: start;
+}
+
+.pages[data-reader-direction="long-strip"]>* {
 	scroll-padding-top: env(safe-area-inset-top);
 	scroll-margin-top: env(safe-area-inset-top);
 }
