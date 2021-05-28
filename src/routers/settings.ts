@@ -120,6 +120,7 @@ router.get("/settings/", async (req, res) => {
 		backups,
 		showNsfw: db.get("settings.show-nsfw") === "yes",
 		storeNsfw: db.get("settings.store-nsfw") === "yes",
+		showCompleted: db.get("settings.show-completed") === "yes",
 	});
 });
 
@@ -196,9 +197,10 @@ router.post("/settings/set-icon/", async (req, res) => {
 });
 
 router.post("/settings/set-app-settings", async (req, res) => {
-	// Set NSFW setting
-	db.set("settings.show-nsfw", req.body["show-nsfw"] ?? false);
-	db.set("settings.store-nsfw", req.body["store-nsfw"] ?? false);
+	// Set all settings
+	for (let key of Object.keys(req.body)) {
+		db.set(`settings.${key}`, req.body[key] ?? false);
+	}
 
 	res.json({
 		status: 200,
