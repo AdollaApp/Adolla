@@ -59,7 +59,6 @@ async function getData() {
 
 	// Get reading
 	let reading = await getReading();
-	console.log(db.get("settings"));
 	if (db.get("settings.show-completed") === "no") {
 		reading = (
 			await Promise.all(
@@ -83,24 +82,8 @@ async function getData() {
 				})
 			)
 		).filter((v) => {
-			console.log(v.success && v.isInProgress, v.success && v.constant.title);
 			return v.success && v.isInProgress;
 		});
-		// reading.filter((series) => {
-		// 	if (series.success) {
-		// 		const lastChapter = await getMangaProgress(
-		// 			series.provider,
-		// 			series.constant.slug
-		// 		);
-		// 		// console.log(series.data.chapters);
-		// 		const l = series.data.chapters.find(
-		// 			(c) => c?.progress?.percentageColor
-		// 		);
-		// 		console.log(l);
-		// 		return true;
-		// 	}
-		// 	return false;
-		// });
 	}
 
 	// Get popular manga
