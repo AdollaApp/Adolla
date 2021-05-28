@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import { setMangaProgress } from "../util/getMangaProgress";
+import getMangaProgress, { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";
 import db from "../db";
 import { getLists } from "../util/lists";
@@ -58,7 +58,50 @@ async function getData() {
 	let lists = await getLists(true);
 
 	// Get reading
-	const reading = await getReading();
+	let reading = await getReading();
+	console.log(db.get("settings"));
+	if (db.get("settings.show-completed") === "no") {
+		reading = (
+			await Promise.all(
+				reading.map(async (series) => {
+					if (series.success) {
+						series.isInProgress = true;
+						const lastChapter = await getMangaProgress(
+							series.provider,
+							series.constant.slug
+						);
+
+						const l = series.data.chapters.find(
+							(c) =>
+								c?.progress?.chapterId === lastChapter.chapterId &&
+								c.progress?.percentage > 90
+						);
+						if (l && !series.data.chapters[series.data.chapters.indexOf(l) + 1])
+							series.isInProgress = false;
+					}
+					return series;
+				})
+			)
+		).filter((v) => {
+			console.log(v.success && v.isInProgress, v.success && v.constant.title);
+			return v.success && v.isInProgress;
+		});
+		// reading.filter((series) => {
+		// 	if (series.success) {
+		// 		const lastChapter = await getMangaProgress(
+		// 			series.provider,
+		// 			series.constant.slug
+		// 		);
+		// 		// console.log(series.data.chapters);
+		// 		const l = series.data.chapters.find(
+		// 			(c) => c?.progress?.percentageColor
+		// 		);
+		// 		console.log(l);
+		// 		return true;
+		// 	}
+		// 	return false;
+		// });
+	}
 
 	// Get popular manga
 	const maxReading = secretConfig.max_reading_to_show_popular ?? 10;

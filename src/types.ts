@@ -99,6 +99,7 @@ export interface StoredData extends ScraperData {
 	savedAt?: number;
 	progress?: Progress;
 	realProgress?: Progress;
+	isInProgress?: boolean;
 }
 
 /** Object for progress. Can be stored under ["manga-slug"]["1-5"] */
