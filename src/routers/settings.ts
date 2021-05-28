@@ -120,7 +120,7 @@ router.get("/settings/", async (req, res) => {
 		backups,
 		showNsfw: db.get("settings.show-nsfw") === "yes",
 		storeNsfw: db.get("settings.store-nsfw") === "yes",
-		showCompleted: db.get("settings.show-completed") === "yes",
+		showCompleted: db.get("settings.show-completed") !== "no",
 	});
 });
 
