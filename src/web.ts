@@ -44,7 +44,7 @@ app.engine(
 					mangasee: "https://mangasee123.com/media/favicon.png",
 					mangadex: "https://mangadex.org/images/misc/navbar.svg",
 					mangadex5:
-						"https://pbs.twimg.com/profile_images/1323198105634902018/Ramm0Zfc_400x400.jpg",
+						"https://mangadex.siteunblocked.info/images/misc/navbar.svg?3",
 					rco: "/provider/rco.png",
 					nhentai: "https://nhentai.to/img/logo.650c98bbb08e.svg",
 					nhentainet: "https://nhentai.net/favicon.ico",

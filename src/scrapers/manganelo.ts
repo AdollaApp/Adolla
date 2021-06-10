@@ -107,7 +107,7 @@ export class manganeloClass extends Scraper {
 		const title = document.querySelector("h1").textContent;
 
 		// Get poster URL
-		let posterUrl = document.querySelector(".info-image img").src;
+		let posterUrl = document.querySelector(".info-image img").src || "";
 		if (posterUrl.startsWith("/"))
 			posterUrl = "https://manganelo.tv" + posterUrl;
 
