@@ -124,10 +124,55 @@ export class comicextraClass extends Scraper {
 				document.querySelector(".movie-dd.status")?.textContent || ""
 			).toLowerCase();
 
+			// Get all chapters
+			const nav = document.querySelector(".general-nav");
+			let chapterLinks = nav
+				? Array.from(new Set([...nav.querySelectorAll("a")].map((a) => a.href)))
+				: [];
+			console.log(chapterLinks);
+
+			const seriesUrlNodes = {};
+
+			const getSeriesNode = async (url) => {
+				// Check cache
+				if (seriesUrlNodes[url]) return seriesUrlNodes[url];
+
+				// Find HTML
+				const pageHtml = await (await fetch(url)).text();
+				const dom = new JSDOM(pageHtml);
+				const document = dom.window.document;
+
+				// Store in cache
+				console.log(url);
+				seriesUrlNodes[url] = document;
+
+				// Do all chapter links because ComicExtra is annoying with showing chapter lists
+				// See https://www.comicextra.com/comic/adventure-comics-1938/11 to see why this is annoying.
+				for (let a of document.querySelectorAll(".general-nav a")) {
+					await getSeriesNode(a.href);
+				}
+
+				return document;
+			};
+			for (let url of chapterLinks) {
+				await getSeriesNode(url);
+			}
+
+			let allChapterDocuments = await Promise.all([
+				document,
+				...Object.values(seriesUrlNodes),
+			]);
+
 			// Get chapters
-			const chapters: Chapter[] = [
-				...document.querySelectorAll(".episode-list tr"),
+			const chapterNodes = [
+				...allChapterDocuments.map((d) =>
+					d.querySelectorAll(".episode-list tr")
+				),
 			]
+				.map((nodelist) => [...nodelist])
+				.flat();
+
+			const chapters: Chapter[] = chapterNodes
 				.reverse() // Their default sorting is large > small — we want the opposite of that
 				.map(
 					(row, i): Chapter => {
