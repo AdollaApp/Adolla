@@ -274,7 +274,14 @@ router.get("/proxy-image", (req, res) => {
 		`image/${url.includes(".png") ? "png" : "jpg"}` // Oh well
 	);
 
-	fetch(url).then(async (response) => {
+	let headers: { [key: string]: string } = {};
+	if (req.query.referer === "mangasee") {
+		headers.referer = "https://mangasee123.com";
+	}
+
+	fetch(url, {
+		headers,
+	}).then(async (response) => {
 		response.body.pipe(res);
 	});
 });
