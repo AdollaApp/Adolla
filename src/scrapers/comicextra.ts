@@ -177,8 +177,18 @@ export class comicextraClass extends Scraper {
 						// Find all values
 						const label = row.querySelector("a").textContent;
 						const slug = row.querySelector("a").href.split("/").pop();
-						const chapter = Number(slug.split("#").pop()) || i;
 						const date = new Date(row.querySelectorAll("td")[1].textContent);
+
+						const chapterOptA = Number(slug.split("#").pop());
+						const chapterOptB = Number(slug.split("-").pop());
+						let chapter = 0;
+						if (!isNaN(chapterOptA)) {
+							chapter = chapterOptA;
+						} else if (!isNaN(chapterOptB)) {
+							chapter = chapterOptB;
+						} else {
+							chapter = -chapterNodes.length + i;
+						}
 
 						// Return product of chapter
 						return {
