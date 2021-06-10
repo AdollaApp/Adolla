@@ -120,8 +120,9 @@ export class comicextraClass extends Scraper {
 			const alternateTitles = [];
 
 			// Get status
-			// const status = document.querySelector(".movie-dd.status").textContent;
-			const status = "";
+			const status = (
+				document.querySelector(".movie-dd.status")?.textContent || ""
+			).toLowerCase();
 
 			// Get chapters
 			const chapters: Chapter[] = [
