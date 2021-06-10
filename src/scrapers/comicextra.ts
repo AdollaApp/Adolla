@@ -129,7 +129,6 @@ export class comicextraClass extends Scraper {
 			let chapterLinks = nav
 				? Array.from(new Set([...nav.querySelectorAll("a")].map((a) => a.href)))
 				: [];
-			console.log(chapterLinks);
 
 			const seriesUrlNodes = {};
 
@@ -143,7 +142,6 @@ export class comicextraClass extends Scraper {
 				const document = dom.window.document;
 
 				// Store in cache
-				console.log(url);
 				seriesUrlNodes[url] = document;
 
 				// Do all chapter links because ComicExtra is annoying with showing chapter lists
