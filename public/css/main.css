@@ -996,7 +996,7 @@ input, textarea {
 }
 
 .pages[data-reader-direction="vertical"] {
-	max-height: 100vh;
+	max-height: calc(100vh - env(safe-area-inset-top));
 	overflow-y: auto;
 	scroll-snap-type: y mandatory;
 }
