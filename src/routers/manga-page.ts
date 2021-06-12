@@ -278,6 +278,7 @@ router.get("/proxy-image", (req, res) => {
 	if (req.query.referer === "mangasee") {
 		headers.referer = "https://mangasee123.com";
 	}
+	headers["user-agent"] = "Adolla";
 
 	fetch(url, {
 		headers,
