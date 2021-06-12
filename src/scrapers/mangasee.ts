@@ -38,6 +38,10 @@ export interface DirectoryItem {
 	h: boolean;
 }
 
+const headers = {
+	"user-agent": "Adolla",
+};
+
 /** This is a chapter in mangasee API */
 interface ChapterResponse {
 	/** For example, 102280 */
@@ -80,7 +84,7 @@ export class MangaseeClass extends Scraper {
 				const searchUrl = `https://mangasee123.com/search/?sort=vm&desc=true&name=${encodeURIComponent(
 					query
 				)}`;
-				const searchRes = await fetch(searchUrl);
+				const searchRes = await fetch(searchUrl, { headers });
 				const html = await searchRes.text();
 
 				try {
@@ -102,7 +106,7 @@ export class MangaseeClass extends Scraper {
 			} else {
 				// Fetch search results
 				const directory = await (
-					await fetch("https://mangasee123.com/_search.php")
+					await fetch("https://mangasee123.com/_search.php", { headers })
 				).json();
 
 				// If query is not empty, use fuse to search
@@ -188,7 +192,7 @@ export class MangaseeClass extends Scraper {
 		try {
 			// Generate URL and fetch page
 			const url = `https://mangasee123.com/manga/${slug}`;
-			const pageRes = await fetch(url);
+			const pageRes = await fetch(url, { headers });
 			const html = await pageRes.text();
 
 			// if (Math.floor(Math.random() * 2) === 0) throw new Error("lol");
@@ -271,7 +275,7 @@ export class MangaseeClass extends Scraper {
 				const chapterUrl = `https://mangasee123.com/read-online/${slug}-chapter-${chapter}-index-${season}.html`;
 
 				// Fetch chapter data
-				const chapterRes = await fetch(chapterUrl);
+				const chapterRes = await fetch(chapterUrl, { headers });
 				const chapterBody = await chapterRes.text();
 
 				// CDN url, like `s6.mangabeast.com`
