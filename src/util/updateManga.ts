@@ -187,6 +187,16 @@ async function addInfo(data: ScraperResponse) {
 			} else {
 				data.constant.banner = data.constant.posterUrl;
 			}
+
+			// Store title in db cache, just for future safety
+			if (!db.get(`seriesNames.${data.provider}.${data.constant.slug}`)) {
+				db.set(
+					`seriesNames.${data.provider}.${data.constant.slug}`,
+					data.constant.title
+				);
+			}
+
+			// Return data
 			return data;
 		} catch (err) {
 			data.constant.banner = data.constant.posterUrl;
