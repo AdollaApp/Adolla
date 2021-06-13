@@ -189,10 +189,10 @@ async function addInfo(data: ScraperResponse) {
 			}
 
 			// Store title in db cache, just for future safety
-			if (!db.get(`seriesNames.${data.provider}.${data.constant.slug}`)) {
+			if (!db.get(`seriesMetaData.${data.provider}.${data.constant.slug}`)) {
 				db.set(
 					`seriesNames.${data.provider}.${data.constant.slug}`,
-					data.constant.title
+					data.constant
 				);
 			}
 
