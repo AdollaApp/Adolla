@@ -170,7 +170,8 @@ export class comicextraClass extends Scraper {
 				.map((nodelist) => [...nodelist])
 				.flat();
 
-			const chapters: Chapter[] = chapterNodes
+			const knownChapters = [];
+			const chaptersWithDupes: Chapter[] = chapterNodes
 				.reverse() // Their default sorting is large > small — we want the opposite of that
 				.map(
 					(row, i): Chapter => {
@@ -200,7 +201,17 @@ export class comicextraClass extends Scraper {
 							combined: chapter,
 						};
 					}
-				);
+				)
+				.sort((a, b) => a.combined - b.combined);
+
+			const chapters = chaptersWithDupes.filter((c) => {
+				if (knownChapters.includes(c.combined)) {
+					return false;
+				} else {
+					knownChapters.push(c.combined);
+					return true;
+				}
+			});
 
 			// Find images
 			let chapterImages = [];
