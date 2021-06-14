@@ -143,9 +143,14 @@ export class mangahereClass extends Scraper {
 						.textContent;
 					const slug = row.querySelector("a").href.split("/")[3];
 					const chapter = row.querySelector("a").href.split("/")[3].slice(1);
-					const date = new Date(
+					let date = new Date(
 						row.querySelector("a .detail-main-list-main .title2").textContent
 					);
+
+					// Make sure date is valid, otherwise set it to now
+					// Thanks for nothing MangaHere (it might be something like "x hours ago")
+					if (!date.getTime()) date = new Date();
+
 					// Return product of chapter
 					return {
 						label,
