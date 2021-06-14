@@ -38,6 +38,10 @@ export interface DirectoryItem {
 	h: boolean;
 }
 
+const headers = {
+	"user-agent": "Adolla",
+};
+
 /** This is a chapter in mangasee API */
 interface ChapterResponse {
 	/** For example, 102280 */
@@ -73,58 +77,62 @@ export class MangaseeClass extends Scraper {
 			...options,
 		};
 
-		let matchedResults = [];
-		// If the query is empty, sort by popular
-		if (query === "") {
-			const searchUrl = `https://mangasee123.com/search/?sort=vm&desc=true&name=${encodeURIComponent(
-				query
-			)}`;
-			const searchRes = await fetch(searchUrl);
-			const html = await searchRes.text();
+		try {
+			let matchedResults = [];
+			// If the query is empty, sort by popular
+			if (query === "") {
+				const searchUrl = `https://mangasee123.com/search/?sort=vm&desc=true&name=${encodeURIComponent(
+					query
+				)}`;
+				const searchRes = await fetch(searchUrl, { headers });
+				const html = await searchRes.text();
 
-			try {
-				// Parse directory
-				const directory = JSON.parse(
-					html.split("vm.Directory = ")[1].split("];")[0] + "]"
-				);
-				matchedResults = directory
-					.sort(
-						(a: DirectoryItem, b: DirectoryItem) =>
-							normalizeNumber(b.v) - normalizeNumber(a.v)
-					)
+				try {
+					// Parse directory
+					const directory = JSON.parse(
+						html.split("vm.Directory = ")[1].split("];")[0] + "]"
+					);
+					matchedResults = directory
+						.sort(
+							(a: DirectoryItem, b: DirectoryItem) =>
+								normalizeNumber(b.v) - normalizeNumber(a.v)
+						)
+						.slice(0, resultCount);
+				} catch (err) {
+					// Error handling.... of sorts
+					// We don't need to do anything since matchedResults is already empty
+					console.error("Error in search, MS is probably down....... Again.");
+				}
+			} else {
+				// Fetch search results
+				const directory = await (
+					await fetch("https://mangasee123.com/_search.php", { headers })
+				).json();
+
+				// If query is not empty, use fuse to search
+				const fuse = new Fuse(directory, {
+					threshold: 0.3,
+					distance: 200,
+					keys: [Directory.Title, Directory.Genres, Directory.AlternateTitles],
+				});
+				matchedResults = fuse
+					.search(query)
+					.map((result) => result.item)
 					.slice(0, resultCount);
-			} catch (err) {
-				// Error handling.... of sorts
-				// We don't need to do anything since matchedResults is already empty
-				console.error("Error in search, MS is probably down....... Again.");
 			}
-		} else {
-			// Fetch search results
-			const directory = await (
-				await fetch("https://mangasee123.com/_search.php")
-			).json();
 
-			// If query is not empty, use fuse to search
-			const fuse = new Fuse(directory, {
-				threshold: 0.3,
-				distance: 200,
-				keys: [Directory.Title, Directory.Genres, Directory.AlternateTitles],
-			});
-			matchedResults = fuse
-				.search(query)
-				.map((result) => result.item)
-				.slice(0, resultCount);
+			// Get details for each search result
+			const searchResultData: ScraperResponse[] = await Promise.all(
+				matchedResults.map((item: DirectoryItem) =>
+					updateManga("Mangasee", item[Directory.Slug])
+				)
+			);
+
+			// Return all successfull data requests
+			return searchResultData.filter((v) => v.success);
+		} catch (err) {
+			return [];
 		}
-
-		// Get details for each search result
-		const searchResultData: ScraperResponse[] = await Promise.all(
-			matchedResults.map((item: DirectoryItem) =>
-				updateManga("Mangasee", item[Directory.Slug])
-			)
-		);
-
-		// Return all successfull data requests
-		return searchResultData.filter((v) => v.success);
 	}
 
 	/**
@@ -184,7 +192,7 @@ export class MangaseeClass extends Scraper {
 		try {
 			// Generate URL and fetch page
 			const url = `https://mangasee123.com/manga/${slug}`;
-			const pageRes = await fetch(url);
+			const pageRes = await fetch(url, { headers });
 			const html = await pageRes.text();
 
 			// if (Math.floor(Math.random() * 2) === 0) throw new Error("lol");
@@ -267,7 +275,7 @@ export class MangaseeClass extends Scraper {
 				const chapterUrl = `https://mangasee123.com/read-online/${slug}-chapter-${chapter}-index-${season}.html`;
 
 				// Fetch chapter data
-				const chapterRes = await fetch(chapterUrl);
+				const chapterRes = await fetch(chapterUrl, { headers });
 				const chapterBody = await chapterRes.text();
 
 				// CDN url, like `s6.mangabeast.com`

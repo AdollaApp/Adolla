@@ -35,26 +35,21 @@ document
 // Currently that's just the NSFW filter
 document.querySelectorAll(".app-wide-settings .switch").forEach((switchEl) => {
 	switchEl.addEventListener("click", () => {
-		let showNsfwInput = document.querySelector(
-			`[data-setting="show-nsfw"] input`
-		);
-		let storeNsfwInput = document.querySelector(
-			`[data-setting="store-nsfw"] input`
-		);
+		const allSettings = {};
+		const wrapper = document.querySelector(".app-wide-settings");
+		wrapper.querySelectorAll(`[data-setting]`).forEach((optionDiv) => {
+			let inp = optionDiv.querySelector("input");
+			allSettings[optionDiv.getAttribute("data-setting")] = inp.getAttribute(
+				`data-${inp.checked}`
+			);
+		});
 
 		fetch("/settings/set-app-settings", {
 			method: "POST",
 			headers: {
 				"content-type": "application/json",
 			},
-			body: JSON.stringify({
-				"show-nsfw": showNsfwInput.getAttribute(
-					`data-${showNsfwInput.checked}`
-				),
-				"store-nsfw": storeNsfwInput.getAttribute(
-					`data-${storeNsfwInput.checked}`
-				),
-			}),
+			body: JSON.stringify(allSettings),
 		});
 	});
 });

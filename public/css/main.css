@@ -655,7 +655,7 @@ input, textarea {
 	height: 2.5rem;
 	border-radius: 4px;
 	border: 1px solid var(--border);
-	background: black;
+	background: white;
 	word-break: break-all;
 	font-size: 0.5rem;
 	object-fit: contain;
@@ -996,7 +996,7 @@ input, textarea {
 }
 
 .pages[data-reader-direction="vertical"] {
-	max-height: 100vh;
+	max-height: calc(100vh - env(safe-area-inset-top));
 	overflow-y: auto;
 	scroll-snap-type: y mandatory;
 }

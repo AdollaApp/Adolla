@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import { setMangaProgress } from "../util/getMangaProgress";
+import getMangaProgress, { setMangaProgress } from "../util/getMangaProgress";
 import getReading from "../util/getReading";
 import db from "../db";
 import { getLists } from "../util/lists";
@@ -58,7 +58,33 @@ async function getData() {
 	let lists = await getLists(true);
 
 	// Get reading
-	const reading = await getReading();
+	let reading = await getReading();
+	if (db.get("settings.show-completed") === "no") {
+		reading = (
+			await Promise.all(
+				reading.map(async (series) => {
+					if (series.success) {
+						series.isInProgress = true;
+						const lastChapter = await getMangaProgress(
+							series.provider,
+							series.constant.slug
+						);
+
+						const l = series.data.chapters.find(
+							(c) =>
+								c?.progress?.chapterId === lastChapter.chapterId &&
+								c.progress?.percentage > 90
+						);
+						if (l && !series.data.chapters[series.data.chapters.indexOf(l) + 1])
+							series.isInProgress = false;
+					}
+					return series;
+				})
+			)
+		).filter((v) => {
+			return v.success && v.isInProgress;
+		});
+	}
 
 	// Get popular manga
 	const maxReading = secretConfig.max_reading_to_show_popular ?? 10;

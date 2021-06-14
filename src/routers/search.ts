@@ -42,9 +42,6 @@ router.get("/:provider", async (req, res, next) => {
 		await Promise.all(searchResults.map(setMangaProgress));
 	}
 
-	// ! Get reading
-	const reading = await getReading(4);
-
 	// ! Get all scrapers and names
 
 	// Get all scrapers
@@ -69,7 +66,6 @@ router.get("/:provider", async (req, res, next) => {
 		.filter(Boolean);
 
 	res.render("search", {
-		reading,
 		query,
 		searchResults,
 		isSearch: true,

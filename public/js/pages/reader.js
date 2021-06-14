@@ -237,7 +237,9 @@ async function initImages() {
 			img.setAttribute("data-i", i);
 
 			// Set source
-			img.src = `/proxy-image?url=${encodeURIComponent(url)}`;
+			img.src = `/proxy-image?url=${encodeURIComponent(url)}&referer=${
+				location.href.includes("mangasee") ? "mangasee" : "null"
+			}`;
 
 			// Add to DOM
 			wrapper.insertBefore(img, wrapper.querySelector("*"));

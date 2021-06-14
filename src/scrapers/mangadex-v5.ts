@@ -93,7 +93,7 @@ export class mangadexClass extends Scraper {
 		try {
 			// Retry because of rate limit
 			const originalData = await getDataFromURL(
-				`https://api.mangadex.org/manga/${slug}`
+				`https://api.mangadex.org/manga/${slug}?includes[]=cover_art`
 			);
 			const data = originalData.data;
 
@@ -105,11 +105,15 @@ export class mangadexClass extends Scraper {
 			let posterUrl = "https://i.imgur.com/6TrIues.jpg";
 
 			// Find cover (poster)
-			const posterId = originalData.relationships.find(
+			const posterData = originalData.relationships.find(
 				(relation) => relation.type === "cover_art"
-			)?.id;
-			if (posterId) {
-				posterUrl = `/mangadex-cover/${slug}/${posterId}`;
+			);
+			if (posterData) {
+				if (posterData.attributes) {
+					posterUrl = `https://uploads.mangadex.org/covers/${slug}/${posterData.attributes.fileName}.512.jpg`;
+				} else if (posterData.id) {
+					posterUrl = `/mangadex-cover/${slug}/${posterData.id}`;
+				}
 			}
 
 			// Get genres from tags

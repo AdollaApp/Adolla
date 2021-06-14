@@ -120,21 +120,76 @@ export class comicextraClass extends Scraper {
 			const alternateTitles = [];
 
 			// Get status
-			// const status = document.querySelector(".movie-dd.status").textContent;
-			const status = "";
+			const status = (
+				document.querySelector(".movie-dd.status")?.textContent || ""
+			).toLowerCase();
+
+			// Get all chapters
+			const nav = document.querySelector(".general-nav");
+			let chapterLinks = nav
+				? Array.from(new Set([...nav.querySelectorAll("a")].map((a) => a.href)))
+				: [];
+
+			const seriesUrlNodes = {};
+
+			const getSeriesNode = async (url) => {
+				// Check cache
+				if (seriesUrlNodes[url]) return seriesUrlNodes[url];
+
+				// Find HTML
+				const pageHtml = await (await fetch(url)).text();
+				const dom = new JSDOM(pageHtml);
+				const document = dom.window.document;
+
+				// Store in cache
+				seriesUrlNodes[url] = document;
+
+				// Do all chapter links because ComicExtra is annoying with showing chapter lists
+				// See https://www.comicextra.com/comic/adventure-comics-1938/11 to see why this is annoying.
+				for (let a of document.querySelectorAll(".general-nav a")) {
+					await getSeriesNode(a.href);
+				}
+
+				return document;
+			};
+			for (let url of chapterLinks) {
+				await getSeriesNode(url);
+			}
+
+			let allChapterDocuments = await Promise.all([
+				document,
+				...Object.values(seriesUrlNodes),
+			]);
 
 			// Get chapters
-			const chapters: Chapter[] = [
-				...document.querySelectorAll(".episode-list tr"),
+			const chapterNodes = [
+				...allChapterDocuments.map((d) =>
+					d.querySelectorAll(".episode-list tr")
+				),
 			]
+				.map((nodelist) => [...nodelist])
+				.flat();
+
+			const knownChapters = [];
+			const chaptersWithDupes: Chapter[] = chapterNodes
 				.reverse() // Their default sorting is large > small — we want the opposite of that
 				.map(
 					(row, i): Chapter => {
 						// Find all values
 						const label = row.querySelector("a").textContent;
 						const slug = row.querySelector("a").href.split("/").pop();
-						const chapter = Number(slug.split("#").pop()) || i;
 						const date = new Date(row.querySelectorAll("td")[1].textContent);
+
+						const chapterOptA = Number(slug.split("#").pop());
+						const chapterOptB = Number(slug.split("-").pop());
+						let chapter = 0;
+						if (!isNaN(chapterOptA)) {
+							chapter = chapterOptA;
+						} else if (!isNaN(chapterOptB)) {
+							chapter = chapterOptB;
+						} else {
+							chapter = -chapterNodes.length + i;
+						}
 
 						// Return product of chapter
 						return {
@@ -146,7 +201,17 @@ export class comicextraClass extends Scraper {
 							combined: chapter,
 						};
 					}
-				);
+				)
+				.sort((a, b) => a.combined - b.combined);
+
+			const chapters = chaptersWithDupes.filter((c) => {
+				if (knownChapters.includes(c.combined)) {
+					return false;
+				} else {
+					knownChapters.push(c.combined);
+					return true;
+				}
+			});
 
 			// Find images
 			let chapterImages = [];
