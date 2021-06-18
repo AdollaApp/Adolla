@@ -95,118 +95,125 @@ export class manganeloClass extends Scraper {
 		slug: string,
 		chapterId: string
 	): Promise<ScraperResponse> {
-		// Get HTML
-		const pageReq = await fetch(`https://manganelo.tv/manga/${slug}`);
-		const pageHtml = await pageReq.text();
+		try {
+			// Get HTML
+			const pageReq = await fetch(`https://manganelo.tv/manga/${slug}`);
+			const pageHtml = await pageReq.text();
 
-		// Get variables
-		const dom = new JSDOM(pageHtml);
-		const document = dom.window.document;
+			// Get variables
+			const dom = new JSDOM(pageHtml);
+			const document = dom.window.document;
 
-		// Get title
-		const title = document.querySelector("h1").textContent;
+			// Get title
+			const title = document.querySelector("h1").textContent;
 
-		// Get poster URL
-		let posterUrl = document.querySelector(".info-image img").src || "";
-		if (posterUrl.startsWith("/"))
-			posterUrl = "https://manganelo.tv" + posterUrl;
+			// Get poster URL
+			let posterUrl =
+				(document.querySelector(".info-image img") ?? {}).src || "";
+			if (posterUrl.startsWith("/"))
+				posterUrl = "https://manganelo.tv" + posterUrl;
 
-		// Get genres from tags
-		const genreWrapper = document.querySelector(".info-genres").parentNode
-			.parentNode;
-		const genreLinks = [...genreWrapper.querySelectorAll(".a-h")];
-		const genres = genreLinks.map((v) => v.textContent);
+			if (!posterUrl) posterUrl = "https://jipfr.nl/jip.jpg";
 
-		// Get alternate titles
-		const altTitleWrapper = document.querySelector(".info-alternative")
-			.parentNode.parentNode;
-		const alternateTitles = altTitleWrapper
-			.querySelector("h2")
-			.textContent.split(";")
-			.map((v) => v.trim());
+			// Get genres from tags
+			const genreWrapper = document.querySelector(".info-genres").parentNode
+				.parentNode;
+			const genreLinks = [...genreWrapper.querySelectorAll(".a-h")];
+			const genres = genreLinks.map((v) => v.textContent);
 
-		// Get status
-		const statusWrapper = document.querySelector(".info-status").parentNode
-			.parentNode;
-		const status = statusWrapper
-			.querySelectorAll("td")[1]
-			.textContent.toLowerCase();
+			// Get alternate titles
+			const altTitleWrapper = document.querySelector(".info-alternative")
+				.parentNode.parentNode;
+			const alternateTitles = altTitleWrapper
+				.querySelector("h2")
+				.textContent.split(";")
+				.map((v) => v.trim());
 
-		// Get chapters
-		const chapters: Chapter[] = [
-			...document.querySelectorAll(".row-content-chapter li"),
-		]
-			.reverse() // Their default sorting is large > small — we want the opposite of that
-			.map(
-				(row): Chapter => {
-					// Find all values
-					const label = row.querySelector("a").textContent.split(":")[0];
-					const slug = row.querySelector("a").href.split("/").pop();
-					const chapter = Number(slug.split("_").pop());
-					let date = new Date(row.querySelector(".chapter-time").textContent);
+			// Get status
+			const statusWrapper = document.querySelector(".info-status").parentNode
+				.parentNode;
+			const status = statusWrapper
+				.querySelectorAll("td")[1]
+				.textContent.toLowerCase();
 
-					// Make sure date is valid, otherwise set it to now
-					// Thanks for nothing Manganelo
-					if (!date.getTime()) date = new Date();
+			// Get chapters
+			const chapters: Chapter[] = [
+				...document.querySelectorAll(".row-content-chapter li"),
+			]
+				.reverse() // Their default sorting is large > small — we want the opposite of that
+				.map(
+					(row): Chapter => {
+						// Find all values
+						const label = row.querySelector("a").textContent.split(":")[0];
+						const slug = row.querySelector("a").href.split("/").pop();
+						const chapter = Number(slug.split("_").pop());
+						let date = new Date(row.querySelector(".chapter-time").textContent);
 
-					// Return product of chapter
-					return {
-						label,
-						hrefString: slug,
-						season: 1,
-						chapter,
-						date,
-						combined: chapter,
-					};
-				}
-			);
+						// Make sure date is valid, otherwise set it to now
+						// Thanks for nothing Manganelo
+						if (!date.getTime()) date = new Date();
 
-		// Find images
-		let chapterImages = [];
-		if (chapterId != "-1") {
-			// Scrape page to find images
-			const url = `https://manganelo.tv/chapter/${slug}/${chapterId}`;
-			const chapterPageReq = await fetch(url);
-			const chapterPageHtml = await chapterPageReq.text();
+						// Return product of chapter
+						return {
+							label,
+							hrefString: slug,
+							season: 1,
+							chapter,
+							date,
+							combined: chapter,
+						};
+					}
+				);
 
-			// JSDOM it
-			const dom = new JSDOM(chapterPageHtml);
-			const chapterDocument = dom.window.document;
+			// Find images
+			let chapterImages = [];
+			if (chapterId != "-1") {
+				// Scrape page to find images
+				const url = `https://manganelo.tv/chapter/${slug}/${chapterId}`;
+				const chapterPageReq = await fetch(url);
+				const chapterPageHtml = await chapterPageReq.text();
 
-			const images = [
-				...chapterDocument.querySelectorAll(".container-chapter-reader img"),
-			];
-			chapterImages = images.map((v) => v.getAttribute("data-src"));
+				// JSDOM it
+				const dom = new JSDOM(chapterPageHtml);
+				const chapterDocument = dom.window.document;
+
+				const images = [
+					...chapterDocument.querySelectorAll(".container-chapter-reader img"),
+				];
+				chapterImages = images.map((v) => v.getAttribute("data-src"));
+			}
+
+			// Find description
+			const descriptionParagraphs = document
+				.querySelector("#panel-story-info-description")
+				.textContent.split(" :")
+				.slice(1)
+				.join(" :")
+				.split(/\n|<br>/g);
+
+			// Return it.
+			const providerId = getProviderId(this.provider);
+			return {
+				constant: {
+					title,
+					slug,
+					posterUrl,
+					alternateTitles,
+					descriptionParagraphs,
+					genres,
+					nsfw: false,
+				},
+				data: {
+					chapters,
+					chapterImages,
+					status,
+				},
+				success: true,
+				provider: isProviderId(providerId) ? providerId : null,
+			};
+		} catch (err) {
+			return error(-1, err);
 		}
-
-		// Find description
-		const descriptionParagraphs = document
-			.querySelector("#panel-story-info-description")
-			.textContent.split(" :")
-			.slice(1)
-			.join(" :")
-			.split(/\n|<br>/g);
-
-		// Return it.
-		const providerId = getProviderId(this.provider);
-		return {
-			constant: {
-				title,
-				slug,
-				posterUrl,
-				alternateTitles,
-				descriptionParagraphs,
-				genres,
-				nsfw: false,
-			},
-			data: {
-				chapters,
-				chapterImages,
-				status,
-			},
-			success: true,
-			provider: isProviderId(providerId) ? providerId : null,
-		};
 	}
 }
 
