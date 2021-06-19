@@ -99,7 +99,7 @@ class Updater {
 
 								// Compare chapter release dates
 
-								const clean = (str: string) => {
+								const clean = (str: string | number) => {
 									return str.toString().replace(/\./g, "_");
 								};
 
@@ -112,14 +112,9 @@ class Updater {
 									// ! A new chapter is out!
 
 									// Check if user hasn't been notified already
-									const dbString = `notified.${
-										data.constant.slug
-									}.${nextChapter.season
-										.toString()
-										.replace(
-											/\./g,
-											"_"
-										)}-${nextChapter.chapter.toString().replace(/\./g, "_")}`;
+									const dbString = `notified.${data.constant.slug}.${clean(
+										nextChapter.season
+									)}-${clean(nextChapter.chapter)}`;
 									const hasNotified = db.get(dbString);
 
 									if (hasNotified) {
