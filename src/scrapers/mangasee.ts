@@ -68,7 +68,8 @@ export class MangaseeClass extends Scraper {
 
 	public async search(
 		query: string,
-		options?: Partial<SearchOptions>
+		options?: Partial<SearchOptions>,
+		host: string = "mangasee123"
 	): Promise<ScraperResponse[]> {
 		// This is a better way of destructuring with default values
 		// than doing it at the top. This took... many hours. Thanks Pandawan!
@@ -81,7 +82,7 @@ export class MangaseeClass extends Scraper {
 			let matchedResults = [];
 			// If the query is empty, sort by popular
 			if (query === "") {
-				const searchUrl = `https://mangasee123.com/search/?sort=vm&desc=true&name=${encodeURIComponent(
+				const searchUrl = `https://${host}.com/search/?sort=vm&desc=true&name=${encodeURIComponent(
 					query
 				)}`;
 				const searchRes = await fetch(searchUrl, { headers });
@@ -101,12 +102,13 @@ export class MangaseeClass extends Scraper {
 				} catch (err) {
 					// Error handling.... of sorts
 					// We don't need to do anything since matchedResults is already empty
-					console.error("Error in search, MS is probably down....... Again.");
+					// console.error("Error in search, MS is probably down....... Again.");
+					throw new Error("Initial search went wrong");
 				}
 			} else {
 				// Fetch search results
 				const directory = await (
-					await fetch("https://mangasee123.com/_search.php", { headers })
+					await fetch(`https://${host}.com/_search.php`, { headers })
 				).json();
 
 				// If query is not empty, use fuse to search
@@ -131,7 +133,11 @@ export class MangaseeClass extends Scraper {
 			// Return all successfull data requests
 			return searchResultData.filter((v) => v.success);
 		} catch (err) {
-			return [];
+			if (host === "mangasee123") {
+				return this.search(query, options, "manga4life");
+			} else {
+				return [];
+			}
 		}
 	}
 
@@ -174,7 +180,8 @@ export class MangaseeClass extends Scraper {
 	}
 	private async doScrape(
 		slug: string,
-		chapterId: string | number | null = null
+		chapterId: string | number | null = null,
+		host: string = "mangasee123"
 	): Promise<ScraperResponse> {
 		let season: number;
 		let chapter: number;
@@ -189,9 +196,18 @@ export class MangaseeClass extends Scraper {
 			chapter = nums[2]; // Bit of a hack...
 		}
 
+		const doErr = (status: number, reason: string) => {
+			if (host === "mangasee123") {
+				return this.doScrape(slug, chapterId, "manga4life");
+			} else {
+				console.error(`${status} Throwing error for ${slug}`);
+				return error(status, reason);
+			}
+		};
+
 		try {
 			// Generate URL and fetch page
-			const url = `https://mangasee123.com/manga/${slug}`;
+			const url = `https://${host}.com/manga/${slug}`;
 			const pageRes = await fetch(url, { headers });
 			const html = await pageRes.text();
 
@@ -204,8 +220,7 @@ export class MangaseeClass extends Scraper {
 				pageRes.url.endsWith("undefined") ||
 				html.includes("<title>404 Page Not Found</title>")
 			) {
-				console.error(`${pageRes.status} Throwing error for ${slug}`);
-				return error(pageRes.status, html);
+				return doErr(pageRes.status, html);
 			}
 
 			// Shittily extract values from page.
@@ -272,7 +287,7 @@ export class MangaseeClass extends Scraper {
 			let chapterImages: string[] = [];
 			if (season >= 0 && chapter >= 0) {
 				// Generate URL for page with chapter data
-				const chapterUrl = `https://mangasee123.com/read-online/${slug}-chapter-${chapter}-index-${season}.html`;
+				const chapterUrl = `https://${host}.com/read-online/${slug}-chapter-${chapter}-index-${season}.html`;
 
 				// Fetch chapter data
 				const chapterRes = await fetch(chapterUrl, { headers });
@@ -345,7 +360,7 @@ export class MangaseeClass extends Scraper {
 		} catch (err) {
 			// OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!
 			// console.error(err.stack);
-			return error(-1, err);
+			return doErr(-1, err);
 		}
 	}
 }
