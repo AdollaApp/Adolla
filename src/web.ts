@@ -48,7 +48,7 @@ app.engine(
 					rco: "/provider/rco.png",
 					nhentai: "https://nhentai.to/img/logo.650c98bbb08e.svg",
 					nhentainet: "https://nhentai.net/favicon.ico",
-					manganelo: "https://manganelo.tv/res/img/favicon-96x96.webp",
+					manganelo: "https://manganato.com/favicon-96x96.png",
 					comicextra: "https://www.comicextra.com/images/site/front/logo.png",
 					mangahere: "/proxy-image?url=https://www.mangahere.cc/favicon.ico",
 				};
