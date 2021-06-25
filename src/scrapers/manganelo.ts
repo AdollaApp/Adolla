@@ -30,7 +30,7 @@ export class manganeloClass extends Scraper {
 			pageUrl = "https://manganato.com/genre-all?type=topview";
 		} else {
 			pageUrl = `https://manganato.com/search/story/${encodeURIComponent(
-				query
+				query.replace(/ /g, "_")
 			)}`;
 		}
 
