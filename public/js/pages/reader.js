@@ -238,7 +238,11 @@ async function initImages() {
 
 			// Set source
 			img.src = `/proxy-image?url=${encodeURIComponent(url)}&referer=${
-				location.href.includes("mangasee") ? "mangasee" : "null"
+				location.href.includes("mangasee")
+					? "mangasee"
+					: location.href.includes("manganelo")
+					? "manganelo"
+					: "null"
 			}`;
 
 			// Add to DOM

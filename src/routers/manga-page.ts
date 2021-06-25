@@ -277,6 +277,8 @@ router.get("/proxy-image", (req, res) => {
 	let headers: { [key: string]: string } = {};
 	if (req.query.referer === "mangasee") {
 		headers.referer = "https://mangasee123.com";
+	} else if (req.query.referer === "manganelo") {
+		headers.referer = "https://readmanganato.com/";
 	}
 	headers["user-agent"] = "Adolla";
 

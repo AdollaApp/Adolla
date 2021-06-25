@@ -27,9 +27,11 @@ export class manganeloClass extends Scraper {
 
 		if (query === "") {
 			// Get popular page
-			pageUrl = "https://manganelo.tv/genre?type=topview";
+			pageUrl = "https://manganato.com/genre-all?type=topview";
 		} else {
-			pageUrl = `https://manganelo.tv/search/${encodeURIComponent(query)}`;
+			pageUrl = `https://manganato.com/search/story/${encodeURIComponent(
+				query
+			)}`;
 		}
 
 		// Fetch DOM for relevant page
@@ -42,8 +44,8 @@ export class manganeloClass extends Scraper {
 
 		// Get nodes
 		const anchors = [
-			...document.querySelectorAll("a.item-title"),
-			...document.querySelectorAll("a.genres-item-name"),
+			...document.querySelectorAll(".genres-item-info .a-h:first-child"),
+			...document.querySelectorAll(".item-title"),
 		];
 
 		// Get IDs from nodes
@@ -97,7 +99,8 @@ export class manganeloClass extends Scraper {
 	): Promise<ScraperResponse> {
 		try {
 			// Get HTML
-			const pageReq = await fetch(`https://manganelo.tv/manga/${slug}`);
+			slug = slug.startsWith("manga-") ? slug : `manga-${slug}`;
+			const pageReq = await fetch(`https://readmanganato.com/${slug}`);
 			const pageHtml = await pageReq.text();
 
 			// Get variables
@@ -111,13 +114,14 @@ export class manganeloClass extends Scraper {
 			let posterUrl =
 				(document.querySelector(".info-image img") ?? {}).src || "";
 			if (posterUrl.startsWith("/"))
-				posterUrl = "https://manganelo.tv" + posterUrl;
+				posterUrl = "https://manganato.com/" + posterUrl;
 
 			if (!posterUrl) posterUrl = "https://jipfr.nl/jip.jpg";
 
 			// Get genres from tags
-			const genreWrapper = document.querySelector(".info-genres").parentNode
-				.parentNode;
+			const genreWrapper = [
+				...document.querySelectorAll(".variations-tableInfo tr"),
+			].find((tr) => tr.textContent.includes("Genres"));
 			const genreLinks = [...genreWrapper.querySelectorAll(".a-h")];
 			const genres = genreLinks.map((v) => v.textContent);
 
@@ -174,7 +178,7 @@ export class manganeloClass extends Scraper {
 			let chapterImages = [];
 			if (chapterId != "-1") {
 				// Scrape page to find images
-				const url = `https://manganelo.tv/chapter/${slug}/${chapterId.replace(
+				const url = `https://readmanganato.com/${slug}/${chapterId.replace(
 					/_/g,
 					"-" // See generation of chapter hrefString above
 				)}`;
@@ -188,7 +192,7 @@ export class manganeloClass extends Scraper {
 				const images = [
 					...chapterDocument.querySelectorAll(".container-chapter-reader img"),
 				];
-				chapterImages = images.map((v) => v.getAttribute("data-src"));
+				chapterImages = images.map((v) => v.getAttribute("src"));
 			}
 
 			// Find description
@@ -204,7 +208,7 @@ export class manganeloClass extends Scraper {
 			return {
 				constant: {
 					title,
-					slug,
+					slug: slug.replace(/manga-/g, ""),
 					posterUrl,
 					alternateTitles,
 					descriptionParagraphs,
@@ -220,6 +224,10 @@ export class manganeloClass extends Scraper {
 				provider: isProviderId(providerId) ? providerId : null,
 			};
 		} catch (err) {
+			console.error(
+				chalk.red("[MANGANELO]") +
+					` A request for '${slug}' at '${chapterId}' has errored`
+			);
 			return error(-1, err);
 		}
 	}
