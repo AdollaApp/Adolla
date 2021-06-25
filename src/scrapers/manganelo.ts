@@ -11,6 +11,7 @@ export class manganeloClass extends Scraper {
 	constructor() {
 		super();
 		this.provider = "Manganelo";
+		this.searchDisplay = "Manganato";
 		this.canSearch = true;
 		this.nsfw = false;
 	}
