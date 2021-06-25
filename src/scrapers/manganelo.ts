@@ -145,7 +145,11 @@ export class manganeloClass extends Scraper {
 					(row): Chapter => {
 						// Find all values
 						const label = row.querySelector("a").textContent.split(":")[0];
-						const slug = row.querySelector("a").href.split("/").pop();
+						const slug = row
+							.querySelector("a")
+							.href.split("/")
+							.pop()
+							.replace(/-/g, "_");
 						const chapter = Number(slug.split("_").pop());
 						let date = new Date(row.querySelector(".chapter-time").textContent);
 
@@ -156,6 +160,7 @@ export class manganeloClass extends Scraper {
 						// Return product of chapter
 						return {
 							label,
+							// Since the creation of the Manganelo scraper, MN has replaced hyphens with underscores. We're replacing that here to keep the reading data intact
 							hrefString: slug,
 							season: 1,
 							chapter,
@@ -169,7 +174,10 @@ export class manganeloClass extends Scraper {
 			let chapterImages = [];
 			if (chapterId != "-1") {
 				// Scrape page to find images
-				const url = `https://manganelo.tv/chapter/${slug}/${chapterId}`;
+				const url = `https://manganelo.tv/chapter/${slug}/${chapterId.replace(
+					/_/g,
+					"-" // See generation of chapter hrefString above
+				)}`;
 				const chapterPageReq = await fetch(url);
 				const chapterPageHtml = await chapterPageReq.text();
 
