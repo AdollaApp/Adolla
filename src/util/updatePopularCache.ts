@@ -97,12 +97,11 @@ class Updater {
 							if (nextChapter && reading[currentChapter.hrefString]) {
 								// There is a next chapter!
 
-								// Compare chapter release dates
-
 								const clean = (str: string | number) => {
 									return str.toString().replace(/\./g, "_");
 								};
 
+								// Compare chapter release dates
 								const chapterReleaseDate = new Date(nextChapter.date).getTime();
 								if (
 									chapterReleaseDate >
