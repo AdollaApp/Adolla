@@ -377,7 +377,9 @@ document.querySelectorAll(".is-camera-button").forEach((btn) => {
 				clearInterval(cameraInterval);
 
 				// Get image URLs for every image that was on screen
-				let imgs = [...onScreenImages[0].parentNode.children];
+				let imgs = [
+					...onScreenImages[0].closest(".pages").querySelectorAll("img"),
+				];
 				let images = onScreenImages.sort(
 					(a, b) => imgs.indexOf(a) - imgs.indexOf(b)
 				);
