@@ -100,6 +100,7 @@ export interface StoredData extends ScraperData {
 	progress?: Progress;
 	realProgress?: Progress;
 	isInProgress?: boolean;
+	unreadChapterCount?: number;
 }
 
 /** Object for progress. Can be stored under ["manga-slug"]["1-5"] */

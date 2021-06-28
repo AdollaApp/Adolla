@@ -667,6 +667,17 @@ input, textarea {
 	right: 5px;
 }
 
+.poster-img .unread-chapter-count {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	padding: 1px 4px;
+	border-radius: 4px;
+	background: var(--body);
+	color: var(--text);
+	border: 2px solid var(--border);
+}
+
 .poster-img .poster-inner {
 	position: absolute;
 	top: 0;

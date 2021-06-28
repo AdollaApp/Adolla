@@ -21,6 +21,9 @@
 				</div>
 			</div>
 			{{/if}}
+			{{#if manga.unreadChapterCount}}
+			<span class="unread-chapter-count">{{manga.unreadChapterCount}}</span>
+			{{/if}}
 			{{#if manga.constant.nsfw}}
 			<span class="badge nsfw-background">NSFW</span>
 			{{/if}}
@@ -30,7 +33,6 @@
 		<p class="progress">{{getProgressString manga}}</p>
 		<div class="title-div">
 			<span class="flex">
-				
 				{{#if progress.new}}
 				<a class="to-manga" href="{{#if toChapter}}{{genLink2 manga.provider manga.constant.slug manga.progress.season manga.progress.chapter }}{{else}}{{genLink2 manga.provider manga.constant.slug}}{{/if}}">
 					<span class="badge badge-background">

@@ -118,6 +118,18 @@ async function addInfo(data: ScraperResponse) {
 		});
 		await Promise.all(chapterPromises);
 
+		if (db.get("settings.show-unread-chapter-count") === "yes") {
+			// Get "unread chapter" length
+			const readChapters = data.data.chapters.filter(
+				(v) => v.progress?.percentage >= 90
+			);
+			const unreadChapterCount =
+				data.data.chapters.length - readChapters.length;
+			data.unreadChapterCount = unreadChapterCount;
+		} else {
+			data.unreadChapterCount = null;
+		}
+
 		// Clean description paragraphs
 		data.constant.descriptionParagraphs = data.constant.descriptionParagraphs.map(
 			(s) =>

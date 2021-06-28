@@ -121,6 +121,7 @@ router.get("/settings/", async (req, res) => {
 		showNsfw: db.get("settings.show-nsfw") === "yes",
 		storeNsfw: db.get("settings.store-nsfw") === "yes",
 		showCompleted: db.get("settings.show-completed") !== "no",
+		showUnreads: db.get("settings.show-unread-chapter-count") === "yes",
 	});
 });
 
