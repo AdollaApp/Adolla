@@ -450,12 +450,14 @@ async function showBigImage(images) {
 	document.body.appendChild(div);
 }
 function isOnScreen(el) {
-	let rect = el.getBoundingClientRect();
-	let viewHeight = Math.max(
-		document.documentElement.clientHeight,
-		window.innerHeight
+	const rect = el.getBoundingClientRect();
+	return (
+		rect.top >= 0 &&
+		rect.left >= 0 &&
+		rect.bottom <=
+			(window.innerHeight || document.documentElement.clientHeight) &&
+		rect.right <= (window.innerWidth || document.documentElement.clientWidth)
 	);
-	return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
 }
 
 function updateDoublePages() {
