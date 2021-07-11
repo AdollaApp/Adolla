@@ -60,12 +60,7 @@ export async function getAnnouncements(): Promise<Announcement[]> {
 
 			// Discord webhook
 			if (secretConfig.discord_webhook) {
-				console.info(
-					chalk.green("[NOTIFS]") +
-						` New announcement: ${announcement.message}, notifying user over Discord Webhook`
-				);
-
-				await fetch(secretConfig.discord_webhook, {
+				const discordReq = await fetch(secretConfig.discord_webhook, {
 					method: "POST",
 					headers: {
 						"content-type": "application/json",
@@ -89,6 +84,11 @@ export async function getAnnouncements(): Promise<Announcement[]> {
 						],
 					}),
 				});
+
+				console.info(
+					chalk.green("[NOTIFS]") +
+						` New announcement: ${announcement.message}, attempted to notify user over Discord Webhook. HTTP status ${discordReq.status}`
+				);
 			}
 
 			notifiedAnnouncements.push(announcement.id);
