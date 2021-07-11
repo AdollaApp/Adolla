@@ -42,6 +42,11 @@ export async function getAnnouncements(): Promise<Announcement[]> {
 
 		// Notify people
 		if (!notifiedAnnouncements.includes(announcement.id)) {
+			console.info(
+				chalk.green("[NOTIFS]") +
+					` New announcement. Attempting methods of sending out notifications.`
+			);
+
 			const bot = Bot.get();
 			if (bot) {
 				// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
