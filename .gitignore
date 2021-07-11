@@ -6,6 +6,7 @@ data.json
 data*.json
 .env
 secret-config.json
+secret-config-*.json
 chapters.json
 md.json
 data-formatted.json
