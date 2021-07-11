@@ -29,7 +29,7 @@ Easy to use web app to read manga and comics.
 
 ## Setup
 
-If you want to run Adolla you will need to have [Node.js](https://nodejs.org/en/) and [Git](https://git-scm.com/) installed. It's also possible not to use Git and to skip the next step by downloading the ZIP directly from GitHub. You can press the green "code" button on the top, then click "download ZIP".
+If you want to run Adolla you will need to have [Node.js](https://nodejs.org/en/) and [Git](https://git-scm.com/) installed. It's also possible not to use Git and to skip the next step by downloading the ZIP directly from GitHub. You can press the green "code" button on the top, then click "download ZIP", or click [this link](https://github.com/AdollaApp/Adolla/archive/refs/heads/master.zip).
 
 To set this up, clone the repo. You can do this by running `git clone https://github.com/AdollaApp/Adolla` in a terminal in the parent folder.
 
