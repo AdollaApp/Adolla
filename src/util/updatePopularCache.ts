@@ -14,6 +14,10 @@ import { Progress } from "../types";
 import { getProviderId } from "../routers/manga-page";
 import { getAnnouncements } from "./getAnnouncements";
 
+const clean = (str: string | number) => {
+	return str.toString().replace(/\./g, "_");
+};
+
 class Updater {
 	start() {
 		this.updateCache();
@@ -96,10 +100,6 @@ class Updater {
 
 							if (nextChapter && reading[currentChapter.hrefString]) {
 								// There is a next chapter!
-
-								const clean = (str: string | number) => {
-									return str.toString().replace(/\./g, "_");
-								};
 
 								// Compare chapter release dates
 								const chapterReleaseDate = new Date(nextChapter.date).getTime();
@@ -232,6 +232,7 @@ class Updater {
 				// Check if cache is old. How old should be fairly obvious
 				if (diff > 1e3 * 60 * 60 * 24) {
 					cache[provider][slug] = undefined;
+					delete cache[provider][slug];
 					console.info(
 						chalk.green("[CLEANUP]") +
 							` Deleting cache for ${slug} since it's ${Math.floor(
