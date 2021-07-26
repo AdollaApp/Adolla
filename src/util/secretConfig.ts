@@ -23,7 +23,6 @@ let secretConfig: SecretConfig | null;
 const configPath = path.join(os.homedir(), ".adolla", "secret-config.json");
 const oldPath =
 	__dirname.split("/").slice(0, -1).join("/") + "/secret-config.json"; // Ew
-console.log(oldPath);
 
 if (!fs.existsSync(configPath)) {
 	// Set default secret config
