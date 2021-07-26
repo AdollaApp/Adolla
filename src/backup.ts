@@ -59,9 +59,13 @@ class Backup {
 		const offset = 1e3 * 60 * 60 * 12;
 
 		const lastBackupTime = await this.getLastBackupTime();
-		const difference = Date.now() - (lastBackupTime || Date.now());
+		const backupTime = lastBackupTime || Date.now();
+		const difference = Date.now() - backupTime;
 
-		console.info(chalk.yellowBright("[BACKUP]") + " Running backup check");
+		console.info(
+			chalk.yellowBright("[BACKUP]") +
+				` Running backup check: diff ${difference}, last ${lastBackupTime}, choosing last ${backupTime}`
+		);
 
 		if (difference > offset) {
 			this.createBackup();
