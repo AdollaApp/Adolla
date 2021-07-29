@@ -31,9 +31,13 @@ export class manganeloClass extends Scraper {
 			pageUrl = "https://manganato.com/genre-all?type=topview";
 		} else {
 			pageUrl = `https://manganato.com/search/story/${encodeURIComponent(
-				query.replace(/ /g, "_")
+				query
+					.replace(/[^a-zA-Z]/g, " ")
+					.trim()
+					.replace(/ /g, "_")
 			)}`;
 		}
+		console.log(pageUrl);
 
 		// Fetch DOM for relevant page
 		const pageReq = await fetch(pageUrl);
