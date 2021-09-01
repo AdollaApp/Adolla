@@ -19,7 +19,7 @@ export class comicextraClass extends Scraper {
 		// This is a better way of destructuring with default values
 		// than doing it at the top. This took... many hours. Thanks Pandawan!
 		const { resultCount } = {
-			resultCount: 40,
+			resultCount: 5,
 			...options,
 		};
 
@@ -48,7 +48,10 @@ export class comicextraClass extends Scraper {
 		);
 
 		// Get IDs from nodes
-		const ids = anchors.map((anchor) => anchor.href.split("/comic/").pop());
+		const ids = anchors
+			.map((anchor) => anchor.href.split("/comic/").pop())
+			.filter(Boolean)
+			.slice(0, resultCount);
 
 		// Get details for each search result
 		const searchResultData: ScraperResponse[] = await Promise.all(
