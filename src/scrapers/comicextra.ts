@@ -16,18 +16,14 @@ export class comicextraClass extends Scraper {
 	}
 
 	public async search(query: string, options?: Partial<SearchOptions>) {
-		// This is a better way of destructuring with default values
-		// than doing it at the top. This took... many hours. Thanks Pandawan!
-		const { resultCount } = {
-			resultCount: 5,
-			...options,
-		};
+		let resultCount = 10;
 
 		let pageUrl: string;
 
 		if (query === "") {
 			// Get popular page
 			pageUrl = "https://www.comicextra.com/popular-comic";
+			resultCount = 5;
 		} else {
 			pageUrl = `https://www.comicextra.com/comic-search?key=${encodeURIComponent(
 				query
