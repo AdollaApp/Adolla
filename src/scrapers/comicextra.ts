@@ -45,7 +45,7 @@ export class comicextraClass extends Scraper {
 
 		// Get IDs from nodes
 		const ids = anchors
-			.map((anchor) => anchor.href.split("/comic/").pop())
+			.map((anchor) => (anchor?.href || "").split("/comic/").pop())
 			.filter(Boolean)
 			.slice(0, resultCount);
 
