@@ -450,13 +450,21 @@ async function showBigImage(images) {
 	document.body.appendChild(div);
 }
 function isOnScreen(el) {
+	// See if element is visible on screen
 	const rect = el.getBoundingClientRect();
-	return (
-		rect.top >= 0 &&
-		rect.left >= 0 &&
-		rect.bottom <=
-			(window.innerHeight || document.documentElement.clientHeight) &&
-		rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+	const viewHeight = Math.max(
+		document.documentElement.clientHeight,
+		window.innerHeight
+	);
+	const viewWidth = Math.max(
+		document.documentElement.clientWidth,
+		window.innerWidth
+	);
+	return !(
+		rect.bottom < 0 ||
+		rect.top - viewHeight >= 0 ||
+		rect.right < 0 ||
+		rect.left - viewWidth >= 0
 	);
 }
 
