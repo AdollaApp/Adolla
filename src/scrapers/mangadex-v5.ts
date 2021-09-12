@@ -40,7 +40,6 @@ export class mangadexClass extends Scraper {
 		const data = await pageReq.json();
 
 		// Get IDs from nodes
-		console.log(data);
 		const ids = data.data
 			.map((result) => {
 				return result.id;
