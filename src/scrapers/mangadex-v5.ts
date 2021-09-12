@@ -40,9 +40,10 @@ export class mangadexClass extends Scraper {
 		const data = await pageReq.json();
 
 		// Get IDs from nodes
-		const ids = data.results
+		console.log(data);
+		const ids = data.data
 			.map((result) => {
-				return result.data.id;
+				return result.id;
 			})
 			.slice(0, resultCount);
 
@@ -105,7 +106,7 @@ export class mangadexClass extends Scraper {
 			let posterUrl = "https://i.imgur.com/6TrIues.jpg";
 
 			// Find cover (poster)
-			const posterData = originalData.relationships.find(
+			const posterData = originalData.data.relationships.find(
 				(relation) => relation.type === "cover_art"
 			);
 			if (posterData) {
@@ -135,9 +136,7 @@ export class mangadexClass extends Scraper {
 				const chapterData = await getDataFromURL(
 					`https://api.mangadex.org/manga/${slug}/feed?offset=${offset}&limit=500&translatedLanguage[]=en`
 				);
-				const mdChapters = (chapterData.results ?? [])
-					.map((v) => (v.result === "ok" ? v.data : null))
-					.filter(Boolean);
+				const mdChapters = (chapterData.data ?? []).filter(Boolean);
 
 				total = chapterData.total;
 				offset = chapterData.offset + chapterData.limit;
