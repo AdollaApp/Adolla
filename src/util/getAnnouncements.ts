@@ -65,31 +65,34 @@ export async function getAnnouncements(): Promise<Announcement[]> {
 				}
 
 				// Discord webhook
-				if (secretConfig.discord_webhook) {
-					const discordReq = await fetch(secretConfig.discord_webhook, {
-						method: "POST",
-						headers: {
-							"content-type": "application/json",
-						},
-						body: JSON.stringify({
-							avatar_url:
-								"https://raw.githubusercontent.com/AdollaApp/Adolla/master/public/icons/white-on-blue.png",
-							username: "Adolla",
-							embeds: [
-								{
-									title: "The Creator has spoken:",
-									description: announcement.message,
-									color: 4959182,
-									author: {
-										name: "Adolla",
-										url: "https://jipfr.nl/adolla",
-										icon_url:
-											"https://raw.githubusercontent.com/AdollaApp/Adolla/master/public/icons/white-on-blue.png",
+				if (process.env.DISCORDWEBHOOK ?? secretConfig.discord_webhook) {
+					const discordReq = await fetch(
+						process.env.DISCORDWEBHOOK ?? secretConfig.discord_webhook,
+						{
+							method: "POST",
+							headers: {
+								"content-type": "application/json",
+							},
+							body: JSON.stringify({
+								avatar_url:
+									"https://raw.githubusercontent.com/AdollaApp/Adolla/master/public/icons/white-on-blue.png",
+								username: "Adolla",
+								embeds: [
+									{
+										title: "The Creator has spoken:",
+										description: announcement.message,
+										color: 4959182,
+										author: {
+											name: "Adolla",
+											url: "https://jipfr.nl/adolla",
+											icon_url:
+												"https://raw.githubusercontent.com/AdollaApp/Adolla/master/public/icons/white-on-blue.png",
+										},
 									},
-								},
-							],
-						}),
-					});
+								],
+							}),
+						}
+					);
 
 					console.info(
 						chalk.green("[NOTIFS]") +

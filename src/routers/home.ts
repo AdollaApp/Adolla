@@ -87,7 +87,11 @@ async function getData() {
 	}
 
 	// Get popular manga
-	const maxReading = secretConfig.max_reading_to_show_popular ?? 10;
+	const maxReading = Number(
+		process.env.MAXREADINGTOSHOWPOPULAR ??
+			secretConfig.max_reading_to_show_popular ??
+			10
+	);
 
 	let popular: ScraperResponse[] | SearchError = [];
 	if (reading.length < maxReading) {

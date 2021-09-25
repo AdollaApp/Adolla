@@ -37,6 +37,17 @@ Navigate to the project folder using `cd` or other means and install the relevan
 
 Then, to start the app, run `npm start`. This will host the web server. You can now navigate to [`http://localhost:8080`](http://localhost:8080) on the machine to open the app in your browser. To use it on another device in the same network, find your local IP and go to `http://[your-ip]:8080`. To find your IP, see [this article](https://lifehacker.com/how-to-find-your-local-and-external-ip-address-5833108). 
 
+## Environment variables
+
+There are various environment variables you can use to customise Adolla.
+--- 
+
+`PORT`: the port the web app will run on 
+`MAXREADINGTOSHOWPOPULAR`: the amount of items in "continue reading" required to stop showing "popular" on the home page (for faster loading)
+`TELEGRAMTOKEN`: Telegram bot token to send from
+`TELEGRAMUSER`: Telegram user ID to send new chapters & updates to. Not sure what your ID? Plug in your bot token, start the app, and send the bot a message. Adolla will log your user ID.
+`DISCORDWEBHOOK`: Discord webhook URL to send new chapters & updates to.
+
 ## FAQ
 
 ### **How to run Adolla?**

@@ -154,13 +154,17 @@ class Updater {
 										}
 
 										// Discord webhook
-										if (secretConfig.discord_webhook) {
+										if (
+											process.env.DISCORDWEBHOOK ??
+											secretConfig.discord_webhook
+										) {
 											console.info(
 												chalk.green("[NOTIFS]") +
 													` New chapter found for ${data.constant.title}, notifying user over Discord Webhook`
 											);
 											const webhookNotif = await fetch(
-												secretConfig.discord_webhook,
+												process.env.DISCORDWEBHOOK ??
+													secretConfig.discord_webhook,
 												{
 													method: "POST",
 													headers: {

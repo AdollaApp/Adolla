@@ -2,9 +2,12 @@ import chalk from "chalk";
 import Telebot from "telebot";
 import secretConfig from "../util/secretConfig";
 
+const botToken = process.env.TELEGRAMTOKEN ?? secretConfig?.telegram?.bot;
+const telegramUser = process.env.TELEGRAMUSER ?? secretConfig?.telegram?.user;
+
 let bot = null;
-if (secretConfig?.telegram?.bot) {
-	bot = new Telebot(secretConfig.telegram.bot);
+if (botToken) {
+	bot = new Telebot(botToken);
 	bot.start();
 	bot.on("text", (message) => {
 		console.info(
@@ -24,13 +27,13 @@ class Bot {
 	}
 	send(message: string) {
 		const bot = this.get();
-		if (bot && secretConfig?.telegram?.user) {
-			bot.sendMessage(secretConfig.telegram.user, message, {
+		if (bot && telegramUser) {
+			bot.sendMessage(telegramUser, message, {
 				parseMode: "markdown",
 			});
 		} else {
 			console.error(
-				secretConfig.telegram.user
+				telegramUser
 					? "[TELEGRAM] No bot token found"
 					: "[TELEGRAM] No user ID found"
 			);
