@@ -40,12 +40,17 @@ Then, to start the app, run `npm start`. This will host the web server. You can 
 ## Environment variables
 
 There are various environment variables you can use to customise Adolla.
+
 --- 
 
 `PORT`: the port the web app will run on 
+
 `MAXREADINGTOSHOWPOPULAR`: the amount of items in "continue reading" required to stop showing "popular" on the home page (for faster loading)
+
 `TELEGRAMTOKEN`: Telegram bot token to send from
+
 `TELEGRAMUSER`: Telegram user ID to send new chapters & updates to. Not sure what your ID? Plug in your bot token, start the app, and send the bot a message. Adolla will log your user ID.
+
 `DISCORDWEBHOOK`: Discord webhook URL to send new chapters & updates to.
 
 ## FAQ
