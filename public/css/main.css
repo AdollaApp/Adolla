@@ -1012,6 +1012,7 @@ input, textarea {
 	max-width: 100vw;
 	overflow-x: auto;
 	justify-items: initial;
+	margin-right: 10px;
 }
 
 .pages[data-image-scaling="height"] img.pageImg {

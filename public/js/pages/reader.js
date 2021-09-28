@@ -97,6 +97,12 @@ function readerIsHorizontal() {
 
 // Scroll to page
 function scrollToPage() {
+	// Scroll each specific page to end
+	document.querySelectorAll(".page-container").forEach((container) => {
+		container.scrollTo(1000, 0);
+	});
+
+	// Scroll to specific page
 	let page = Number(document.body.dataset.toPage) || 1;
 	console.info("Scroll to page", page);
 	if (page) {
