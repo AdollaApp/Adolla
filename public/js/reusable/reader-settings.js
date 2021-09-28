@@ -9,6 +9,7 @@ const defaultSettings = {
 	"show-camera-button": "no",
 	"enable-keyboard-controls": "no",
 	"double-pages": "no",
+	"image-scaling": "width",
 };
 
 // Get current settings

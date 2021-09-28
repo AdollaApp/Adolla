@@ -1006,6 +1006,19 @@ input, textarea {
 	overflow-y: hidden;
 }
 
+/* Image fit thing */
+
+.pages[data-image-scaling="height"] .page-container {
+	max-width: 100vw;
+	overflow-x: auto;
+	justify-items: initial;
+}
+
+.pages[data-image-scaling="height"] img.pageImg {
+	width: initial;
+	max-width: initial;
+}
+
 .pages[data-reader-direction="vertical"] {
 	max-height: calc(100vh - env(safe-area-inset-top));
 	overflow-y: auto;
