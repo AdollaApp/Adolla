@@ -1006,10 +1006,6 @@ input, textarea {
 	overflow-y: hidden;
 }
 
-.pages[data-reader-direction="horizontal-reversed"] {
-	flex-direction: row-reverse;
-}
-
 /* Image fit thing */
 
 .pages[data-image-scaling="height"] .page-container {

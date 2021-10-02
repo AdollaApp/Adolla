@@ -61,7 +61,8 @@ function applySettings() {
 	}
 
 	// Update "double pages" for the images
-	if (typeof updateDoublePages !== "undefined") updateDoublePages();
+	// if (typeof updateDoublePages !== "undefined") updateDoublePages();
+	if (typeof doImages !== "undefined") doImages(); // Redo images when setting is changed (e.g. double pages)
 }
 
 // Update switches, boxes, etc.
@@ -70,8 +71,6 @@ function updateSettings() {
 	updateSettingBoxes(settings);
 	updateSettingToggles(settings);
 	applySettings();
-
-	if (typeof scrollToPage !== "undefined") scrollToPage(); // Scroll to page when settings are adjusted
 }
 
 // Update setting boxes in sidebar
