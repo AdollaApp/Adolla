@@ -494,7 +494,8 @@ function updateDoublePages() {
 	const settings = getSettings();
 	const doDouble =
 		settings["double-pages"] === "yes" &&
-		settings["reader-direction"] === "horizontal" &&
+		(settings["reader-direction"] === "horizontal" ||
+			settings["reader-direction"] === "horizontal-reversed") &&
 		window.innerWidth > window.innerHeight;
 
 	if (doDouble) {
