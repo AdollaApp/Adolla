@@ -4,6 +4,7 @@
 
 // Load state
 let loaded = false;
+let imageUrls;
 
 document.querySelector(".manga-reader .loading").scrollIntoView({
 	inline: "start",
@@ -72,9 +73,11 @@ function getPageProgress() {
 
 	// Get offset for pages
 	let direction = isHorizontal ? "left" : "bottom";
+
 	let wrapperOffset = isHorizontal
 		? document.querySelector(".pages").getBoundingClientRect()[direction]
 		: window.innerHeight;
+
 	let elementOffsets = [...document.querySelectorAll(".pageImg")]
 		.map((d) => ({
 			offset: Math.abs(d.getBoundingClientRect()[direction] - wrapperOffset),
@@ -85,23 +88,34 @@ function getPageProgress() {
 	let closestPage = elementOffsets[0]?.el;
 
 	let currentPage = closestPage
-		? [...document.querySelectorAll(".pageImg")].indexOf(closestPage) + 1
+		? Number(closestPage.getAttribute("data-i")) || 1
 		: 1;
 	return [currentPage, pageCount];
 }
 
 function readerIsHorizontal() {
 	// Returns if the images are vertical or not
-	return getSettings()["reader-direction"] === "horizontal";
+	const settings = getSettings();
+	return (
+		settings["reader-direction"] === "horizontal" ||
+		settings["reader-direction"] === "horizontal-reversed"
+	);
 }
 
 // Scroll to page
 function scrollToPage() {
+	doImages();
+	// Scroll each specific page to end
+	document.querySelectorAll(".page-container").forEach((container) => {
+		container.scrollTo(1000, 0);
+	});
+
+	// Scroll to specific page
 	let page = Number(document.body.dataset.toPage) || 1;
 	console.info("Scroll to page", page);
 	if (page) {
 		// Get relevant element and scroll to it
-		let pageEl = document.querySelectorAll(".pageImg")[page - 1];
+		let pageEl = document.querySelector(`.pageImg[data-i="${page}"]`);
 		if (!pageEl) return null;
 		scrollReader(pageEl);
 	}
@@ -225,31 +239,13 @@ async function initImages() {
 
 	try {
 		// Fetch array of URLs
-		let imageUrls = await getImageUrls(location.href);
+		imageUrls = await getImageUrls(location.href);
 
 		// Add elements to DOM
+		doImages();
+
+		// Wait for all images to load\
 		let wrapper = document.querySelector(".pages");
-		for (let [i, url] of Object.entries(imageUrls.reverse())) {
-			// Generate node
-			let img = document.createElement("img");
-			img.classList.add("pageImg");
-			img.setAttribute("alt", `Page ${Number(i) + 1}`);
-			img.setAttribute("data-i", i);
-
-			// Set source
-			img.src = `/proxy-image?url=${encodeURIComponent(url)}&referer=${
-				location.href.includes("mangasee")
-					? "mangasee"
-					: location.href.includes("manganelo")
-					? "manganelo"
-					: "null"
-			}`;
-
-			// Add to DOM
-			wrapper.insertBefore(img, wrapper.querySelector("*"));
-		}
-
-		// Wait for all images to load
 		let loadedCount = 0;
 		let toLoadImages = [...wrapper.querySelectorAll(".pageImg")];
 
@@ -270,9 +266,6 @@ async function initImages() {
 				});
 			})
 		);
-
-		// Update doublePages
-		updateDoublePages();
 
 		// Remove loading text
 		setLoadingText("");
@@ -306,6 +299,46 @@ async function initImages() {
 	}
 }
 initImages();
+
+function doImages() {
+	// Add images to DOM
+
+	let [currentPage, pageCount] = getPageProgress();
+
+	let wrapper = document.querySelector(".pages");
+	document
+		.querySelectorAll(".page-container, .pageImg")
+		.forEach((el) => el.remove());
+
+	const clone = Object.assign([], imageUrls); // Apparently `.reverse()` now manipulates the original array? So we need to clone it.
+
+	for (let [i, url] of Object.entries(clone.reverse())) {
+		// Generate node
+		let img = document.createElement("img");
+		img.classList.add("pageImg");
+		img.setAttribute("alt", `Page ${Number(clone.length - i)}`);
+		img.setAttribute("data-i", clone.length - i);
+
+		// Set source
+		img.src = `/proxy-image?url=${encodeURIComponent(url)}&referer=${
+			location.href.includes("mangasee")
+				? "mangasee"
+				: location.href.includes("manganelo")
+				? "manganelo"
+				: "null"
+		}`;
+
+		// Add to DOM
+		wrapper.insertBefore(img, wrapper.querySelector("*"));
+	}
+
+	// Update doublePages
+	updateDoublePages();
+
+	// Scroll to previous page
+	const pageEl = document.querySelector(`[data-i="${currentPage}"]`);
+	if (pageEl) pageEl.scrollIntoView();
+}
 
 async function getImageUrls(loc = location.href) {
 	// Prepare storage
@@ -473,7 +506,7 @@ function updateDoublePages() {
 
 	// Get all images
 	const allImages = [...document.querySelectorAll(".pageImg")].sort((a, b) => {
-		return b.getAttribute("data-i") - a.getAttribute("data-i");
+		return a.getAttribute("data-i") - b.getAttribute("data-i");
 	});
 
 	// Remove left-overs
@@ -484,7 +517,8 @@ function updateDoublePages() {
 	const settings = getSettings();
 	const doDouble =
 		settings["double-pages"] === "yes" &&
-		settings["reader-direction"] === "horizontal" &&
+		(settings["reader-direction"] === "horizontal" ||
+			settings["reader-direction"] === "horizontal-reversed") &&
 		window.innerWidth > window.innerHeight;
 
 	if (doDouble) {
@@ -516,7 +550,11 @@ function updateDoublePages() {
 		}
 
 		// Add to DOM
-		wrapper.insertBefore(div, wrapper.querySelector("*"));
+		if (settings["reader-direction"] === "horizontal-reversed") {
+			wrapper.appendChild(div);
+		} else {
+			wrapper.insertBefore(div, wrapper.querySelector("*"));
+		}
 	}
 }
 

@@ -994,7 +994,7 @@ input, textarea {
 
 /* Horizontal reader */
 
-.pages[data-reader-direction="horizontal"] {
+.pages[data-reader-direction="horizontal"], .pages[data-reader-direction="horizontal-reversed"] {
 	/* Horizontal reader */
 	max-width: 100%;
 	overflow-x: auto;
@@ -1004,6 +1004,20 @@ input, textarea {
 	scroll-snap-type: x mandatory;
 	max-height: calc(100vh - env(safe-area-inset-top));
 	overflow-y: hidden;
+}
+
+/* Image fit thing */
+
+.pages[data-image-scaling="height"] .page-container {
+	max-width: 100vw;
+	overflow-x: auto;
+	justify-items: initial;
+	margin-right: 10px;
+}
+
+.pages[data-image-scaling="height"] img.pageImg {
+	width: initial;
+	max-width: initial;
 }
 
 .pages[data-reader-direction="vertical"] {
@@ -1028,7 +1042,7 @@ input, textarea {
 	justify-items: center;
 }
 
-.pages[data-reader-direction="horizontal"] .pageImg {
+.pages[data-reader-direction="horizontal"] .pageImg, .pages[data-reader-direction="horizontal-reversed"] .pageImg {
 	height: calc(100vh - var(--footer-height) - env(safe-area-inset-top) - 50px);
 }
 
@@ -1038,7 +1052,7 @@ input, textarea {
 	margin-bottom: 10px;
 }
 
-.pages[data-reader-direction="long-strip"][data-vertical-image-size="full-height"] .pageImg, .pages[data-reader-direction="horizontal"] .pageImg, .pages[data-reader-direction="vertical"] .pageImg {
+.pages[data-reader-direction="long-strip"][data-vertical-image-size="full-height"] .pageImg, .pages[data-reader-direction="horizontal"] .pageImg, .pages[data-reader-direction="horizontal-reversed"] .pageImg, .pages[data-reader-direction="vertical"] .pageImg {
 	width: 100%;
 	max-height: calc(100vh - env(safe-area-inset-top));
 	height: calc(100vh - env(safe-area-inset-top));
