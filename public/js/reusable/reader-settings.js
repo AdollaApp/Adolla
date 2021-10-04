@@ -2,7 +2,7 @@
 const defaultSettings = {
 	"reader-direction": "horizontal",
 	"vertical-image-size": "auto",
-	"vertical-gap": "yes",
+	"vertical-gap": "no",
 	"back-location": "bottom-left",
 	"do-toggle-alt": "no",
 	"show-info-badge": "yes",
@@ -62,7 +62,6 @@ function applySettings() {
 
 	// Update "double pages" for the images
 	if (typeof updateDoublePages !== "undefined") updateDoublePages();
-	// if (typeof doImages !== "undefined") doImages(); // Redo images when setting is changed (e.g. double pages)
 }
 
 // Update switches, boxes, etc.

@@ -48,6 +48,7 @@ setInterval(updatePages, 500);
 
 function updatePages() {
 	let [currentPage, pageCount] = getPageProgress();
+	lastPage = currentPage;
 
 	if (loaded) document.body.setAttribute("data-to-page", currentPage);
 
@@ -497,9 +498,6 @@ function isOnScreen(el) {
 }
 
 function updateDoublePages() {
-	console.log("Updating double pages");
-	let [currentPage, pageCount] = getPageProgress();
-
 	const wrapper = document.querySelector(".pages");
 
 	// Get all images
@@ -517,14 +515,12 @@ function updateDoublePages() {
 		settings["double-pages"] === "yes" &&
 		readerIsHorizontal() &&
 		window.innerWidth > window.innerHeight;
-	console.log(doDouble);
 	if (doDouble) {
 		newImageSequences.unshift([null]);
 	}
 
 	// Sort all images into the sequence
 	for (const img of allImages) {
-		console.log(img.naturalHeight, img.naturalWidth, doDouble);
 		if (img.naturalHeight > img.naturalWidth && doDouble) {
 			// Vertical images...
 			if (newImageSequences[0].length < 2) {
@@ -539,7 +535,6 @@ function updateDoublePages() {
 	}
 
 	// Add all sequences to the DOM
-	console.log(newImageSequences);
 	for (const seq of newImageSequences) {
 		const div = document.createElement("div");
 		div.classList.add("page-container");
