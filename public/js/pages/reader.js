@@ -104,7 +104,7 @@ function readerIsHorizontal() {
 
 // Scroll to page
 function scrollToPage() {
-	doImages();
+	// doImages();
 	// Scroll each specific page to end
 	document.querySelectorAll(".page-container").forEach((container) => {
 		container.scrollTo(1000, 0);
@@ -282,6 +282,8 @@ async function initImages() {
 				loaded = true;
 			}
 		}, 50);
+
+		updateDoublePages();
 	} catch (err) {
 		console.error(err);
 		loaded = true;
@@ -302,9 +304,6 @@ initImages();
 
 function doImages() {
 	// Add images to DOM
-
-	let [currentPage, pageCount] = getPageProgress();
-
 	let wrapper = document.querySelector(".pages");
 	document
 		.querySelectorAll(".page-container, .pageImg")
@@ -334,10 +333,6 @@ function doImages() {
 
 	// Update doublePages
 	updateDoublePages();
-
-	// Scroll to previous page
-	const pageEl = document.querySelector(`[data-i="${currentPage}"]`);
-	if (pageEl) pageEl.scrollIntoView();
 }
 
 async function getImageUrls(loc = location.href) {
@@ -502,6 +497,9 @@ function isOnScreen(el) {
 }
 
 function updateDoublePages() {
+	console.log("Updating double pages");
+	let [currentPage, pageCount] = getPageProgress();
+
 	const wrapper = document.querySelector(".pages");
 
 	// Get all images
@@ -517,16 +515,16 @@ function updateDoublePages() {
 	const settings = getSettings();
 	const doDouble =
 		settings["double-pages"] === "yes" &&
-		(settings["reader-direction"] === "horizontal" ||
-			settings["reader-direction"] === "horizontal-reversed") &&
+		readerIsHorizontal() &&
 		window.innerWidth > window.innerHeight;
-
+	console.log(doDouble);
 	if (doDouble) {
 		newImageSequences.unshift([null]);
 	}
 
 	// Sort all images into the sequence
 	for (const img of allImages) {
+		console.log(img.naturalHeight, img.naturalWidth, doDouble);
 		if (img.naturalHeight > img.naturalWidth && doDouble) {
 			// Vertical images...
 			if (newImageSequences[0].length < 2) {
@@ -541,6 +539,7 @@ function updateDoublePages() {
 	}
 
 	// Add all sequences to the DOM
+	console.log(newImageSequences);
 	for (const seq of newImageSequences) {
 		const div = document.createElement("div");
 		div.classList.add("page-container");
@@ -550,11 +549,23 @@ function updateDoublePages() {
 		}
 
 		// Add to DOM
-		if (settings["reader-direction"] === "horizontal-reversed") {
-			wrapper.appendChild(div);
-		} else {
-			wrapper.insertBefore(div, wrapper.querySelector("*"));
-		}
+		wrapper.insertBefore(div, wrapper.querySelector("*"));
+	}
+
+	// For RTL readers, reverse the order of the pages
+	// Reverse element order of `pages`
+	if (getSettings()["reader-direction"] === "horizontal-reversed") {
+		reverseChildren(document.querySelector(".pages"));
+	}
+
+	// Scroll to previous page
+	const pageEl = document.querySelector(`[data-i="${currentPage}"]`);
+	if (pageEl) pageEl.scrollIntoView();
+}
+
+function reverseChildren(parent) {
+	for (let i = 1; i < parent.childNodes.length; i++) {
+		parent.insertBefore(parent.childNodes[i], parent.firstChild);
 	}
 }
 

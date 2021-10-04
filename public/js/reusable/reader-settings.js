@@ -61,8 +61,8 @@ function applySettings() {
 	}
 
 	// Update "double pages" for the images
-	// if (typeof updateDoublePages !== "undefined") updateDoublePages();
-	if (typeof doImages !== "undefined") doImages(); // Redo images when setting is changed (e.g. double pages)
+	if (typeof updateDoublePages !== "undefined") updateDoublePages();
+	// if (typeof doImages !== "undefined") doImages(); // Redo images when setting is changed (e.g. double pages)
 }
 
 // Update switches, boxes, etc.
