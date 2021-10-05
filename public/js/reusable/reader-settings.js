@@ -2,7 +2,7 @@
 const defaultSettings = {
 	"reader-direction": "horizontal",
 	"vertical-image-size": "auto",
-	"vertical-gap": "yes",
+	"vertical-gap": "no",
 	"back-location": "bottom-left",
 	"do-toggle-alt": "no",
 	"show-info-badge": "yes",
@@ -61,16 +61,25 @@ function applySettings() {
 	}
 
 	// Update "double pages" for the images
-	// if (typeof updateDoublePages !== "undefined") updateDoublePages();
-	if (typeof doImages !== "undefined") doImages(); // Redo images when setting is changed (e.g. double pages)
+	if (typeof updateDoublePages !== "undefined") updateDoublePages();
 }
 
 // Update switches, boxes, etc.
 function updateSettings() {
 	let settings = getSettings();
+	let currentPage;
+	if (typeof getPageProgress !== "undefined") {
+		currentPage = getPageProgress()[0];
+	}
+
 	updateSettingBoxes(settings);
 	updateSettingToggles(settings);
 	applySettings();
+
+	if (currentPage) {
+		const pageEl = document.querySelector(`[data-i="${currentPage}"]`);
+		if (pageEl) pageEl.scrollIntoView();
+	}
 }
 
 // Update setting boxes in sidebar

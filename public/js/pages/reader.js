@@ -13,10 +13,15 @@ document.querySelector(".manga-reader .loading").scrollIntoView({
 
 // This is a debounce effect for the page update
 let scrollDebounce;
+let secondScrollDebounce;
 function updateScrollDebounce() {
 	if (scrollDebounce) {
 		clearTimeout(scrollDebounce);
 		delete scrollDebounce;
+	}
+	if (secondScrollDebounce) {
+		clearTimeout(secondScrollDebounce);
+		delete secondScrollDebounce;
 	}
 	scrollDebounce = setTimeout(() => {
 		if (!loaded) return;
@@ -37,6 +42,10 @@ function updateScrollDebounce() {
 			}),
 		});
 	}, 500);
+
+	secondScrollDebounce = setTimeout(() => {
+		updatePages();
+	}, 100);
 }
 
 // Find html and pages so that we can add scroll listeners for both
@@ -44,7 +53,6 @@ document.addEventListener("scroll", updateScrollDebounce);
 document
 	.querySelector(".pages")
 	.addEventListener("scroll", updateScrollDebounce);
-setInterval(updatePages, 500);
 
 function updatePages() {
 	let [currentPage, pageCount] = getPageProgress();
@@ -69,7 +77,10 @@ function getPageProgress() {
 	let pageCount = document.querySelectorAll(".pageImg").length;
 
 	// Check if the reader is horizontal or not
-	let isHorizontal = readerIsHorizontal();
+	const isHorizontal = document
+		.querySelector("[data-reader-direction]")
+		.getAttribute("data-reader-direction")
+		.startsWith("horizontal");
 
 	// Get offset for pages
 	let direction = isHorizontal ? "left" : "bottom";
@@ -104,7 +115,7 @@ function readerIsHorizontal() {
 
 // Scroll to page
 function scrollToPage() {
-	doImages();
+	// doImages();
 	// Scroll each specific page to end
 	document.querySelectorAll(".page-container").forEach((container) => {
 		container.scrollTo(1000, 0);
@@ -282,6 +293,8 @@ async function initImages() {
 				loaded = true;
 			}
 		}, 50);
+
+		updateDoublePages();
 	} catch (err) {
 		console.error(err);
 		loaded = true;
@@ -302,9 +315,6 @@ initImages();
 
 function doImages() {
 	// Add images to DOM
-
-	let [currentPage, pageCount] = getPageProgress();
-
 	let wrapper = document.querySelector(".pages");
 	document
 		.querySelectorAll(".page-container, .pageImg")
@@ -334,10 +344,6 @@ function doImages() {
 
 	// Update doublePages
 	updateDoublePages();
-
-	// Scroll to previous page
-	const pageEl = document.querySelector(`[data-i="${currentPage}"]`);
-	if (pageEl) pageEl.scrollIntoView();
 }
 
 async function getImageUrls(loc = location.href) {
@@ -502,6 +508,7 @@ function isOnScreen(el) {
 }
 
 function updateDoublePages() {
+	const [currentPage] = getPageProgress();
 	const wrapper = document.querySelector(".pages");
 
 	// Get all images
@@ -517,10 +524,8 @@ function updateDoublePages() {
 	const settings = getSettings();
 	const doDouble =
 		settings["double-pages"] === "yes" &&
-		(settings["reader-direction"] === "horizontal" ||
-			settings["reader-direction"] === "horizontal-reversed") &&
+		readerIsHorizontal() &&
 		window.innerWidth > window.innerHeight;
-
 	if (doDouble) {
 		newImageSequences.unshift([null]);
 	}
@@ -550,11 +555,23 @@ function updateDoublePages() {
 		}
 
 		// Add to DOM
-		if (settings["reader-direction"] === "horizontal-reversed") {
-			wrapper.appendChild(div);
-		} else {
-			wrapper.insertBefore(div, wrapper.querySelector("*"));
-		}
+		wrapper.insertBefore(div, wrapper.querySelector("*"));
+	}
+
+	// For RTL readers, reverse the order of the pages
+	// Reverse element order of `pages`
+	if (getSettings()["reader-direction"] === "horizontal-reversed") {
+		reverseChildren(document.querySelector(".pages"));
+	}
+
+	// Scroll to previous page
+	const pageEl = document.querySelector(`[data-i="${currentPage}"]`);
+	if (pageEl) pageEl.scrollIntoView();
+}
+
+function reverseChildren(parent) {
+	for (let i = 1; i < parent.childNodes.length; i++) {
+		parent.insertBefore(parent.childNodes[i], parent.firstChild);
 	}
 }
 
