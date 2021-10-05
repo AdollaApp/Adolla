@@ -1628,20 +1628,20 @@ div.selection-actions .selection-actions-inner {
 
 /* Reload chapters */
 
-.main-sidebar .reload-chapter {
-	grid-area: reload-chapter;
-}
-
-.main-sidebar .reload-chapter svg {
-	vertical-align: text-bottom;
-}
-
 .reload-chapters-button svg {
 	cursor: pointer;
 }
 
-.main-sidebar .reload-chapters-button:not(:empty) {
+.main-sidebar .reload-chapter {
+	grid-area: reload-chapter;
+}
+
+.main-sidebar .reload-chapters-button {
 	justify-self: center;
+}
+
+.main-sidebar .reload-chapters-button svg {
+	vertical-align: text-bottom;
 }
 
 .reload-chapters-button.hidden {
