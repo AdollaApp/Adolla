@@ -73,12 +73,14 @@ function updatePages() {
 updatePages();
 
 // Get page progress
-function getPageProgress(isVertical = false) {
+function getPageProgress() {
 	let pageCount = document.querySelectorAll(".pageImg").length;
 
 	// Check if the reader is horizontal or not
-	let isHorizontal = readerIsHorizontal(isVertical);
-	// alert(isHorizontal);
+	const isHorizontal = document
+		.querySelector("[data-reader-direction]")
+		.getAttribute("data-reader-direction")
+		.startsWith("horizontal");
 
 	// Get offset for pages
 	let direction = isHorizontal ? "left" : "bottom";
@@ -102,10 +104,8 @@ function getPageProgress(isVertical = false) {
 	return [currentPage, pageCount];
 }
 
-function readerIsHorizontal(isVertical) {
+function readerIsHorizontal() {
 	// Returns if the images are vertical or not
-	console.log(isVertical);
-	if (isVertical) return false;
 	const settings = getSettings();
 	return (
 		settings["reader-direction"] === "horizontal" ||

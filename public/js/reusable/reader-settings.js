@@ -12,6 +12,8 @@ const defaultSettings = {
 	"image-scaling": "width",
 };
 
+let oldSettings;
+
 // Get current settings
 function getSettings() {
 	// Verify stored settings
@@ -69,19 +71,17 @@ function updateSettings() {
 	let settings = getSettings();
 	let currentPage;
 	if (typeof getPageProgress !== "undefined") {
-		currentPage = getPageProgress(
-			settings["reader-direction"].startsWith("horizontal")
-		)[0];
-		console.log(currentPage);
+		currentPage = getPageProgress()[0];
 	}
+
 	updateSettingBoxes(settings);
 	updateSettingToggles(settings);
 	applySettings();
 
 	if (currentPage) {
+		const pageEl = document.querySelector(`[data-i="${currentPage}"]`);
+		if (pageEl) pageEl.scrollIntoView();
 	}
-	const pageEl = document.querySelector(`[data-i="${currentPage}"]`);
-	if (pageEl) pageEl.scrollIntoView();
 }
 
 // Update setting boxes in sidebar
@@ -120,6 +120,7 @@ function updateSettingToggles(settings) {
 // Set setting
 async function setSetting(key, value) {
 	let settings = getSettings();
+	oldSettings = Object.assign({}, settings);
 	settings[key] = value;
 	localStorage.setItem("settings", JSON.stringify(settings));
 }
