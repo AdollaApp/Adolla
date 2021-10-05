@@ -229,7 +229,7 @@ document.querySelectorAll(".pageImg").forEach((img) => {
 	});
 });
 
-async function initImages() {
+async function initImages(forced = false) {
 	// Function to set innerHTML
 	function setLoadingText(text) {
 		document.querySelectorAll(".current-loading-progress").forEach((el) => {
@@ -239,10 +239,10 @@ async function initImages() {
 
 	try {
 		// Fetch array of URLs
-		imageUrls = await getImageUrls(location.href);
+		imageUrls = await getImageUrls(location.href, forced);
 
 		// Add elements to DOM
-		doImages();
+		doImages(forced);
 
 		// Wait for all images to load\
 		let wrapper = document.querySelector(".pages");
@@ -287,6 +287,7 @@ async function initImages() {
 		loaded = true;
 		document.querySelector(".manga-reader").classList.add("loaded");
 		setLoadingText("Error");
+		document.querySelectorAll(".reload-chapters-button").forEach((el) => { el.classList.remove("hidden"); })
 	}
 
 	// Pre-load other image urls
@@ -300,7 +301,18 @@ async function initImages() {
 }
 initImages();
 
-function doImages() {
+document.querySelectorAll(".reload-chapters-button").forEach((el) => {
+	el.addEventListener("click", (evt) => {
+		document.querySelector(".manga-reader").classList.remove("loaded");
+		document
+			.querySelectorAll(".page-container, .pageImg")
+			.forEach((el) => el.remove());
+		initImages(true);
+		el.classList.add("hidden");
+	});
+});
+
+function doImages(bypassCache = false) {
 	// Add images to DOM
 
 	let [currentPage, pageCount] = getPageProgress();
@@ -326,7 +338,7 @@ function doImages() {
 				: location.href.includes("manganelo")
 				? "manganelo"
 				: "null"
-		}`;
+		}${bypassCache ? `&c=${+Date.now()}` : ''}`;
 
 		// Add to DOM
 		wrapper.insertBefore(img, wrapper.querySelector("*"));
@@ -340,7 +352,7 @@ function doImages() {
 	if (pageEl) pageEl.scrollIntoView();
 }
 
-async function getImageUrls(loc = location.href) {
+async function getImageUrls(loc = location.href, forceFetch = false) {
 	// Prepare storage
 	let key = "image-cache";
 	if (!localStorage.getItem(key)) localStorage.setItem(key, "{}");
@@ -358,7 +370,7 @@ async function getImageUrls(loc = location.href) {
 	}
 
 	// Check cache
-	if (cache[url]) return cache[url].images;
+	if (cache[url] && !forceFetch) return cache[url].images;
 
 	// Get data
 	let urls = await (await fetch(url)).json();
