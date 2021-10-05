@@ -12,8 +12,6 @@ const defaultSettings = {
 	"image-scaling": "width",
 };
 
-let oldSettings;
-
 // Get current settings
 function getSettings() {
 	// Verify stored settings
@@ -120,7 +118,6 @@ function updateSettingToggles(settings) {
 // Set setting
 async function setSetting(key, value) {
 	let settings = getSettings();
-	oldSettings = Object.assign({}, settings);
 	settings[key] = value;
 	localStorage.setItem("settings", JSON.stringify(settings));
 }
