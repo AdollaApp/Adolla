@@ -13,10 +13,15 @@ document.querySelector(".manga-reader .loading").scrollIntoView({
 
 // This is a debounce effect for the page update
 let scrollDebounce;
+let secondScrollDebounce;
 function updateScrollDebounce() {
 	if (scrollDebounce) {
 		clearTimeout(scrollDebounce);
 		delete scrollDebounce;
+	}
+	if (secondScrollDebounce) {
+		clearTimeout(secondScrollDebounce);
+		delete secondScrollDebounce;
 	}
 	scrollDebounce = setTimeout(() => {
 		if (!loaded) return;
@@ -37,6 +42,10 @@ function updateScrollDebounce() {
 			}),
 		});
 	}, 500);
+
+	secondScrollDebounce = setTimeout(() => {
+		updatePages();
+	}, 100);
 }
 
 // Find html and pages so that we can add scroll listeners for both
@@ -44,11 +53,9 @@ document.addEventListener("scroll", updateScrollDebounce);
 document
 	.querySelector(".pages")
 	.addEventListener("scroll", updateScrollDebounce);
-setInterval(updatePages, 500);
 
 function updatePages() {
 	let [currentPage, pageCount] = getPageProgress();
-	lastPage = currentPage;
 
 	if (loaded) document.body.setAttribute("data-to-page", currentPage);
 
@@ -66,11 +73,12 @@ function updatePages() {
 updatePages();
 
 // Get page progress
-function getPageProgress() {
+function getPageProgress(isVertical = false) {
 	let pageCount = document.querySelectorAll(".pageImg").length;
 
 	// Check if the reader is horizontal or not
-	let isHorizontal = readerIsHorizontal();
+	let isHorizontal = readerIsHorizontal(isVertical);
+	// alert(isHorizontal);
 
 	// Get offset for pages
 	let direction = isHorizontal ? "left" : "bottom";
@@ -94,8 +102,10 @@ function getPageProgress() {
 	return [currentPage, pageCount];
 }
 
-function readerIsHorizontal() {
+function readerIsHorizontal(isVertical) {
 	// Returns if the images are vertical or not
+	console.log(isVertical);
+	if (isVertical) return false;
 	const settings = getSettings();
 	return (
 		settings["reader-direction"] === "horizontal" ||
@@ -498,6 +508,7 @@ function isOnScreen(el) {
 }
 
 function updateDoublePages() {
+	const [currentPage] = getPageProgress();
 	const wrapper = document.querySelector(".pages");
 
 	// Get all images

@@ -67,9 +67,21 @@ function applySettings() {
 // Update switches, boxes, etc.
 function updateSettings() {
 	let settings = getSettings();
+	let currentPage;
+	if (typeof getPageProgress !== "undefined") {
+		currentPage = getPageProgress(
+			settings["reader-direction"].startsWith("horizontal")
+		)[0];
+		console.log(currentPage);
+	}
 	updateSettingBoxes(settings);
 	updateSettingToggles(settings);
 	applySettings();
+
+	if (currentPage) {
+	}
+	const pageEl = document.querySelector(`[data-i="${currentPage}"]`);
+	if (pageEl) pageEl.scrollIntoView();
 }
 
 // Update setting boxes in sidebar
