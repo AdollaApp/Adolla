@@ -888,7 +888,7 @@ input, textarea {
 .chapter-navigation {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	grid-template-areas: "current current" "previous next";
+	grid-template-areas: "current current" "reload-chapter reload-chapter" "previous next";
 	grid-gap: 10px 5px;
 	color: var(--text);
 	align-items: center;
@@ -1624,6 +1624,28 @@ div.selection-actions .selection-actions-inner {
 
 .main-sidebar .current-loading-progress:not(:empty)::after {
 	content: ")";
+}
+
+/* Reload chapters */
+
+.reload-chapters-button svg {
+	cursor: pointer;
+}
+
+.main-sidebar .reload-chapter {
+	grid-area: reload-chapter;
+}
+
+.main-sidebar .reload-chapters-button {
+	justify-self: center;
+}
+
+.main-sidebar .reload-chapters-button svg {
+	vertical-align: text-bottom;
+}
+
+.reload-chapters-button.hidden {
+	display: none;
 }
 
 /* Image share */
