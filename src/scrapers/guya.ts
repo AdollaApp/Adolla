@@ -19,6 +19,7 @@ interface GuyaSeries {
 			volume: string;
 			title: string;
 			folder: string;
+			preferred_sort?: string[];
 			groups: {
 				[groupId: string]: string[];
 			},
@@ -127,14 +128,16 @@ export class guyaClass extends Scraper {
 			// Get alternate titles
 			const alternateTitles = [];
 
-			const { preferred_sort: preferredSort, chapters: chapterData } = pageJson
+			const { chapters: chapterData } = pageJson
 
 			let chapterImages = [];
-			let bestGroup = ''
 
 			if (chapterId && typeof chapterId === "string") {
-				const { groups, folder } = chapterData[chapterId];
-				bestGroup =
+				const { groups, folder, preferred_sort: chapterPreferredSort } = chapterData[chapterId];
+
+				const preferredSort = chapterPreferredSort ?? pageJson.preferred_sort
+
+				const bestGroup =
 					Object.keys(groups).sort((a, b) => preferredSort.indexOf(a) - preferredSort.indexOf(b))[0] ?? Object.keys(groups)[0];
 				const pages = groups[bestGroup];
 
