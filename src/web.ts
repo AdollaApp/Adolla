@@ -51,6 +51,7 @@ app.engine(
 					manganelo: "https://manganato.com/favicon-96x96.png",
 					comicextra: "https://www.comicextra.com/images/site/front/logo.png",
 					mangahere: "/proxy-image?url=https://www.mangahere.cc/favicon.ico",
+					guya: "https://guya.moe/static/logo_small.png",
 				};
 				return icons[provider] ?? "/icons/main-on-white.png";
 			},

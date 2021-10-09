@@ -87,6 +87,10 @@ export const Mangahere = MangahereInstance;
 import MangadexInstance from "./mangadex-v5";
 export const Mangadex5 = MangadexInstance;
 
+// Import Guya.moe
+import GuyaInstance from "./guya";
+export const Guya = GuyaInstance;
+
 export const scrapers = {
 	Mangasee,
 	Mangadex5,
@@ -96,4 +100,5 @@ export const scrapers = {
 	ComicExtra,
 	nhentai,
 	nhentainet,
+	Guya,
 };
