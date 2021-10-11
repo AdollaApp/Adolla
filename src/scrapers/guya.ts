@@ -22,10 +22,10 @@ interface GuyaSeries {
 			preferred_sort?: string[];
 			groups: {
 				[groupId: string]: string[];
-			},
+			};
 			release_date: {
 				[groupId: string]: number;
-			}
+			};
 		}
 	},
 	next_release_page: boolean;
@@ -50,13 +50,13 @@ export class guyaClass extends Scraper {
 
 		if (query.length) {
 			// If query is not empty, use fuse to search
-			const fuse = new Fuse(pageJson.keys(), {
+			const fuse = new Fuse(Object.keys(pageJson), {
 				threshold: 0.3,
 				distance: 200,
 			});
 			ids = fuse
 				.search(query)
-				.map((key) => pageJson[key].slug);
+				.map(({ item }) => pageJson[item].slug);
 		} else {
 			// Get IDs from nodes
 			ids = Object.values(pageJson).map(({ slug }) => slug);
@@ -128,20 +128,20 @@ export class guyaClass extends Scraper {
 			// Get alternate titles
 			const alternateTitles = [];
 
-			const { chapters: chapterData } = pageJson
+			const { chapters: chapterData, preferred_sort: seriesPreferredSort } = pageJson;
 
 			let chapterImages = [];
 
 			if (chapterId && typeof chapterId === "string") {
 				const { groups, folder, preferred_sort: chapterPreferredSort } = chapterData[chapterId];
 
-				const preferredSort = chapterPreferredSort ?? pageJson.preferred_sort
+				const preferredSort = chapterPreferredSort ?? seriesPreferredSort;
 
 				const bestGroup =
 					Object.keys(groups).sort((a, b) => preferredSort.indexOf(a) - preferredSort.indexOf(b))[0] ?? Object.keys(groups)[0];
 				const pages = groups[bestGroup];
 
-				chapterImages = pages.map((page) => `https://guya.moe/media/manga/${slug}/chapters/${folder}/${bestGroup}/${page}`)
+				chapterImages = pages.map((page) => `https://guya.moe/media/manga/${slug}/chapters/${folder}/${bestGroup}/${page}`);
 			}
 
 			let chapters: Chapter[] = Object.entries(chapterData)
@@ -150,8 +150,8 @@ export class guyaClass extends Scraper {
 
 					const releaseDate = Object.values(releaseDates).sort((a, b) => a - b)[0]
 
-					const season = Number(volume)
-					const chapterId = Number(chapter)
+					const season = Number(volume);
+					const chapterId = Number(chapter);
 
 					return {
 						chapter: chapterId,
