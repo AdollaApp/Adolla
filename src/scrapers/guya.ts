@@ -8,6 +8,15 @@ import { Scraper } from "./types";
 import { getProviderId, isProviderId } from "../routers/manga-page";
 import updateManga from "../util/updateManga";
 
+interface GuyaSeriesList {
+	[seriesName: string]: {
+		description: string;
+		slug: string;
+		cover: string;
+		last_updated: number;
+	}
+}
+
 interface GuyaSeries {
 	title: string;
 	slug: string;
@@ -15,7 +24,7 @@ interface GuyaSeries {
 	cover: string;
 	preferred_sort: string[];
 	chapters: {
-		[key: string]: {
+		[chapterNumber: string]: {
 			volume: string;
 			title: string;
 			folder: string;
@@ -44,7 +53,7 @@ export class guyaClass extends Scraper {
 
 		// Fetch DOM for relevant page
 		const pageReq = await fetch(pageUrl);
-		const pageJson = await pageReq.json();
+		const pageJson: GuyaSeriesList = await pageReq.json();
 
 		let ids = []
 
