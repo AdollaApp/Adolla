@@ -577,7 +577,10 @@ router.post(
 		const data = await updateManga(provider, req.params.slug);
 		if (data.success) {
 			const storeNsfw = db.get("settings.store-nsfw") === "yes";
-			if ((storeNsfw && data.constant.nsfw) || !data.constant.nsfw) {
+			if (
+				((storeNsfw && data.constant.nsfw) || !data.constant.nsfw) &&
+				!process.env.IGNOREREADING
+			) {
 				// Update db
 				db.set(`hide_read.${getProviderId(provider)}.${slug}`, false);
 				db.set(

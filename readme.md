@@ -47,6 +47,8 @@ There are various environment variables you can use to customise Adolla.
 
 `MAXREADINGTOSHOWPOPULAR`: the amount of items in "continue reading" required to stop showing "popular" on the home page (for faster loading)
 
+`IGNOREREADING`: stop storing the progress. Old progress will be kept and shown, but nothing new will be added. Useful for shared servers.
+
 `TELEGRAMTOKEN`: Telegram bot token to send from
 
 `TELEGRAMUSER`: Telegram user ID to send new chapters & updates to. Not sure what your ID? Plug in your bot token, start the app, and send the bot a message. Adolla will log your user ID.
