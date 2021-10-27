@@ -63,11 +63,9 @@ function updatePages() {
 	let pageCountDom =
 		Number(document.body.getAttribute("data-page-count")) || toPage + 1;
 	document.querySelectorAll(".current-page").forEach((span) => {
-		span.innerText = `${
-			loaded ? currentPage : toPage !== "false" ? toPage : 0
-		} of ${
-			pageCount ? pageCount : pageCountDom !== "false" ? pageCountDom : 0
-		}`;
+		span.innerText = `${loaded ? currentPage : toPage !== "false" ? toPage : 0
+			} of ${pageCount ? pageCount : pageCountDom !== "false" ? pageCountDom : 0
+			}`;
 	});
 }
 updatePages();
@@ -151,6 +149,23 @@ document.querySelectorAll(".floating-button").forEach((button) => {
 	});
 });
 
+function nextPage() {
+	let [currentPage, pageCount] = getPageProgress();
+	let pageEl = document.querySelectorAll(".pageImg")[currentPage];
+	if (pageEl) scrollReader(pageEl);
+}
+function previousPage() {
+	let [currentPage, pageCount] = getPageProgress();
+	let pageEl = document.querySelectorAll(".pageImg")[currentPage - 2];
+	if (pageEl) scrollReader(pageEl);
+}
+function nextChapter() {
+	document.querySelector(".next .chapterLink").click();
+}
+function previousChapter() {
+	document.querySelector(".previous .chapterLink").click();
+}
+
 // Keyboard controls
 document.addEventListener("keydown", (evt) => {
 	if (
@@ -161,23 +176,6 @@ document.addEventListener("keydown", (evt) => {
 	evt.preventDefault();
 
 	let isHorizontal = readerIsHorizontal();
-
-	function nextPage() {
-		let [currentPage, pageCount] = getPageProgress();
-		let pageEl = document.querySelectorAll(".pageImg")[currentPage];
-		if (pageEl) scrollReader(pageEl);
-	}
-	function previousPage() {
-		let [currentPage, pageCount] = getPageProgress();
-		let pageEl = document.querySelectorAll(".pageImg")[currentPage - 2];
-		if (pageEl) scrollReader(pageEl);
-	}
-	function nextChapter() {
-		document.querySelector(".next .chapterLink").click();
-	}
-	function previousChapter() {
-		document.querySelector(".previous .chapterLink").click();
-	}
 
 	switch (evt.key) {
 		case "ArrowLeft":
@@ -197,22 +195,42 @@ document.addEventListener("keydown", (evt) => {
 	}
 });
 
-// "Tap to toggle" elements
-document.querySelectorAll(".pages, .loading").forEach((el) => {
-	el.addEventListener("click", (evt) => {
-		// Get all classes for each element in the path
-		let classes = [...evt.composedPath()]
-			.reverse()
-			.map((v) => Object.values(v.classList ?? {}).join("."))
-			.map((v) => (v.length > 0 ? "." + v : v))
-			.join(" ")
-			.trim();
+function toggleSidebar(evt) {
+	// Get all classes for each element in the path
+	let classes = [...evt.composedPath()]
+		.reverse()
+		.map((v) => Object.values(v.classList ?? {}).join("."))
+		.map((v) => (v.length > 0 ? "." + v : v))
+		.join(" ")
+		.trim();
 
-		// If no button was pressed, toggle each relevant class
-		if (!classes.includes(".secondary-button"))
-			document
-				.querySelectorAll(".toggle-on-tap, .toggle-class-on-tap")
-				.forEach((toggle) => toggle.classList.toggle("tapped"));
+	// If no button was pressed, toggle each relevant class
+	if (!classes.includes(".secondary-button"))
+		document
+			.querySelectorAll(".toggle-on-tap, .toggle-class-on-tap")
+			.forEach((toggle) => toggle.classList.toggle("tapped"));
+}
+
+document.querySelectorAll(".content-wrapper").forEach((el) => {
+	el.addEventListener("click", (evt) => {
+		const target = evt.currentTarget;
+		const { x: containerX, width } = target.getBoundingClientRect();
+		const { clientX } = evt;
+		const relativeX = clientX - containerX;
+
+		// Evaluate which section was clicked
+		const [left, middle, right] = [
+			0,
+			width / 3,
+			width / 3 * 2,
+		].map((area) => relativeX >= area && relativeX < area + width / 3);
+
+		if (left)
+			previousPage();
+		else if (middle)
+			toggleSidebar(evt);
+		else if (right)
+			nextPage();
 	});
 });
 
@@ -231,8 +249,7 @@ document.querySelectorAll(".pageImg").forEach((img) => {
 		errorDebounce = setTimeout(() => {
 			// alert(`The images for ${failedImages.sort((a,b) => a.split(" ").pop() - b.split(" ").pop()).join(", ")} ${failedImages.length === 1 ? "has" : "have"} failed to load.`);
 			alert(
-				`The images for ${failedImages.length} ${
-					failedImages.length === 1 ? "page has" : "pages have"
+				`The images for ${failedImages.length} ${failedImages.length === 1 ? "page has" : "pages have"
 				} failed to load.`
 			);
 			failedImages = [];
@@ -342,13 +359,12 @@ function doImages(bypassCache = false) {
 		img.setAttribute("data-i", clone.length - i);
 
 		// Set source
-		img.src = `/proxy-image?url=${encodeURIComponent(url)}&referer=${
-			location.href.includes("mangasee")
-				? "mangasee"
-				: location.href.includes("manganelo")
+		img.src = `/proxy-image?url=${encodeURIComponent(url)}&referer=${location.href.includes("mangasee")
+			? "mangasee"
+			: location.href.includes("manganelo")
 				? "manganelo"
 				: "null"
-		}${bypassCache ? `&c=${+Date.now()}` : ''}`;
+			}${bypassCache ? `&c=${+Date.now()}` : ''}`;
 
 		// Add to DOM
 		wrapper.insertBefore(img, wrapper.querySelector("*"));
