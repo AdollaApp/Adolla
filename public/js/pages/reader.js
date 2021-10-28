@@ -151,6 +151,23 @@ document.querySelectorAll(".floating-button").forEach((button) => {
 	});
 });
 
+function nextPage() {
+	let [currentPage, pageCount] = getPageProgress();
+	let pageEl = document.querySelectorAll(".pageImg")[currentPage];
+	if (pageEl) scrollReader(pageEl);
+}
+function previousPage() {
+	let [currentPage, pageCount] = getPageProgress();
+	let pageEl = document.querySelectorAll(".pageImg")[currentPage - 2];
+	if (pageEl) scrollReader(pageEl);
+}
+function nextChapter() {
+	document.querySelector(".next .chapterLink").click();
+}
+function previousChapter() {
+	document.querySelector(".previous .chapterLink").click();
+}
+
 // Keyboard controls
 document.addEventListener("keydown", (evt) => {
 	if (
@@ -161,23 +178,6 @@ document.addEventListener("keydown", (evt) => {
 	evt.preventDefault();
 
 	let isHorizontal = readerIsHorizontal();
-
-	function nextPage() {
-		let [currentPage, pageCount] = getPageProgress();
-		let pageEl = document.querySelectorAll(".pageImg")[currentPage];
-		if (pageEl) scrollReader(pageEl);
-	}
-	function previousPage() {
-		let [currentPage, pageCount] = getPageProgress();
-		let pageEl = document.querySelectorAll(".pageImg")[currentPage - 2];
-		if (pageEl) scrollReader(pageEl);
-	}
-	function nextChapter() {
-		document.querySelector(".next .chapterLink").click();
-	}
-	function previousChapter() {
-		document.querySelector(".previous .chapterLink").click();
-	}
 
 	switch (evt.key) {
 		case "ArrowLeft":
@@ -197,8 +197,13 @@ document.addEventListener("keydown", (evt) => {
 	}
 });
 
-// "Tap to toggle" elements
-document.querySelectorAll(".pages, .loading").forEach((el) => {
+function toggleTappable(evt) {
+	document
+		.querySelectorAll(".toggle-on-tap, .toggle-class-on-tap")
+		.forEach((toggle) => toggle.classList.toggle("tapped"));
+}
+
+document.querySelectorAll(".manga-reader").forEach((el) => {
 	el.addEventListener("click", (evt) => {
 		// Get all classes for each element in the path
 		let classes = [...evt.composedPath()]
@@ -208,11 +213,30 @@ document.querySelectorAll(".pages, .loading").forEach((el) => {
 			.join(" ")
 			.trim();
 
-		// If no button was pressed, toggle each relevant class
-		if (!classes.includes(".secondary-button"))
-			document
-				.querySelectorAll(".toggle-on-tap, .toggle-class-on-tap")
-				.forEach((toggle) => toggle.classList.toggle("tapped"));
+		// If a button was pressed or the layout is open, do nothing
+		if (
+			classes.includes(".secondary-button") ||
+			classes.includes("quick-select-wrapper")
+		)
+			return;
+
+		const target = evt.currentTarget;
+		const { x: containerX, width } = target.getBoundingClientRect();
+		const { clientX } = evt;
+		const relativeX = clientX - containerX;
+
+		// Evaluate which section was clicked
+		const [left, middle, right] = [0, width / 3, (width / 3) * 2].map(
+			(area) => relativeX >= area && relativeX < area + width / 3
+		);
+
+		if (getSettings()["tap-navigation"] !== "yes") {
+			toggleTappable(evt);
+		} else {
+			if (left) previousPage();
+			else if (middle) toggleTappable(evt);
+			else if (right) nextPage();
+		}
 	});
 });
 
@@ -300,7 +324,9 @@ async function initImages(forced = false) {
 		loaded = true;
 		document.querySelector(".manga-reader").classList.add("loaded");
 		setLoadingText("Error");
-		document.querySelectorAll(".reload-chapters-button").forEach((el) => { el.classList.remove("hidden"); })
+		document.querySelectorAll(".reload-chapters-button").forEach((el) => {
+			el.classList.remove("hidden");
+		});
 	}
 
 	// Pre-load other image urls
@@ -348,7 +374,7 @@ function doImages(bypassCache = false) {
 				: location.href.includes("manganelo")
 				? "manganelo"
 				: "null"
-		}${bypassCache ? `&c=${+Date.now()}` : ''}`;
+		}${bypassCache ? `&c=${+Date.now()}` : ""}`;
 
 		// Add to DOM
 		wrapper.insertBefore(img, wrapper.querySelector("*"));

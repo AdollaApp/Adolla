@@ -10,6 +10,7 @@ const defaultSettings = {
 	"enable-keyboard-controls": "no",
 	"double-pages": "no",
 	"image-scaling": "width",
+	"tap-navigation": "yes",
 };
 
 // Get current settings
