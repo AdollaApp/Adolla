@@ -63,9 +63,11 @@ function updatePages() {
 	let pageCountDom =
 		Number(document.body.getAttribute("data-page-count")) || toPage + 1;
 	document.querySelectorAll(".current-page").forEach((span) => {
-		span.innerText = `${loaded ? currentPage : toPage !== "false" ? toPage : 0
-			} of ${pageCount ? pageCount : pageCountDom !== "false" ? pageCountDom : 0
-			}`;
+		span.innerText = `${
+			loaded ? currentPage : toPage !== "false" ? toPage : 0
+		} of ${
+			pageCount ? pageCount : pageCountDom !== "false" ? pageCountDom : 0
+		}`;
 	});
 }
 updatePages();
@@ -211,7 +213,7 @@ function toggleSidebar(evt) {
 			.forEach((toggle) => toggle.classList.toggle("tapped"));
 }
 
-document.querySelectorAll(".content-wrapper").forEach((el) => {
+document.querySelectorAll(".pages").forEach((el) => {
 	el.addEventListener("click", (evt) => {
 		const target = evt.currentTarget;
 		const { x: containerX, width } = target.getBoundingClientRect();
@@ -219,18 +221,13 @@ document.querySelectorAll(".content-wrapper").forEach((el) => {
 		const relativeX = clientX - containerX;
 
 		// Evaluate which section was clicked
-		const [left, middle, right] = [
-			0,
-			width / 3,
-			width / 3 * 2,
-		].map((area) => relativeX >= area && relativeX < area + width / 3);
+		const [left, middle, right] = [0, width / 3, (width / 3) * 2].map(
+			(area) => relativeX >= area && relativeX < area + width / 3
+		);
 
-		if (left)
-			previousPage();
-		else if (middle)
-			toggleSidebar(evt);
-		else if (right)
-			nextPage();
+		if (left) previousPage();
+		else if (middle) toggleSidebar(evt);
+		else if (right) nextPage();
 	});
 });
 
@@ -249,7 +246,8 @@ document.querySelectorAll(".pageImg").forEach((img) => {
 		errorDebounce = setTimeout(() => {
 			// alert(`The images for ${failedImages.sort((a,b) => a.split(" ").pop() - b.split(" ").pop()).join(", ")} ${failedImages.length === 1 ? "has" : "have"} failed to load.`);
 			alert(
-				`The images for ${failedImages.length} ${failedImages.length === 1 ? "page has" : "pages have"
+				`The images for ${failedImages.length} ${
+					failedImages.length === 1 ? "page has" : "pages have"
 				} failed to load.`
 			);
 			failedImages = [];
@@ -317,7 +315,9 @@ async function initImages(forced = false) {
 		loaded = true;
 		document.querySelector(".manga-reader").classList.add("loaded");
 		setLoadingText("Error");
-		document.querySelectorAll(".reload-chapters-button").forEach((el) => { el.classList.remove("hidden"); })
+		document.querySelectorAll(".reload-chapters-button").forEach((el) => {
+			el.classList.remove("hidden");
+		});
 	}
 
 	// Pre-load other image urls
@@ -359,12 +359,13 @@ function doImages(bypassCache = false) {
 		img.setAttribute("data-i", clone.length - i);
 
 		// Set source
-		img.src = `/proxy-image?url=${encodeURIComponent(url)}&referer=${location.href.includes("mangasee")
-			? "mangasee"
-			: location.href.includes("manganelo")
+		img.src = `/proxy-image?url=${encodeURIComponent(url)}&referer=${
+			location.href.includes("mangasee")
+				? "mangasee"
+				: location.href.includes("manganelo")
 				? "manganelo"
 				: "null"
-			}${bypassCache ? `&c=${+Date.now()}` : ''}`;
+		}${bypassCache ? `&c=${+Date.now()}` : ""}`;
 
 		// Add to DOM
 		wrapper.insertBefore(img, wrapper.querySelector("*"));
