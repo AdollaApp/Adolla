@@ -155,11 +155,17 @@ function nextPage() {
 	let [currentPage, pageCount] = getPageProgress();
 	let pageEl = document.querySelectorAll(".pageImg")[currentPage];
 	if (pageEl) scrollReader(pageEl);
+
+	// Go to next chapter if it's on the last page
+	if (currentPage === pageCount) nextChapter();
 }
 function previousPage() {
 	let [currentPage, pageCount] = getPageProgress();
 	let pageEl = document.querySelectorAll(".pageImg")[currentPage - 2];
 	if (pageEl) scrollReader(pageEl);
+
+	// Go to previous chapter if it's on page 0
+	if (currentPage === 1) previousChapter();
 }
 function nextChapter() {
 	document.querySelector(".next .chapterLink").click();
