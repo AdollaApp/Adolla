@@ -197,7 +197,7 @@ document.addEventListener("keydown", (evt) => {
 	}
 });
 
-function toggleSidebar(evt) {
+function toggleTappable(evt) {
 	// Get all classes for each element in the path
 	let classes = [...evt.composedPath()]
 		.reverse()
@@ -226,7 +226,7 @@ document.querySelectorAll(".pages").forEach((el) => {
 		);
 
 		if (left) previousPage();
-		else if (middle) toggleSidebar(evt);
+		else if (middle) toggleTappable(evt);
 		else if (right) nextPage();
 	});
 });
