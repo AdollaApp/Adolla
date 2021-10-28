@@ -198,23 +198,28 @@ document.addEventListener("keydown", (evt) => {
 });
 
 function toggleTappable(evt) {
-	// Get all classes for each element in the path
-	let classes = [...evt.composedPath()]
-		.reverse()
-		.map((v) => Object.values(v.classList ?? {}).join("."))
-		.map((v) => (v.length > 0 ? "." + v : v))
-		.join(" ")
-		.trim();
-
-	// If no button was pressed, toggle each relevant class
-	if (!classes.includes(".secondary-button"))
-		document
-			.querySelectorAll(".toggle-on-tap, .toggle-class-on-tap")
-			.forEach((toggle) => toggle.classList.toggle("tapped"));
+	document
+		.querySelectorAll(".toggle-on-tap, .toggle-class-on-tap")
+		.forEach((toggle) => toggle.classList.toggle("tapped"));
 }
 
-document.querySelectorAll(".pages").forEach((el) => {
+document.querySelectorAll(".manga-reader").forEach((el) => {
 	el.addEventListener("click", (evt) => {
+		// Get all classes for each element in the path
+		let classes = [...evt.composedPath()]
+			.reverse()
+			.map((v) => Object.values(v.classList ?? {}).join("."))
+			.map((v) => (v.length > 0 ? "." + v : v))
+			.join(" ")
+			.trim();
+
+		// If a button was pressed or the layout is open, do nothing
+		if (
+			classes.includes(".secondary-button") ||
+			classes.includes("quick-select-wrapper")
+		)
+			return;
+
 		const target = evt.currentTarget;
 		const { x: containerX, width } = target.getBoundingClientRect();
 		const { clientX } = evt;
@@ -225,9 +230,13 @@ document.querySelectorAll(".pages").forEach((el) => {
 			(area) => relativeX >= area && relativeX < area + width / 3
 		);
 
-		if (left) previousPage();
-		else if (middle) toggleTappable(evt);
-		else if (right) nextPage();
+		if (getSettings()["tap-navigation"] !== "yes") {
+			toggleTappable(evt);
+		} else {
+			if (left) previousPage();
+			else if (middle) toggleTappable(evt);
+			else if (right) nextPage();
+		}
 	});
 });
 
