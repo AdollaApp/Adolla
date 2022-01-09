@@ -285,7 +285,7 @@ async function initImages(forced = false) {
 		// Add elements to DOM
 		doImages(forced);
 
-		// Wait for all images to load\
+		// Wait for all images to load
 		let wrapper = document.querySelector(".pages");
 		let loadedCount = 0;
 		let toLoadImages = [...wrapper.querySelectorAll(".pageImg")];
@@ -301,6 +301,7 @@ async function initImages(forced = false) {
 								.toString()
 								.padStart(2, "0") + "%";
 						setLoadingText(percentageText);
+						updatePages();
 						resolve();
 					});
 					img.addEventListener("error", reject);
