@@ -207,8 +207,8 @@ export class mangadexClass extends Scraper {
 						`https://api.mangadex.org/at-home/server/${chapter.id}`
 					);
 					const { baseUrl } = atHome;
-					chapterImages = chapter.attributes.data.map(
-						(id) => `${baseUrl}/data/${chapter.attributes.hash}/${id}`
+					chapterImages = atHome.chapter.data.map(
+						(fileName) => `${baseUrl}/data/${atHome.chapter.hash}/${fileName}`
 					);
 				} else {
 					console.error(
