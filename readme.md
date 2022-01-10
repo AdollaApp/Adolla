@@ -26,6 +26,7 @@ Easy to use web app to read manga and comics.
   - Mangahere
   - ReadComicOnline
   - ComicExtra
+  - Guya.moe
 
 ## Setup
 
