@@ -55,6 +55,8 @@ There are various environment variables you can use to customise Adolla.
 
 `DISCORDWEBHOOK`: Discord webhook URL to send new chapters & updates to.
 
+`DISABLE_ANALYTICS`: disable sending a message to me when you start Adolla (useful for me to know how many users I have).
+
 ## FAQ
 
 ### **How to run Adolla?**
