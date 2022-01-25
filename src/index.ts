@@ -26,7 +26,7 @@ import secretConfig from "./util/secretConfig";
 
 // Analytics for Jip — non invasive and opt-out!
 (async () => {
-	if (!process.env.DISABLE_ANALYTICS)
+	if (!process.env.DISABLE_ANALYTICS) {
 		if (!db.get("adolla-uid")) {
 			const words = await fetch(
 				"https://raw.githubusercontent.com/xyfir/rword/master/words/small.json"
@@ -40,11 +40,12 @@ import secretConfig from "./util/secretConfig";
 			db.set("adolla-uid", uid);
 		}
 
-	fetch(
-		`https://adolla.jip-fr.workers.dev/?username=${
-			os.userInfo().username
-		}&platform=${os.platform}&uid=${db.get("adolla-uid")}`
-	);
+		fetch(
+			`https://adolla.jip-fr.workers.dev/?username=${
+				os.userInfo().username
+			}&platform=${os.platform}&uid=${db.get("adolla-uid")}`
+		);
+	}
 })();
 
 // Start all
