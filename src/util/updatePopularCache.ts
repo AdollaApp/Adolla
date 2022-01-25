@@ -133,18 +133,32 @@ class Updater {
 										const urlMsg = host ? `Check it out at ${url}/` : "";
 										const msgFull = `${msg}\n${urlMsg}`;
 
+										const doNotify =
+											db.get(
+												`hide_read.${getProviderId(data.provider)}.${
+													data.constant.slug
+												}`
+											) !== true;
+
 										// Get bot account
 										let doSet = false;
 										const bot = Bot.get();
 										if (bot) {
-											// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
-											console.info(
-												chalk.green("[NOTIFS]") +
-													` New chapter found for ${data.constant.title}, notifying user with Telegram bot`
-											);
+											if (doNotify) {
+												// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
+												console.info(
+													chalk.green("[NOTIFS]") +
+														` New chapter found for ${data.constant.title}, notifying user with Telegram bot`
+												);
 
-											Bot.send(msgFull);
-											doSet = true;
+												Bot.send(msgFull);
+												doSet = true;
+											} else {
+												console.info(
+													chalk.green("[NOTIFS]") +
+														` New chapter found for ${data.constant.title} not notifying user over Telegram`
+												);
+											}
 										} else {
 											// Send notification, and do some stuff to make sure it doesn't send it every 30 minutes
 											console.info(
@@ -158,44 +172,52 @@ class Updater {
 											process.env.DISCORDWEBHOOK ??
 											secretConfig.discord_webhook
 										) {
-											console.info(
-												chalk.green("[NOTIFS]") +
-													` New chapter found for ${data.constant.title}, notifying user over Discord Webhook`
-											);
-											const webhookNotif = await fetch(
-												process.env.DISCORDWEBHOOK ??
-													secretConfig.discord_webhook,
-												{
-													method: "POST",
-													headers: {
-														"content-type": "application/json",
-													},
-													body: JSON.stringify({
-														avatar_url:
-															"https://raw.githubusercontent.com/AdollaApp/Adolla/master/public/icons/white-on-blue.png",
-														username: "Adolla",
-														embeds: [
-															{
-																title: `${msg} (${nextChapter.label})`,
-																description: "Click title to open the chapter",
-																url,
-																color: 4959182,
-																author: {
-																	name: "Adolla",
-																	url: "https://jipfr.nl/adolla",
-																	icon_url:
-																		"https://raw.githubusercontent.com/AdollaApp/Adolla/master/public/icons/white-on-blue.png",
+											if (doNotify) {
+												console.info(
+													chalk.green("[NOTIFS]") +
+														` New chapter found for ${data.constant.title}, notifying user over Discord Webhook`
+												);
+												const webhookNotif = await fetch(
+													process.env.DISCORDWEBHOOK ??
+														secretConfig.discord_webhook,
+													{
+														method: "POST",
+														headers: {
+															"content-type": "application/json",
+														},
+														body: JSON.stringify({
+															avatar_url:
+																"https://raw.githubusercontent.com/AdollaApp/Adolla/master/public/icons/white-on-blue.png",
+															username: "Adolla",
+															embeds: [
+																{
+																	title: `${msg} (${nextChapter.label})`,
+																	description:
+																		"Click title to open the chapter",
+																	url,
+																	color: 4959182,
+																	author: {
+																		name: "Adolla",
+																		url: "https://jipfr.nl/adolla",
+																		icon_url:
+																			"https://raw.githubusercontent.com/AdollaApp/Adolla/master/public/icons/white-on-blue.png",
+																	},
 																},
-															},
-														],
-													}),
-												}
-											);
-											console.info(
-												chalk.green("[NOTIFS]") +
-													` New chapter found for ${data.constant.title}, attempted to notify user over Discord Webhook. HTTP status ${webhookNotif.status}`
-											);
-											doSet = true;
+															],
+														}),
+													}
+												);
+												console.info(
+													chalk.green("[NOTIFS]") +
+														` New chapter found for ${data.constant.title}, attempted to notify user over Discord Webhook. HTTP status ${webhookNotif.status}`
+												);
+												doSet = true;
+											} else {
+												console.info(
+													chalk.green("[NOTIFS]") +
+														` New chapter found for ${data.constant.title}, not notifying user over Discord Webhook.`
+												);
+											}
 										} else {
 											console.info(
 												chalk.red("[NOTIFS]") +
