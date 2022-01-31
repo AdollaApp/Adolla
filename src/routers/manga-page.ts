@@ -242,16 +242,25 @@ const imageRouter = async (req, res, next) => {
 		return;
 	}
 
-	const data = await updateManga(provider, slug, true, chapterId);
-	if (data && data.success) {
-		// Return images
-		res.json(data.data.chapterImages);
-	} else if (data.success === false) {
+	try {
+		const data = await updateManga(provider, slug, true, chapterId);
+		if (data && data.success) {
+			// Return images
+			res.json(data.data.chapterImages);
+		} else if (data.success === false) {
+			// Something went wrong for some reason
+			res.status(404);
+			res.json({
+				status: 404,
+				err: data.err,
+			});
+		}
+	} catch (err) {
 		// Something went wrong for some reason
 		res.status(404);
 		res.json({
 			status: 404,
-			err: data.err,
+			err,
 		});
 	}
 };

@@ -412,7 +412,12 @@ async function getImageUrls(loc = location.href, forceFetch = false) {
 	if (cache[url] && !forceFetch) return cache[url].images;
 
 	// Get data
-	let urls = await (await fetch(url)).json();
+	let urls;
+	try {
+		urls = await (await fetch(url)).json();
+	} catch (err) {
+		location.href = "/error";
+	}
 
 	// Store in cache
 	cache = JSON.parse(localStorage.getItem(key));
