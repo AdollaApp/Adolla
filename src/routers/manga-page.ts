@@ -257,6 +257,7 @@ const imageRouter = async (req, res, next) => {
 		}
 	} catch (err) {
 		// Something went wrong for some reason
+		console.error("Throwing get-images error for", provider, slug);
 		res.status(404);
 		res.json({
 			status: 404,
@@ -294,9 +295,17 @@ router.get("/proxy-image", (req, res) => {
 
 	fetch(url, {
 		headers,
-	}).then(async (response) => {
-		response.body.pipe(res);
-	});
+	})
+		.then(async (response) => {
+			response.body.pipe(res);
+		})
+		.catch((err) => {
+			res.status(500);
+			res.json({
+				status: 500,
+				err,
+			});
+		});
 });
 
 router.get("/mangadex-cover/:slug/:id", async (req, res) => {
