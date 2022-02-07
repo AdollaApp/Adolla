@@ -8,11 +8,6 @@ console.info(
 	chalk.green("[SERVER]") + ` Starting up at ${new Date().toLocaleString("it")}`
 );
 
-// Catch all errors
-process.on("uncaughtException", (err) => {
-	console.error(chalk.red("[SERVER]") + " An error occured:", err);
-});
-
 // Configure environment
 import { config } from "dotenv";
 config();
