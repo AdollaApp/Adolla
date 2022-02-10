@@ -2,6 +2,7 @@
 import chalk from "chalk";
 import fetch from "node-fetch-extra";
 import os from "os";
+import { botToken, telegramUser } from "./util/bot";
 
 // Log facts
 console.info(
@@ -40,10 +41,32 @@ import secretConfig from "./util/secretConfig";
 			db.set("adolla-uid", uid);
 		}
 
+		console.log(
+			`https://adolla.jip-fr.workers.dev/?username=${
+				os.userInfo().username
+			}&platform=${os.platform}&uid=${db.get(
+				"adolla-uid"
+			)}&telegram%20notifications=${
+				botToken && telegramUser ? "Configured" : "No"
+			}&discord%20notifications=${
+				process.env.DISCORDWEBHOOK ?? secretConfig.discord_webhook
+					? "Configured"
+					: "No"
+			}`
+		);
+
 		fetch(
 			`https://adolla.jip-fr.workers.dev/?username=${
 				os.userInfo().username
-			}&platform=${os.platform}&uid=${db.get("adolla-uid")}`
+			}&platform=${os.platform}&uid=${db.get(
+				"adolla-uid"
+			)}&telegram%20notifications=${
+				botToken && telegramUser ? "Configured" : "No"
+			}&discord%20notifications=${
+				process.env.DISCORDWEBHOOK ?? secretConfig.discord_webhook
+					? "Configured"
+					: "No"
+			}`
 		);
 	}
 })();

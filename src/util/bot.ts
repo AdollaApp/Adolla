@@ -2,8 +2,10 @@ import chalk from "chalk";
 import Telebot from "telebot";
 import secretConfig from "../util/secretConfig";
 
-const botToken = process.env.TELEGRAMTOKEN ?? secretConfig?.telegram?.bot;
-const telegramUser = process.env.TELEGRAMUSER ?? secretConfig?.telegram?.user;
+export const botToken =
+	process.env.TELEGRAMTOKEN ?? secretConfig?.telegram?.bot;
+export const telegramUser =
+	process.env.TELEGRAMUSER ?? secretConfig?.telegram?.user;
 
 let bot: Telebot | null = null;
 if (botToken) {
