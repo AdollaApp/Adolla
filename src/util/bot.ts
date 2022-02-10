@@ -5,7 +5,7 @@ import secretConfig from "../util/secretConfig";
 const botToken = process.env.TELEGRAMTOKEN ?? secretConfig?.telegram?.bot;
 const telegramUser = process.env.TELEGRAMUSER ?? secretConfig?.telegram?.user;
 
-let bot = null;
+let bot: Telebot | null = null;
 if (botToken) {
 	bot = new Telebot(botToken);
 	bot.start();
@@ -28,9 +28,7 @@ class Bot {
 	send(message: string) {
 		const bot = this.get();
 		if (bot && telegramUser) {
-			bot.sendMessage(telegramUser, message, {
-				parseMode: "markdown",
-			});
+			bot.sendMessage(telegramUser, message).catch((err) => console.log(err));
 		} else {
 			console.error(
 				telegramUser

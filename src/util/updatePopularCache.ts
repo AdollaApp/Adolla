@@ -124,14 +124,12 @@ class Updater {
 									} else {
 										// Generate message
 										const host = db.get("other.host");
-										const msg = `New chapter for **${data.constant.title}**!`;
 										const url = `${host.replace("localhost", "127.0.0.1")}${
 											data.provider
 										}/${data.constant.slug}/${nextChapter.season}-${
 											nextChapter.chapter
 										}`;
 										const urlMsg = host ? `Check it out at ${url}/` : "";
-										const msgFull = `${msg}\n${urlMsg}`;
 
 										const doNotify =
 											db.get(
@@ -151,7 +149,9 @@ class Updater {
 														` New chapter found for ${data.constant.title}, notifying user with Telegram bot`
 												);
 
-												Bot.send(msgFull);
+												Bot.send(
+													`New chapter for ${data.constant.title}!\n${urlMsg}`
+												);
 												doSet = true;
 											} else {
 												console.info(
@@ -191,7 +191,7 @@ class Updater {
 															username: "Adolla",
 															embeds: [
 																{
-																	title: `${msg} (${nextChapter.label})`,
+																	title: `New chapter for **${data.constant.title}**! (${nextChapter.label})`,
 																	description:
 																		"Click title to open the chapter",
 																	url,

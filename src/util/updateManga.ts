@@ -212,13 +212,7 @@ async function addInfo(data: ScraperResponse) {
 			return data;
 		} catch (err) {
 			data.constant.banner = data.constant.posterUrl;
-			console.error(
-				chalk.red("[ANILIST]") +
-					` Unable to fetch banner for ${data.constant.title}:`,
-				err
-			);
 			return data;
-			// /shrug
 		}
 	}
 }
