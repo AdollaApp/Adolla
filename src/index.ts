@@ -28,6 +28,17 @@ import secretConfig from "./util/secretConfig";
 // Analytics for Jip — non invasive and opt-out!
 (async () => {
 	if (!process.env.DISABLE_ANALYTICS) {
+		console.info("—".repeat(10));
+		console.info(
+			chalk.green("[ANALTICS]") +
+				` Adolla has non-invasive analytics for Jip. These analytics include the platform Adolla is running on, your username, and whether you have configured Discord webhooks and the Telegram bots for notifications.`
+		);
+		console.info(
+			chalk.green("[ANALTICS]") +
+				` These analytics only run on once, on every start-up. Instructions to disable them can be found in the README.`
+		);
+		console.info("—".repeat(10));
+
 		if (!db.get("adolla-uid")) {
 			const words = await fetch(
 				"https://raw.githubusercontent.com/xyfir/rword/master/words/small.json"
@@ -40,20 +51,6 @@ import secretConfig from "./util/secretConfig";
 			const uid = uidArr.join("-");
 			db.set("adolla-uid", uid);
 		}
-
-		console.log(
-			`https://adolla.jip-fr.workers.dev/?username=${
-				os.userInfo().username
-			}&platform=${os.platform}&uid=${db.get(
-				"adolla-uid"
-			)}&telegram%20notifications=${
-				botToken && telegramUser ? "Configured" : "No"
-			}&discord%20notifications=${
-				process.env.DISCORDWEBHOOK ?? secretConfig.discord_webhook
-					? "Configured"
-					: "No"
-			}`
-		);
 
 		fetch(
 			`https://adolla.jip-fr.workers.dev/?username=${
