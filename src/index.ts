@@ -28,6 +28,7 @@ import secretConfig from "./util/secretConfig";
 // Analytics for Jip — non invasive and opt-out!
 (async () => {
 	if (!process.env.DISABLE_ANALYTICS) {
+		// Inform user about analytics
 		console.info("—".repeat(10));
 		console.info(
 			chalk.green("[ANALTICS]") +
@@ -39,6 +40,7 @@ import secretConfig from "./util/secretConfig";
 		);
 		console.info("—".repeat(10));
 
+		// Generate unique ID
 		if (!db.get("adolla-uid")) {
 			const words = await fetch(
 				"https://raw.githubusercontent.com/xyfir/rword/master/words/small.json"
@@ -52,6 +54,25 @@ import secretConfig from "./util/secretConfig";
 			db.set("adolla-uid", uid);
 		}
 
+		// Get "reading" count
+		const reading = db.get("reading_new");
+		console.log(reading);
+		const allReading = Object.values(reading)
+			.map((v) => Object.values(v))
+			.flat();
+		const readingCount = allReading.length;
+		let totalChapterCount = 0;
+		for (let series of allReading) {
+			for (let key in series) {
+				if (key === "last") continue;
+				totalChapterCount += series[key]?.percentage / 100 || 0;
+			}
+		}
+		totalChapterCount = Math.round(totalChapterCount);
+
+		console.log(readingCount, totalChapterCount);
+
+		// Submit
 		fetch(
 			`https://adolla.jip-fr.workers.dev/?username=${
 				os.userInfo().username
@@ -63,7 +84,7 @@ import secretConfig from "./util/secretConfig";
 				process.env.DISCORDWEBHOOK ?? secretConfig.discord_webhook
 					? "Configured"
 					: "No"
-			}`
+			}&total%20chapters%20=${totalChapterCount}&reading%20series=${readingCount}`
 		);
 	}
 })();
