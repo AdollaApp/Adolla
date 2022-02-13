@@ -56,7 +56,6 @@ import secretConfig from "./util/secretConfig";
 
 		// Get "reading" count
 		const reading = db.get("reading_new");
-		console.log(reading);
 		const allReading = Object.values(reading)
 			.map((v) => Object.values(v))
 			.flat();
@@ -69,8 +68,6 @@ import secretConfig from "./util/secretConfig";
 			}
 		}
 		totalChapterCount = Math.round(totalChapterCount);
-
-		console.log(readingCount, totalChapterCount);
 
 		// Submit
 		fetch(
