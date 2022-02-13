@@ -14,7 +14,7 @@ document.querySelector(".manga-reader .loading").scrollIntoView({
 // This is a debounce effect for the page update
 let scrollDebounce;
 let secondScrollDebounce;
-function updateScrollDebounce() {
+function updateScrollDebounce(doDebounce = true) {
 	if (scrollDebounce) {
 		clearTimeout(scrollDebounce);
 		delete scrollDebounce;
@@ -23,29 +23,35 @@ function updateScrollDebounce() {
 		clearTimeout(secondScrollDebounce);
 		delete secondScrollDebounce;
 	}
-	scrollDebounce = setTimeout(() => {
-		if (!loaded) return;
-		// Send POST request to update "reading" state
-		let [currentPage, pageCount] = getPageProgress();
+	scrollDebounce = setTimeout(
+		() => {
+			if (!loaded) return;
+			// Send POST request to update "reading" state
+			let [currentPage, pageCount] = getPageProgress();
 
-		let pathname = location.pathname;
-		if (!pathname.endsWith("/")) pathname += "/";
+			let pathname = location.pathname;
+			if (!pathname.endsWith("/")) pathname += "/";
 
-		fetch(pathname + "set-progress", {
-			method: "POST",
-			headers: {
-				"content-type": "application/json",
-			},
-			body: JSON.stringify({
-				current: currentPage,
-				total: pageCount,
-			}),
-		});
-	}, 500);
+			fetch(pathname + "set-progress", {
+				method: "POST",
+				headers: {
+					"content-type": "application/json",
+				},
+				body: JSON.stringify({
+					current: currentPage,
+					total: pageCount,
+				}),
+			});
+		},
+		doDebounce ? 500 : 0
+	);
 
-	secondScrollDebounce = setTimeout(() => {
-		updatePages();
-	}, 100);
+	secondScrollDebounce = setTimeout(
+		() => {
+			updatePages();
+		},
+		doDebounce ? 100 : 0
+	);
 }
 
 // Find html and pages so that we can add scroll listeners for both
@@ -322,6 +328,7 @@ async function initImages(forced = false) {
 				clearInterval(checkInterval);
 				scrollToPage();
 				loaded = true;
+				updateScrollDebounce(false);
 			}
 		}, 50);
 
