@@ -208,6 +208,15 @@ router.post("/settings/set-app-settings", async (req, res) => {
 	});
 });
 
+router.post("/settings/set-app-theme", async (req, res) => {
+	// Set all settings
+	db.set(`settings.theme`, req.body ?? {});
+
+	res.json({
+		status: 200,
+	});
+});
+
 // Intercept manifest.json
 router.get("/manifest.json", (req, res) => {
 	const icons = fs

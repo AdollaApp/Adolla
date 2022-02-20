@@ -53,3 +53,70 @@ document.querySelectorAll(".app-wide-settings .switch").forEach((switchEl) => {
 		});
 	});
 });
+
+// Add color theme options
+const colorOptions = [
+	{
+		badge: "#4babce",
+	},
+	{
+		badge: "#5855ff",
+	},
+	{
+		badge: "#07c05f",
+	},
+	{
+		badge: "#009688",
+	},
+	{
+		badge: "#d4b131",
+	},
+	{
+		badge: "#69257c",
+	},
+	{
+		badge: "#fc6c7c",
+	},
+	{
+		badge: "#ed412d",
+	},
+];
+
+for (let color of colorOptions) {
+	let colorOption = document.createElement("div");
+
+	colorOption.classList.add("color");
+
+	colorOption.style = `--bg: ${color.badge}`;
+
+	if (
+		color.badge.toLowerCase().trim() ===
+		getComputedStyle(document.body)
+			.getPropertyValue("--badge")
+			.toLowerCase()
+			.trim()
+	)
+		colorOption.classList.add("selected");
+
+	console.log(
+		color.badge.toLowerCase().trim(),
+		getComputedStyle(document.body).getPropertyValue("--badge").toLowerCase(),
+		color.badge.toLowerCase().trim() ===
+			getComputedStyle(document.body)
+				.getPropertyValue("--badge")
+				.toLowerCase()
+				.trim()
+	);
+
+	colorOption.addEventListener("click", () => {
+		fetch("/settings/set-app-theme", {
+			method: "POST",
+			headers: {
+				"content-type": "application/json",
+			},
+			body: JSON.stringify(color),
+		}).then(() => location.reload());
+	});
+
+	document.querySelector(".color-grid").appendChild(colorOption);
+}

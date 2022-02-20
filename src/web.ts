@@ -8,6 +8,7 @@ import routers from "./routers";
 import { StoredData, Chapter, Progress, List } from "./types";
 import getIconSrc from "./util/getIconSrc";
 import { getProviderId } from "./routers/manga-page";
+import db from "./db";
 
 const app = express();
 
@@ -140,6 +141,20 @@ app.engine(
 				return list.byCreator ? options.inverse() : options.fn();
 			},
 			getIconSrc,
+			/**
+			 * Get app theme options
+			 */
+			getThemeOptions() {
+				const colors = db.get("settings.theme") || {};
+
+				const colorArray = Object.entries(colors)
+					.map(([key, value]) => {
+						return `--${key}: ${value}`;
+					})
+					.join(";");
+
+				return colorArray;
+			},
 		},
 	})
 );
