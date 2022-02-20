@@ -20,6 +20,11 @@ interface SecretConfig {
 
 let secretConfig: SecretConfig | null;
 
+const homePath = path.join(os.homedir(), ".adolla");
+if (!fs.existsSync(homePath)) {
+	fs.mkdirSync(homePath);
+}
+
 const configPath = path.join(os.homedir(), ".adolla", "secret-config.json");
 const oldPath =
 	__dirname.split("/").slice(0, -1).join("/") + "/secret-config.json"; // Ew
