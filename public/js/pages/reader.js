@@ -54,6 +54,25 @@ function updateScrollDebounce(doDebounce = true) {
 	);
 }
 
+// Lazy loading shizzles
+document.addEventListener("scroll", updateLazyLoading);
+document.querySelector(".pages").addEventListener("scroll", updateLazyLoading);
+
+function updateLazyLoading() {
+	const elOffsets = getPageProgress()[2];
+	const threshold = document.body.scrollWidth + document.body.scrollHeight;
+
+	const els = elOffsets.filter(
+		(entry) => entry.offset < threshold && entry.el.getAttribute("data-src")
+	);
+
+	for (let entry of els) {
+		entry.el.src = entry.el.getAttribute("data-src");
+		entry.el.removeAttribute("data-src");
+		console.log(`Lazy loading: ${entry.el.alt}`);
+	}
+}
+
 // Find html and pages so that we can add scroll listeners for both
 document.addEventListener("scroll", updateScrollDebounce);
 document
@@ -107,7 +126,7 @@ function getPageProgress() {
 	let currentPage = closestPage
 		? Number(closestPage.getAttribute("data-i")) || 1
 		: 1;
-	return [currentPage, pageCount];
+	return [currentPage, pageCount, elementOffsets];
 }
 
 function readerIsHorizontal() {
@@ -291,23 +310,17 @@ async function initImages(forced = false) {
 		// Add elements to DOM
 		doImages(forced);
 
-		// Wait for all images to load
+		// Wait for any images to load
 		let wrapper = document.querySelector(".pages");
-		let loadedCount = 0;
 		let toLoadImages = [...wrapper.querySelectorAll(".pageImg")];
 
+		updateLazyLoading();
+
 		// Load for each one
-		await Promise.all(
+		await Promise.any(
 			toLoadImages.map((img) => {
 				return new Promise((resolve, reject) => {
 					img.addEventListener("load", () => {
-						loadedCount++;
-						let percentageText =
-							Math.round((loadedCount / toLoadImages.length) * 100)
-								.toString()
-								.padStart(2, "0") + "%";
-						setLoadingText(percentageText);
-						updatePages();
 						resolve();
 					});
 					img.addEventListener("error", reject);
@@ -317,6 +330,7 @@ async function initImages(forced = false) {
 
 		// Remove loading text
 		setLoadingText("");
+		updatePages();
 
 		// Update loading section in DOM
 		document.querySelector(".manga-reader").classList.add("loaded");
@@ -382,13 +396,16 @@ function doImages(bypassCache = false) {
 		img.setAttribute("data-i", clone.length - i);
 
 		// Set source
-		img.src = `/proxy-image?url=${encodeURIComponent(url)}&referer=${
+		const src = `/proxy-image?url=${encodeURIComponent(url)}&referer=${
 			location.href.includes("mangasee")
 				? "mangasee"
 				: location.href.includes("manganelo")
 				? "manganelo"
 				: "null"
 		}${bypassCache ? `&c=${+Date.now()}` : ""}`;
+		img.setAttribute("data-src", src);
+		img.src =
+			"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 
 		// Add to DOM
 		wrapper.insertBefore(img, wrapper.querySelector("*"));

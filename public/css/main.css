@@ -979,10 +979,6 @@ input, textarea {
 	}
 }
 
-.manga-reader:not(.loaded) .pages {
-	display: none;
-}
-
 .manga-reader.loaded .loading {
 	display: none;
 }
