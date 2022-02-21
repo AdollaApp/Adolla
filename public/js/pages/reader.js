@@ -60,7 +60,9 @@ document.querySelector(".pages").addEventListener("scroll", updateLazyLoading);
 
 function updateLazyLoading() {
 	const elOffsets = getPageProgress()[2];
-	const threshold = document.body.scrollWidth + document.body.scrollHeight;
+	const threshold = screen.width + screen.height;
+
+	console.log(elOffsets.map((v) => v.offset));
 
 	const els = elOffsets.filter(
 		(entry) => entry.offset < threshold && entry.el.getAttribute("data-src")
@@ -69,6 +71,7 @@ function updateLazyLoading() {
 	for (let entry of els) {
 		entry.el.src = entry.el.getAttribute("data-src");
 		entry.el.removeAttribute("data-src");
+		entry.el.removeAttribute("style");
 		console.log(`Lazy loading: ${entry.el.alt}`);
 	}
 }
@@ -313,6 +316,7 @@ async function initImages(forced = false) {
 		// Wait for any images to load
 		let wrapper = document.querySelector(".pages");
 		let toLoadImages = [...wrapper.querySelectorAll(".pageImg")];
+		let loadedImg;
 
 		updateLazyLoading();
 
@@ -321,12 +325,19 @@ async function initImages(forced = false) {
 			toLoadImages.map((img) => {
 				return new Promise((resolve, reject) => {
 					img.addEventListener("load", () => {
+						loadedImg = img;
 						resolve();
 					});
 					img.addEventListener("error", reject);
 				});
 			})
 		);
+
+		if (getSettings()["reader-direction"] === "long-strip") {
+			document.querySelectorAll("[data-src]").forEach((el) => {
+				el.style.minHeight = loadedImg.scrollHeight + "px";
+			});
+		}
 
 		// Remove loading text
 		setLoadingText("");
@@ -394,6 +405,7 @@ function doImages(bypassCache = false) {
 		img.classList.add("pageImg");
 		img.setAttribute("alt", `Page ${Number(clone.length - i)}`);
 		img.setAttribute("data-i", clone.length - i);
+		img.style.minHeight = "30vh";
 
 		// Set source
 		img.setAttribute("data-src", url);
