@@ -396,16 +396,23 @@ function doImages(bypassCache = false) {
 		img.setAttribute("data-i", clone.length - i);
 
 		// Set source
-		const src = `/proxy-image?url=${encodeURIComponent(url)}&referer=${
-			location.href.includes("mangasee")
-				? "mangasee"
-				: location.href.includes("manganelo")
-				? "manganelo"
-				: "null"
-		}${bypassCache ? `&c=${+Date.now()}` : ""}`;
-		img.setAttribute("data-src", src);
+		img.setAttribute("data-src", url);
 		img.src =
 			"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+
+		img.addEventListener("error", () => {
+			const proxySrc = `/proxy-image?url=${encodeURIComponent(url)}&referer=${
+				location.href.includes("mangasee")
+					? "mangasee"
+					: location.href.includes("manganelo")
+					? "manganelo"
+					: "null"
+			}${bypassCache ? `&c=${+Date.now()}` : ""}`;
+
+			if (!img.src.includes("proxy-image")) {
+				img.src = proxySrc;
+			}
+		});
 
 		// Add to DOM
 		wrapper.insertBefore(img, wrapper.querySelector("*"));
