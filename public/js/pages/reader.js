@@ -298,14 +298,14 @@ document.querySelectorAll(".pageImg").forEach((img) => {
 	});
 });
 
-async function initImages(forced = false) {
-	// Function to set innerHTML
-	function setLoadingText(text) {
-		document.querySelectorAll(".current-loading-progress").forEach((el) => {
-			el.innerText = text;
-		});
-	}
+// Function to set innerHTML
+function setLoadingText(text) {
+	document.querySelectorAll(".current-loading-progress").forEach((el) => {
+		el.innerText = text;
+	});
+}
 
+async function initImages(forced = false) {
 	try {
 		// Fetch array of URLs
 		imageUrls = await getImageUrls(location.href, forced);
@@ -423,6 +423,13 @@ function doImages(bypassCache = false) {
 
 			if (!img.src.includes("proxy-image")) {
 				img.src = proxySrc;
+			} else {
+				loaded = true;
+				document.querySelector(".manga-reader").classList.add("loaded");
+				setLoadingText("Error");
+				document.querySelectorAll(".reload-chapters-button").forEach((el) => {
+					el.classList.remove("hidden");
+				});
 			}
 		});
 
