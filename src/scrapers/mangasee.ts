@@ -69,7 +69,7 @@ export class MangaseeClass extends Scraper {
 	public async search(
 		query: string,
 		options?: Partial<SearchOptions>,
-		host: string = "mangasee123"
+		host: string = "manga4life"
 	): Promise<ScraperResponse[]> {
 		// This is a better way of destructuring with default values
 		// than doing it at the top. This took... many hours. Thanks Pandawan!
@@ -133,8 +133,8 @@ export class MangaseeClass extends Scraper {
 			// Return all successfull data requests
 			return searchResultData.filter((v) => v.success);
 		} catch (err) {
-			if (host === "mangasee123") {
-				return this.search(query, options, "manga4life");
+			if (host === "manga4life") {
+				return this.search(query, options, "mangasee123");
 			} else {
 				return [];
 			}
@@ -170,7 +170,7 @@ export class MangaseeClass extends Scraper {
 			raceResult.err === "This request took too long"
 		) {
 			console.error(
-				chalk.red("[MANGADEX]") +
+				chalk.red("[MANGASEE]") +
 					` A request for '${slug}' at '${chapterId}' took too long and has timed out`
 			);
 		}
@@ -181,7 +181,7 @@ export class MangaseeClass extends Scraper {
 	private async doScrape(
 		slug: string,
 		chapterId: string | number | null = null,
-		host: string = "mangasee123"
+		host: string = "manga4life"
 	): Promise<ScraperResponse> {
 		let season: number;
 		let chapter: number;
@@ -197,8 +197,8 @@ export class MangaseeClass extends Scraper {
 		}
 
 		const doErr = (status: number, reason: string) => {
-			if (host === "mangasee123") {
-				return this.doScrape(slug, chapterId, "manga4life");
+			if (host === "manga4life") {
+				return this.doScrape(slug, chapterId, "mangasee123");
 			} else {
 				console.error(`${status} Throwing error for ${slug}`);
 				return error(status, reason);
