@@ -31,11 +31,11 @@ import secretConfig from "./util/secretConfig";
 		// Inform user about analytics
 		console.info("—".repeat(10));
 		console.info(
-			chalk.green("[ANALTICS]") +
+			chalk.green("[ANALYTICS]") +
 				` Adolla has non-invasive analytics for Jip. These analytics include the platform Adolla is running on, your username, and whether you have configured Discord webhooks and the Telegram bots for notifications.`
 		);
 		console.info(
-			chalk.green("[ANALTICS]") +
+			chalk.green("[ANALYTICS]") +
 				` These analytics only run on once, on every start-up. Instructions to disable them can be found in the README.`
 		);
 		console.info("—".repeat(10));
