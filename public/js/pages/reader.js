@@ -62,8 +62,6 @@ function updateLazyLoading() {
 	const elOffsets = getPageProgress()[2];
 	const threshold = screen.width + screen.height;
 
-	console.log(elOffsets.map((v) => v.offset));
-
 	const els = elOffsets.filter(
 		(entry) => entry.offset < threshold && entry.el.getAttribute("data-src")
 	);
@@ -408,19 +406,19 @@ function doImages(bypassCache = false) {
 		img.style.minHeight = "30vh";
 
 		// Set source
-		img.setAttribute("data-src", url);
+		const proxySrc = `/proxy-image?url=${encodeURIComponent(url)}&referer=${
+			location.href.includes("mangasee")
+				? "mangasee"
+				: location.href.includes("manganelo")
+				? "manganelo"
+				: "null"
+		}${bypassCache ? `&c=${+Date.now()}` : ""}`;
+
+		img.setAttribute("data-src", url.includes("mangadex") ? proxySrc : url);
 		img.src =
 			"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 
 		img.addEventListener("error", () => {
-			const proxySrc = `/proxy-image?url=${encodeURIComponent(url)}&referer=${
-				location.href.includes("mangasee")
-					? "mangasee"
-					: location.href.includes("manganelo")
-					? "manganelo"
-					: "null"
-			}${bypassCache ? `&c=${+Date.now()}` : ""}`;
-
 			if (!img.src.includes("proxy-image")) {
 				img.src = proxySrc;
 			} else {

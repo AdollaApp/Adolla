@@ -110,7 +110,7 @@ export class mangadexClass extends Scraper {
 			);
 			if (posterData) {
 				if (posterData.attributes) {
-					posterUrl = `https://uploads.mangadex.org/covers/${slug}/${posterData.attributes.fileName}.512.jpg`;
+					posterUrl = `/proxy-image/?url=https://uploads.mangadex.org/covers/${slug}/${posterData.attributes.fileName}.512.jpg`;
 				} else if (posterData.id) {
 					posterUrl = `/mangadex-cover/${slug}/${posterData.id}`;
 				}
