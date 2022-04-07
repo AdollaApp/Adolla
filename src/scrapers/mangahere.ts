@@ -129,7 +129,14 @@ export class mangahereClass extends Scraper {
 		const statusWrapper = document.querySelector(
 			".detail-info-right-title-tip"
 		);
-		const status = statusWrapper.textContent.toLowerCase();
+		const raw = statusWrapper.textContent.toLowerCase();
+
+		let statuses = {
+			"completed": "Finished",
+			"ongoing": "Releasing"
+		}
+
+		const status = statuses[raw]
 
 		// Get chapters
 		const chapters: Chapter[] = [

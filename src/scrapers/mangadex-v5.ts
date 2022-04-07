@@ -123,7 +123,14 @@ export class mangadexClass extends Scraper {
 			const alternateTitles = data.attributes.altTitles.map((t) => t.en);
 
 			// Get status
-			const status = data.attributes.status.toLowerCase();
+			const raw = data.attributes.status.toLowerCase();
+
+			let statuses = {
+				"completed": "Finished",
+				"ongoing": "Releasing"
+			}
+
+			const status = statuses[raw]
 
 			// Get chapters
 			let offset = 0;
