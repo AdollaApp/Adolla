@@ -141,9 +141,16 @@ export class manganeloClass extends Scraper {
 			// Get status
 			const statusWrapper = document.querySelector(".info-status").parentNode
 				.parentNode;
-			const status = statusWrapper
+			const raw = statusWrapper
 				.querySelectorAll("td")[1]
 				.textContent.toLowerCase();
+
+				let statuses = {
+					"completed": "Finished",
+					"ongoing": "Releasing"
+				}
+	
+			const status = statuses[raw]
 
 			// Get chapters
 			const chapters: Chapter[] = [

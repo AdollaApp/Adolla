@@ -188,7 +188,7 @@ export class guyaClass extends Scraper {
 				data: {
 					chapters,
 					chapterImages,
-					status: isOngoing ? "ongoing" : "ended",
+					status: isOngoing ? "Releasing" : "Finished",
 				},
 				success: true,
 				provider: isProviderId(providerId) ? providerId : null,

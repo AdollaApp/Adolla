@@ -156,7 +156,7 @@ export class nhentaiClass extends Scraper {
 						},
 					],
 					chapterImages,
-					status: "ended",
+					status: "Finished",
 				},
 				success: true,
 				provider: isProviderId(providerId) ? providerId : null,

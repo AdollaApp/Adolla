@@ -276,12 +276,19 @@ export class MangaseeClass extends Scraper {
 			);
 
 			// Get status
-			const status = html
+			const raw = html
 				.split('<span class="mlabel">Status:</span>')[1]
 				.split(">")[1]
 				.split(" (")[0]
 				.trim()
 				.toLowerCase();
+
+				let statuses = {
+					"complete": "Finished",
+					"ongoing": "Releasing"
+				}
+	
+			const status = statuses[raw]
 
 			// Generate chapter images
 			let chapterImages: string[] = [];
