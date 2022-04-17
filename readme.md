@@ -58,6 +58,8 @@ There are various environment variables you can use to customise Adolla.
 
 `DISABLE_ANALYTICS`: disable sending a message to me when you start Adolla (useful for me to know how many users I have).
 
+`IMAGE_PROXY_URL`: the URL to use for image proxy. By default is makes a request in the back-end and pipes the response through. It's recommended you use a third-party proxy on lower powered devices like a Raspberry Pi with 1GB of RAM.
+
 ## FAQ
 
 ### **How to run Adolla?**

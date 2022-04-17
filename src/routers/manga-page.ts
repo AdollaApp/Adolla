@@ -280,6 +280,9 @@ router.get("/:provider/:slug/:chapter/get-images/json", imageRouter);
 router.get("/proxy-image", (req, res) => {
 	const url = decodeURIComponent(req.query.url.toString());
 
+	if (process.env.IMAGE_PROXY_URL)
+		return res.redirect(`${process.env.IMAGE_PROXY_URL}${url}`);
+
 	res.setHeader(
 		"content-type",
 		`image/${url.includes(".png") ? "png" : "jpg"}` // Oh well
