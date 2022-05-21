@@ -8,6 +8,8 @@ export const iconNames = {
 	"white-on-green": "Forest",
 	"white-on-red": "Crimson",
 	"white-on-black": "Black",
+	"rainbow-on-dark": "Dark rainbow",
+	"rainbow-on-white": "Light rainbow",
 };
 export const iconNamesReversed = Object.fromEntries(
 	Object.entries(iconNames).map((v) => v.reverse())

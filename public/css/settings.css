@@ -13,8 +13,14 @@
 .icon-grid {
 	margin-top: 20px;
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-	grid-gap: 20px 10px;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	grid-gap: 10px;
+}
+
+@media (max-width: 700px) {
+	.icon-grid {
+		grid-template-columns: 100%;
+	}
 }
 
 .color-grid {
@@ -44,10 +50,9 @@
 
 .icon-option {
 	width: 100%;
-	text-align: center;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-gap: 10px;
 	align-items: center;
 }
 
@@ -65,8 +70,8 @@
 }
 
 .icon-option .icon {
-	width: 100%;
-	border-radius: 4px;
+	width: 70px;
+	border-radius: 10px;
 	border: 1px solid var(--border);
 	display: block;
 }
@@ -76,6 +81,7 @@
 	margin-top: 10px;
 	padding: 2px 10px;
 	border-radius: 4px;
+	display: inline-block;
 }
 
 .settings.details-inner {
