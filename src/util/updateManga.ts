@@ -42,6 +42,11 @@ export default async function updateManga(
 		const d = await addInfo(existing);
 		if (d.success && d.constant.nsfw && db.get("settings.show-nsfw") === "no")
 			return nsfwError;
+
+		const reqIdentifier = `${provider} - ${d.constant.title}`;
+
+		console.info(chalk.green("[PERF]"), `Returning cached: ${reqIdentifier}`);
+
 		return d;
 	}
 
@@ -59,6 +64,8 @@ export default async function updateManga(
 			success: false,
 		};
 	}
+
+	const start = Date.now();
 
 	// Scrape data
 	const data = await scraper.scrape(slug, chapterId);
@@ -85,6 +92,15 @@ export default async function updateManga(
 	// Add other info
 	const d = await addInfo(data);
 
+	const end = Date.now();
+	console.info(
+		chalk[d?.success ? "green" : "red"]("[PERF]"),
+		d?.success
+			? `Scraped ${provider} - ${d.constant.title} in ${end - start}ms`
+			: `Failed to scrape ${provider} - ${slug} in ${end - start}ms`
+	);
+
+	// Return data
 	if (!d?.success) {
 		if (typeof d?.success === "undefined") {
 			return {
