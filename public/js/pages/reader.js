@@ -17,11 +17,11 @@ let secondScrollDebounce;
 function updateScrollDebounce(doDebounce = true) {
 	if (scrollDebounce) {
 		clearTimeout(scrollDebounce);
-		delete scrollDebounce;
+		scrollDebounce = null;
 	}
 	if (secondScrollDebounce) {
 		clearTimeout(secondScrollDebounce);
-		delete secondScrollDebounce;
+		secondScrollDebounce = null;
 	}
 	scrollDebounce = setTimeout(
 		() => {
@@ -282,7 +282,7 @@ document.querySelectorAll(".pageImg").forEach((img) => {
 
 		if (errorDebounce) {
 			clearTimeout(errorDebounce);
-			delete errorDebounce;
+			errorDebounce = null;
 		}
 		errorDebounce = setTimeout(() => {
 			// alert(`The images for ${failedImages.sort((a,b) => a.split(" ").pop() - b.split(" ").pop()).join(", ")} ${failedImages.length === 1 ? "has" : "have"} failed to load.`);
@@ -452,7 +452,7 @@ async function getImageUrls(loc = location.href, forceFetch = false) {
 	// Remove old items
 	for (let url of Object.keys(cache)) {
 		if (cache[url] && cache[url].at < Date.now() - 1e3 * 60 * 60) {
-			delete cache[url];
+			cache[url] = undefined;
 		}
 	}
 

@@ -60,7 +60,7 @@ let resizeDebounce;
 window.addEventListener("resize", () => {
 	if (resizeDebounce) {
 		clearTimeout(resizeDebounce);
-		delete resizeDebounce;
+		resizeDebounce = null;
 	}
 	resizeDebounce = setTimeout(doCheck, 1e3 / 60);
 });

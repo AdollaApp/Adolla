@@ -3,12 +3,13 @@
 	"version": "1.0.0",
 	"description": "Adolla is a manga reader for every device with a web browser",
 	"scripts": {
-		"start": "ts-node src/index.ts",
-		"start-es": "npm run build && node ./dist/index.js",
+		"start": "npm run build-fe && ts-node src/index.ts",
+		"start-es": "npm run build-fe && npm run build && node ./dist/index.js",
 		"dev": "npm start",
 		"clear-cache": "npm run build && node ./dist/clear-cache.js",
 		"format-data": "npm run build && node ./dist/format-data.js",
 		"build": "etsc",
+		"build-fe": "babel public/js -d public/js_compiled",
 		"lint": "eslint src/",
 		"lint:fix": "prettier --write . && eslint src/ --fix",
 		"build-binaries": "npm run build && pkg dist/index.js"
@@ -40,6 +41,9 @@
 		"typescript": "^4.1.2"
 	},
 	"devDependencies": {
+		"@babel/cli": "^7.17.10",
+		"@babel/core": "^7.18.0",
+		"@babel/preset-env": "^7.18.0",
 		"@typescript-eslint/eslint-plugin": "^4.10.0",
 		"@typescript-eslint/parser": "^4.10.0",
 		"eslint": "^7.16.0",

@@ -1,5 +1,5 @@
 const CACHE_NAME = "manga-0";
-let urlsToCache = ["/", "/css/main.css", "/js/404.js"];
+let urlsToCache = ["/", "/css/main.css", "/js_compiled/404.js"];
 
 self.addEventListener("install", (event) => {
 	event.waitUntil(
