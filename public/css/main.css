@@ -898,6 +898,7 @@ input, textarea {
 .chapter-navigation .current {
 	text-align: center;
 	grid-area: current;
+	white-space: nowrap;
 }
 
 .chapter-navigation .next {
@@ -986,6 +987,7 @@ input, textarea {
 /* Pages */
 
 .manga-reader.loaded {
+	width: 100%;
 	padding-bottom: calc(var(--footer-height) + 50px);
 	padding-bottom: 0;
 }
@@ -1745,6 +1747,7 @@ div.selection-actions .selection-actions-inner {
 
 	/* Scaling */
 	.pages {
+		width: 100%;
 		max-width: 100%;
 		overflow-x: auto;
 	}
