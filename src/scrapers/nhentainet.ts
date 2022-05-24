@@ -36,17 +36,21 @@ export class nhentaiClass extends Scraper {
 		// Fetch search JSON
 		const searchData = await getDataFromURL(pageUrl);
 
-		// Find IDs
-		const ids = searchData.result
-			.map((result) => result.id)
-			.slice(0, resultCount);
+		if (searchData?.result) {
+			// Find IDs
+			const ids = searchData.result
+				.map((result) => result.id)
+				.slice(0, resultCount);
 
-		// Get details for each search result
-		const searchResultData: ScraperResponse[] = await Promise.all(
-			ids.map((id) => updateManga("nhentainet", id))
-		);
+			// Get details for each search result
+			const searchResultData: ScraperResponse[] = await Promise.all(
+				ids.map((id) => updateManga("nhentainet", id))
+			);
 
-		return searchResultData;
+			return searchResultData;
+		} else {
+			return [];
+		}
 	}
 
 	/**
@@ -94,10 +98,13 @@ export class nhentaiClass extends Scraper {
 		chapterId: string
 	): Promise<ScraperResponse> {
 		try {
+			console.log(1);
 			// Get data
 			const data = await getDataFromURL(
-				`https://nhentai.net/api/gallery/${slug}`
+				`https://nhentai.net/api/gallery/${slug}`,
+				0
 			);
+			console.log(2);
 
 			// Find language, default to unknown
 			const language =
@@ -117,6 +124,8 @@ export class nhentaiClass extends Scraper {
 				data.media_id
 			}/cover.${this.getImageType(data.images.cover.t)}`;
 			const posterUrl = `/proxy-image?url=${encodeURIComponent(posterUrlMain)}`;
+
+			console.log(3);
 
 			// Get genres
 			const genres = data.tags.map(

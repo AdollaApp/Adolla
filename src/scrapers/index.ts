@@ -14,12 +14,12 @@ export function error(status = -1, err = "Unknown"): ScraperError {
 	};
 }
 
-export async function getDataFromURL(url: string) {
+export async function getDataFromURL(url: string, maxRetries = 4) {
 	let retryCount = 0;
 	let isValid = false;
 	let data: any = {};
 
-	while (!isValid && retryCount < 4) {
+	while (!isValid && retryCount < maxRetries) {
 		// Get data
 		const dataReq = await fetch(url);
 		if (dataReq.status === 204) {
