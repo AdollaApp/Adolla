@@ -414,9 +414,15 @@ function doImages(bypassCache = false) {
 				: "null"
 		}${bypassCache ? `&c=${+Date.now()}` : ""}`;
 
-		img.setAttribute("data-src", url.includes("mangadex") ? proxySrc : url);
-		img.src =
-			"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+		const isBookMode = getSettings()["double-pages"] === "yes";
+
+		if (isBookMode) {
+			img.setAttribute("src", url.includes("mangadex") ? proxySrc : url);
+		} else {
+			img.setAttribute("data-src", url.includes("mangadex") ? proxySrc : url);
+			img.src =
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+		}
 
 		img.addEventListener("error", () => {
 			if (!img.src.includes("proxy-image")) {
@@ -605,7 +611,7 @@ function isOnScreen(el) {
 	);
 }
 
-function updateDoublePages() {
+function updateDoublePages(doScroll = false) {
 	const [currentPage] = getPageProgress();
 	const wrapper = document.querySelector(".pages");
 
@@ -663,8 +669,10 @@ function updateDoublePages() {
 	}
 
 	// Scroll to previous page
-	const pageEl = document.querySelector(`[data-i="${currentPage}"]`);
-	if (pageEl) pageEl.scrollIntoView();
+	if (doScroll) {
+		const pageEl = document.querySelector(`[data-i="${currentPage}"]`);
+		if (pageEl) pageEl.scrollIntoView();
+	}
 }
 
 function reverseChildren(parent) {
