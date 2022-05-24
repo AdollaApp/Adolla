@@ -98,13 +98,11 @@ export class nhentaiClass extends Scraper {
 		chapterId: string
 	): Promise<ScraperResponse> {
 		try {
-			console.log(1);
 			// Get data
 			const data = await getDataFromURL(
 				`https://nhentai.net/api/gallery/${slug}`,
 				0
 			);
-			console.log(2);
 
 			// Find language, default to unknown
 			const language =
