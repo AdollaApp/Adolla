@@ -33,5 +33,5 @@ jobs:
           git config --global user.email 'jipfr@users.noreply.github.com'
     - run: |
           git add public/*
-          git commit -m "Change things"
+          git commit -m "ci: build frontend"
           git push
