@@ -29,6 +29,7 @@ document.querySelectorAll(".toggle-quick-select").forEach((div) => {
 
 // Util
 document.querySelectorAll(".blue-on-click").forEach((el) => {
+	// Used for elements like buttons and stuff
 	el.addEventListener("click", () => {
 		el.classList.add("badge-background");
 	});
