@@ -44,17 +44,16 @@ function doCheck() {
 			.forEach((el) => (el.innerText = toHide.length));
 	});
 }
-window.addEventListener("load", () => {
-	// Add event listener for "read more"
-	document.querySelectorAll("button.show-all").forEach((btn) => {
-		btn.addEventListener("click", () => {
-			btn.closest(".show-all-wrapper").classList.add("force-show");
-		});
-	});
 
-	// Run main row check
-	doCheck();
+// Add event listener for "read more"
+document.querySelectorAll("button.show-all").forEach((btn) => {
+	btn.addEventListener("click", () => {
+		btn.closest(".show-all-wrapper").classList.add("force-show");
+	});
 });
+
+// Run main row check
+doCheck();
 
 let resizeDebounce;
 window.addEventListener("resize", () => {
