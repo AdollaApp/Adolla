@@ -155,6 +155,9 @@ app.engine(
 
 				return colorArray;
 			},
+			getThemeColor() {
+				return db.get("settings.theme")?.badge || "#4babce";
+			},
 		},
 	})
 );
