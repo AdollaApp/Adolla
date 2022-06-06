@@ -94,18 +94,16 @@ function doCheck() {
       return el.innerText = toHide.length;
     });
   });
-}
+} // Add event listener for "read more"
 
-window.addEventListener("load", function () {
-  // Add event listener for "read more"
-  document.querySelectorAll("button.show-all").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      btn.closest(".show-all-wrapper").classList.add("force-show");
-    });
-  }); // Run main row check
 
-  doCheck();
-});
+document.querySelectorAll("button.show-all").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    btn.closest(".show-all-wrapper").classList.add("force-show");
+  });
+}); // Run main row check
+
+doCheck();
 var resizeDebounce;
 window.addEventListener("resize", function () {
   if (resizeDebounce) {
