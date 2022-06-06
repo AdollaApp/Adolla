@@ -80,6 +80,13 @@ const colorOptions = [
 	{
 		badge: "#ed412d",
 	},
+	{
+		badge: "#719A6B",
+	},
+	{
+		badge: "#2f364a",
+		"badge-text": "white",
+	},
 ];
 
 for (let color of colorOptions) {

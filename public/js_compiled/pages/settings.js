@@ -63,6 +63,11 @@ var colorOptions = [{
   badge: "#fc6c7c"
 }, {
   badge: "#ed412d"
+}, {
+  badge: "#719A6B"
+}, {
+  badge: "#2f364a",
+  "badge-text": "white"
 }];
 
 var _loop = function _loop() {

@@ -81,7 +81,7 @@ body[data-is-dev="true"]::after {
 
 .anchor {
 	text-decoration: none;
-	color: var(--badge);
+	color: var(--badge-text, var(--badge));
 }
 
 .anchor:hover {
@@ -858,7 +858,7 @@ input, textarea {
 }
 
 .progress[data-color="recent"] {
-	color: var(--badge);
+	color: var(--badge-text, var(--badge));
 }
 
 .chapters .chapter.badge-background .progress[data-color="recent"] {
@@ -876,7 +876,7 @@ input, textarea {
 .chapter .chapter-icon svg {
 	display: inline-block;
 	margin-right: 10px;
-	color: var(--badge);
+	color: var(--badge-text, var(--badge));
 }
 
 .chapter .do-center {
