@@ -1,5 +1,6 @@
 import fetch from "node-fetch-extra";
 import chalk from "chalk";
+import { JSDOM } from "jsdom";
 import updateManga from "../util/updateManga";
 import { XmlEntities } from "html-entities";
 import { Chapter, ScraperError, ScraperResponse } from "../types";
@@ -224,18 +225,13 @@ class RCOClass extends Scraper {
 			// Get HTML for page
 			const body = await mainReq.text();
 
-			// Get each table row
-			const divs = body
-				.split("<tr>")
-				.slice(1)
-				.map((v) => v.split("</tr>")[0].replace(/\r\n| {2}|\t/g, ""));
+			const dom = new JSDOM(body);
+			const document = dom.window.document;
 
-			// Extract links
-			resultIds = divs.map((div) => {
-				// Get slug from table row
-				const slug = div.split('href="/Comic/')[1].split('"')[0];
-				return slug;
-			});
+			resultIds = Array.from(
+				document.querySelectorAll(".item > a:first-child")
+				// @ts-ignore
+			).map((v) => v.getAttribute("href").replace("/Comic/", ""));
 		} else {
 			// Fetch search results HTML
 			const searchUrl = "https://readcomiconline.li/Search/Comic";

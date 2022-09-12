@@ -168,12 +168,10 @@ export class mangahereClass extends Scraper {
 		if (chapterId != "-1") {
 			// Scrape page to find images
 			const url = `http://mangahere.cc/roll_manga/${slug}/${chapterId}/1.html`;
-			console.log(url);
 			const chapterPageReq = await fetch(url, {});
 			const chapterPageHtml = await chapterPageReq.text();
 
 			// Ooooh boy
-			const comicId = chapterPageHtml.match(/var comicid = (\d+);/)[1];
 			const internalChapterId = chapterPageHtml.match(
 				/var chapterid =(\d+);/
 			)[1];
