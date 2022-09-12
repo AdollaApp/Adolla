@@ -19,7 +19,7 @@ export class manganeloClass extends Scraper {
 	public async search(query: string, options?: Partial<SearchOptions>) {
 		// This is a better way of destructuring with default values
 		// than doing it at the top. This took... many hours. Thanks Pandawan!
-		const { resultCount } = {
+		let { resultCount } = {
 			resultCount: 15,
 			...options,
 		};
@@ -28,6 +28,7 @@ export class manganeloClass extends Scraper {
 
 		if (query === "") {
 			// Get popular page
+			resultCount = 5;
 			pageUrl = "https://manganato.com/genre-all?type=topview";
 		} else {
 			pageUrl = `https://manganato.com/search/story/${encodeURIComponent(

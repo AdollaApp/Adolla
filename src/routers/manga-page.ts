@@ -293,6 +293,8 @@ router.get("/proxy-image", (req, res) => {
 		headers.referer = "https://mangasee123.com";
 	} else if (req.query.referer === "manganelo") {
 		headers.referer = "https://readmanganato.com/";
+	} else if (req.query.referer === "mangahere") {
+		headers.referer = "https://www.mangahere.cc/";
 	}
 	headers["user-agent"] = "Adolla";
 
