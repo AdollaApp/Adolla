@@ -7,6 +7,7 @@ import { Chapter, ScraperError, ScraperResponse } from "../types";
 import { Scraper, SearchOptions } from "./types";
 import { getProviderId, isProviderId } from "../routers/manga-page";
 import { error } from "./index";
+import { beau } from "./rco-garbage";
 
 const Entities = new XmlEntities();
 
@@ -153,16 +154,18 @@ class RCOClass extends Scraper {
 				);
 				const chapterHTML = await imgReq.text();
 
-				const js = chapterHTML
-					.split("var lstImages = new Array();")[1]
-					.split("var currImage = 0;")[0];
-				const imgSources = js
-					.match(/lstImages\.push\("(.+?)"\);/g)
-					.map((snippet) => {
-						return snippet.match(/lstImages\.push\("(.+?)"\);/)[1];
-					});
+				if (chapterHTML.includes("Are You Human")) {
+					chapterImages = ["captcha"];
+				} else {
+					const imgSources = chapterHTML
+						.match(/lstImages\.push\("?'?(.+?)"?'?\);/g)
+						.map((snippet) => {
+							return snippet.match(/lstImages\.push\("?'?(.+?)"?'?\);/)[1];
+						});
 
-				chapterImages = imgSources;
+					// Beautify URLS if they were obfuscated
+					chapterImages = beau(imgSources);
+				}
 			}
 
 			// Series status

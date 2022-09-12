@@ -572,15 +572,25 @@ function _getImageUrls() {
 
           case 15:
             urls = _context2.sent;
-            _context2.next = 21;
+            _context2.next = 22;
             break;
 
           case 18:
             _context2.prev = 18;
             _context2.t0 = _context2["catch"](10);
             location.href = "/error";
+            return _context2.abrupt("return");
 
-          case 21:
+          case 22:
+            if (!(urls[0] === "captcha")) {
+              _context2.next = 25;
+              break;
+            }
+
+            location.href = "/error?t=captcha";
+            return _context2.abrupt("return");
+
+          case 25:
             // Store in cache
             cache = JSON.parse(localStorage.getItem(key));
             cache[url] = {
@@ -596,7 +606,7 @@ function _getImageUrls() {
 
             return _context2.abrupt("return", urls);
 
-          case 25:
+          case 29:
           case "end":
             return _context2.stop();
         }

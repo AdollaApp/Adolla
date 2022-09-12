@@ -471,6 +471,12 @@ async function getImageUrls(loc = location.href, forceFetch = false) {
 		urls = await (await fetch(url)).json();
 	} catch (err) {
 		location.href = "/error";
+		return;
+	}
+
+	if (urls[0] === "captcha") {
+		location.href = "/error?t=captcha";
+		return;
 	}
 
 	// Store in cache
