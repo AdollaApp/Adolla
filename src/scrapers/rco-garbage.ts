@@ -1,4 +1,6 @@
+// @ts-nocheck
 let $ = () => ({ keydown: () => {}, on: () => {} });
+
 let document = null;
 let navigator = {
 	userAgent:
@@ -170,7 +172,7 @@ if (
 		}, 0x16 * 0x179 + 0x22d0 + -0x3f4e);
 }
 
-function beau(w) {
+export function beau(w) {
 	var S = J;
 	for (var v = -0x893 + 0x627 + 0x3e * 0xa; v < w[S(0x1ae)]; v++) {
 		w[v] = w[v][S(0x1a5)](/_x236/g, "d")[S(0x1a5)](/_x945/g, "g");
@@ -221,5 +223,3 @@ function beau(w) {
 	}
 	return w;
 }
-
-module.exports = { beau };
