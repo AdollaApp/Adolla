@@ -2,8 +2,10 @@
 
 // JavaScript for the app-wide settings page.
 // This page has the settins for "icon"
+
 document.querySelectorAll(".icon-option:not(.is-current-icon)").forEach(function (iconWrapper) {
   // Add "click" event listener to icon wrapper to send a POST request in order to update the icon of choice
+
   iconWrapper.addEventListener("click", function () {
     var name = iconWrapper.querySelector(".text").textContent;
     var endpoint = location.href;
@@ -26,9 +28,10 @@ document.querySelectorAll(".icon-option:not(.is-current-icon)").forEach(function
       }
     });
   });
-}); // App-wide settings toggles
-// Currently that's just the NSFW filter
+});
 
+// App-wide settings toggles
+// Currently that's just the NSFW filter
 document.querySelectorAll(".app-wide-settings .switch").forEach(function (switchEl) {
   switchEl.addEventListener("click", function () {
     var allSettings = {};
@@ -45,8 +48,9 @@ document.querySelectorAll(".app-wide-settings .switch").forEach(function (switch
       body: JSON.stringify(allSettings)
     });
   });
-}); // Add color theme options
+});
 
+// Add color theme options
 var colorOptions = [{
   badge: "#4babce"
 }, {
@@ -69,7 +73,6 @@ var colorOptions = [{
   badge: "#2f364a",
   "badge-text": "white"
 }];
-
 var _loop = function _loop() {
   var color = _colorOptions[_i];
   var colorOption = document.createElement("div");
@@ -90,7 +93,6 @@ var _loop = function _loop() {
   });
   document.querySelector(".color-grid").appendChild(colorOption);
 };
-
 for (var _i = 0, _colorOptions = colorOptions; _i < _colorOptions.length; _i++) {
   _loop();
 }
