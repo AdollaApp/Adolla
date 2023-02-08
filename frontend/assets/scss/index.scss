@@ -1,0 +1,21 @@
+body {
+	margin: 0;
+}
+
+:root {
+	--theme: #4babce;
+	--theme-as-text: var(--theme);
+	--body: #16161a;
+	--content: #1f1e24;
+	--content-hover: #2d2c33;
+	--text: white;
+	--text-secondary: #898696;
+	--border: #2e2d32;
+}
+
+body {
+	background: var(--body);
+	color: var(--text);
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+		Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
