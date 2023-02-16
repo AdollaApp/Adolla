@@ -49,10 +49,21 @@ export async function sendPushNotification(body: {
 			db.get("vapidPrivate")
 		);
 
+		console.log(clients);
+
 		let t = await webPush
 			.sendNotification(subscription, payload)
-			.catch(function (err) {
+			.catch((err) => {
 				console.log(err);
+				if (err.statusCode === 410) {
+					console.log("Removing endpoint");
+					db.set(
+						"push-client",
+						clients.filter(
+							(client) => client.subscription.endpoint !== subscription.endpoint
+						)
+					);
+				}
 			});
 		console.info(
 			chalk[t?.statusCode === 201 ? "green" : "redBright"]("[PUSH]") +
