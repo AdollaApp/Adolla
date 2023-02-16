@@ -31,28 +31,39 @@ export function configure() {
 // 	});
 // }, 10e3);
 
+export async function sendBadgeCountUnread() {
+	const reading = await getReading();
+	const unreadNewCount = reading.filter((r) =>
+		r.success ? r.progress.new : null
+	).length;
+	sendPushNotification({
+		badgeCount: unreadNewCount,
+	});
+}
+
 export async function sendPushNotification(body: {
-	title: string;
+	title?: string;
 	body?: string;
 	badgeCount?: number;
 }) {
-	await Promise.all(
-		(db.get("push-clients") || []).map(async ({ subscription }) => {
-			const payload = JSON.stringify({
-				title: body.title,
-				body: body.body,
-				badgeCount: body.badgeCount,
-			});
+	console.log(db.get("push-clients") || []);
+	for (const { subscription } of db.get("push-clients") || []) {
+		const payload = JSON.stringify({
+			title: body.title,
+			body: body.body,
+			badgeCount: body.badgeCount,
+		});
 
-			webPush.setVapidDetails(
-				subscription.endpoint,
-				db.get("vapidPublic"),
-				db.get("vapidPrivate")
-			);
+		await webPush.setVapidDetails(
+			subscription.endpoint,
+			db.get("vapidPublic"),
+			db.get("vapidPrivate")
+		);
 
-			webPush.sendNotification(subscription, payload).catch(function (err) {
-				console.log(err);
-			});
-		})
-	);
+		await webPush.sendNotification(subscription, payload).catch(function (err) {
+			console.log(err);
+		});
+	}
 }
+
+sendBadgeCountUnread();

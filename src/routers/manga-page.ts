@@ -12,6 +12,9 @@ import fetch from "node-fetch-extra";
 import { Provider, ProviderId } from "../scrapers/types";
 import { removeData } from "./lists";
 import { getDataFromURL } from "../scrapers";
+import { sendBadgeCountUnread } from "../util/push";
+
+let progressDebounce = setTimeout(() => {});
 
 interface NewList {
 	slug: string;
@@ -619,6 +622,11 @@ router.post(
 				);
 			}
 		}
+
+		if (progressDebounce) clearTimeout(progressDebounce);
+		progressDebounce = setTimeout(() => {
+			sendBadgeCountUnread();
+		}, 10e3);
 
 		res.json({
 			status: 200,

@@ -13,7 +13,7 @@ import secretConfig from "../util/secretConfig";
 import { Progress } from "../types";
 import { getProviderId } from "../routers/manga-page";
 import { getAnnouncements } from "./getAnnouncements";
-import { sendPushNotification } from "./push";
+import { sendBadgeCountUnread, sendPushNotification } from "./push";
 
 const clean = (str: string | number) => {
 	return str.toString().replace(/\./g, "_");
@@ -173,13 +173,9 @@ class Updater {
 												chalk.green("[NOTIFS]") +
 													` New chapter found for ${data.constant.title}, notifying all push clients`
 											);
-											const unreadNewCount = reading.filter((r) =>
-												r.success ? r.progress.new : null
-											).length;
 											sendPushNotification({
 												title: `${data.constant.title} — ${nextChapter.label}`,
 												body: "A new chapter has been released",
-												badgeCount: unreadNewCount,
 											});
 										}
 
@@ -289,6 +285,8 @@ class Updater {
 		console.info(chalk.green("[CLEANUP]") + " Done cleaning up");
 
 		getAnnouncements();
+
+		sendBadgeCountUnread();
 	}
 }
 

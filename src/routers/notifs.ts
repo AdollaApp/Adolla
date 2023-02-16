@@ -1,5 +1,6 @@
 import express from "express";
 import db from "../db";
+import { sendBadgeCountUnread } from "../util/push";
 const router = express.Router();
 
 // POST /subscribe
@@ -18,6 +19,8 @@ router.post("/", async (req, res) => {
 	const clients = db.get("push-clients");
 	clients.push(req.body);
 	db.store(false);
+
+	sendBadgeCountUnread();
 
 	res.json({
 		message: "Yep okay",
