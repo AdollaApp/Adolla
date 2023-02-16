@@ -49,8 +49,6 @@ export async function sendPushNotification(body: {
 			db.get("vapidPrivate")
 		);
 
-		console.log(clients);
-
 		let t = await webPush
 			.sendNotification(subscription, payload)
 			.catch((err) => {
