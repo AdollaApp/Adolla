@@ -19,9 +19,7 @@ async function subscribeToPush() {
 				});
 			});
 		}
-		console.log(2);
 		if (Notification.permission === "granted") {
-			console.log(3);
 			getSubscriptionObject().then((obj) => {
 				subscribe(obj).then((res) => {
 					if (res.ok) {
@@ -31,6 +29,8 @@ async function subscribeToPush() {
 					}
 				});
 			});
+		} else {
+			button.classList.add("el-hidden");
 		}
 	}
 }

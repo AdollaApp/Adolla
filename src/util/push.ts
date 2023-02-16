@@ -10,27 +10,6 @@ export function configure() {
 	}
 }
 
-// let badgeCount = 5;
-
-// setInterval(async () => {
-// 	const reading = await getReading();
-// 	const unreadNewCount = reading.filter((r) =>
-// 		r.success ? r.progress.new : null
-// 	).length;
-
-// 	console.log(
-// 		"pushing",
-// 		db.get("push-clients").map((t) => t.subscription)
-// 	);
-
-// 	badgeCount--;
-// 	sendPushNotification({
-// 		title: "This is my notification",
-// 		body: "Hello world!" + badgeCount,
-// 		badgeCount,
-// 	});
-// }, 10e3);
-
 export async function sendBadgeCountUnread() {
 	const reading = await getReading();
 	const unreadNewCount = reading.filter((r) =>
