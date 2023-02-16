@@ -55,9 +55,9 @@ export async function sendPushNotification(body: {
 				console.log(err);
 			});
 		console.info(
-			chalk[t.statusCode === 201 ? "green" : "redBright"]("[PUSH]") +
+			chalk[t?.statusCode === 201 ? "green" : "redBright"]("[PUSH]") +
 				` Sent out message at ${new Date().toLocaleString()}: status code ${
-					t.statusCode
+					t?.statusCode
 				}`
 		);
 	}
