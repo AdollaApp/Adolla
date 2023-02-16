@@ -1,4 +1,4 @@
-<div class="content-inner">
+<div class="content-inner" data-vapid-public="{{publicVapidKey}}">
 
 	{{#each announcements}}
 	<div class="announcement-banner badge-background" data-id="{{id}}">
@@ -18,6 +18,8 @@
 
 	<h1 class="title">Adolla</h1>
 	<p>Adolla is a manga-reader web app built by <a href="https://jipfr.nl" target="_blank" class="anchor">Jip Fr</a>. The source code is available <a href="https://github.com/AdollaApp/Adolla" target="_blank" class="anchor">here</a>.</p>
+
+	<button class="push-notif-button el-hidden" onClick="subscribeToPush()">Subscribe to push</button>
 
 	{{#if reading}}
 	<section class="section continue-reading" data-list-id="continue-reading" data-list-type="list">
@@ -49,6 +51,7 @@
 
 </div>
 
+<script src="/js_compiled/notifs.js"></script>
 <script src="/js_compiled/pages/home.js"></script>
 <script src="/js_compiled/reusable/lists.js"></script>
 <script src="/js_compiled/reusable/list-type.js"></script>

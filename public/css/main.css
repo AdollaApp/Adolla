@@ -1672,6 +1672,10 @@ div.selection-actions .selection-actions-inner {
 	width: 100%;
 }
 
+.el-hidden {
+	display: none;
+}
+
 /* Responsiveness */
 
 @media screen and (max-width: 900px), (orientation: portrait) {

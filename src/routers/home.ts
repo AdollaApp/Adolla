@@ -31,6 +31,7 @@ router.get("/", async (req, res) => {
 		lists,
 		announcements,
 		isHome: true,
+		publicVapidKey: db.get("vapidPublic"),
 	});
 });
 

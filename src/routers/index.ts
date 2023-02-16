@@ -4,6 +4,7 @@ import search from "./search";
 import notFound from "./not-found";
 import lists from "./lists";
 import settings from "./settings";
+import notifs from "./notifs";
 
 export default {
 	home,
@@ -12,4 +13,5 @@ export default {
 	notFound,
 	lists,
 	settings,
+	notifs,
 };
