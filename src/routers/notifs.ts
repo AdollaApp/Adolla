@@ -1,6 +1,6 @@
 import express from "express";
 import db from "../db";
-import { sendBadgeCountUnread } from "../util/push";
+import { sendBadgeCountUnread, sendPushNotification } from "../util/push";
 const router = express.Router();
 
 // POST /subscribe
@@ -20,6 +20,10 @@ router.post("/", async (req, res) => {
 	clients.push(req.body);
 	db.store(false);
 
+	sendPushNotification({
+		title: "New device added",
+		body: "Notifications for new chapters have been enabled on a new device",
+	});
 	sendBadgeCountUnread();
 
 	res.json({

@@ -49,25 +49,25 @@ export async function sendPushNotification(body: {
 	const clients = db.get("push-clients") || [];
 	console.log(`Distributing to ${clients.length}:`, body);
 	for (const { subscription } of clients) {
-		(async () => {
-			const payload = JSON.stringify({
-				title: body.title,
-				body: body.body,
-				badgeCount: body.badgeCount,
+		console.log("Doing");
+		const payload = JSON.stringify({
+			title: body.title,
+			body: body.body,
+			badgeCount: body.badgeCount,
+		});
+
+		await webPush.setVapidDetails(
+			subscription.endpoint,
+			db.get("vapidPublic"),
+			db.get("vapidPrivate")
+		);
+
+		let t = await webPush
+			.sendNotification(subscription, payload)
+			.catch(function (err) {
+				console.log(err);
 			});
-
-			await webPush.setVapidDetails(
-				subscription.endpoint,
-				db.get("vapidPublic"),
-				db.get("vapidPrivate")
-			);
-
-			await webPush
-				.sendNotification(subscription, payload)
-				.catch(function (err) {
-					console.log(err);
-				});
-		})();
+		console.log("Done", t);
 	}
 }
 
