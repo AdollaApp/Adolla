@@ -1,6 +1,7 @@
 import db from "../db";
 import webPush from "web-push";
 import getReading from "./getReading";
+import chalk from "chalk";
 
 export function configure() {
 	if (!db.get("vapidPublic") || !db.get("vapidPrivate")) {
@@ -27,8 +28,15 @@ export async function sendPushNotification(body: {
 }) {
 	const clients = db.get("push-clients") || [];
 	console.log(`Distributing to ${clients.length}:`, body);
+
+	console.info(
+		chalk.yellowBright("[PUSH]") +
+			` Sending out message at ${new Date().toLocaleString()}: ${
+				body.title
+			} / badge: ${body.badgeCount}`
+	);
+
 	for (const { subscription } of clients) {
-		console.log("Doing");
 		const payload = JSON.stringify({
 			title: body.title,
 			body: body.body,
@@ -46,8 +54,20 @@ export async function sendPushNotification(body: {
 			.catch(function (err) {
 				console.log(err);
 			});
-		console.log("Done", t);
+		console.info(
+			chalk[t.statusCode === 201 ? "green" : "redBright"]("[PUSH]") +
+				` Sent out message at ${new Date().toLocaleString()}: status code ${
+					t.statusCode
+				}`
+		);
 	}
+
+	console.info(
+		chalk.green("[PUSH]") +
+			` Done sending out message at ${new Date().toLocaleString()}: ${
+				body.title
+			} / badge: ${body.badgeCount}`
+	);
 }
 
 sendBadgeCountUnread();

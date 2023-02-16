@@ -21,7 +21,7 @@ function _subscribeToPush() {
           case 0:
             button = document.querySelector(".push-notif-button");
             if (!window.Notification) {
-              _context2.next = 7;
+              _context2.next = 6;
               break;
             }
             if (!(Notification.permission != "granted")) {
@@ -37,9 +37,7 @@ function _subscribeToPush() {
               });
             });
           case 5:
-            console.log(2);
             if (Notification.permission === "granted") {
-              console.log(3);
               getSubscriptionObject().then(function (obj) {
                 subscribe(obj).then(function (res) {
                   if (res.ok) {
@@ -51,8 +49,10 @@ function _subscribeToPush() {
                   }
                 });
               });
+            } else {
+              button.classList.add("el-hidden");
             }
-          case 7:
+          case 6:
           case "end":
             return _context2.stop();
         }
