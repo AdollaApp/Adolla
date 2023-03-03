@@ -1,6 +1,7 @@
 import express from "express";
 import db from "../db";
-import { sendBadgeCountUnread, sendPushNotification } from "../util/push";
+import { sendPushNotification } from "../util/push";
+import { sendBadgeCountUnread } from "../util/push-unread";
 const router = express.Router();
 
 // POST /subscribe
