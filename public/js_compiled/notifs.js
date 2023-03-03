@@ -65,7 +65,6 @@ function doSubscribe() {
     });
   });
 }
-doSubscribe();
 
 //Generate subscription object
 function getSubscriptionObject() {
