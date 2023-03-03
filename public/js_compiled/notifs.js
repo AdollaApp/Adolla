@@ -11,7 +11,7 @@ if ("Notification" in window && Notification.permission === "default") {
 }
 function subscribeToPush() {
   return _subscribeToPush.apply(this, arguments);
-} //Generate subscription object
+}
 function _subscribeToPush() {
   _subscribeToPush = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
     var button;
@@ -38,17 +38,7 @@ function _subscribeToPush() {
             });
           case 5:
             if (Notification.permission === "granted") {
-              getSubscriptionObject().then(function (obj) {
-                subscribe(obj).then(function (res) {
-                  if (res.ok) {
-                    button.classList.add("el-hidden");
-                  } else {
-                    res.json().then(function (d) {
-                      return alert(d.message);
-                    });
-                  }
-                });
-              });
+              doSubscribe();
             } else {
               button.classList.add("el-hidden");
             }
@@ -61,6 +51,23 @@ function _subscribeToPush() {
   }));
   return _subscribeToPush.apply(this, arguments);
 }
+function doSubscribe() {
+  var button = document.querySelector(".push-notif-button");
+  getSubscriptionObject().then(function (obj) {
+    subscribe(obj).then(function (res) {
+      if (res.ok) {
+        button.classList.add("el-hidden");
+      } else {
+        res.json().then(function (d) {
+          return alert(d.message);
+        });
+      }
+    });
+  });
+}
+doSubscribe();
+
+//Generate subscription object
 function getSubscriptionObject() {
   return navigator.serviceWorker.register("/js_compiled/service-worker-push.js").then( /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(worker) {
