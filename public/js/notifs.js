@@ -20,20 +20,27 @@ async function subscribeToPush() {
 			});
 		}
 		if (Notification.permission === "granted") {
-			getSubscriptionObject().then((obj) => {
-				subscribe(obj).then((res) => {
-					if (res.ok) {
-						button.classList.add("el-hidden");
-					} else {
-						res.json().then((d) => alert(d.message));
-					}
-				});
-			});
+			doSubscribe();
 		} else {
 			button.classList.add("el-hidden");
 		}
 	}
 }
+
+function doSubscribe() {
+	const button = document.querySelector(".push-notif-button");
+	getSubscriptionObject().then((obj) => {
+		subscribe(obj).then((res) => {
+			if (res.ok) {
+				button.classList.add("el-hidden");
+			} else {
+				res.json().then((d) => alert(d.message));
+			}
+		});
+	});
+}
+
+doSubscribe();
 
 //Generate subscription object
 function getSubscriptionObject() {
