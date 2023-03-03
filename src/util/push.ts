@@ -1,6 +1,5 @@
 import db from "../db";
 import webPush from "web-push";
-import getReading from "./getReading";
 import chalk from "chalk";
 
 export function configure() {
@@ -11,22 +10,12 @@ export function configure() {
 	}
 }
 
-export async function sendBadgeCountUnread() {
-	const reading = await getReading();
-	const unreadNewCount = reading.filter((r) =>
-		r.success ? r.progress.new : null
-	).length;
-	sendPushNotification({
-		badgeCount: unreadNewCount,
-	});
-}
-
 export async function sendPushNotification(body: {
 	title?: string;
 	body?: string;
 	badgeCount?: number;
 }) {
-	const clients = db.get("push-clients") || [];
+	let clients = db.get("push-clients") || [];
 	console.log(`Distributing to ${clients.length}:`, body);
 
 	console.info(
@@ -55,11 +44,9 @@ export async function sendPushNotification(body: {
 				console.log(err);
 				if (err.statusCode === 410) {
 					console.log("Removing endpoint");
-					db.set(
-						"push-client",
-						clients.filter(
-							(client) => client.subscription.endpoint !== subscription.endpoint
-						)
+
+					clients = clients.filter(
+						(client) => client.subscription.endpoint !== subscription.endpoint
 					);
 				}
 			});
@@ -77,6 +64,6 @@ export async function sendPushNotification(body: {
 				body.title
 			} / badge: ${body.badgeCount}`
 	);
-}
 
-sendBadgeCountUnread();
+	db.set("push-client", clients);
+}

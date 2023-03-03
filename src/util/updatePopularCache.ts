@@ -13,7 +13,8 @@ import secretConfig from "../util/secretConfig";
 import { Progress } from "../types";
 import { getProviderId } from "../routers/manga-page";
 import { getAnnouncements } from "./getAnnouncements";
-import { sendBadgeCountUnread, sendPushNotification } from "./push";
+import { sendPushNotification } from "./push";
+import { sendBadgeCountUnread } from "./push-unread";
 
 const clean = (str: string | number) => {
 	return str.toString().replace(/\./g, "_");
