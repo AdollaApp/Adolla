@@ -431,7 +431,7 @@ function doImages() {
     img.style.minHeight = "30vh";
 
     // Set source
-    var proxySrc = "/proxy-image?url=".concat(encodeURIComponent(url), "&referer=").concat(location.href.includes("mangasee") ? "mangasee" : location.href.includes("manganelo") ? "manganelo" : "null").concat(bypassCache ? "&c=".concat(+Date.now()) : "");
+    var proxySrc = "/proxy-image?url=".concat(encodeURIComponent(url), "&referer=").concat(location.href.includes("mangasee") ? "mangasee" : location.href.includes("manganelo") ? "manganelo" : location.href.includes("mangahere") ? "mangahere" : "null").concat(bypassCache ? "&c=".concat(+Date.now()) : "");
     var isBookMode = getSettings()["double-pages"] === "yes";
     if (isBookMode) {
       img.setAttribute("src", url.includes("mangadex") ? proxySrc : url);

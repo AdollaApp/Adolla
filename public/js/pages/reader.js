@@ -411,6 +411,8 @@ function doImages(bypassCache = false) {
 				? "mangasee"
 				: location.href.includes("manganelo")
 				? "manganelo"
+				: location.href.includes("mangahere")
+				? "mangahere"
 				: "null"
 		}${bypassCache ? `&c=${+Date.now()}` : ""}`;
 
