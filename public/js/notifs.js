@@ -3,10 +3,7 @@ const publicVapidKey = document
 	.querySelector("[data-vapid-public]")
 	.getAttribute("data-vapid-public");
 
-if (
-	("Notification" in window && Notification.permission === "default") ||
-	true
-) {
+if ("Notification" in window && Notification.permission === "default") {
 	document.querySelector(".push-notif-button").classList.remove("el-hidden");
 }
 
