@@ -19,9 +19,11 @@ async function subscribeToPush() {
 				});
 			});
 		}
+		console.log(1);
 		if (Notification.permission === "granted") {
 			doSubscribe();
 		} else {
+			console.log("Add");
 			button.classList.add("el-hidden");
 		}
 	}
@@ -43,7 +45,6 @@ function doSubscribe() {
 //Generate subscription object
 async function getSubscriptionObject() {
 	const worker = (await navigator.serviceWorker.getRegistrations())[0];
-	console.log(worker.active);
 	return await worker.pushManager
 		.subscribe({
 			userVisibleOnly: true,
@@ -52,22 +53,6 @@ async function getSubscriptionObject() {
 		.catch(function (err) {
 			alert(err);
 		});
-	// return navigator.serviceWorker
-	// 	.register("/js_compiled/service-worker-push.js")
-	// 	.then(async (worker) => {
-	// 		await new Promise((resolve) => setTimeout(resolve, 2e3));
-	// 		return worker.pushManager
-	// 			.subscribe({
-	// 				userVisibleOnly: true,
-	// 				applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
-	// 			})
-	// 			.catch(function (err) {
-	// 				alert(err);
-	// 			});
-	// 	})
-	// 	.catch(function (err) {
-	// 		alert(err);
-	// 	});
 }
 
 //Send subscription to server

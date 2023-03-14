@@ -54,7 +54,7 @@ document.querySelectorAll(".chapterLink, a.chapter:not(.no-badge)").forEach(func
 var sw = true;
 if (sw && navigator.onLine) {
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js").then(function (reg) {}, function (err) {
+    navigator.serviceWorker.register("/sw.js").then(function () {}, function (err) {
       console.error(err);
     });
   }

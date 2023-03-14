@@ -21,7 +21,7 @@ function _subscribeToPush() {
           case 0:
             button = document.querySelector(".push-notif-button");
             if (!window.Notification) {
-              _context.next = 6;
+              _context.next = 7;
               break;
             }
             if (!(Notification.permission != "granted")) {
@@ -37,12 +37,14 @@ function _subscribeToPush() {
               });
             });
           case 5:
+            console.log(1);
             if (Notification.permission === "granted") {
               doSubscribe();
             } else {
+              console.log("Add");
               button.classList.add("el-hidden");
             }
-          case 6:
+          case 7:
           case "end":
             return _context.stop();
         }
@@ -81,17 +83,16 @@ function _getSubscriptionObject() {
             return navigator.serviceWorker.getRegistrations();
           case 2:
             worker = _context2.sent[0];
-            console.log(worker.active);
-            _context2.next = 6;
+            _context2.next = 5;
             return worker.pushManager.subscribe({
               userVisibleOnly: true,
               applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
             })["catch"](function (err) {
               alert(err);
             });
-          case 6:
+          case 5:
             return _context2.abrupt("return", _context2.sent);
-          case 7:
+          case 6:
           case "end":
             return _context2.stop();
         }
