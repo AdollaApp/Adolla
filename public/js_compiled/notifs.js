@@ -6,29 +6,29 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 //Start subscription
 var publicVapidKey = document.querySelector("[data-vapid-public]").getAttribute("data-vapid-public");
-if ("Notification" in window && Notification.permission === "default") {
+if ("Notification" in window && Notification.permission === "default" || true) {
   document.querySelector(".push-notif-button").classList.remove("el-hidden");
 }
 function subscribeToPush() {
   return _subscribeToPush.apply(this, arguments);
 }
 function _subscribeToPush() {
-  _subscribeToPush = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  _subscribeToPush = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
     var button;
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+    return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context.prev = _context.next) {
           case 0:
             button = document.querySelector(".push-notif-button");
             if (!window.Notification) {
-              _context2.next = 6;
+              _context.next = 6;
               break;
             }
             if (!(Notification.permission != "granted")) {
-              _context2.next = 5;
+              _context.next = 5;
               break;
             }
-            _context2.next = 5;
+            _context.next = 5;
             return new Promise(function (resolve) {
               button.textContent = "Please hold!...";
               Notification.requestPermission(resolve)["catch"](function (err) {
@@ -44,10 +44,10 @@ function _subscribeToPush() {
             }
           case 6:
           case "end":
-            return _context2.stop();
+            return _context.stop();
         }
       }
-    }, _callee2);
+    }, _callee);
   }));
   return _subscribeToPush.apply(this, arguments);
 }
@@ -68,39 +68,38 @@ function doSubscribe() {
 
 //Generate subscription object
 function getSubscriptionObject() {
-  return navigator.serviceWorker.register("/js_compiled/service-worker-push.js").then( /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(worker) {
-      return _regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.next = 2;
-              return new Promise(function (resolve) {
-                return setTimeout(resolve, 2e3);
-              });
-            case 2:
-              return _context.abrupt("return", worker.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
-              })["catch"](function (err) {
-                alert(err);
-              }));
-            case 3:
-            case "end":
-              return _context.stop();
-          }
+  return _getSubscriptionObject.apply(this, arguments);
+} //Send subscription to server
+function _getSubscriptionObject() {
+  _getSubscriptionObject = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var worker;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 2;
+            return navigator.serviceWorker.getRegistrations();
+          case 2:
+            worker = _context2.sent[0];
+            console.log(worker.active);
+            _context2.next = 6;
+            return worker.pushManager.subscribe({
+              userVisibleOnly: true,
+              applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+            })["catch"](function (err) {
+              alert(err);
+            });
+          case 6:
+            return _context2.abrupt("return", _context2.sent);
+          case 7:
+          case "end":
+            return _context2.stop();
         }
-      }, _callee);
-    }));
-    return function (_x) {
-      return _ref.apply(this, arguments);
-    };
-  }())["catch"](function (err) {
-    alert(err);
-  });
+      }
+    }, _callee2);
+  }));
+  return _getSubscriptionObject.apply(this, arguments);
 }
-
-//Send subscription to server
 function subscribe(subscription) {
   return fetch(window.location.origin + "/subscribe", {
     method: "POST",
