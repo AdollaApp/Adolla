@@ -6,7 +6,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 //Start subscription
 var publicVapidKey = document.querySelector("[data-vapid-public]").getAttribute("data-vapid-public");
-if ("Notification" in window && Notification.permission === "default" || true) {
+if ("Notification" in window && Notification.permission === "default") {
   document.querySelector(".push-notif-button").classList.remove("el-hidden");
 }
 function subscribeToPush() {
