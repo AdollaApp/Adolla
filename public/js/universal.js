@@ -60,14 +60,12 @@ document
 const sw = true;
 if (sw && navigator.onLine) {
 	if ("serviceWorker" in navigator) {
-		window.addEventListener("load", function () {
-			navigator.serviceWorker.register("/sw.js").then(
-				(reg) => {},
-				(err) => {
-					console.error(err);
-				}
-			);
-		});
+		navigator.serviceWorker.register("/sw.js").then(
+			() => {},
+			(err) => {
+				console.error(err);
+			}
+		);
 	}
 } else if (!sw && navigator.onLine) {
 	if ("serviceWorker" in navigator) {
