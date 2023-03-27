@@ -7,6 +7,7 @@ import secretConfig from "./secretConfig";
 import Bot from "./bot";
 import { months } from "../routers/settings";
 import { sendPushNotification } from "./push";
+import { getUnreadCount } from "./unread";
 
 const gistUrl =
 	"https://gist.githubusercontent.com/JipFr/df06901f3a2c1990a91e7a1aadc16129/raw";
@@ -68,6 +69,7 @@ export async function getAnnouncements(): Promise<Announcement[]> {
 				sendPushNotification({
 					title: `Word has come from The Creator!`,
 					body: announcement.message,
+					badgeCount: await getUnreadCount(),
 				});
 
 				// Discord webhook
