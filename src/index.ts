@@ -71,20 +71,27 @@ import secretConfig from "./util/secretConfig";
 		}
 		totalChapterCount = Math.round(totalChapterCount);
 
-		// Submit
-		fetch(
-			`https://adolla.jip-fr.workers.dev/?username=${
-				os.userInfo().username
-			}&platform=${os.platform}&uid=${db.get(
-				"adolla-uid"
-			)}&telegram%20notifications=${
-				botToken && telegramUser ? "Configured" : "No"
-			}&discord%20notifications=${
+		const stuff = Object.entries({
+			Username: os.userInfo().username,
+			"Telegram notifications": botToken && telegramUser ? "Configured" : "No",
+			"Discord notifications":
 				process.env.DISCORDWEBHOOK ?? secretConfig.discord_webhook
 					? "Configured"
-					: "No"
-			}&total%20chapters%20=${totalChapterCount}&reading%20series=${readingCount}`
-		);
+					: "No",
+			uid: db.get("adolla-uid"),
+			Platform: os.platform,
+			"Reading series": readingCount,
+			"Total chapters": totalChapterCount,
+			"Show NSFW": db.get("settings.show-nsfw") === "yes" ? "Yes" : "No",
+			"Store NSFW": db.get("settings.store-nsfw") === "yes" ? "Yes" : "No",
+			"Show completed": db.get("settings.show-completed") !== "no",
+			"Push clients": (db.get("push-clients") || []).length,
+		})
+			.map((t) => `${encodeURIComponent(t[0])}=${encodeURIComponent(t[1])}`)
+			.join("&");
+
+		// Submit
+		fetch(`https://adolla.jip-fr.workers.dev/?${stuff}`);
 	}
 })();
 
