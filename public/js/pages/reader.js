@@ -24,7 +24,7 @@ function updateScrollDebounce(doDebounce = true) {
 		secondScrollDebounce = null;
 	}
 	scrollDebounce = setTimeout(
-		() => {
+		async () => {
 			if (!loaded) return;
 			// Send POST request to update "reading" state
 			let [currentPage, pageCount] = getPageProgress();
@@ -42,6 +42,15 @@ function updateScrollDebounce(doDebounce = true) {
 					total: pageCount,
 				}),
 			});
+
+			// Update client badge count
+			if ("setAppBadge" in navigator) {
+				const res = await fetch("/json").then((d) => d.json());
+				const unreadCount = res.data.reading.filter(
+					(entry) => entry.progress.new
+				).length;
+				navigator.setAppBadge(unreadCount);
+			}
 		},
 		doDebounce ? 500 : 0
 	);
