@@ -13,8 +13,6 @@ import { Provider, ProviderId } from "../scrapers/types";
 import { removeData } from "./lists";
 import { getDataFromURL } from "../scrapers";
 
-let progressDebounce = setTimeout(() => {});
-
 interface NewList {
 	slug: string;
 	name: string;
@@ -621,11 +619,6 @@ router.post(
 				);
 			}
 		}
-
-		if (progressDebounce) clearTimeout(progressDebounce);
-		progressDebounce = setTimeout(() => {
-			// sendBadgeCountUnread();
-		}, 10e3);
 
 		res.json({
 			status: 200,

@@ -15,6 +15,9 @@ export async function sendPushNotification(body: {
 	body?: string;
 	badgeCount?: number;
 }) {
+	if (!body.title)
+		throw new Error("You can't make a push notification without a title");
+
 	let clients = db.get("push-clients") || [];
 	console.log(`Distributing to ${clients.length}:`, body);
 

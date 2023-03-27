@@ -1,7 +1,7 @@
 import express from "express";
 import db from "../db";
 import { sendPushNotification } from "../util/push";
-import { sendBadgeCountUnread } from "../util/push-unread";
+import { getUnreadCount } from "../util/unread";
 const router = express.Router();
 
 // POST /subscribe
@@ -21,11 +21,12 @@ router.post("/", async (req, res) => {
 	clients.push(req.body);
 	db.store(false);
 
+	const unreadCount = await getUnreadCount();
 	sendPushNotification({
 		title: "New device added",
 		body: "Notifications for new chapters have been enabled on a new device",
+		badgeCount: unreadCount,
 	});
-	sendBadgeCountUnread();
 
 	res.json({
 		message: "Yep okay",
