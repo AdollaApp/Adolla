@@ -69,7 +69,7 @@ function updateScrollDebounce() {
 
             // Update client badge count
             if (!("setAppBadge" in navigator)) {
-              _context.next = 13;
+              _context.next = 12;
               break;
             }
             _context.next = 9;
@@ -80,10 +80,9 @@ function updateScrollDebounce() {
             res = _context.sent;
             unreadCount = res.data.reading.filter(function (entry) {
               return entry.progress["new"];
-            });
-            console.log(unreadCount);
+            }).length;
             navigator.setAppBadge(unreadCount);
-          case 13:
+          case 12:
           case "end":
             return _context.stop();
         }

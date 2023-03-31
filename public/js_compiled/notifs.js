@@ -21,7 +21,7 @@ function _subscribeToPush() {
           case 0:
             button = document.querySelector(".push-notif-button");
             if (!window.Notification) {
-              _context.next = 7;
+              _context.next = 6;
               break;
             }
             if (!(Notification.permission != "granted")) {
@@ -37,14 +37,12 @@ function _subscribeToPush() {
               });
             });
           case 5:
-            console.log(1);
             if (Notification.permission === "granted") {
               doSubscribe();
             } else {
-              console.log("Add");
               button.classList.add("el-hidden");
             }
-          case 7:
+          case 6:
           case "end":
             return _context.stop();
         }
@@ -111,7 +109,7 @@ function subscribe(subscription) {
       "content-type": "application/json"
     }
   })["catch"](function (err) {
-    console.log(err);
+    console.error(err);
   });
 }
 
@@ -119,7 +117,6 @@ function subscribe(subscription) {
 function urlBase64ToUint8Array(base64String) {
   var padding = "=".repeat((4 - base64String.length % 4) % 4);
   var base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
-  console.log(base64);
   var rawData = window.atob(base64);
   var outputArray = new Uint8Array(rawData.length);
   for (var i = 0; i < rawData.length; ++i) {

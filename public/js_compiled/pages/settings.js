@@ -79,7 +79,6 @@ var _loop = function _loop() {
   colorOption.classList.add("color");
   colorOption.style = "--bg: ".concat(color.badge);
   if (color.badge.toLowerCase().trim() === getComputedStyle(document.body).getPropertyValue("--badge").toLowerCase().trim()) colorOption.classList.add("selected");
-  console.log(color.badge.toLowerCase().trim(), getComputedStyle(document.body).getPropertyValue("--badge").toLowerCase(), color.badge.toLowerCase().trim() === getComputedStyle(document.body).getPropertyValue("--badge").toLowerCase().trim());
   colorOption.addEventListener("click", function () {
     fetch("/settings/set-app-theme", {
       method: "POST",

@@ -19,11 +19,9 @@ async function subscribeToPush() {
 				});
 			});
 		}
-		console.log(1);
 		if (Notification.permission === "granted") {
 			doSubscribe();
 		} else {
-			console.log("Add");
 			button.classList.add("el-hidden");
 		}
 	}
@@ -66,7 +64,7 @@ function subscribe(subscription) {
 			"content-type": "application/json",
 		},
 	}).catch(function (err) {
-		console.log(err);
+		console.error(err);
 	});
 }
 
@@ -74,7 +72,6 @@ function subscribe(subscription) {
 function urlBase64ToUint8Array(base64String) {
 	const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
 	const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
-	console.log(base64);
 	const rawData = window.atob(base64);
 	const outputArray = new Uint8Array(rawData.length);
 	for (let i = 0; i < rawData.length; ++i) {
