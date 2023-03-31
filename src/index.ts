@@ -72,10 +72,13 @@ import secretConfig from "./util/secretConfig";
 		}
 		totalChapterCount = Math.round(totalChapterCount);
 
+		let hash = "Not a git repo";
+		try {
+			hash = execSync("git rev-parse --short HEAD").toString().trim();
+		} catch {}
+
 		const stuff = Object.entries({
-			"Last commit hash": execSync("git rev-parse --short HEAD")
-				.toString()
-				.trim(),
+			"Last commit hash": hash,
 			Username: os.userInfo().username,
 			"Telegram notifications": botToken && telegramUser ? "Configured" : "No",
 			"Discord notifications":
