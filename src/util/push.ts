@@ -45,8 +45,7 @@ export async function sendPushNotification(body: {
 			.sendNotification(subscription, payload)
 			.catch((err) => {
 				if (err.statusCode === 410) {
-					console.log("Removing endpoint");
-
+					console.log("Removing endpoint", JSON.parse(err.body));
 					clients = clients.filter(
 						(client) => client.subscription.endpoint !== subscription.endpoint
 					);
