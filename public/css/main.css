@@ -1672,6 +1672,33 @@ div.selection-actions .selection-actions-inner {
 	width: 100%;
 }
 
+.el-hidden {
+	display: none;
+}
+
+/* Push */
+
+.push-notif-button:not(.el-hidden) {
+	width: 100%;
+	background: var(--body-offset);
+	color: var(--text);
+	padding: 8px 16px;
+	border: 1px solid var(--border);
+	border-radius: 6px;
+	margin: 20px 0;
+	font-size: 1rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
+}
+
+.push-notif-button svg {
+	display: block;
+	width: 1.2rem;
+	height: 1.2rem;
+}
+
 /* Responsiveness */
 
 @media screen and (max-width: 900px), (orientation: portrait) {

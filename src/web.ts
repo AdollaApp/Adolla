@@ -174,6 +174,7 @@ app.use(bodyParser.json());
 app.use("/", routers.home);
 app.use("/search", routers.search);
 app.use("/lists", routers.lists);
+app.use("/subscribe", routers.notifs);
 app.use("/", routers.settings);
 
 // Static assets

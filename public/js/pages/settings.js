@@ -105,16 +105,6 @@ for (let color of colorOptions) {
 	)
 		colorOption.classList.add("selected");
 
-	console.log(
-		color.badge.toLowerCase().trim(),
-		getComputedStyle(document.body).getPropertyValue("--badge").toLowerCase(),
-		color.badge.toLowerCase().trim() ===
-			getComputedStyle(document.body)
-				.getPropertyValue("--badge")
-				.toLowerCase()
-				.trim()
-	);
-
 	colorOption.addEventListener("click", () => {
 		fetch("/settings/set-app-theme", {
 			method: "POST",

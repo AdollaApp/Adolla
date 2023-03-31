@@ -257,7 +257,7 @@ const imageRouter = async (req, res, next) => {
 		}
 	} catch (err) {
 		// Something went wrong for some reason
-		console.log(err);
+		console.error(err);
 		console.error("Throwing get-images error for", provider, slug);
 		res.status(404);
 		res.json({

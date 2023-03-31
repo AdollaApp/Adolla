@@ -13,6 +13,8 @@ import secretConfig from "../util/secretConfig";
 import { Progress } from "../types";
 import { getProviderId } from "../routers/manga-page";
 import { getAnnouncements } from "./getAnnouncements";
+import { sendPushNotification } from "./push";
+import { getUnreadCount } from "./unread";
 
 const clean = (str: string | number) => {
 	return str.toString().replace(/\./g, "_");
@@ -165,6 +167,18 @@ class Updater {
 												chalk.red("[NOTIFS]") +
 													` New chapter found for ${data.constant.title} but Telegram Bot is not configured`
 											);
+										}
+
+										if (doNotify) {
+											console.info(
+												chalk.green("[NOTIFS]") +
+													` New chapter found for ${data.constant.title}, notifying all push clients`
+											);
+											sendPushNotification({
+												title: `${data.constant.title} — ${nextChapter.label}`,
+												body: "A new chapter has been released",
+												badgeCount: await getUnreadCount(),
+											});
 										}
 
 										// Discord webhook
