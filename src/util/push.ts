@@ -45,9 +45,9 @@ export async function sendPushNotification(body: {
 			.sendNotification(subscription, payload)
 			.catch((err) => {
 				if (err.statusCode === 410) {
-					console.log("Removing endpoint", JSON.parse(err.body));
-					clients = clients.filter(
-						(client) => client.subscription.endpoint !== subscription.endpoint
+					console.info(
+						chalk.redBright("[PUSH]") + ` Failed to send out push:`,
+						JSON.parse(err.body)
 					);
 				}
 			});
@@ -65,7 +65,4 @@ export async function sendPushNotification(body: {
 				body.title
 			} / badge: ${body.badgeCount}`
 	);
-
-	db.set("push-client", clients);
-	db.store(false);
 }
