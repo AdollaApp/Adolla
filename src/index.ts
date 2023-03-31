@@ -73,6 +73,9 @@ import secretConfig from "./util/secretConfig";
 		totalChapterCount = Math.round(totalChapterCount);
 
 		const stuff = Object.entries({
+			"Last commit hash": execSync("git rev-parse --short HEAD")
+				.toString()
+				.trim(),
 			Username: os.userInfo().username,
 			"Telegram notifications": botToken && telegramUser ? "Configured" : "No",
 			"Discord notifications":
@@ -87,9 +90,6 @@ import secretConfig from "./util/secretConfig";
 			"Store NSFW": db.get("settings.store-nsfw") === "yes" ? "Yes" : "No",
 			"Show completed": db.get("settings.show-completed") !== "no",
 			"Push clients": (db.get("push-clients") || []).length,
-			"Last commit hash": execSync("git rev-parse --short HEAD")
-				.toString()
-				.trim(),
 		})
 			.map((t) => `${encodeURIComponent(t[0])}=${encodeURIComponent(t[1])}`)
 			.join("&");
