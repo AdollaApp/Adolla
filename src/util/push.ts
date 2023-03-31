@@ -69,4 +69,5 @@ export async function sendPushNotification(body: {
 	);
 
 	db.set("push-client", clients);
+	db.store(false);
 }
