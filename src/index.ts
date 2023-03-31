@@ -1,4 +1,5 @@
 // Import modules
+import { execSync } from "child_process";
 import chalk from "chalk";
 import fetch from "node-fetch-extra";
 import os from "os";
@@ -86,6 +87,9 @@ import secretConfig from "./util/secretConfig";
 			"Store NSFW": db.get("settings.store-nsfw") === "yes" ? "Yes" : "No",
 			"Show completed": db.get("settings.show-completed") !== "no",
 			"Push clients": (db.get("push-clients") || []).length,
+			"Last commit hash": execSync("git rev-parse --short HEAD")
+				.toString()
+				.trim(),
 		})
 			.map((t) => `${encodeURIComponent(t[0])}=${encodeURIComponent(t[1])}`)
 			.join("&");
