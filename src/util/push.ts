@@ -44,7 +44,7 @@ export async function sendPushNotification(body: {
 		let t = await webPush
 			.sendNotification(subscription, payload)
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 				if (err.statusCode === 410) {
 					console.log("Removing endpoint");
 

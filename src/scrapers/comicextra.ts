@@ -254,7 +254,7 @@ export class comicextraClass extends Scraper {
 				provider: isProviderId(providerId) ? providerId : null,
 			};
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 			return {
 				success: false,
 				status: 0,
