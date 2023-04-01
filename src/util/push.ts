@@ -47,7 +47,7 @@ export async function sendPushNotification(body: {
 				if (err.statusCode === 410) {
 					console.info(
 						chalk.redBright("[PUSH]") + ` Failed to send out push:`,
-						JSON.parse(err.body)
+						err.body
 					);
 				}
 			});

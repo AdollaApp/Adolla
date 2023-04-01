@@ -14,6 +14,7 @@ document.querySelector(".manga-reader .loading").scrollIntoView({
 // This is a debounce effect for the page update
 let scrollDebounce;
 let secondScrollDebounce;
+let badgeScrollDebounce;
 function updateScrollDebounce(doDebounce = true) {
 	if (scrollDebounce) {
 		clearTimeout(scrollDebounce);
@@ -23,8 +24,12 @@ function updateScrollDebounce(doDebounce = true) {
 		clearTimeout(secondScrollDebounce);
 		secondScrollDebounce = null;
 	}
+	if (badgeScrollDebounce) {
+		clearTimeout(badgeScrollDebounce);
+		badgeScrollDebounce = null;
+	}
 	scrollDebounce = setTimeout(
-		async () => {
+		() => {
 			if (!loaded) return;
 			// Send POST request to update "reading" state
 			let [currentPage, pageCount] = getPageProgress();
@@ -42,18 +47,20 @@ function updateScrollDebounce(doDebounce = true) {
 					total: pageCount,
 				}),
 			});
-
-			// Update client badge count
-			if ("setAppBadge" in navigator) {
-				const res = await fetch("/json").then((d) => d.json());
-				const unreadCount = res.data.reading.filter(
-					(entry) => entry.progress.new
-				).length;
-				navigator.setAppBadge(unreadCount);
-			}
 		},
 		doDebounce ? 500 : 0
 	);
+
+	badgeScrollDebounce = setTimeout(async () => {
+		console.log("Setting badge");
+		// Update client badge count
+		if ("setAppBadge" in navigator) {
+			const res = await fetch("/json").then((d) => d.json());
+			const unreadCount = res.data.reading.filter((entry) => entry.progress.new)
+				.length;
+			navigator.setAppBadge(unreadCount);
+		}
+	}, 3e3);
 
 	secondScrollDebounce = setTimeout(
 		() => {
