@@ -135,7 +135,6 @@ export class gmangaClass extends Scraper {
 			let chapterImages = [];
 			if (chapterId != "-1") {
 				// Scrape page to find images
-				console.log(chapterId);
 				const url = `https://gmanga.org/mangas/${slug}/hello-world/123/${chapterId}`;
 				const chapterPageReq = await fetch(url);
 				const chapterPageHtml = await chapterPageReq.text();
@@ -148,12 +147,12 @@ export class gmangaClass extends Scraper {
 						'[type="application/json"][data-component-name="HomeApp"]'
 					).textContent
 				);
-				console.log(chapterJson);
 				const release = chapterJson.readerDataAction.readerData.release;
+				console.log(chapterJson, release);
 
-				const imgs = release.webp_pages.map(
+				const imgs = release.pages.map(
 					(page) =>
-						`https://media.gmanga.me/uploads/releases/${release.storage_key}/mq_webp/${page}`
+						`https://media.gmanga.me/uploads/releases/${release.storage_key}/mq/${page}`
 				);
 				chapterImages = imgs;
 			}
