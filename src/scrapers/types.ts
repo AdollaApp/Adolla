@@ -11,7 +11,8 @@ export type Provider =
 	| "ComicExtra"
 	| "Mangahere"
 	| "Mangadex5"
-	| "Guya";
+	| "Guya"
+	| "gmanga";
 export type ProviderId =
 	| "mangasee"
 	| "mangadex"
@@ -22,7 +23,8 @@ export type ProviderId =
 	| "comicextra"
 	| "mangahere"
 	| "mangadex5"
-	| "guya";
+	| "guya"
+	| "gmanga";
 
 export interface SearchOptions {
 	resultCount: number;

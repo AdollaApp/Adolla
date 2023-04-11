@@ -53,6 +53,7 @@ app.engine(
 					comicextra: "https://www.comicextra.com/images/site/front/logo.png",
 					mangahere: "/proxy-image?url=https://www.mangahere.cc/favicon.ico",
 					guya: "https://guya.moe/static/logo_small.png",
+					gmanga: "https://gmanga.org/assets/product/gmanga/logo.png",
 				};
 				return icons[provider] ?? "/icons/main-on-white.png";
 			},
