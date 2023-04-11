@@ -26,37 +26,21 @@ export class gmangaClass extends Scraper {
 
 		let pageUrl: string;
 
-		if (query === "") {
-			// Get popular page
-			resultCount = 5;
-			pageUrl = "https://manganato.com/genre-all?type=topview";
-		} else {
-			pageUrl = `https://manganato.com/search/story/${encodeURIComponent(
-				query
-					.replace(/[^a-zA-Z]/g, " ")
-					.trim()
-					.replace(/ /g, "_")
-			)}`;
-		}
-		console.log(pageUrl);
-
-		// Fetch DOM for relevant page
-		const pageReq = await fetch(pageUrl);
-		const pageHtml = await pageReq.text();
-
-		// Get DOM for popular page
-		const dom = new JSDOM(pageHtml);
-		const document = dom.window.document;
-
-		// Get nodes
-		const anchors = [
-			...document.querySelectorAll(".genres-item-info .a-h:first-child"),
-			...document.querySelectorAll(".item-title"),
-		];
+		const quickSearch = await fetch("https://api.gmanga.me/api/quick_search", {
+			method: "POST",
+			headers: {
+				"content-type": "application/json",
+			},
+			body: JSON.stringify({
+				query,
+				includes: ["Manga"],
+			}),
+		}).then((d) => d.json());
 
 		// Get IDs from nodes
-		const ids = anchors
-			.map((anchor) => anchor.href.split("/").pop())
+		const ids = quickSearch
+			.find((t) => t.class === "Manga")
+			.data.map((result) => result.id.toString())
 			.slice(0, resultCount);
 
 		// Get details for each search result
@@ -114,7 +98,7 @@ export class gmangaClass extends Scraper {
 			const title = mangaData.title;
 
 			// Get poster URL
-			const posterUrl = `https://media.gmanga.me/uploads/manga/cover/9176/${mangaData.cover}`;
+			const posterUrl = `https://media.gmanga.me/uploads/manga/cover/${slug}/${mangaData.cover}`;
 
 			// Get genres
 			const genres = mangaData.categories.map((t) => t.name);
