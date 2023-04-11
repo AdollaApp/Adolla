@@ -91,6 +91,10 @@ export const Mangadex5 = MangadexInstance;
 import GuyaInstance from "./guya";
 export const Guya = GuyaInstance;
 
+// Import Gmanga
+import GmangaInstance from "./gmanga";
+export const Gmanga = GmangaInstance;
+
 export const scrapers = {
 	Mangasee,
 	Mangadex5,
@@ -101,4 +105,5 @@ export const scrapers = {
 	nhentai,
 	nhentainet,
 	Guya,
+	Gmanga,
 };
