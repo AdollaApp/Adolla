@@ -134,21 +134,11 @@ export class gmangaClass extends Scraper {
 			).then((d) => d.json());
 
 			const chapters: Chapter[] = chapterRes.chapterizations.map((c) => {
-				const label = [
-					typeof c.chapter !== "undefined" &&
-					c.chapter.toString().trim().length > 0
-						? `Ch ${c.chapter}`
-						: null,
-					c.title,
-				]
-					.filter((t) => t && t.toString().trim().length > 0)
-					.join(" — ");
-
 				const ch: Chapter = {
 					season: c.volume,
 					chapter: c.chapter,
 					combined: c.volume * 1000 + c.chapter,
-					label,
+					label: `Chapter ${c.chapter}`,
 					date: new Date(c.time_stamp * 1e3),
 					hrefString: chapterRes.releases
 						.find((t) => t.chapterization_id === c.id)
