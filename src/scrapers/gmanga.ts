@@ -107,10 +107,15 @@ export class gmangaClass extends Scraper {
 			const alternateTitles = [mangaData.english];
 
 			// Get status
-			const status = "unknown";
+			const status = ["unknown", "unknown", "Ongoing", "Finished"][
+				mangaData.story_status
+			];
 
 			// Find description
 			const descriptionParagraphs = mangaData.summary.trim().split("\n");
+
+			// Get NSFW
+			const nsfw = mangaData.over17;
 
 			// Get chapters
 			const chapterRes = await fetch(
@@ -167,7 +172,7 @@ export class gmangaClass extends Scraper {
 					alternateTitles,
 					descriptionParagraphs,
 					genres,
-					nsfw: false,
+					nsfw,
 				},
 				data: {
 					chapters,
