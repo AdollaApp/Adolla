@@ -248,6 +248,18 @@ router.get("/manifest.json", (req, res) => {
 	});
 });
 
+router.get("/osdd.xml", (req, res) => {
+	res.setHeader("content-type", "application/xml");
+	res.send(`<?xml version="1.0"?>
+	<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+		<ShortName>Adolla</ShortName>
+		<Description>Search Adolla</Description>
+		<Url type="text/html" method="get" template="${db.get(
+			"other.host"
+		)}search/mangasee/?q={searchTerms}" />
+	</OpenSearchDescription>`);
+});
+
 function getIconName(fileName: string) {
 	// Get array with each "section" of file name
 	const str = fileName.split(/-|\./).slice(0, -1).join("-");
