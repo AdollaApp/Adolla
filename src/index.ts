@@ -107,7 +107,7 @@ app.listen(process.env.PORT ?? secretConfig.port ?? cfg.http.port ?? 80, () => {
 	console.info(
 		chalk.green("[SERVER]") +
 			` Web server is live on http://localhost:${
-				process.env.PORT ?? cfg.http.port
+				process.env.PORT ?? secretConfig.port ?? cfg.http.port ?? 80
 			}`
 	);
 	backup.start();
