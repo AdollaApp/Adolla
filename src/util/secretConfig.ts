@@ -2,6 +2,11 @@ import os from "os";
 import path from "path";
 import chalk from "chalk";
 import fs from "fs";
+
+// Configure environment
+import { config } from "dotenv";
+config();
+
 const exampleConfig = JSON.parse(
 	fs.readFileSync("./src/example.secret-config.json", "utf-8")
 );

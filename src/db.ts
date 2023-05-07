@@ -1,5 +1,4 @@
 import path from "path";
-import os from "os";
 import fs from "fs";
 import { Database, Progress } from "./types";
 import Db from "jipdb";
