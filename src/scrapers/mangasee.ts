@@ -1,13 +1,17 @@
 import fetch from "node-fetch-extra";
 import chalk from "chalk";
 import Fuse from "fuse.js";
+import fs from "fs";
 
 import updateManga from "../util/updateManga";
 import { Chapter, ScraperError, ScraperResponse } from "../types";
 import { Scraper, SearchOptions } from "./types";
 import { getProviderId, isProviderId } from "../routers/manga-page";
 import { error } from "./index";
-import { disallowedGenres } from "../config.json";
+
+const { disallowedGenres } = JSON.parse(
+	fs.readFileSync("./src/config.json", "utf-8")
+);
 
 // Search interfaces
 /** This is for `DirectoryItem`, the values there aren't very useful */

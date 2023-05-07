@@ -4,6 +4,7 @@ config();
 
 // Import modules
 import { execSync } from "child_process";
+import fs from "fs";
 import chalk from "chalk";
 import fetch from "node-fetch-extra";
 import os from "os";
@@ -25,7 +26,7 @@ import db from "./db";
 import updatePopularCache from "./util/updatePopularCache";
 
 // Import config
-import cfg from "./config.json";
+const cfg = JSON.parse(fs.readFileSync("./src/config.json", "utf-8"));
 import secretConfig from "./util/secretConfig";
 
 // Analytics for Jip — non invasive and opt-out!

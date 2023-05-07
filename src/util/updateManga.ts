@@ -1,17 +1,19 @@
 import fetch from "node-fetch-extra";
 import chalk from "chalk";
 import BBCodeParser from "bbcode-parser";
+import fs from "fs";
 import { XmlEntities } from "html-entities";
 
 import * as scrapers from "../scrapers";
 import db from "../db";
 import { ScraperError, ScraperResponse } from "../types";
 import getMangaProgress from "./getMangaProgress";
-import config from "../config.json";
 import { Provider, Scraper } from "../scrapers/types";
 import { getProviderId, getProviderName } from "../routers/manga-page";
-import { disallowedGenres } from "../config.json";
 import cache from "../util/cache";
+
+const config = JSON.parse(fs.readFileSync("./src/config.json", "utf-8"));
+const { disallowedGenres } = config;
 
 const Entities = new XmlEntities();
 const parser = new BBCodeParser(BBCodeParser.defaultTags());
