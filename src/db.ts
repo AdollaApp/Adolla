@@ -4,6 +4,7 @@ import fs from "fs";
 import { Database, Progress } from "./types";
 import Db from "jipdb";
 import chalk from "chalk";
+import { homePath } from "./util/secretConfig";
 
 // Configure DB's default values
 const defaults: Database = {
@@ -19,7 +20,6 @@ const defaults: Database = {
 };
 
 // Iniate new DB
-const homePath = path.join(os.homedir(), ".adolla");
 const dbPath = path.join(homePath, "data.json");
 if (!fs.existsSync(homePath)) {
 	fs.mkdirSync(homePath);

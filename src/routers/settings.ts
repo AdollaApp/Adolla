@@ -1,14 +1,13 @@
 import express from "express";
 import db from "../db";
 import fs from "fs";
-import os from "os";
 import getReading from "../util/getReading";
 import getIconSrc, { iconNames, iconNamesReversed } from "../util/getIconSrc";
 import path from "path";
 import { removeData } from "./lists";
 import { List } from "../types";
+import { homePath } from "../util/secretConfig";
 
-const homePath = path.join(os.homedir(), ".adolla");
 const backupsPath = path.join(homePath, "backups", "");
 
 const router = express.Router();

@@ -1,3 +1,7 @@
+// Configure environment
+import { config } from "dotenv";
+config();
+
 // Import modules
 import { execSync } from "child_process";
 import chalk from "chalk";
@@ -11,10 +15,6 @@ configurePush();
 console.info(
 	chalk.green("[SERVER]") + ` Starting up at ${new Date().toLocaleString("it")}`
 );
-
-// Configure environment
-import { config } from "dotenv";
-config();
 
 // Require important things
 import app from "./web";

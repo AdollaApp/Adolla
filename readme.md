@@ -60,6 +60,8 @@ There are various environment variables you can use to customise Adolla.
 
 `IMAGE_PROXY_URL`: the URL to use for image proxy. By default is makes a request in the back-end and pipes the response through. It's recommended you use a third-party proxy on lower powered devices like a Raspberry Pi with 1GB of RAM.
 
+`DIRSUFFIX`: suffix to add to the `.adolla` folder (for example, `DIRSUFFIX=hi` makes `.adolla-hi`)
+
 ## FAQ
 
 ### **How to run Adolla?**

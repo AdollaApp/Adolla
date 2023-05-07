@@ -4,8 +4,8 @@ import fs from "fs";
 import chalk from "chalk";
 import db from "./db";
 import { List } from "./types";
+import { homePath } from "./util/secretConfig";
 
-const homePath = path.join(os.homedir(), ".adolla");
 const backupsPath = path.join(homePath, "backups", "");
 
 class Backup {
