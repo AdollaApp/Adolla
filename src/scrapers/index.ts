@@ -68,8 +68,8 @@ import ManganeloInstance from "./manganelo";
 export const Manganelo = ManganeloInstance;
 
 // Import ComicExtra
-import ComicExtraInstance from "./comicextra";
-export const ComicExtra = ComicExtraInstance;
+// import ComicExtraInstance from "./comicextra";
+// export const ComicExtra = ComicExtraInstance;
 
 // Import nhentai
 import nhentaiInstance from "./nhentai";
@@ -101,7 +101,7 @@ export const scrapers = {
 	Manganelo,
 	Mangahere,
 	RCO,
-	ComicExtra,
+	// ComicExtra,
 	nhentai,
 	nhentainet,
 	Guya,
