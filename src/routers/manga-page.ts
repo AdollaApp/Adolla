@@ -136,6 +136,7 @@ async function handleData(data, param) {
 		totalChapterCount,
 		doneChapterCount,
 		mangaProgress,
+		...data,
 	};
 }
 
