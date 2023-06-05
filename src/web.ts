@@ -14,6 +14,7 @@ import db from "./db";
 const app = express();
 
 app.use(cors());
+app.options("*", cors());
 
 // Set up view engine
 app.engine(
