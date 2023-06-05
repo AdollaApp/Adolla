@@ -55,7 +55,7 @@ router.get("/:provider/:slug", async (req, res, next) => {
 		next();
 		return;
 	}
-	const data = await updateManga(provider, param, true);
+	const data = await updateManga(provider, param);
 
 	if (data && data.success) {
 		const { lists, allLists, mangaProgress } = await handleData(data, param);
@@ -88,7 +88,7 @@ router.get("/:provider/:slug/json", async (req, res) => {
 		});
 		return;
 	}
-	const data = await updateManga(provider, param, true);
+	const data = await updateManga(provider, param);
 
 	if (data && data.success) {
 		const newData = await handleData(data, param);
