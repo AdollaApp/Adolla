@@ -2,6 +2,7 @@
 import express from "express";
 import handlebars from "express-handlebars";
 import bodyParser from "body-parser";
+import cors from "cors";
 
 // Import custom modules
 import routers from "./routers";
@@ -11,6 +12,8 @@ import { getProviderId } from "./routers/manga-page";
 import db from "./db";
 
 const app = express();
+
+app.use(cors());
 
 // Set up view engine
 app.engine(
