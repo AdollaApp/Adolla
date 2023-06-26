@@ -52,7 +52,8 @@ router.get("/settings/", async (req, res) => {
 				name: getIconName(fileName),
 				isSelected: src === currentIcon,
 			};
-		});
+		})
+		.filter((t) => t.name);
 
 	// Get backups
 	const backupFiles = fs.readdirSync(backupsPath);
@@ -263,7 +264,7 @@ function getIconName(fileName: string) {
 	// Get array with each "section" of file name
 	const str = fileName.split(/-|\./).slice(0, -1).join("-");
 
-	return iconNames[str] ?? "Unknown";
+	return iconNames[str] ?? null;
 }
 
 export default router;

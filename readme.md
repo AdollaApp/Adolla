@@ -111,4 +111,3 @@ Good, thanks for asking!
 ![Mobile, dark](https://raw.githubusercontent.com/JipFr/jipfr/master/screenshots/adolla/mobile_2_dark.png)
 ![Mobile](https://raw.githubusercontent.com/JipFr/jipfr/master/screenshots/adolla/mobile_3_light.png)
 ![Mobile, dark](https://raw.githubusercontent.com/JipFr/jipfr/master/screenshots/adolla/mobile_3_dark.png)
-![Alternative app icons on iOS](https://raw.githubusercontent.com/JipFr/jipfr/master/screenshots/adolla/icons.jpg)

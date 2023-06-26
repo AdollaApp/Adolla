@@ -1,15 +1,14 @@
 import db from "../db";
 
 export const iconNames = {
-	"main-on-white": "White",
-	"white-on-gold": "Gold",
-	"white-on-blue": "Ocean",
-	"white-on-dark": "Night",
-	"white-on-green": "Forest",
-	"white-on-red": "Crimson",
-	"white-on-black": "Black",
-	"rainbow-on-dark": "Dark rainbow",
-	"rainbow-on-white": "Light rainbow",
+	"adolla-dark": "Adolla dark",
+	"adolla-gold": "Adolla Gold",
+	"adolla-blue": "Adolla blue",
+	"adolla-pride": "Pride 🏳️‍🌈",
+	"adolla-trans": "Trans 🏳️‍⚧️",
+	"adolla-primary": "Adolla green",
+	"adolla-white": "Adolla no bg",
+	"adolla-forest": "Adolla forest",
 };
 export const iconNamesReversed = Object.fromEntries(
 	Object.entries(iconNames).map((v) => v.reverse())
@@ -20,5 +19,5 @@ export const iconNamesReversed = Object.fromEntries(
  */
 export default function getIconSrc(): string {
 	const selectedName = db.get("settings.icon");
-	return `/icons/${iconNamesReversed[selectedName] || "main-on-white"}.png`;
+	return `/icons/${iconNamesReversed[selectedName] || "adolla-primary"}.png`;
 }
