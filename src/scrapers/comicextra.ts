@@ -16,16 +16,16 @@ export class comicextraClass extends Scraper {
 	}
 
 	public async search(query: string, options?: Partial<SearchOptions>) {
-		let resultCount = 10;
+		let resultCount = 20;
 
 		let pageUrl: string;
 
 		if (query === "") {
 			// Get popular page
-			pageUrl = "https://www.comicextra.com/popular-comic";
+			pageUrl = "https://comicextra.net/popular-comic";
 			resultCount = 5;
 		} else {
-			pageUrl = `https://www.comicextra.com/comic-search?key=${encodeURIComponent(
+			pageUrl = `https://comicextra.net/comic-search?key=${encodeURIComponent(
 				query
 			)}`;
 		}
@@ -95,7 +95,7 @@ export class comicextraClass extends Scraper {
 	): Promise<ScraperResponse> {
 		try {
 			// Get HTML
-			const pageReq = await fetch(`https://www.comicextra.com/comic/${slug}`);
+			const pageReq = await fetch(`https://comicextra.net/comic/${slug}`);
 			const pageHtml = await pageReq.text();
 
 			// Get variables
@@ -108,7 +108,7 @@ export class comicextraClass extends Scraper {
 			// Get poster URL
 			let posterUrl = document.querySelector(".movie-l-img img").src;
 			if (posterUrl.startsWith("/"))
-				posterUrl = "https://www.comicextra.com" + posterUrl;
+				posterUrl = "https://comicextra.net" + posterUrl;
 
 			// Get genres from tags
 			const genres = [
@@ -216,7 +216,8 @@ export class comicextraClass extends Scraper {
 			let chapterImages = [];
 			if (chapterId != "-1") {
 				// Scrape page to find images
-				const url = `https://www.comicextra.com/${slug}/${chapterId}/full`;
+				const url = `https://comicextra.net/comic/${slug}/${chapterId}/full`;
+				console.log(url);
 				const chapterPageReq = await fetch(url);
 				const chapterPageHtml = await chapterPageReq.text();
 
