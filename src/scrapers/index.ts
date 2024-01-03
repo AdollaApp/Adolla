@@ -80,8 +80,8 @@ import nhentainetInstance from "./nhentainet";
 export const nhentainet = nhentainetInstance;
 
 // Import Mangahere
-import MangahereInstance from "./mangahere";
-export const Mangahere = MangahereInstance;
+// import MangahereInstance from "./mangahere";
+// export const Mangahere = MangahereInstance;
 
 // Import MangaDex V5
 import MangadexInstance from "./mangadex-v5";
@@ -99,7 +99,7 @@ export const scrapers = {
 	Mangasee,
 	Mangadex5,
 	Manganelo,
-	Mangahere,
+	// Mangahere,
 	RCO,
 	ComicExtra,
 	nhentai,
