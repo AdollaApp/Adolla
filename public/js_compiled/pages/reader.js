@@ -463,14 +463,15 @@ function doImages() {
     img.setAttribute("alt", "Page ".concat(Number(clone.length - i)));
     img.setAttribute("data-i", clone.length - i);
     img.style.minHeight = "30vh";
+    var referer = location.href.includes("mangasee") ? "mangasee" : location.href.includes("manganelo") ? "manganelo" : location.href.includes("mangahere") ? "mangahere" : "null";
 
     // Set source
-    var proxySrc = "/proxy-image?url=".concat(encodeURIComponent(url), "&referer=").concat(location.href.includes("mangasee") ? "mangasee" : location.href.includes("manganelo") ? "manganelo" : location.href.includes("mangahere") ? "mangahere" : "null").concat(bypassCache ? "&c=".concat(+Date.now()) : "");
+    var proxySrc = "/proxy-image?url=".concat(encodeURIComponent(url), "&referer=").concat(referer).concat(bypassCache ? "&c=".concat(+Date.now()) : "");
     var isBookMode = getSettings()["double-pages"] === "yes";
     if (isBookMode) {
-      img.setAttribute("src", url.includes("mangadex") ? proxySrc : url);
+      img.setAttribute("src", url);
     } else {
-      img.setAttribute("data-src", url.includes("mangadex") ? proxySrc : url);
+      img.setAttribute("data-src", url);
       img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
     }
     img.addEventListener("error", function () {

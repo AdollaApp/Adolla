@@ -421,23 +421,25 @@ function doImages(bypassCache = false) {
 		img.setAttribute("data-i", clone.length - i);
 		img.style.minHeight = "30vh";
 
+		const referer = location.href.includes("mangasee")
+			? "mangasee"
+			: location.href.includes("manganelo")
+			? "manganelo"
+			: location.href.includes("mangahere")
+			? "mangahere"
+			: "null";
+
 		// Set source
-		const proxySrc = `/proxy-image?url=${encodeURIComponent(url)}&referer=${
-			location.href.includes("mangasee")
-				? "mangasee"
-				: location.href.includes("manganelo")
-				? "manganelo"
-				: location.href.includes("mangahere")
-				? "mangahere"
-				: "null"
-		}${bypassCache ? `&c=${+Date.now()}` : ""}`;
+		const proxySrc = `/proxy-image?url=${encodeURIComponent(
+			url
+		)}&referer=${referer}${bypassCache ? `&c=${+Date.now()}` : ""}`;
 
 		const isBookMode = getSettings()["double-pages"] === "yes";
 
 		if (isBookMode) {
-			img.setAttribute("src", url.includes("mangadex") ? proxySrc : url);
+			img.setAttribute("src", url);
 		} else {
-			img.setAttribute("data-src", url.includes("mangadex") ? proxySrc : url);
+			img.setAttribute("data-src", url);
 			img.src =
 				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 		}
