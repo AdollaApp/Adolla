@@ -54,7 +54,7 @@ app.engine(
 					nhentai: "https://nhentai.to/img/logo.650c98bbb08e.svg",
 					nhentainet: "https://nhentai.net/favicon.ico",
 					manganelo: "https://manganato.com/favicon-96x96.png",
-					comicextra: "https://comicextra.net/images/site/front/logo.png",
+					comicextra: "https://comixextra.com/images/site/front/logo.png",
 					mangahere: "/proxy-image?url=https://www.mangahere.cc/favicon.ico",
 					guya: "https://guya.moe/static/logo_small.png",
 					gmanga: "https://gmanga.org/assets/product/gmanga/logo.png",
