@@ -299,7 +299,8 @@ router.get("/proxy-image", (req, res) => {
 	} else if (req.query.referer === "mangahere") {
 		headers.referer = "https://www.mangahere.cc/";
 	}
-	headers["user-agent"] = "Adolla";
+	headers["user-agent"] =
+		"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 
 	fetch(url, {
 		headers,
