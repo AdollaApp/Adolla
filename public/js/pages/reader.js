@@ -421,13 +421,10 @@ function doImages(bypassCache = false) {
 		img.setAttribute("data-i", clone.length - i);
 		img.style.minHeight = "30vh";
 
-		const referer = location.href.includes("mangasee")
-			? "mangasee"
-			: location.href.includes("manganelo")
-			? "manganelo"
-			: location.href.includes("mangahere")
-			? "mangahere"
-			: "null";
+		let referer = "null";
+		if (location.href.includes("mangasee")) referer = "mangasee";
+		if (location.href.includes("manganelo")) referer = "manganelo";
+		if (location.href.includes("mangahere")) referer = "mangahere";
 
 		// Set source
 		const proxySrc = `/proxy-image?url=${encodeURIComponent(
@@ -436,10 +433,14 @@ function doImages(bypassCache = false) {
 
 		const isBookMode = getSettings()["double-pages"] === "yes";
 
+		const isMangaDex = location.href.includes("mangadex");
+		const imgUrl =
+			isMangaDex && getSettings()["proxy-md"] === "yes" ? proxySrc : url;
+
 		if (isBookMode) {
-			img.setAttribute("src", url);
+			img.setAttribute("src", imgUrl);
 		} else {
-			img.setAttribute("data-src", url);
+			img.setAttribute("data-src", imgUrl);
 			img.src =
 				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 		}
