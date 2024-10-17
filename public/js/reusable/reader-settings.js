@@ -11,6 +11,7 @@ const defaultSettings = {
 	"double-pages": "no",
 	"image-scaling": "width",
 	"tap-navigation": "yes",
+	"proxy-md": "yes",
 };
 
 // Get current settings
@@ -116,11 +117,17 @@ function updateSettingToggles(settings) {
 	}
 }
 
+function mdProxyUpdated() {
+	localStorage.removeItem("image-cache");
+	initImages();
+}
+
 // Set setting
 async function setSetting(key, value) {
 	let settings = getSettings();
 	settings[key] = value;
 	localStorage.setItem("settings", JSON.stringify(settings));
+	if (key === "proxy-md") mdProxyUpdated();
 }
 
 initSettings();

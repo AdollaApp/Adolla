@@ -19,7 +19,8 @@ var defaultSettings = {
   "enable-keyboard-controls": "no",
   "double-pages": "no",
   "image-scaling": "width",
-  "tap-navigation": "yes"
+  "tap-navigation": "yes",
+  "proxy-md": "yes"
 };
 
 // Get current settings
@@ -114,6 +115,10 @@ function updateSettingToggles(settings) {
     _loop2();
   }
 }
+function mdProxyUpdated() {
+  localStorage.removeItem("image-cache");
+  initImages();
+}
 
 // Set setting
 function setSetting(_x, _x2) {
@@ -129,7 +134,8 @@ function _setSetting() {
             settings = getSettings();
             settings[key] = value;
             localStorage.setItem("settings", JSON.stringify(settings));
-          case 3:
+            if (key === "proxy-md") mdProxyUpdated();
+          case 4:
           case "end":
             return _context.stop();
         }
