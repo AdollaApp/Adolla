@@ -1,0 +1,9 @@
+{
+  "tasks": {
+    "start": "deno run --allow-net --allow-env --allow-sys --watch=static/,routes/,data/ src/main.ts",
+    "lint": "deno lint"
+  },
+  "imports": {
+    "fastify": "npm:fastify@^5.2.1"
+  }
+}
