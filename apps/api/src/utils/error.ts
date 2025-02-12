@@ -1,4 +1,5 @@
-import { apiErrorCodes, ApiErrorCodes } from "./codes";
+import type { ApiErrorCodes } from './codes';
+import { apiErrorCodes } from './codes';
 
 const errorSymbol = Symbol('ApiError');
 

@@ -5,13 +5,13 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 export const db = drizzle({
   connection: {
     connectionString: conf.database.connection,
-    ssl: conf.database.ssl
-  }
+    ssl: conf.database.ssl,
+  },
 });
 
 export async function isDatabaseConnected() {
   try {
-    await db.execute(`select 1`)
+    await db.execute(`select 1`);
     return true;
   } catch {
     return false;

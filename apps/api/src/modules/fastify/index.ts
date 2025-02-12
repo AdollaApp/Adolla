@@ -18,7 +18,7 @@ export async function setupFastify(): Promise<FastifyInstance> {
   log.info(`setting up fastify...`);
 
   const app = Fastify({
-    logger: log.child({ type: 'req' }) as any,
+    loggerInstance: log.child({ type: 'req' }) as any,
   });
 
   app.setValidatorCompiler(validatorCompiler);

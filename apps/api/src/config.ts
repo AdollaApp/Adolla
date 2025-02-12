@@ -1,6 +1,6 @@
-import { Fragment, zodCoercedBoolean } from '@neato/config';
+import { zodCoercedBoolean } from '@neato/config';
 import { createConfigLoader } from '@neato/config';
-import { PartialDeep } from 'type-fest';
+import type { PartialDeep } from 'type-fest';
 import { z } from 'zod';
 
 const schema = z.object({
