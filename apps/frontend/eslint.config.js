@@ -100,6 +100,7 @@ export default tseslint.config(
     name: 'adolla/global-ignores',
     ignores: [
       '**/dist/',
+      '**/build/',
       '**/.svelte-kit/',
     ],
   },

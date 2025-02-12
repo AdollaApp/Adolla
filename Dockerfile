@@ -14,7 +14,7 @@ COPY . ./
 
 ## --- frontend ---
 FROM base AS frontend
-EXPOSE 8080
+EXPOSE 3000
 WORKDIR /app/apps/frontend
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile

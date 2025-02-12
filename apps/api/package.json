@@ -15,14 +15,7 @@
     "lint:fix": "eslint --fix ."
   },
   "devDependencies": {
-    "@eslint-community/eslint-plugin-eslint-comments": "^4.4.1",
-    "@eslint/js": "^9.18.0",
-    "@stylistic/eslint-plugin": "^3.1.0",
-    "@types/node": "^20.12.7",
-    "eslint": "^9.18.0",
-    "globals": "^15.14.0",
-    "tsup": "7.2.0",
-    "typescript-eslint": "^8.20.0"
+    "@types/node": "^22.0.0"
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",
