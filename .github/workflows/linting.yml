@@ -1,0 +1,31 @@
+name: Linting
+
+on: pull_request
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 10
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
+      - name: Run ESLint on /apps/api
+        working-directory: "./apps/api"
+        run: pnpm run lint
+      - name: Run ESLint on /apps/frontend
+        working-directory: "./apps/frontend"
+        run: pnpm run lint
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docker Image
+        run: docker build .
