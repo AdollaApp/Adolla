@@ -31,14 +31,25 @@ Adolla sources manga from many places:
 
 ## 🧬 Running locally for development
 
-You need to have `pnpm` and `NodeJS 22` installed to run for development
+You need to have `pnpm` and `NodeJS 22` installed to run for development.
 
+Create an `.env` file at `/apps/api/.env` with these contents:
 ```sh
-# run the frontend
+CONF_USE_PRESETS=docker
+```
+
+Then run the compose file at `/.docker` with this command to setup the complimentary services:
+```sh
+docker compose up -d
+```
+
+Then finally, spin up the dev servers:
+```sh
+pnpm i
+
 cd apps/frontend
 pnpm dev
 
-# run the API server
 cd apps/api
 pnpm dev
 ```

@@ -4,8 +4,8 @@
   "private": true,
   "main": "./dist/main.js",
   "type": "module",
-  "engines" : {
-    "node" : ">=22.0.0"
+  "engines": {
+    "node": ">=22.0.0"
   },
   "scripts": {
     "start": "node dist/main.js",
@@ -15,17 +15,22 @@
     "lint:fix": "eslint --fix ."
   },
   "devDependencies": {
-    "@types/node": "^22.0.0"
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.11",
+    "drizzle-kit": "^0.30.4",
+    "type-fest": "^4.34.1"
   },
   "dependencies": {
-    "@fastify/cors": "^9.0.1",
-    "@prisma/client": "^5.12.1",
-    "fastify": "^4.26.2",
-    "fastify-type-provider-zod": "^1.1.9",
-    "neat-config": "^3.0.0",
-    "pino": "^8.20.0",
-    "pino-pretty": "^11.0.0",
-    "prisma": "^5.12.1",
-    "zod": "^3.22.4"
+    "@fastify/cors": "^10.0.2",
+    "@fastify/swagger": "^9.4.2",
+    "@neato/config": "^3.0.0",
+    "drizzle-orm": "^0.39.3",
+    "fastify": "^5.2.1",
+    "fastify-type-provider-zod": "^4.0.2",
+    "pg": "^8.13.2",
+    "pino": "^9.6.0",
+    "pino-pretty": "^13.0.0",
+    "typeid-js": "^1.2.0",
+    "zod": "^3.24.2"
   }
 }

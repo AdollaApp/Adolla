@@ -1,18 +1,17 @@
-// Import the framework and instantiate it
-import Fastify from 'fastify';
-const fastify = Fastify({
-  logger: true,
-});
+import {
+  setupFastify,
+  setupFastifyRoutes,
+  startFastify,
+} from '@/modules/fastify';
+import { logger } from './modules/log';
 
-// Declare a route
-fastify.get('/', async function handler(_request, _reply) {
-  return { hello: 'world' };
-});
+const log = logger.child({ svc: 'adolla' });
 
-// Run the server!
-try {
-  await fastify.listen({ port: 3000 });
-} catch (err) {
-  fastify.log.error(err);
-  process.exit(1);
-}
+log.info(`App booting...`);
+
+const app = await setupFastify();
+await setupFastifyRoutes(app);
+await startFastify(app);
+
+log.info(`App setup, ready to accept connections`);
+log.info(`--------------------------------------`);
