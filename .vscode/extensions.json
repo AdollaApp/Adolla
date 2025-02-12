@@ -1,5 +1,6 @@
 {
   "recommendations": [
+    "dbaeumer.vscode-eslint",
     "svelte.svelte-vscode",
     "EditorConfig.EditorConfig",
     "denoland.vscode-deno"

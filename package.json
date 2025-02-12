@@ -1,0 +1,6 @@
+{
+  "name": "adolla",
+  "version": "0.0.0",
+  "packageManager": "pnpm@10.3.0",
+  "private": true
+}

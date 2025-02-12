@@ -31,14 +31,14 @@ Adolla sources manga from many places:
 
 ## 🧬 Running locally for development
 
-You need to have Deno installed to run for development
+You need to have `pnpm` and `NodeJS 22` installed to run for development
 
 ```sh
 # run the frontend
-cd frontend
-deno task dev
+cd apps/frontend
+pnpm dev
 
 # run the API server
-cd api
-deno task dev
+cd apps/api
+pnpm dev
 ```

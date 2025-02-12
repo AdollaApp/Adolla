@@ -1,0 +1,13 @@
+{
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"],
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "module": "Node16",
+    "strict": true,
+    "moduleResolution": "Bundler",
+    "paths": {
+      "@/*": ["./*"],
+    }
+  }
+}

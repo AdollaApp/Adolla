@@ -1,8 +1,11 @@
 {
-	"name": "adolla-frontend",
-	"private": true,
+	"name": "@repo/frontend",
 	"version": "0.0.1",
+	"private": true,
 	"type": "module",
+  "engines" : {
+    "node" : ">=22.0.0"
+  },
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -10,8 +13,8 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint ."
+		"lint": "eslint .",
+    "lint:fix": "eslint --fix ."
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
