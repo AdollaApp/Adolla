@@ -33,7 +33,7 @@ export const fragments: Record<string, PartialDeep<z.infer<typeof schema>>> = {
       cors: 'http://localhost:3000',
     },
     database: {
-      connection: 'postgres://postgres:postgres@postgres:5432/postgres',
+      connection: 'postgres://postgres:postgres@localhost:5432/postgres',
     },
     crypto: {
       secret: '12345678901234567890123456789012',

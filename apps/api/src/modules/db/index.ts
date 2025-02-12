@@ -1,7 +1,7 @@
 import { conf } from '@/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
+import { logger } from '../log';
 
-// You can specify any property from the node-postgres connection options
 export const db = drizzle({
   connection: {
     connectionString: conf.database.connection,
@@ -13,7 +13,8 @@ export async function isDatabaseConnected() {
   try {
     await db.execute(`select 1`);
     return true;
-  } catch {
+  } catch (err) {
+    logger.warn(err);
     return false;
   }
 }

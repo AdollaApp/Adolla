@@ -53,3 +53,8 @@ pnpm dev
 cd apps/api
 pnpm dev
 ```
+
+## Migrations
+Need to modify the database in the code? Here is a cheatsheet:
+- `npx drizzle-kit generate --name "msg"`: Create a migration
+- `npx drizzle-kit migrate`: Run migrations
