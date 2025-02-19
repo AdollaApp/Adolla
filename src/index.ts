@@ -47,7 +47,7 @@ import secretConfig from "./util/secretConfig";
 		// Generate unique ID
 		if (!db.get("adolla-uid")) {
 			const words = await fetch(
-				"https://raw.githubusercontent.com/xyfir/rword/master/words/small.json"
+				"https://raw.githubusercontent.com/adollaapp/adolla/master/small-words.json"
 			).then((d) => d.json());
 
 			let uidArr = [];
