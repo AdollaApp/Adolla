@@ -38,7 +38,7 @@ class Updater {
 			chalk.yellowBright("[CACHE]") +
 				` Updating popular cache at ${new Date().toLocaleString()}`
 		);
-		const popular = await scrapers.Mangasee.search("");
+		const popular = await scrapers.Mangadex5.search("");
 
 		await Promise.all(
 			popular
