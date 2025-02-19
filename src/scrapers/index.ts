@@ -52,8 +52,8 @@ function sleep(ms: number) {
 }
 
 // Import Mangasee
-import MangaseeInstance from "./mangasee";
-export const Mangasee = MangaseeInstance;
+// import MangaseeInstance from "./mangasee";
+// export const Mangasee = MangaseeInstance; // 🫡
 
 // Import MangaDex
 // import MangadexInstance from "./mangadex";
@@ -96,7 +96,7 @@ import GmangaInstance from "./gmanga";
 export const Gmanga = GmangaInstance;
 
 export const scrapers = {
-	Mangasee,
+	// Mangasee,
 	Mangadex5,
 	Manganelo,
 	// Mangahere,
