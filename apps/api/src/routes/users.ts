@@ -1,5 +1,6 @@
 import { db } from '@/modules/db';
-import { usersTable } from '@/modules/db/schema';
+import { users } from '@/modules/db/schema';
+import { roles } from '@/utils/auth/roles';
 import { handle } from '@/utils/handle';
 import { makeRouter } from '@/utils/router';
 
@@ -11,10 +12,11 @@ export const userRouter = makeRouter((app) => {
         description: 'List users',
       },
     },
-    handle(async () => {
-      const users = await db.select().from(usersTable);
+    handle(async ({ auth }) => {
+      auth.check(c => c.hasRole(roles.super));
+      const userQuery = await db.select().from(users);
       return {
-        users,
+        users: userQuery,
       };
     }),
   );
