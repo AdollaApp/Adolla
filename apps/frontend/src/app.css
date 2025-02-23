@@ -1,1 +1,26 @@
 @import 'tailwindcss';
+
+html, body {
+  font-family: 'Ubuntu', sans-serif;
+  color: var(--color-text);
+}
+
+@theme {
+  --color-stroke-100: #E6E8E9;
+  --color-stroke-accent: #B6D8E8;
+  --color-shadow: rgba(107, 108, 123, 0.1);
+
+  --color-gradient-start: rgba(169, 209, 255, 0.35);
+  --color-header-gradient-start: #B5B2F9;
+
+  --color-logo-accent: #1A3836;
+  --color-accent: #8DA6F8;
+
+  --color-text: #191828;
+  --color-text-light: #737A94;
+  --color-text-accent: #3D4198;
+
+  --color-hover-bg: #3D4198;
+
+  --shadow-custom: 0 3px 8px var(--color-shadow);
+}
