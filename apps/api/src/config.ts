@@ -9,6 +9,7 @@ const schema = z.object({
       port: z.coerce.number().default(8080),
       cors: z.string().default(''),
       basePath: z.string().default('/'),
+      frontendBaseUrl: z.string().default('/'),
     })
     .default({}),
   logging: z
