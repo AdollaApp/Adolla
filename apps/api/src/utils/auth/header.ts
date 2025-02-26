@@ -8,6 +8,9 @@ import { conf } from '@/config';
 export type AuthToken = {
   type: 'session';
   id: string;
+} | {
+  type: 'reg';
+  id: string;
 };
 
 const alg = 'HS256' as const;
