@@ -31,6 +31,4 @@ WORKDIR /app/apps/api
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 RUN pnpm run build
-RUN echo "#!/bin/bash\nnode dist/main.js $@" > adolla
-RUN chmod +x adolla
 ENTRYPOINT ["./adolla"]

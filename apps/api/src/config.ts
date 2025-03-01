@@ -52,6 +52,7 @@ export const fragments: Record<string, PartialDeep<z.infer<typeof schema>>> = {
   },
 };
 
+// TODO get version not from env but from package.json file
 export const version = process.env.npm_package_version ?? 'unknown';
 
 export const conf = createConfigLoader()
