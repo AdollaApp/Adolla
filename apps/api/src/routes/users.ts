@@ -8,6 +8,23 @@ import { makeRouter } from '@/utils/router';
 
 export const userRouter = makeRouter((app) => {
   app.get(
+    '/stats',
+    {
+      schema: {
+        description: 'Get statistics',
+        querystring: pagerSchema(),
+      },
+    },
+    handle(async ({ auth }) => {
+      auth.check(c => c.hasRole(roles.super));
+      const totalUsers = await db.$count(db.select().from(users));
+      return {
+        userTotal: totalUsers,
+      };
+    }),
+  );
+
+  app.get(
     '/users',
     {
       schema: {
