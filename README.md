@@ -29,6 +29,14 @@ Adolla sources manga from many places:
 > Visit the app here: https://example.com
 
 
+## 🍄 Self-hosting
+
+- Use the docker container to host an instance
+- To setup your adolla instance, run `adolla init`
+- To run database migrations, run `adolla migrate`
+- To promote your account to admin, run `adolla promote`
+
+
 ## 🧬 Running locally for development
 
 You need to have `pnpm` and `NodeJS 22` installed to run for development.
