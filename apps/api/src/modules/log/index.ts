@@ -1,6 +1,7 @@
 import { conf } from '@/config';
 import { pino } from 'pino';
 import pretty from 'pino-pretty';
+import figlet from 'figlet';
 
 const prettyStream =
   conf.logging.format === 'pretty'
@@ -18,5 +19,17 @@ const loggerInstance = pino(
   },
   prettyStream,
 );
+
+export function logIntro(withDivide = false) {
+  if (conf.logging.format === 'pretty')
+    console.log(figlet.textSync('Adolla', { font: 'Small' }));
+  if (withDivide)
+    logDivide();
+}
+
+export function logDivide() {
+  if (conf.logging.format === 'pretty')
+    loggerInstance.info(`--------------------------------------`);
+}
 
 export const logger = loggerInstance;

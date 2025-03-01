@@ -4,6 +4,7 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "module": "Preserve",
+    "target": "ESNext",
     "strict": true,
     "moduleResolution": "Bundler",
     "paths": {

@@ -3,15 +3,22 @@ import {
   setupFastifyRoutes,
   startFastify,
 } from '@/modules/fastify';
-import { logger } from './modules/log';
+import { logDivide, logger, logIntro } from './modules/log';
+import { createProgram } from './cli';
 
-const log = logger.child({ svc: 'adolla' });
+async function run() {
+  const log = logger.child({ svc: 'adolla' });
 
-log.info(`App booting...`);
+  logIntro();
+  log.info(`App booting...`);
 
-const app = await setupFastify();
-await setupFastifyRoutes(app);
-await startFastify(app);
+  const app = await setupFastify();
+  await setupFastifyRoutes(app);
+  await startFastify(app);
 
-log.info(`App setup, ready to accept connections`);
-log.info(`--------------------------------------`);
+  log.info(`App setup, ready to accept connections`);
+  logDivide();
+}
+
+const program = createProgram(run);
+await program.parseAsync(process.argv);

@@ -15,19 +15,24 @@
     "lint:fix": "eslint --fix ."
   },
   "devDependencies": {
+    "@types/figlet": "^1.7.0",
     "@types/node": "^22.0.0",
     "@types/pg": "^8.11.11",
-    "drizzle-kit": "^0.30.4",
     "type-fest": "^4.34.1"
   },
   "dependencies": {
+    "@clack/prompts": "^0.10.0",
     "@fastify/cors": "^10.0.2",
     "@fastify/swagger": "^9.4.2",
     "@neato/config": "^3.0.0",
     "@types/jsonwebtoken": "^9.0.9",
+    "commander": "^13.1.0",
+    "drizzle-kit": "^0.30.4",
     "drizzle-orm": "^0.39.3",
+    "exec-sh": "^0.4.0",
     "fastify": "^5.2.1",
     "fastify-type-provider-zod": "^4.0.2",
+    "figlet": "^1.8.0",
     "jsonwebtoken": "^9.0.2",
     "ofetch": "^1.4.1",
     "pg": "^8.13.2",
