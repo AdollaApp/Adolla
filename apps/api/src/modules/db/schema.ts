@@ -36,6 +36,7 @@ export const grantCodes = pgTable('grantcodes', {
   userId: varchar().notNull(),
   token: varchar().notNull().unique(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
+  expiresAt: timestamp('expires_at').notNull(),
 });
 
 export const sessions = pgTable('sessions', {

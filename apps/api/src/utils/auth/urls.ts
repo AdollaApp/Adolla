@@ -7,12 +7,14 @@ import { randomBytes } from 'crypto';
 
 const registrationStartUrl = new URL(`${conf.server.frontendBaseUrl}register/setup`).toString();
 const afterLoginUrl = new URL(`${conf.server.frontendBaseUrl}login/callback`).toString();
+const grantCodeExpiryMs = 2 * 60 * 1000; // 2 minutes
 
 export async function createAfterLoginUrl(userId: string) {
   const [grantCode] = await db.insert(grantCodes).values({
     id: getId('reg'),
     userId: userId,
     token: randomBytes(8).toString('hex'),
+    expiresAt: new Date(Date.now() + grantCodeExpiryMs),
   }).returning();
   const afterLoginRedirect = new URL(afterLoginUrl);
   afterLoginRedirect.searchParams.append('code', grantCode.token);

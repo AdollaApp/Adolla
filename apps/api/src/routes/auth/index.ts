@@ -8,12 +8,14 @@ import { createSession } from '@/utils/auth/session';
 import { ApiError } from '@/utils/error';
 import { handle } from '@/utils/handle';
 import { makeRouter } from '@/utils/router';
-import { eq } from 'drizzle-orm';
+import { and, eq, gte } from 'drizzle-orm';
 import { z } from 'zod';
 
 export const discordRedirectUrl = new URL(`${conf.server.backendBaseUrl}api/v1/auth/oauth/discord/callback`).toString();
 
 // TODO test if sessions expire
+// TODO test if sessions bump
+// TODO test if grant codes expire
 
 export const authRouter = makeRouter((app) => {
   app.get(
@@ -37,10 +39,9 @@ export const authRouter = makeRouter((app) => {
       },
     },
     handle(async ({ body }) => {
-      const [res] = await db.select().from(grantCodes).where(eq(grantCodes.token, body.code)).leftJoin(users, eq(users.id, grantCodes.userId));
+      const [res] = await db.select().from(grantCodes).where(and(eq(grantCodes.token, body.code), gte(grantCodes.expiresAt, new Date()))).leftJoin(users, eq(users.id, grantCodes.userId));
       if (!res || !res.users) throw ApiError.forCode('authInvalidInput');
-      // TODO delete grant code on use
-      // TODO expire grant code if too old
+      await db.delete(users).where(eq(grantCodes.id, res.grantcodes.id));
       const [session] = await createSession(res.users);
       return mapToken('auth', makeAuthToken({
         type: 'session',
