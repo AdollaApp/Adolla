@@ -1,0 +1,1 @@
+ALTER TABLE "grantcodes" ADD COLUMN "expires_at" timestamp NOT NULL;

@@ -13,10 +13,6 @@ import { z } from 'zod';
 
 export const discordRedirectUrl = new URL(`${conf.server.backendBaseUrl}api/v1/auth/oauth/discord/callback`).toString();
 
-// TODO test if sessions expire
-// TODO test if sessions bump
-// TODO test if grant codes expire
-
 export const authRouter = makeRouter((app) => {
   app.get(
     '/api/v1/auth/oauth/discord',
@@ -41,7 +37,7 @@ export const authRouter = makeRouter((app) => {
     handle(async ({ body }) => {
       const [res] = await db.select().from(grantCodes).where(and(eq(grantCodes.token, body.code), gte(grantCodes.expiresAt, new Date()))).leftJoin(users, eq(users.id, grantCodes.userId));
       if (!res || !res.users) throw ApiError.forCode('authInvalidInput');
-      await db.delete(users).where(eq(grantCodes.id, res.grantcodes.id));
+      await db.delete(grantCodes).where(eq(grantCodes.id, res.grantcodes.id));
       const [session] = await createSession(res.users);
       return mapToken('auth', makeAuthToken({
         type: 'session',

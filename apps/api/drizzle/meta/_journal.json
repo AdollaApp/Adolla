@@ -15,6 +15,13 @@
       "when": 1740577149317,
       "tag": "0001_add-registrations-and-grant-codes",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1740842108357,
+      "tag": "0002_add-expiry-grant-code",
+      "breakpoints": true
     }
   ]
 }
