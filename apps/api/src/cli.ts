@@ -51,7 +51,7 @@ const promoteCmd = new Command('promote')
     s.start('Promoting user');
     await db.update(users).set({
       roles: [...(user.roles ?? []), roles.super],
-    });
+    }).where(eq(users.id, user.id));
     s.stop('Promoted user!');
 
     log.success('User has successfully been promoted!');
