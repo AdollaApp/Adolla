@@ -1,4 +1,6 @@
 import { conf } from '@/config';
+import { mapSuccess } from '@/mappings/success';
+import { mapToken } from '@/mappings/tokens';
 import { db } from '@/modules/db';
 import { grantCodes, sessions, users } from '@/modules/db/schema';
 import { makeAuthToken } from '@/utils/auth/header';
@@ -38,12 +40,10 @@ export const authRouter = makeRouter((app) => {
       const [res] = await db.select().from(grantCodes).where(eq(grantCodes.token, body.code)).leftJoin(users, eq(users.id, grantCodes.userId));
       if (!res || !res.users) throw ApiError.forCode('authInvalidInput');
       const [session] = await createSession(res.users);
-      return {
-        token: makeAuthToken({ // TODO token output
-          type: 'session',
-          id: session.id,
-        }),
-      };
+      return mapToken('auth', makeAuthToken({
+        type: 'session',
+        id: session.id,
+      }));
     }),
   );
 
@@ -55,9 +55,7 @@ export const authRouter = makeRouter((app) => {
       const id = auth.data.getSession().id;
 
       await db.delete(sessions).where(eq(sessions.id, id));
-      return { // TODO success output
-        success: true,
-      };
+      return mapSuccess();
     }),
   );
 });

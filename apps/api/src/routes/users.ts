@@ -1,3 +1,4 @@
+import { mapShallowUserForAdmins } from '@/mappings/user';
 import { db } from '@/modules/db';
 import { users } from '@/modules/db/schema';
 import { roles } from '@/utils/auth/roles';
@@ -15,9 +16,8 @@ export const userRouter = makeRouter((app) => {
     handle(async ({ auth }) => {
       auth.check(c => c.hasRole(roles.super));
       const userQuery = await db.select().from(users);
-      return {
-        users: userQuery,
-      };
+      // TODO pagination
+      return userQuery.map(mapShallowUserForAdmins);
     }),
   );
 });

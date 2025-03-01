@@ -1,5 +1,7 @@
+import { mapRegistration } from '@/mappings/registration';
+import { mapToken } from '@/mappings/tokens';
 import { db } from '@/modules/db';
-import { registrations, users } from '@/modules/db/schema';
+import { registrations, registrationType, users } from '@/modules/db/schema';
 import { makeAuthToken, parseAuthToken } from '@/utils/auth/header';
 import { createSession } from '@/utils/auth/session';
 import { NotFoundError } from '@/utils/error';
@@ -24,7 +26,7 @@ export const registerRouter = makeRouter((app) => {
       if (!tokenData || tokenData.type !== 'reg') throw new NotFoundError();
       const [registration] = await db.select().from(registrations).where(eq(registrations.id, tokenData.id));
       if (!registration) throw new NotFoundError();
-      return registration; // TODO map output
+      return mapRegistration(registration);
     }),
   );
 
@@ -48,16 +50,14 @@ export const registerRouter = makeRouter((app) => {
         id: getId('usr'),
         securityStamp: '', // empty security stamp to start out with
         username: body.username,
-        discordId: registration.discordId,
+        discordId: registration.type === registrationType.discord ? registration.discordId : null,
       }).returning();
       await db.delete(registrations).where(eq(registrations.id, tokenData.id));
       const [session] = await createSession(newUser);
-      return {
-        token: makeAuthToken({ // TODO token output
-          type: 'session',
-          id: session.id,
-        }),
-      };
+      return mapToken('auth', makeAuthToken({
+        type: 'session',
+        id: session.id,
+      }));
     }),
   );
 });
