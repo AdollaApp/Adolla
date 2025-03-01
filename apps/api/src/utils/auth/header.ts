@@ -1,5 +1,5 @@
 import type { SignOptions } from 'jsonwebtoken';
-import { verify, sign } from 'jsonwebtoken';
+import jwtLib from 'jsonwebtoken';
 import type { FastifyRequest } from 'fastify';
 import { ApiError } from '@/utils/error';
 import { logger } from '@/modules/log';
@@ -17,7 +17,7 @@ const alg = 'HS256' as const;
 
 export function parseAuthToken(input: string): null | AuthToken {
   try {
-    const jwt = verify(input, conf.crypto.secret, {
+    const jwt = jwtLib.verify(input, conf.crypto.secret, {
       algorithms: [alg],
       complete: true,
     });
@@ -35,7 +35,7 @@ export function makeAuthToken(
   const ops: SignOptions = {
     algorithm: alg,
   };
-  return sign(payload, conf.crypto.secret, ops);
+  return jwtLib.sign(payload, conf.crypto.secret, ops);
 }
 
 export function hasAuthorizationToken(request: FastifyRequest) {
