@@ -3,7 +3,7 @@
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
     "baseUrl": "./src",
-    "module": "Node16",
+    "module": "Preserve",
     "strict": true,
     "moduleResolution": "Bundler",
     "paths": {
