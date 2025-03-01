@@ -1,0 +1,18 @@
+meta {
+  name: Register
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{host}}/api/v1/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "token": "123",
+    "username": ""
+  }
+}

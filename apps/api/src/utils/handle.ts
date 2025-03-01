@@ -121,7 +121,7 @@ export function handle<
       auth: await makeAuthContext(req),
     });
     if (result instanceof Promise) result = await result;
-    res.send(result);
+    if (result !== undefined) res.send(result);
   };
   return reqHandler;
 }

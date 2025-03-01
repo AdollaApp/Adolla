@@ -3,6 +3,7 @@
     "dbaeumer.vscode-eslint",
     "svelte.svelte-vscode",
     "EditorConfig.EditorConfig",
-    "denoland.vscode-deno"
+    "denoland.vscode-deno",
+    "bruno-api-client.bruno"
   ]
 }

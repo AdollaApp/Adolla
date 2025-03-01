@@ -8,6 +8,7 @@ import { registrations, registrationType, users } from '@/modules/db/schema';
 import { getId } from '@/utils/id';
 import { eq } from 'drizzle-orm';
 import { createAfterLoginUrl, createRegisterCompletionUrl } from '@/utils/auth/urls';
+import { conf } from '@/config';
 
 type DiscordTokenResponse = {
   access_token: string;
@@ -37,14 +38,17 @@ export const authCallbackRouter = makeRouter((app) => {
       },
     },
     handle(async ({ query, res }) => {
-      const tokenResponse = await ofetch<DiscordTokenResponse>('https://discord.com/api/v10/oauth2/token', {
-        method: 'post',
+      const tokenResponse = await ofetch<DiscordTokenResponse>('https://discord.com/api/oauth2/token', {
+        method: 'POST',
         body: new URLSearchParams({
           grant_type: 'authorization_code',
           code: query.code,
-          redirect: discordRedirectUrl,
+          redirect_uri: discordRedirectUrl,
+          client_id: conf.auth.discord.clientId,
+          client_secret: conf.auth.discord.clientSecret,
         }),
       });
+
       const user = await ofetch<DiscordUser>('https://discord.com/api/v10/users/@me', {
         headers: new Headers({
           authorization: 'Bearer ' + tokenResponse.access_token,
@@ -53,7 +57,7 @@ export const authCallbackRouter = makeRouter((app) => {
       const [existingUser] = await db.select().from(users).where(eq(users.discordId, user.id));
       if (existingUser) {
         res.redirect(await createAfterLoginUrl(existingUser.id), 307);
-        return;
+        return res;
       }
 
       const [registration] = await db.insert(registrations).values({
@@ -63,7 +67,7 @@ export const authCallbackRouter = makeRouter((app) => {
         usernameSuggestion: user.global_name ?? user.username,
       }).returning();
       res.redirect(createRegisterCompletionUrl(registration.id), 307);
-      return;
+      return res;
     }),
   );
 });

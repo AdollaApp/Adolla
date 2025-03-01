@@ -1,0 +1,18 @@
+meta {
+  name: Login from grant code
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host}}/api/v1/auth/login/code
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "code": "123"
+  }
+  
+}

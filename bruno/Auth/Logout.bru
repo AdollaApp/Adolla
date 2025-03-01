@@ -1,0 +1,18 @@
+meta {
+  name: Logout
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{host}}/api/v1/auth/logout
+  body: none
+  auth: inherit
+}
+
+body:json {
+  {
+    "code": "123"
+  }
+  
+}

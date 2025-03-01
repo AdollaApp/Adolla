@@ -1,0 +1,11 @@
+meta {
+  name: List users
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{host}}/users
+  body: none
+  auth: inherit
+}

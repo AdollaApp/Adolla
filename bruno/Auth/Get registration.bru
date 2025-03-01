@@ -1,0 +1,21 @@
+meta {
+  name: Get registration
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{host}}/api/v1/auth/register?token
+  body: none
+  auth: none
+}
+
+params:query {
+  token: 
+}
+
+body:json {
+  {
+    "code": "123"
+  }
+}

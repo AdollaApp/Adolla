@@ -1,0 +1,15 @@
+meta {
+  name: Discord Oauth callback
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{host}}/api/v1/auth/oauth/discord/callback?code
+  body: none
+  auth: none
+}
+
+params:query {
+  code: 
+}

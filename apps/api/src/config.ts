@@ -9,8 +9,8 @@ const schema = z.object({
       port: z.coerce.number().default(8080),
       cors: z.string().default(''),
       basePath: z.string().default('/'),
-      backendBaseUrl: z.string(), // should end with slash
-      frontendBaseUrl: z.string(), // should end with slash
+      backendBaseUrl: z.string().url().endsWith('/'),
+      frontendBaseUrl: z.string().url().endsWith('/'),
     }),
   auth: z
     .object({
@@ -40,8 +40,8 @@ export const fragments: Record<string, PartialDeep<z.infer<typeof schema>>> = {
   docker: {
     server: {
       cors: 'http://localhost:3000',
-      frontendBaseUrl: 'http://localhost:3000',
-      backendBaseUrl: 'http://localhost:8080',
+      frontendBaseUrl: 'http://localhost:3000/',
+      backendBaseUrl: 'http://localhost:8080/',
     },
     database: {
       connection: 'postgres://postgres:postgres@localhost:5432/postgres',

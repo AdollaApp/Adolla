@@ -1,0 +1,15 @@
+{
+  "version": "1",
+  "name": "Adolla API",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ],
+  "size": 0,
+  "filesCount": 0,
+  "presets": {
+    "requestType": "http",
+    "requestUrl": "{{host}}"
+  }
+}
