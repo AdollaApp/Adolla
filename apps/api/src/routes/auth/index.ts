@@ -13,7 +13,7 @@ import { z } from 'zod';
 
 export const discordRedirectUrl = new URL(`${conf.server.backendBaseUrl}api/v1/auth/oauth/discord/callback`).toString();
 
-// TODO test all of this auth flow shit
+// TODO test if sessions expire
 
 export const authRouter = makeRouter((app) => {
   app.get(
@@ -39,6 +39,8 @@ export const authRouter = makeRouter((app) => {
     handle(async ({ body }) => {
       const [res] = await db.select().from(grantCodes).where(eq(grantCodes.token, body.code)).leftJoin(users, eq(users.id, grantCodes.userId));
       if (!res || !res.users) throw ApiError.forCode('authInvalidInput');
+      // TODO delete grant code on use
+      // TODO expire grant code if too old
       const [session] = await createSession(res.users);
       return mapToken('auth', makeAuthToken({
         type: 'session',
@@ -51,10 +53,11 @@ export const authRouter = makeRouter((app) => {
     '/api/v1/auth/logout',
     {},
     handle(async ({ auth }) => {
-      auth.check(c => c.isAuthenticated());
-      const id = auth.data.getSession().id;
+      if (auth.checkers.isAuthenticated()) {
+        const id = auth.data.getSession().id;
+        await db.delete(sessions).where(eq(sessions.id, id));
+      }
 
-      await db.delete(sessions).where(eq(sessions.id, id));
       return mapSuccess();
     }),
   );

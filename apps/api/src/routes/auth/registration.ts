@@ -48,7 +48,7 @@ export const registerRouter = makeRouter((app) => {
 
       const [newUser] = await db.insert(users).values({
         id: getId('usr'),
-        securityStamp: '', // empty security stamp to start out with
+        securityStamp: 'first-stamp', // hardcoded security stamp to start out with
         username: body.username,
         discordId: registration.type === registrationType.discord ? registration.discordId : null,
       }).returning();
