@@ -16,6 +16,22 @@
       isNsfw={false}
       lang="English"
     />
+    <MangaCard
+      title="Demon Slayer - Kimetsu no Yaiba"
+      image="https://temp.compsci88.com/cover/Kimetsu-No-Yaiba.jpg"
+      isNew={true}
+      chapterName="Chapter 119"
+      isNsfw={false}
+      lang="English"
+    />
+    <MangaCard
+      title="Fire Force"
+      image="https://temp.compsci88.com/cover/Fire-Brigade-Of-Flames.jpg"
+      isNew={false}
+      chapterName="Chapter 314.25"
+      isNsfw={true}
+      lang="English"
+    />
     {#each new Array(10) as _}
       <MangaCard
         title="Telework Yotabanashi"
