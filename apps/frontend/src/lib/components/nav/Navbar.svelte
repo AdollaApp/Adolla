@@ -1,9 +1,13 @@
 <script>
   import AppsSolid from "../icons/AppsSolid.svelte";
+  import SearchIcon from "../icons/Search.svelte";
   import UserSolid from "../icons/UserSolid.svelte";
   import Container from "../util/Container.svelte";
+  import TextInput from "../util/TextInput.svelte";
   import Logo from "./Logo.svelte";
   import NavLink from "./NavLink.svelte";
+
+  let s = $state("");
 </script>
 
 <div
@@ -17,8 +21,13 @@
         <Logo />
         Adolla
       </a>
-      <div class="flex justify-center items-center">Search bar here</div>
+      <div class="flex justify-center items-center">
+        <TextInput bind:value={s} placeholder="Fire Force">
+          <SearchIcon />
+        </TextInput>
+      </div>
       <div class="flex justify-end items-center gap-8">
+        {s}
         <NavLink href="/list" Icon={AppsSolid}>My lists</NavLink>
         <NavLink href="/@me" Icon={UserSolid}>@jip</NavLink>
       </div>

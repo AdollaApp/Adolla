@@ -1,14 +1,18 @@
 @import 'tailwindcss';
 
 html, body {
-  font-family: 'Ubuntu', sans-serif;
+  background: var(--color-bg);
   color: var(--color-text);
+  font-family: 'Ubuntu', sans-serif;
 }
 
 @theme {
   --color-stroke-100: #E6E8E9;
+  --color-stroke-200: #D8D7DD;
+  /** These aren't actually 100-200 in the traditional sense, I just need more than one stroke type lol */
   --color-stroke-accent: #B6D8E8;
   --color-shadow: rgba(107, 108, 123, 0.1);
+  --color-shadow-2: rgba(0, 0, 0, 0.05);
 
   --color-gradient-start: rgba(169, 209, 255, 0.35);
   --color-header-gradient-start: #B5B2F9;
@@ -18,9 +22,12 @@ html, body {
 
   --color-text: #191828;
   --color-text-light: #737A94;
+  --color-text-lighter: #ABABAF;
   --color-text-accent: #3D4198;
 
+  --color-bg: white;
   --color-hover-bg: #3D4198;
 
   --shadow-custom: 0 3px 8px var(--color-shadow);
+  --shadow-custom-input: 0 1px 2px var(--color-shadow-2);
 }
