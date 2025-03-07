@@ -5,9 +5,9 @@ export const mangadex = makeScraper({
   name: 'Mangadex',
   imagePath: '/mangadex.png',
   getChapter(_mid, _cid) {
-
+    // TODO implement
   },
   getManga(_mid) {
-
+    // TODO implement
   },
 });
