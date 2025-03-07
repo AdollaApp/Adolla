@@ -4,6 +4,7 @@ import { userRouter } from '@/routes/users';
 import { authCallbackRouter } from '@/routes/auth/callbacks';
 import { registerRouter } from '@/routes/auth/registration';
 import { authRouter } from '@/routes/auth';
+import { mangaRouter } from '@/routes/manga';
 
 export async function setupRoutes(app: FastifyInstance) {
   await app.register(indexRouter.register);
@@ -11,4 +12,5 @@ export async function setupRoutes(app: FastifyInstance) {
   await app.register(authRouter.register);
   await app.register(authCallbackRouter.register);
   await app.register(registerRouter.register);
+  await app.register(mangaRouter.register);
 }
