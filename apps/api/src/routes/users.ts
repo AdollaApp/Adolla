@@ -8,7 +8,7 @@ import { makeRouter } from '@/utils/router';
 
 export const userRouter = makeRouter((app) => {
   app.get(
-    '/stats',
+    '/api/v1/stats',
     {
       schema: {
         description: 'Get statistics',
@@ -25,7 +25,7 @@ export const userRouter = makeRouter((app) => {
   );
 
   app.get(
-    '/users',
+    '/api/v1//users',
     {
       schema: {
         description: 'List users',
