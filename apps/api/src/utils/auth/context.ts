@@ -8,6 +8,7 @@ import { fetchSessionAndUpdateExpiry } from './session';
 
 export interface AuthChecks {
   isAuthenticated(): boolean;
+  isUser(id: string): boolean;
   hasRole(role: Roles): boolean;
 }
 
@@ -15,6 +16,7 @@ export interface AuthContext {
   check(cb: (checks: AuthChecks) => boolean): void;
   checkers: AuthChecks;
   data: {
+    resolveUserParam(value: string): string;
     getSession(): PopulatedSession;
     getUserId(): string;
     getRoles(): Roles[];
@@ -65,6 +67,9 @@ export function makeAuthCheckers(data: AuthContextData): AuthChecks {
     hasRole(role: Roles) {
       return context.roles.includes(role);
     },
+    isUser(id: string) {
+      return context.userId === id;
+    },
     isAuthenticated() {
       return !!data.session;
     },
@@ -85,6 +90,10 @@ export async function makeAuthContext(
     },
     checkers,
     data: {
+      resolveUserParam(value) {
+        if (value === '@me') return this.getSession().userId;
+        return value;
+      },
       getSession() {
         if (!data.session) throw new Error('Session not set but is requested');
         return data.session;
