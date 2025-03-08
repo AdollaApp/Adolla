@@ -1,7 +1,7 @@
 import type { EnumType } from '@/utils/types';
 import type { InferSelectModel } from 'drizzle-orm';
 import { relations } from 'drizzle-orm';
-import { timestamp, pgTable, varchar } from 'drizzle-orm/pg-core';
+import { timestamp, pgTable, varchar, integer, unique } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: varchar().primaryKey(),
@@ -54,3 +54,53 @@ export const sessionRelation = relations(sessions, ({ one }) => ({
 }));
 
 export type Session = InferSelectModel<typeof sessions>;
+
+export const progressItems = pgTable('progress_items', {
+  id: varchar().primaryKey(),
+  mangaId: varchar('manga_id').notNull(),
+  chapterId: varchar('chapter_id').notNull(),
+  updatedAt: timestamp('expires_at').notNull(),
+  userId: varchar('user_id').notNull(),
+  currentPage: integer('current_page').notNull(),
+  totalPages: integer('total_pages').notNull(),
+}, t => [
+  unique().on(t.userId, t.chapterId, t.mangaId),
+]);
+
+export const progressItemRelation = relations(progressItems, ({ one }) => ({
+  user: one(users, {
+    fields: [progressItems.userId],
+    references: [users.id],
+  }),
+}));
+
+export type ProgressItem = InferSelectModel<typeof progressItems>;
+
+export const lists = pgTable('lists', {
+  id: varchar().primaryKey(),
+  name: varchar().notNull(),
+  userId: varchar('user_id').notNull(),
+});
+
+export const listRelation = relations(lists, ({ one }) => ({
+  user: one(users, {
+    fields: [lists.userId],
+    references: [users.id],
+  }),
+}));
+
+export type List = InferSelectModel<typeof lists>;
+
+export const listItems = pgTable('list_items', {
+  id: varchar().primaryKey(),
+  listId: varchar('list_id').notNull(),
+});
+
+export const listItemRelation = relations(listItems, ({ one }) => ({
+  list: one(lists, {
+    fields: [listItems.listId],
+    references: [lists.id],
+  }),
+}));
+
+export type ListItem = InferSelectModel<typeof listItems>;

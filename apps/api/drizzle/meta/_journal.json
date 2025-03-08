@@ -22,6 +22,13 @@
       "when": 1740842108357,
       "tag": "0002_add-expiry-grant-code",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1741440691336,
+      "tag": "0003_add-progress-tracking-and-lists",
+      "breakpoints": true
     }
   ]
 }
