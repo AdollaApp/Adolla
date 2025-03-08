@@ -5,6 +5,7 @@ import { roles } from '@/utils/auth/roles';
 import { handle } from '@/utils/handle';
 import { applyPage, mapPage, pagerSchema } from '@/utils/pages';
 import { makeRouter } from '@/utils/router';
+import { z } from 'zod';
 
 export const userRouter = makeRouter((app) => {
   app.get(
@@ -38,6 +39,24 @@ export const userRouter = makeRouter((app) => {
       const usrQuery = await applyPage(baseQuery, query);
       const total = await db.$count(baseQuery);
       return mapPage(query, usrQuery.map(mapShallowUserForAdmins), total);
+    }),
+  );
+
+  app.get(
+    '/api/v1/users/:uid',
+    {
+      schema: {
+        description: 'Get user',
+        params: z.object({
+          uid: z.string(),
+        }),
+      },
+    },
+    handle(async ({ auth, query }) => {
+      const uid = auth.data.resolveUserParam(params.uid);
+      auth.check(c => c.isUser(uid));
+
+      return true; // TODO add implementation
     }),
   );
 });
