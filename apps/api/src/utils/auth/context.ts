@@ -18,7 +18,8 @@ export interface AuthContext {
   data: {
     resolveUserParam(value: string): string;
     getSession(): PopulatedSession;
-    getUserId(): string;
+    getSessionOrDefault(): PopulatedSession | null;
+    getUserId(): string | null;
     getRoles(): Roles[];
   };
 }
@@ -91,18 +92,21 @@ export async function makeAuthContext(
     checkers,
     data: {
       resolveUserParam(value) {
-        if (value === '@me') return this.getSession().userId;
+        if (value === '@me') return this.getSessionOrDefault()?.userId ?? value;
         return value;
       },
       getSession() {
         if (!data.session) throw new Error('Session not set but is requested');
         return data.session;
       },
+      getSessionOrDefault() {
+        return data.session ?? null;
+      },
       getRoles() {
         return (this.getSession().user?.roles ?? []) as Roles[];
       },
       getUserId() {
-        return this.getSession().userId;
+        return this.getSessionOrDefault()?.userId ?? null;
       },
     },
   };

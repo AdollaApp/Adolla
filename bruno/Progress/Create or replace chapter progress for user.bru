@@ -1,0 +1,24 @@
+meta {
+  name: Create or replace chapter progress for user
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{host}}/api/v1/users/:uid/progress/:mid/items/:cid
+  body: json
+  auth: inherit
+}
+
+params:path {
+  cid: 123
+  mid: mangadex:test
+  uid: @me
+}
+
+body:json {
+  {
+    "currentPage": 6,
+    "totalPages": 50
+  }
+}

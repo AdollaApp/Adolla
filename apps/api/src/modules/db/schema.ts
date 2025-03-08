@@ -31,6 +31,8 @@ export const registrations = pgTable('registrations', {
   usernameSuggestion: varchar('username_suggestion'),
 });
 
+export type Registration = InferSelectModel<typeof registrations>;
+
 export const grantCodes = pgTable('grantcodes', {
   id: varchar().primaryKey(),
   userId: varchar().notNull(),

@@ -1,0 +1,16 @@
+meta {
+  name: Get manga progress for user
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{host}}/api/v1/users/:uid/progress/:mid
+  body: none
+  auth: inherit
+}
+
+params:path {
+  mid: mangadex:test
+  uid: @me
+}

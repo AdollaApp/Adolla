@@ -1,5 +1,12 @@
+import { mapProgressItem } from '@/mappings/progress';
+import { mapSuccess } from '@/mappings/success';
+import { db } from '@/modules/db';
+import { progressItems } from '@/modules/db/schema';
+import { NotFoundError } from '@/utils/error';
 import { handle } from '@/utils/handle';
+import { getId } from '@/utils/id';
 import { makeRouter } from '@/utils/router';
+import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 
 export const progressRouter = makeRouter((app) => {
@@ -17,8 +24,10 @@ export const progressRouter = makeRouter((app) => {
     handle(async ({ auth, params }) => {
       const uid = auth.data.resolveUserParam(params.uid);
       auth.check(c => c.isUser(uid));
+      const items = await db.select().from(progressItems)
+        .where(and(eq(progressItems.mangaId, params.mid), eq(progressItems.userId, uid)));
 
-      return true; // TODO add implementation
+      return items.map(v => mapProgressItem(v));
     }),
   );
 
@@ -38,7 +47,13 @@ export const progressRouter = makeRouter((app) => {
       const uid = auth.data.resolveUserParam(params.uid);
       auth.check(c => c.isUser(uid));
 
-      return true; // TODO add implementation
+      const [item] = await db.select().from(progressItems)
+        .where(and(eq(progressItems.mangaId, params.mid), eq(progressItems.userId, uid), eq(progressItems.chapterId, params.cid)));
+
+      if (!item)
+        throw new NotFoundError();
+
+      return mapProgressItem(item);
     }),
   );
 
@@ -58,11 +73,33 @@ export const progressRouter = makeRouter((app) => {
         }),
       },
     },
-    handle(async ({ auth, params }) => {
+    handle(async ({ auth, params, body }) => {
       const uid = auth.data.resolveUserParam(params.uid);
       auth.check(c => c.isUser(uid));
 
-      return true; // TODO add implementation
+      const [existingItem] = await db.select().from(progressItems)
+        .where(and(eq(progressItems.mangaId, params.mid), eq(progressItems.userId, uid), eq(progressItems.chapterId, params.cid)));
+
+      if (!existingItem) {
+        const [newItem] = await db.insert(progressItems).values({
+          id: getId('prg'),
+          chapterId: params.cid,
+          mangaId: params.mid,
+          updatedAt: new Date(),
+          userId: uid,
+          currentPage: body.currentPage,
+          totalPages: body.totalPages,
+        }).returning();
+        return mapProgressItem(newItem);
+      }
+
+      const [newItem] = await db.update(progressItems).set({
+        currentPage: body.currentPage,
+        totalPages: body.totalPages,
+        updatedAt: new Date(),
+      }).where(eq(progressItems.id, existingItem.id)).returning();
+
+      return mapProgressItem(newItem);
     }),
   );
 
@@ -76,17 +113,21 @@ export const progressRouter = makeRouter((app) => {
           mid: z.string(),
           cid: z.string(),
         }),
-        body: z.object({
-          totalPages: z.number().min(1),
-          currentPage: z.number().min(1),
-        }),
       },
     },
     handle(async ({ auth, params }) => {
       const uid = auth.data.resolveUserParam(params.uid);
       auth.check(c => c.isUser(uid));
 
-      return true; // TODO add implementation
+      const [existingItem] = await db.select().from(progressItems)
+        .where(and(eq(progressItems.mangaId, params.mid), eq(progressItems.userId, uid), eq(progressItems.chapterId, params.cid)));
+
+      if (!existingItem)
+        throw new NotFoundError();
+
+      await db.delete(progressItems).where(eq(progressItems.id, existingItem.id)).returning();
+
+      return mapSuccess();
     }),
   );
 });

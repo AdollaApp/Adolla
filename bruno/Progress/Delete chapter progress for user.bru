@@ -1,0 +1,17 @@
+meta {
+  name: Delete chapter progress for user
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{host}}/api/v1/users/:uid/progress/:mid/items/:cid
+  body: none
+  auth: inherit
+}
+
+params:path {
+  cid: 123
+  mid: mangadex:test
+  uid: @me
+}

@@ -1,10 +1,11 @@
-import { mapShallowUserForAdmins } from '@/mappings/user';
+import { mapShallowUserForAdmins, mapUserForSelf } from '@/mappings/user';
 import { db } from '@/modules/db';
 import { users } from '@/modules/db/schema';
 import { roles } from '@/utils/auth/roles';
 import { handle } from '@/utils/handle';
 import { applyPage, mapPage, pagerSchema } from '@/utils/pages';
 import { makeRouter } from '@/utils/router';
+import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 
 export const userRouter = makeRouter((app) => {
@@ -52,11 +53,13 @@ export const userRouter = makeRouter((app) => {
         }),
       },
     },
-    handle(async ({ auth, query }) => {
+    handle(async ({ auth, params }) => {
       const uid = auth.data.resolveUserParam(params.uid);
       auth.check(c => c.isUser(uid));
 
-      return true; // TODO add implementation
+      const [user] = await db.select().from(users).where(eq(users.id, uid));
+
+      return mapUserForSelf(user);
     }),
   );
 });
