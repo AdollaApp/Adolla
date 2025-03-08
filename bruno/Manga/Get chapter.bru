@@ -1,0 +1,16 @@
+meta {
+  name: Get chapter
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{host}}/api/v1/manga/:id/chapters/:cid
+  body: none
+  auth: inherit
+}
+
+params:path {
+  cid: def
+  id: mangadex:123
+}

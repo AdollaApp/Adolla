@@ -1,17 +1,18 @@
-import type { EnumType } from '@/utils/types';
-import type { ChapterDto } from './chapter';
+import { mapChapter, type ChapterDto } from './chapter';
+import type { MangaDetails, MangaMeta, MangaStatus, Volume } from '@/utils/scraping/scraper';
+import { getScrapersMeta } from '@/utils/scraping/manga-id';
 
-export type ProviderDto = {
+export type ScraperDto = {
   id: string;
   name: string;
-  image: string;
+  image?: string;
 };
 
 export type VolumeDto = {
   id: string;
   volumeNum: number;
   name: string;
-  publishedAt: Date;
+  publishedAt: string;
 };
 
 export type MangaMetaDto = {
@@ -24,21 +25,51 @@ export type MangaMetaDto = {
   nsfw: boolean;
 };
 
-export const mangaStatus = {
-  hiatus: 'hiatus',
-  ongoing: 'ongoing',
-  finished: 'finished',
-} as const;
-export type MangaStatus = EnumType<typeof mangaStatus>;
-
 export type MangaDetailsDto = {
   id: string;
-  provider: ProviderDto;
+  scraper: ScraperDto;
   meta: MangaMetaDto;
   volumes: VolumeDto[];
   chapters: ChapterDto[];
 };
 
-export function mapMangaDetails(_data: any): any {
-  return {}; // TODO map it for real
+export function mapMangaMeta(data: MangaMeta): MangaMetaDto {
+  return {
+    id: data.id,
+    description: data.description,
+    nsfw: data.nsfw,
+    posterUrl: data.posterUrl,
+    status: data.status,
+    title: data.title,
+    bannerUrl: data.bannerUrl,
+  };
+}
+
+export function mapVolume(data: Volume): VolumeDto {
+  return {
+    id: data.id,
+    name: data.name,
+    publishedAt: data.publishedAt.toISOString(),
+    volumeNum: data.volumeNum,
+  };
+}
+
+export function mapScraper(id: string): ScraperDto {
+  const scraper = getScrapersMeta(id);
+  if (!scraper) throw new Error('Could not map scraper');
+  return {
+    id: scraper.id,
+    name: scraper.name,
+    image: scraper.image,
+  };
+}
+
+export function mapMangaDetails(scraperId: string, data: MangaDetails): MangaDetailsDto {
+  return {
+    id: data.meta.id,
+    meta: mapMangaMeta(data.meta),
+    scraper: mapScraper(scraperId),
+    volumes: data.volumes.map(v => mapVolume(v)),
+    chapters: data.chapters.map(v => mapChapter(v)),
+  };
 }

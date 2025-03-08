@@ -1,0 +1,15 @@
+meta {
+  name: Get manga
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{host}}/api/v1/manga/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: mangadex:123
+}

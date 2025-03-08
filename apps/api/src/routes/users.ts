@@ -25,7 +25,7 @@ export const userRouter = makeRouter((app) => {
   );
 
   app.get(
-    '/api/v1//users',
+    '/api/v1/users',
     {
       schema: {
         description: 'List users',

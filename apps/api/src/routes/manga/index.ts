@@ -1,4 +1,4 @@
-import { mapChapterContent } from '@/mappings/chapter';
+import { mapChapterContentResult } from '@/mappings/chapter';
 import { mapMangaDetails } from '@/mappings/manga';
 import { handle } from '@/utils/handle';
 import { makeRouter } from '@/utils/router';
@@ -24,7 +24,7 @@ export const mangaRouter = makeRouter((app) => {
       if (!scraper) throw new Error('Invalid scraper');
       const result = await scraper.getManga(ids.id);
 
-      return mapMangaDetails(result);
+      return mapMangaDetails(scraper.id, result);
     }),
   );
 
@@ -46,7 +46,7 @@ export const mangaRouter = makeRouter((app) => {
       if (!scraper) throw new Error('Invalid scraper');
       const result = await scraper.getChapter(ids.id, params.cid);
 
-      return mapChapterContent(result);
+      return mapChapterContentResult(result);
     }),
   );
 });
