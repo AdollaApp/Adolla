@@ -28,7 +28,7 @@ export type Volume = {
 export type MangaMeta = {
   id: string;
   status: MangaStatus;
-  posterUrl: string;
+  posterUrl?: string;
   bannerUrl?: string;
   title: string;
   description: string[];

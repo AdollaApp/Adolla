@@ -18,7 +18,7 @@ export type VolumeDto = {
 export type MangaMetaDto = {
   id: string;
   status: MangaStatus;
-  posterUrl: string;
+  posterUrl?: string;
   bannerUrl?: string;
   title: string;
   description: string[];
