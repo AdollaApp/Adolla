@@ -1,4 +1,4 @@
-import type { MangaMeta, MangaStatus, Volume } from '@/utils/scraping/scraper';
+import type { Chapter, MangaMeta, MangaStatus, Volume } from '@/utils/scraping/scraper';
 import { makeScraper, mangaStatus } from '@/utils/scraping/scraper';
 import { ofetch } from 'ofetch';
 
@@ -44,7 +44,7 @@ type MangaDetails = EntityData<'manga', {
   contentRating: string;
 }, Array<CoverArt | Author>>;
 
-type Chapter = EntityData<'chapter', {
+type MdChapter = EntityData<'chapter', {
   volume: string;
   chapter: string;
   title: string | null;
@@ -52,6 +52,15 @@ type Chapter = EntityData<'chapter', {
   publishAt: string;
   readableAt: string;
 }, Array<EntityData<'manga'>>>;
+
+type ChapterContent = {
+  result: 'ok';
+  baseUrl: string;
+  chapter: {
+    hash: string;
+    data: string[];
+  };
+};
 
 async function getMangaDetails(mid: string) {
   return await ofetch<Res<MangaDetails>>(`/manga/${mid}`, {
@@ -91,12 +100,22 @@ function makeMetaFromDetails(details: MangaDetails): MangaMeta {
   };
 }
 
+function makeChapterMetaFromChapter(c: MdChapter): Chapter {
+  return {
+    id: c.id,
+    chapterNum: Number(c.attributes.chapter),
+    name: c.attributes.title ? c.attributes.title : c.attributes.chapter,
+    publishedAt: new Date(c.attributes.publishAt),
+    volumeId: c.attributes.volume,
+  };
+}
+
 async function getChapters(mid: string) {
   const limit = 500;
-  let allChapters: Chapter[] = [];
+  let allChapters: MdChapter[] = [];
   let offset = 0;
   while (true) {
-    const newChapters = await ofetch<PageRes<Chapter>>(`/manga/${mid}/feed`, {
+    const newChapters = await ofetch<PageRes<MdChapter>>(`/manga/${mid}/feed`, {
       baseURL: 'https://api.mangadex.org/',
       query: {
         'order[volume]': 'desc',
@@ -112,24 +131,32 @@ async function getChapters(mid: string) {
   }
 }
 
+async function getChapterMeta(cid: string) {
+  return await ofetch<Res<MdChapter>>(`/chapter/${cid}`, {
+    baseURL: 'https://api.mangadex.org/',
+  });
+}
+
+async function getContentFromChapter(cid: string) {
+  return await ofetch<ChapterContent>(`/at-home/server/${cid}`, {
+    baseURL: 'https://api.mangadex.org/',
+  });
+}
+
 export const mangadex = makeScraper({
   id: 'mangadex',
   name: 'Mangadex',
   imagePath: '/scrapers/mangadex.png',
-  async getChapter(_mid, _cid) {
-    // TODO implement
+  async getChapter(_mid, cid) {
+    const chapter = await getChapterMeta(cid);
+    const content = await getContentFromChapter(cid);
+
     return {
-      chapter: {
-        id: 'abc',
-        chapterNum: 42,
-        name: 'My first chapter',
-        publishedAt: new Date(),
-        volumeId: 'def',
-      },
-      content: [{
-        id: '123',
-        url: 'https://google.com',
-      }],
+      chapter: makeChapterMetaFromChapter(chapter.data),
+      content: content.chapter.data.map(fileName => ({
+        id: fileName,
+        url: `${content.baseUrl}/data/${content.chapter.hash}/${fileName}`,
+      })),
     };
   },
   async getManga(mid) {
@@ -156,13 +183,7 @@ export const mangadex = makeScraper({
     return {
       meta: makeMetaFromDetails(manga),
       volumes,
-      chapters: chapters.map(c => ({
-        id: c.id,
-        chapterNum: Number(c.attributes.chapter),
-        name: c.attributes.title ? c.attributes.title : c.attributes.chapter,
-        publishedAt: new Date(c.attributes.publishAt),
-        volumeId: c.attributes.volume,
-      })),
+      chapters: chapters.map(c => makeChapterMetaFromChapter(c)),
     };
   },
 });
