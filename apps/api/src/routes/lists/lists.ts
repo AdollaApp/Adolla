@@ -30,6 +30,8 @@ export const listsRouter = makeRouter((app) => {
       const lstQuery = await applyPage(baseQuery, query);
       const total = await db.$count(baseQuery);
 
+      // TODO add preview list items
+
       return mapPage(query, lstQuery.map(mapList), total);
     }),
   );
@@ -61,6 +63,8 @@ export const listsRouter = makeRouter((app) => {
     }),
   );
 
+  // TODO update list name
+
   app.get(
     '/api/v1/lists/:id',
     {
@@ -80,6 +84,8 @@ export const listsRouter = makeRouter((app) => {
         throw new NotFoundError();
 
       auth.check(c => c.isUser(list.userId));
+
+      // TODO add all list items
 
       return mapList(list);
     }),

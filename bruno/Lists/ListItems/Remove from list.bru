@@ -1,0 +1,20 @@
+meta {
+  name: Remove from list
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{host}}/api/v1/lists/:lid/items/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: ltm_01jnxfkahefvmawenj7n8k7gc6
+  lid: lst_01jnxf30hbfvmawencrta4yhj5
+}
+
+body:json {
+  {}
+}

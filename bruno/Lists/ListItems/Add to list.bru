@@ -1,0 +1,19 @@
+meta {
+  name: Add to list
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host}}/api/v1/lists/:lid/items
+  body: json
+  auth: inherit
+}
+
+params:path {
+  lid: lst_01jnxf30hbfvmawencrta4yhj5
+}
+
+body:json {
+  {}
+}

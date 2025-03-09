@@ -33,6 +33,8 @@ export const listItemRouter = makeRouter((app) => {
         listId: list.id,
       }).returning();
 
+      // TODO add content to list item
+
       return mapListItem(newItem);
     }),
   );
@@ -53,7 +55,7 @@ export const listItemRouter = makeRouter((app) => {
 
       const [listItem] = await db.select().from(listItems).leftJoin(lists, eq(lists.id, listItems.listId))
         .where(and(eq(listItems.listId, params.lid), eq(listItems.id, params.id)));
-      const list = listItem.lists;
+      const list = listItem?.lists;
       if (!listItem || !list) throw new NotFoundError();
       auth.check(c => c.isUser(list.userId));
 

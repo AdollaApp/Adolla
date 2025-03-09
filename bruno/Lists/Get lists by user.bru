@@ -1,0 +1,15 @@
+meta {
+  name: Get lists by user
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{host}}/api/v1/users/:uid/lists
+  body: none
+  auth: inherit
+}
+
+params:path {
+  uid: @me
+}

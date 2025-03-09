@@ -1,0 +1,15 @@
+meta {
+  name: Get list by id
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{host}}/api/v1/lists/:lid
+  body: none
+  auth: inherit
+}
+
+params:path {
+  lid: lst_01jnxf30hbfvmawencrta4yhj5
+}

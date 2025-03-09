@@ -1,0 +1,21 @@
+meta {
+  name: Create list
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{host}}/api/v1/users/:uid/lists
+  body: json
+  auth: inherit
+}
+
+params:path {
+  uid: @me
+}
+
+body:json {
+  {
+    "name": "Hello world"
+  }
+}

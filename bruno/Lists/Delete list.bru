@@ -1,0 +1,21 @@
+meta {
+  name: Delete list
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{host}}/api/v1/lists/:lid
+  body: json
+  auth: inherit
+}
+
+params:path {
+  lid: lst_01jnxey76rfzyaetpkw723c0da
+}
+
+body:json {
+  {
+    "name": "Hello world"
+  }
+}
