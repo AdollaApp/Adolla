@@ -1,5 +1,6 @@
 import Fastify, { type FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
+import fastifyStatic from '@fastify/static';
 import {
   jsonSchemaTransform,
   serializerCompiler,
@@ -11,6 +12,7 @@ import { conf, version } from '@/config';
 import { isApiError } from '@/utils/error';
 import { logger } from '../log';
 import { setupRoutes } from './routes';
+import path from 'path';
 
 const log = logger.child({ svc: 'fastify' });
 
@@ -95,6 +97,11 @@ export async function setupFastify(): Promise<FastifyInstance> {
   await app.register(cors, {
     origin: corsDomains,
     credentials: true,
+  });
+
+  app.register(fastifyStatic, {
+    root: path.join(import.meta.dirname, './scrapers'),
+    prefix: '/scrapers',
   });
 
   return app;

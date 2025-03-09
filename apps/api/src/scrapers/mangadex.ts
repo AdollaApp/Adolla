@@ -115,7 +115,7 @@ async function getChapters(mid: string) {
 export const mangadex = makeScraper({
   id: 'mangadex',
   name: 'Mangadex',
-  imagePath: '/mangadex.png',
+  imagePath: '/scrapers/mangadex.png',
   async getChapter(_mid, _cid) {
     // TODO implement
     return {

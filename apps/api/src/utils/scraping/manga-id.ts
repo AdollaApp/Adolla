@@ -1,3 +1,4 @@
+import { conf } from '@/config';
 import { scrapers } from '@/scrapers';
 
 export type ScraperMeta = {
@@ -32,6 +33,6 @@ export function getScrapersMeta(scraperId: string): ScraperMeta | null {
   return {
     id: scraper.id,
     name: scraper.name,
-    image: scraper.imagePath, // TODO make this into a url
+    image: `${conf.server.backendBaseUrl.slice(0, -1)}${scraper.imagePath}`,
   };
 }
