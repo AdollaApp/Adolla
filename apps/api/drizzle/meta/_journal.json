@@ -29,6 +29,13 @@
       "when": 1741440691336,
       "tag": "0003_add-progress-tracking-and-lists",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1741533269192,
+      "tag": "0004_add-foreign-keys",
+      "breakpoints": true
     }
   ]
 }

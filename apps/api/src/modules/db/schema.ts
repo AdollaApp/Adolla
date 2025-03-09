@@ -35,7 +35,7 @@ export type Registration = InferSelectModel<typeof registrations>;
 
 export const grantCodes = pgTable('grantcodes', {
   id: varchar().primaryKey(),
-  userId: varchar().notNull(),
+  userId: varchar().notNull().references(() => users.id, { onDelete: 'cascade' }),
   token: varchar().notNull().unique(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   expiresAt: timestamp('expires_at').notNull(),
@@ -44,7 +44,7 @@ export const grantCodes = pgTable('grantcodes', {
 export const sessions = pgTable('sessions', {
   id: varchar().primaryKey(),
   expiresAt: timestamp('expires_at').notNull(),
-  userId: varchar('user_id').notNull(),
+  userId: varchar('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   securityStamp: varchar('security_stamp').notNull(),
 });
 
@@ -62,7 +62,7 @@ export const progressItems = pgTable('progress_items', {
   mangaId: varchar('manga_id').notNull(),
   chapterId: varchar('chapter_id').notNull(),
   updatedAt: timestamp('expires_at').notNull(),
-  userId: varchar('user_id').notNull(),
+  userId: varchar('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   currentPage: integer('current_page').notNull(),
   totalPages: integer('total_pages').notNull(),
 }, t => [
@@ -81,7 +81,7 @@ export type ProgressItem = InferSelectModel<typeof progressItems>;
 export const lists = pgTable('lists', {
   id: varchar().primaryKey(),
   name: varchar().notNull(),
-  userId: varchar('user_id').notNull(),
+  userId: varchar('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
 });
 
 export const listRelation = relations(lists, ({ one }) => ({
@@ -95,7 +95,7 @@ export type List = InferSelectModel<typeof lists>;
 
 export const listItems = pgTable('list_items', {
   id: varchar().primaryKey(),
-  listId: varchar('list_id').notNull(),
+  listId: varchar('list_id').notNull().references(() => lists.id, { onDelete: 'cascade' }),
 });
 
 export const listItemRelation = relations(listItems, ({ one }) => ({
