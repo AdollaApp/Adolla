@@ -1,13 +1,14 @@
-import { mapList } from '@/mappings/list';
+import { mapList, mapListWithItems } from '@/mappings/list';
 import { mapSuccess } from '@/mappings/success';
 import { db } from '@/modules/db';
-import { lists } from '@/modules/db/schema';
+import type { ListItem } from '@/modules/db/schema';
+import { listItems, lists } from '@/modules/db/schema';
 import { NotFoundError } from '@/utils/error';
 import { handle } from '@/utils/handle';
 import { getId } from '@/utils/id';
 import { applyPage, mapPage, pagerSchema } from '@/utils/pages';
 import { makeRouter } from '@/utils/router';
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 
 export const listsRouter = makeRouter((app) => {
@@ -30,9 +31,15 @@ export const listsRouter = makeRouter((app) => {
       const lstQuery = await applyPage(baseQuery, query);
       const total = await db.$count(baseQuery);
 
-      // TODO add preview list items
+      const listIds = lstQuery.map(v => v.id);
+      const listItemsQuery = await db.select().from(listItems).where(inArray(listItems.listId, listIds));
+      const mappedListItems = listItemsQuery.reduce((a, v) => {
+        if (!a[v.listId]) a[v.listId] = [];
+        a[v.listId].push(v);
+        return a;
+      }, {} as Record<string, ListItem[]>);
 
-      return mapPage(query, lstQuery.map(mapList), total);
+      return mapPage(query, lstQuery.map(v => mapListWithItems(v, mappedListItems[v.id] ?? [])), total);
     }),
   );
 
@@ -63,7 +70,36 @@ export const listsRouter = makeRouter((app) => {
     }),
   );
 
-  // TODO update list name
+  app.patch(
+    '/api/v1/lists/:id',
+    {
+      schema: {
+        description: 'Update list',
+        params: z.object({
+          id: z.string(),
+        }),
+        body: z.object({
+          name: z.string().min(1).optional(),
+        }),
+      },
+    },
+    handle(async ({ auth, params, body }) => {
+      auth.check(c => c.isAuthenticated());
+
+      const [list] = await db.select().from(lists)
+        .where(eq(lists.id, params.id));
+      if (!list)
+        throw new NotFoundError();
+
+      auth.check(c => c.isUser(list.userId));
+
+      const [newList] = await db.update(lists).set({
+        name: body.name,
+      }).where(eq(lists.id, list.id)).returning();
+
+      return mapList(newList);
+    }),
+  );
 
   app.get(
     '/api/v1/lists/:id',
@@ -85,9 +121,8 @@ export const listsRouter = makeRouter((app) => {
 
       auth.check(c => c.isUser(list.userId));
 
-      // TODO add all list items
-
-      return mapList(list);
+      const listItemsQuery = await db.select().from(listItems).where(eq(listItems.listId, list.id));
+      return mapListWithItems(list, listItemsQuery);
     }),
   );
 

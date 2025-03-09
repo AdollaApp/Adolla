@@ -6,16 +6,27 @@ export type ListDto = {
   name: string;
 };
 
+export type ListWithItemDto = ListDto & {
+  items: ListItemDto[];
+};
+
 export type ListItemDto = {
   id: string;
   listId: string;
 };
 
-export function mapList(item: List): ListDto {
+export function mapList(list: List): ListDto {
   return {
-    id: item.id,
-    userId: item.userId,
-    name: item.name,
+    id: list.id,
+    userId: list.userId,
+    name: list.name,
+  };
+}
+
+export function mapListWithItems(list: List, items: ListItem[]): ListWithItemDto {
+  return {
+    ...mapList(list),
+    items: items.map(v => mapListItem(v)),
   };
 }
 

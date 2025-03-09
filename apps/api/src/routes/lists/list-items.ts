@@ -33,8 +33,6 @@ export const listItemRouter = makeRouter((app) => {
         listId: list.id,
       }).returning();
 
-      // TODO add content to list item
-
       return mapListItem(newItem);
     }),
   );

@@ -1,0 +1,21 @@
+meta {
+  name: Update list
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{host}}/api/v1/lists/:lid
+  body: json
+  auth: inherit
+}
+
+params:path {
+  lid: lst_01jnxf30hbfvmawencrta4yhj5
+}
+
+body:json {
+  {
+    "name": "Hello world 5"
+  }
+}

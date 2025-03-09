@@ -65,6 +65,7 @@ export const progressItems = pgTable('progress_items', {
   userId: varchar('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   currentPage: integer('current_page').notNull(),
   totalPages: integer('total_pages').notNull(),
+  // TODO add manga metadata
 }, t => [
   unique().on(t.userId, t.chapterId, t.mangaId),
 ]);
@@ -96,6 +97,7 @@ export type List = InferSelectModel<typeof lists>;
 export const listItems = pgTable('list_items', {
   id: varchar().primaryKey(),
   listId: varchar('list_id').notNull().references(() => lists.id, { onDelete: 'cascade' }),
+  // TODO add manga metadata
 });
 
 export const listItemRelation = relations(listItems, ({ one }) => ({
