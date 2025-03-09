@@ -14,7 +14,6 @@ export const userRouter = makeRouter((app) => {
     {
       schema: {
         description: 'Get statistics',
-        querystring: pagerSchema(),
       },
     },
     handle(async ({ auth }) => {

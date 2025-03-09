@@ -1,5 +1,13 @@
+import { mapList } from '@/mappings/list';
+import { mapSuccess } from '@/mappings/success';
+import { db } from '@/modules/db';
+import { lists } from '@/modules/db/schema';
+import { NotFoundError } from '@/utils/error';
 import { handle } from '@/utils/handle';
+import { getId } from '@/utils/id';
+import { applyPage, mapPage, pagerSchema } from '@/utils/pages';
 import { makeRouter } from '@/utils/router';
+import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 
 export const listsRouter = makeRouter((app) => {
@@ -8,16 +16,21 @@ export const listsRouter = makeRouter((app) => {
     {
       schema: {
         description: 'Get lists for user',
+        querystring: pagerSchema(),
         params: z.object({
           uid: z.string(),
         }),
       },
     },
-    handle(async ({ auth, params }) => {
+    handle(async ({ auth, params, query }) => {
       const uid = auth.data.resolveUserParam(params.uid);
       auth.check(c => c.isUser(uid));
 
-      return true; // TODO add implementation
+      const baseQuery = db.select().from(lists).where(eq(lists.userId, uid));
+      const lstQuery = await applyPage(baseQuery, query);
+      const total = await db.$count(baseQuery);
+
+      return mapPage(query, lstQuery.map(mapList), total);
     }),
   );
 
@@ -29,13 +42,22 @@ export const listsRouter = makeRouter((app) => {
         params: z.object({
           uid: z.string(),
         }),
+        body: z.object({
+          name: z.string().min(1),
+        }),
       },
     },
-    handle(async ({ auth, params }) => {
+    handle(async ({ auth, params, body }) => {
       const uid = auth.data.resolveUserParam(params.uid);
       auth.check(c => c.isUser(uid));
 
-      return true; // TODO add implementation
+      const [newList] = await db.insert(lists).values({
+        id: getId('lst'),
+        userId: uid,
+        name: body.name,
+      }).returning();
+
+      return mapList(newList);
     }),
   );
 
@@ -49,12 +71,17 @@ export const listsRouter = makeRouter((app) => {
         }),
       },
     },
-    handle(async ({ auth }) => {
+    handle(async ({ auth, params }) => {
       auth.check(c => c.isAuthenticated());
 
-      // TODO check if user has access
+      const [list] = await db.select().from(lists)
+        .where(eq(lists.id, params.id));
+      if (!list)
+        throw new NotFoundError();
 
-      return true; // TODO add implementation
+      auth.check(c => c.isUser(list.userId));
+
+      return mapList(list);
     }),
   );
 
@@ -68,12 +95,19 @@ export const listsRouter = makeRouter((app) => {
         }),
       },
     },
-    handle(async ({ auth }) => {
+    handle(async ({ auth, params }) => {
       auth.check(c => c.isAuthenticated());
 
-      // TODO check if user has access
+      const [list] = await db.select().from(lists)
+        .where(eq(lists.id, params.id));
+      if (!list)
+        throw new NotFoundError();
 
-      return true; // TODO add implementation
+      auth.check(c => c.isUser(list.userId));
+
+      await db.delete(lists).where(eq(lists.id, params.id));
+
+      return mapSuccess();
     }),
   );
 });

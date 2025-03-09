@@ -1,11 +1,12 @@
-import type { AnyPgSelectQueryBuilder } from 'drizzle-orm/pg-core';
+import type { PgSelect } from 'drizzle-orm/pg-core';
 import { z } from 'zod';
 
 export type PageControls = { limit: number; offset: number };
 
-export function applyPage<T extends AnyPgSelectQueryBuilder>(query: T, page: PageControls) {
-  // Can't get the types to work, so casting it is!
-  return (query.offset(page.offset) as T).limit(page.limit);
+export function applyPage<T>(query: T, page: PageControls) {
+  // Can't get the types to work, so full generic it is!
+  const castedQuery = query as PgSelect;
+  return castedQuery.offset(page.offset).limit(page.limit) as T;
 }
 
 export function pagerSchema(maxLimit = 50) {
