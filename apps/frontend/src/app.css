@@ -18,7 +18,8 @@ html, body {
   --color-header-gradient-start: #B5B2F9;
 
   --color-logo-accent: #1A3836;
-  --color-accent: #8DA6F8;
+  --color-accent: #4babce;
+  --color-text-on-accent: white;
 
   --color-text: #191828;
   --color-text-light: #737A94;

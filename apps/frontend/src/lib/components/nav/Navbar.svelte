@@ -1,36 +1,69 @@
-<script>
+<script lang="ts">
+  import { onMount } from "svelte";
   import AppsSolid from "../icons/AppsSolid.svelte";
-  import SearchIcon from "../icons/Search.svelte";
   import UserSolid from "../icons/UserSolid.svelte";
   import Container from "../util/Container.svelte";
-  import TextInput from "../util/TextInput.svelte";
   import Logo from "./Logo.svelte";
+  import NavFooter from "./NavFooter.svelte";
   import NavLink from "./NavLink.svelte";
+  import SearchBox from "./SearchBox.svelte";
 
-  let s = $state("");
+  let header: HTMLElement | null = null;
+  let headerHeight = $state(0);
+  let scrollY = $state(0);
+
+  function updateHeaderHeight() {
+    if (header) {
+      headerHeight = header.offsetHeight;
+    }
+  }
+
+  function onScroll() {
+    scrollY = window.scrollY;
+  }
+
+  $effect(updateHeaderHeight);
+
+  onMount(() => {
+    window.addEventListener("resize", updateHeaderHeight);
+    window.addEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("resize", updateHeaderHeight);
+      window.removeEventListener("scroll", onScroll);
+    };
+  });
 </script>
 
+<!-- BG gradient -->
 <div
   class="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-header-gradient-start/15 to-transparent -z-10"
 ></div>
 
-<header class="border-t-4 border-accent py-4 mb-10">
+<!-- Main header -->
+<header
+  class={[
+    "border-t-4 border-t-accent py-2 md:py-4 fixed top-0 left-0 w-full z-20 bg-bg border-b",
+    scrollY > 0 ? "border-b-stroke-100" : "border-b-transparent",
+  ].join(" ")}
+  bind:this={header}
+>
   <Container>
-    <div class="grid grid-cols-[1fr_300px_1fr] gap-4">
-      <a class="flex items-center gap-4 text-[20px] font-bold" href="/">
+    <div class="grid justify-center md:grid-cols-[1fr_300px_1fr] gap-4">
+      <a class="flex items-center gap-4 md:text-[20px] font-bold" href="/">
         <Logo />
-        Adolla
+        Adolla {headerHeight}px
       </a>
-      <div class="flex justify-center items-center">
-        <TextInput bind:value={s} placeholder="Fire Force">
-          <SearchIcon />
-        </TextInput>
+      <div class="hidden md:flex justify-center items-center">
+        <SearchBox />
       </div>
-      <div class="flex justify-end items-center gap-8">
-        {s}
+      <div class="hidden md:flex justify-end items-center gap-8">
         <NavLink href="/lists" Icon={AppsSolid}>My lists</NavLink>
         <NavLink href="/@me" Icon={UserSolid}>@jip</NavLink>
       </div>
     </div>
   </Container>
 </header>
+
+<div class="mb-7 md:mb-10" style={`height: ${headerHeight}px`}></div>
+
+<NavFooter />

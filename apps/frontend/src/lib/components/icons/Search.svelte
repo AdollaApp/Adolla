@@ -1,19 +1,19 @@
 <svg
-  width="17"
-  height="17"
-  viewBox="0 0 17 17"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
 >
   <path
-    d="M9.20833 13.4583C6.07872 13.4583 3.54167 10.9213 3.54167 7.79167C3.54167 4.66205 6.07872 2.125 9.20833 2.125C12.3379 2.125 14.875 4.66205 14.875 7.79167C14.875 10.9213 12.3379 13.4583 9.20833 13.4583Z"
+    d="M13 19C8.58172 19 5 15.4183 5 11C5 6.58172 8.58172 3 13 3C17.4182 3 21 6.58172 21 11C21 15.4183 17.4182 19 13 19Z"
     stroke="currentColor"
     stroke-width="2"
     stroke-linecap="round"
     stroke-linejoin="round"
   />
   <path
-    d="M2.1248 14.875L5.20605 11.7937"
+    d="M3 21L7.35 16.6499"
     stroke="currentColor"
     stroke-width="2"
     stroke-linecap="round"
