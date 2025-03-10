@@ -97,6 +97,7 @@ export type List = InferSelectModel<typeof lists>;
 export const listItems = pgTable('list_items', {
   id: varchar().primaryKey(),
   listId: varchar('list_id').notNull().references(() => lists.id, { onDelete: 'cascade' }),
+  mangaId: varchar('mangda_id').notNull(),
   // TODO add manga metadata
 });
 

@@ -1,0 +1,1 @@
+ALTER TABLE "list_items" ADD COLUMN "mangda_id" varchar NOT NULL;
