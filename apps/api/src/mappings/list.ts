@@ -13,6 +13,7 @@ export type ListWithItemDto = ListDto & {
 export type ListItemDto = {
   id: string;
   listId: string;
+  mangaId: string;
 };
 
 export function mapList(list: List): ListDto {
@@ -34,5 +35,6 @@ export function mapListItem(item: ListItem): ListItemDto {
   return {
     id: item.id,
     listId: item.listId,
+    mangaId: item.mangaId,
   };
 }

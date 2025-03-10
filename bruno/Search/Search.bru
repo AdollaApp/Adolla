@@ -1,0 +1,18 @@
+meta {
+  name: Search
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host}}/api/v1/search
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "scraperId": "mangadex",
+    "query": "hello"
+  }
+}

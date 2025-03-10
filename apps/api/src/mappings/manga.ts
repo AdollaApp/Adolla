@@ -1,6 +1,6 @@
 import { mapChapter, type ChapterDto } from './chapter';
-import type { MangaDetails, MangaMeta, MangaStatus, Volume } from '@/utils/scraping/scraper';
-import { getScrapersMeta } from '@/utils/scraping/manga-id';
+import type { MangaDetails, MangaMeta, MangaSearchResult, MangaStatus, Volume } from '@/utils/scraping/scraper';
+import { getScrapersMeta, makeMangaId } from '@/utils/scraping/manga-id';
 
 export type ScraperDto = {
   id: string;
@@ -31,6 +31,12 @@ export type MangaDetailsDto = {
   meta: MangaMetaDto;
   volumes: VolumeDto[];
   chapters: ChapterDto[];
+};
+
+export type MangaSearchResultDto = {
+  mangaId: string;
+  scraper: ScraperDto;
+  meta: MangaMetaDto;
 };
 
 export function mapMangaMeta(data: MangaMeta): MangaMetaDto {
@@ -71,5 +77,13 @@ export function mapMangaDetails(scraperId: string, data: MangaDetails): MangaDet
     scraper: mapScraper(scraperId),
     volumes: data.volumes.map(v => mapVolume(v)),
     chapters: data.chapters.map(v => mapChapter(v)),
+  };
+}
+
+export function mapMangaSearchResult(scraperId: string, result: MangaSearchResult): MangaSearchResultDto {
+  return {
+    mangaId: makeMangaId(scraperId, result.id),
+    meta: mapMangaMeta(result.meta),
+    scraper: mapScraper(scraperId),
   };
 }

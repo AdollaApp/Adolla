@@ -18,9 +18,12 @@ export const listItemRouter = makeRouter((app) => {
         params: z.object({
           id: z.string(),
         }),
+        body: z.object({
+          mangaId: z.string(),
+        }),
       },
     },
-    handle(async ({ auth, params }) => {
+    handle(async ({ auth, params, body }) => {
       auth.check(c => c.isAuthenticated());
 
       const [list] = await db.select().from(lists)
@@ -31,6 +34,7 @@ export const listItemRouter = makeRouter((app) => {
       const [newItem] = await db.insert(listItems).values({
         id: getId('ltm'),
         listId: list.id,
+        mangaId: body.mangaId,
       }).returning();
 
       return mapListItem(newItem);

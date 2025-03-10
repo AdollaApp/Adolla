@@ -39,6 +39,7 @@ export const mangaStatus = {
   hiatus: 'hiatus',
   ongoing: 'ongoing',
   finished: 'finished',
+  cancelled: 'cancelled',
 } as const;
 export type MangaStatus = EnumType<typeof mangaStatus>;
 
@@ -48,6 +49,16 @@ export type MangaDetails = {
   chapters: Chapter[];
 };
 
+export type MangaSearchResult = {
+  id: string;
+  meta: MangaMeta;
+};
+
+export type SearchOptions = {
+  query: string;
+  limit: number;
+};
+
 export type Scraper = {
   id: string;
   name: string;
@@ -55,6 +66,7 @@ export type Scraper = {
 
   getChapter: (mid: string, cid: string) => Promise<ChapterContentResult>;
   getManga: (mid: string) => Promise<MangaDetails>;
+  search: (ops: SearchOptions) => Promise<MangaSearchResult[]>;
 };
 
 export function makeScraper(input: Scraper): Scraper {
