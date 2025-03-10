@@ -8,6 +8,7 @@ import { mangaRouter } from '@/routes/manga';
 import { listsRouter } from '@/routes/lists/lists';
 import { listItemRouter } from '@/routes/lists/list-items';
 import { progressRouter } from '@/routes/progress';
+import { searchRouter } from '@/routes/search';
 
 export async function setupRoutes(app: FastifyInstance) {
   await app.register(indexRouter.register);
@@ -19,4 +20,5 @@ export async function setupRoutes(app: FastifyInstance) {
   await app.register(listsRouter.register);
   await app.register(listItemRouter.register);
   await app.register(progressRouter.register);
+  await app.register(searchRouter.register);
 }

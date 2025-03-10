@@ -187,7 +187,6 @@ export const mangadex = makeScraper({
     const dedupedChapters = chapters.filter((c) => {
       const hasChapter = alreadyDoneChapters.has(c.attributes.chapter);
       if (hasChapter) return false;
-      console.log(alreadyDoneChapters, c.attributes.chapter);
       alreadyDoneChapters.add(c.attributes.chapter);
       return true;
     });
@@ -197,5 +196,19 @@ export const mangadex = makeScraper({
       volumes,
       chapters: dedupedChapters.map(c => makeChapterMetaFromChapter(c)),
     };
+  },
+  async search(ops) {
+    const results = await ofetch<PageRes<MangaDetails>>(`/manga`, {
+      baseURL: 'https://api.mangadex.org/',
+      query: {
+        'includes[]': 'cover_art',
+        'title': ops.query,
+        'limit': ops.limit,
+      },
+    });
+    return results.data.map(v => ({
+      id: v.id,
+      meta: makeMetaFromDetails(v),
+    }));
   },
 });
