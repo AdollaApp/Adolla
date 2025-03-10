@@ -1,0 +1,88 @@
+{
+  "name": "Adolla",
+  "short_name": "Adolla",
+  "id": "Adolla",
+  "lang": "EN",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#4babce",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "sizes": "200x200",
+      "src": "/icon.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/adolla-blue.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/adolla-dark.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/adolla-forest.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/adolla-gold.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/adolla-trans.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/adolla-pride.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/adolla-primary.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/adolla-transparent.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/adolla-white.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/main-on-white.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/rainbow-on-dark.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/rainbow-on-white.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/white-on-black.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/white-on-blue.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/white-on-dark.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/white-on-gold.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/white-on-green.png"
+    },
+    {
+      "size": "200x200",
+      "src": "/icons/white-on-red.png"
+    }
+  ]
+}

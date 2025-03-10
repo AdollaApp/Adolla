@@ -11,10 +11,20 @@
   let header: HTMLElement | null = null;
   let headerHeight = $state(0);
   let scrollY = $state(0);
+  let borderTop = 16;
 
   function updateHeaderHeight() {
     if (header) {
       headerHeight = header.offsetHeight;
+
+      // ? TODO !!!!
+      // const d = document.createElement("div");
+      // d.style.height = `env(safe-area-inset-top)`;
+      // getComputedStyle(d);
+      // borderTop = d.offsetHeight;
+      // if (isNaN(borderTop) || borderTop === 0) {
+      //   borderTop = 16;
+      // }
     }
   }
 
@@ -42,7 +52,7 @@
 <!-- Main header -->
 <header
   class={[
-    "border-t-4 border-t-accent py-2 md:py-4 fixed top-0 left-0 w-full z-20 bg-bg border-b",
+    "border-t-4 border-t-accent py-2 md:py-4 fixed top-0 left-0 w-full z-20 bg-bg border-b transition-colors duration-100",
     scrollY > 0 ? "border-b-stroke-100" : "border-b-transparent",
   ].join(" ")}
   bind:this={header}
