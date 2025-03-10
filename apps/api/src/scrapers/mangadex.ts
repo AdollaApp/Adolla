@@ -85,7 +85,10 @@ function getBestLanguage<T>(langs: LanguageRecord<T>): T {
 
 function getStatus(status: string): MangaStatus {
   if (status === 'completed') return mangaStatus.finished;
-  return mangaStatus.ongoing; // TODO fill out the rest
+  if (status === 'ongoing') return mangaStatus.ongoing;
+  if (status === 'cancelled') return mangaStatus.cancelled;
+  if (status === 'hiatus') return mangaStatus.hiatus;
+  return mangaStatus.ongoing;
 }
 
 function makeMetaFromDetails(details: MangaDetails): MangaMeta {
@@ -163,10 +166,12 @@ export const mangadex = makeScraper({
     const { data: manga } = await getMangaDetails(mid);
     const chapters = await getChapters(mid);
 
-    const alreadyDoneVolumes: string[] = [];
+    // TODO take chapters from best publishers
+
+    const alreadyDoneVolumes = new Set();
     const volumes: Volume[] = [];
     chapters.forEach((c) => {
-      const hasVolume = alreadyDoneVolumes.includes(c.attributes.volume);
+      const hasVolume = alreadyDoneVolumes.has(c.attributes.volume);
       if (!hasVolume) {
         volumes.push({
           id: c.attributes.volume,
@@ -174,16 +179,23 @@ export const mangadex = makeScraper({
           publishedAt: new Date(c.attributes.readableAt),
           volumeNum: Number(c.attributes.volume),
         });
-        alreadyDoneVolumes.push(c.attributes.volume);
+        alreadyDoneVolumes.add(c.attributes.volume);
       }
     });
 
-    // TODO remove duplicate chapters, only pick best one
+    const alreadyDoneChapters = new Set();
+    const dedupedChapters = chapters.filter((c) => {
+      const hasChapter = alreadyDoneChapters.has(c.attributes.chapter);
+      if (hasChapter) return false;
+      console.log(alreadyDoneChapters, c.attributes.chapter);
+      alreadyDoneChapters.add(c.attributes.chapter);
+      return true;
+    });
 
     return {
       meta: makeMetaFromDetails(manga),
       volumes,
-      chapters: chapters.map(c => makeChapterMetaFromChapter(c)),
+      chapters: dedupedChapters.map(c => makeChapterMetaFromChapter(c)),
     };
   },
 });

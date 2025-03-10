@@ -39,6 +39,7 @@ export const mangaStatus = {
   hiatus: 'hiatus',
   ongoing: 'ongoing',
   finished: 'finished',
+  cancelled: 'cancelled',
 } as const;
 export type MangaStatus = EnumType<typeof mangaStatus>;
 
