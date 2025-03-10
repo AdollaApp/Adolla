@@ -51,13 +51,4 @@
       </div>
     </h4>
   </a>
-  {#if isNsfw}
-    <div
-      class="absolute inset-0 bg-red-600/80 flex justify-center items-center text-white p-8 text-center font-bold flex-col gap-4"
-    >
-      <img class="max-w-3/5" src="https://www.svgcrown.com/file/cross/30.png" />
-      THE LORD AND SAVIOUR JESUS CHRIST IS WATCHING YOU. DO NOT ENGAGE WITH THIS
-      CONTENT.
-    </div>
-  {/if}
 </div>

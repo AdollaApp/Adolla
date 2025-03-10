@@ -5,7 +5,7 @@
   import Container from "$lib/components/util/Container.svelte";
 </script>
 
-<Container>
+<Container pageContainer={true}>
   <LargeHeading>Continue Reading</LargeHeading>
   <MangaGrid>
     <MangaCard

@@ -28,7 +28,7 @@
       </div>
       <div class="flex justify-end items-center gap-8">
         {s}
-        <NavLink href="/list" Icon={AppsSolid}>My lists</NavLink>
+        <NavLink href="/lists" Icon={AppsSolid}>My lists</NavLink>
         <NavLink href="/@me" Icon={UserSolid}>@jip</NavLink>
       </div>
     </div>
