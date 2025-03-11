@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"type": "module",
-  "main": "./build/index.js",
+	"main": "./build/index.js",
 	"engines": {
 		"node": ">=22.0.0"
 	},
@@ -11,7 +11,7 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-    "start": "node ./build/index.js",
+		"start": "node ./build/index.js",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -20,12 +20,17 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "^5.2.12",
-		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@sveltejs/kit": "^2.16.0",
+		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@tailwindcss/vite": "^4.0.0",
+		"@types/js-cookie": "^3.0.6",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
 		"tailwindcss": "^4.0.0",
 		"vite": "^6.0.0"
+	},
+	"dependencies": {
+		"js-cookie": "^3.0.5",
+		"ofetch": "^1.4.1"
 	}
 }

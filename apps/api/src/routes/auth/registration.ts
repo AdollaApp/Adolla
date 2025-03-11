@@ -4,7 +4,7 @@ import { db } from '@/modules/db';
 import { registrations, registrationType, users } from '@/modules/db/schema';
 import { makeAuthToken, parseAuthToken } from '@/utils/auth/header';
 import { createSession } from '@/utils/auth/session';
-import { NotFoundError } from '@/utils/error';
+import { ApiError, NotFoundError } from '@/utils/error';
 import { handle } from '@/utils/handle';
 import { getId } from '@/utils/id';
 import { makeRouter } from '@/utils/router';
@@ -42,9 +42,9 @@ export const registerRouter = makeRouter((app) => {
     },
     handle(async ({ body }) => {
       const tokenData = parseAuthToken(body.token);
-      if (!tokenData || tokenData.type !== 'reg') throw new NotFoundError();
+      if (!tokenData || tokenData.type !== 'reg') throw ApiError.forCode('invalid', 400);
       const [registration] = await db.select().from(registrations).where(eq(registrations.id, tokenData.id));
-      if (!registration) throw new NotFoundError();
+      if (!registration) throw ApiError.forCode('invalid', 400);
 
       const [newUser] = await db.insert(users).values({
         id: getId('usr'),
