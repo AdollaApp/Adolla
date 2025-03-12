@@ -7,11 +7,13 @@
   import NavFooter from "./NavFooter.svelte";
   import NavLink from "./NavLink.svelte";
   import SearchBox from "./SearchBox.svelte";
+  import { page } from "$app/state";
 
   let header: HTMLElement | null = null;
   let headerHeight = $state(0);
   let scrollY = $state(0);
   let borderTop = 16;
+  const user = page.data.user;
 
   function updateHeaderHeight() {
     if (header) {
@@ -67,8 +69,12 @@
         <SearchBox />
       </div>
       <div class="hidden md:flex justify-end items-center gap-8">
-        <NavLink href="/lists" Icon={AppsSolid}>My lists</NavLink>
-        <NavLink href="/@me" Icon={UserSolid}>@jip</NavLink>
+        {#if user}
+          <NavLink href="/lists" Icon={AppsSolid}>My lists</NavLink>
+          <NavLink href="/@me" Icon={UserSolid}>@{user.username}</NavLink>
+        {:else}
+          <NavLink href="/login" Icon={AppsSolid}>Login</NavLink>
+        {/if}
       </div>
     </div>
   </Container>

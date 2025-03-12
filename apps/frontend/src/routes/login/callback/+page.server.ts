@@ -1,11 +1,8 @@
+import type { TokenDto } from "$lib/api/token";
 import { setAuthForServer } from "$lib/hooks/auth";
 import { api } from "$lib/hooks/fetch";
+import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-
-type TokenDto = {
-  type: 'auth';
-  token: string;
-};
 
 export const load: PageServerLoad = async (event) => {
   const { url, fetch } = event;
@@ -18,6 +15,5 @@ export const load: PageServerLoad = async (event) => {
   });
 
   setAuthForServer(event, result.token);
-
-  return {};
+  redirect(307, "/");
 };

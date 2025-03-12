@@ -17,9 +17,10 @@ export function getAuth(): string | null {
 export function setAuth(token: string) {
   if (!globalThis.window?.document) return;
   Cookies.set('auth', token, {
-    path: "/",
     expires: getCookieExpiryDate(),
-    sameSite: "Strict",
+    sameSite: "lax",
+    httpOnly: false,
+    path: "/"
   });
 }
 
@@ -27,6 +28,7 @@ export function setAuthForServer(event: RequestEvent, token: string) {
   event.cookies.set('auth', token, {
     path: "/",
     expires: getCookieExpiryDate(),
-    sameSite: "strict",
+    sameSite: "lax",
+    httpOnly: false,
   })
 }
