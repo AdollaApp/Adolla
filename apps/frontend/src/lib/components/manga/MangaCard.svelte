@@ -3,7 +3,7 @@
   import Badge from "../util/Badge.svelte";
 
   // These props are temporary
-  export let id = "mangadex:dfe5b356-a684-4bc0-a2d9-8d5794420af1";
+  export let id = "mangadex:b0b721ff-c388-4486-aa0f-c2b0bb321512";
   export let title;
   export let image;
   export let isNew;

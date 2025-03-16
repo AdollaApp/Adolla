@@ -4,6 +4,7 @@ html, body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: 'Ubuntu', sans-serif;
+  overflow-x: hidden;
 }
 
 @theme {
