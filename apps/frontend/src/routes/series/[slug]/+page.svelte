@@ -24,7 +24,7 @@
 
 <Container>
   <div class="grid grid-cols-[300px_1fr] gap-4">
-    <div class="mt-[1rem]">
+    <div class="mt-[1rem] relative z-10">
       <div
         aria-label={data.manga.meta.title}
         class="pb-[150%] rounded-xl border border-stroke-100 shadow-custom row-span-4 md:row-span-1 bg-stroke-50 bg-cover bg-center"
@@ -32,23 +32,29 @@
       ></div>
     </div>
     <div class="mt-[7rem]">
-      <h1 class="text-3xl font-bold line-clamp-1">{data.manga.meta.title}</h1>
-      <span class="mt-2 inline-block text-text-light">
-        {#each genres as genre, i}
-          <span
-            class={Number(i) !== 0
-              ? "before:content-['·'] before:text-text-lighter before:mx-2"
-              : ""}
-          >
-            {genre}
-          </span>
-        {/each}
-      </span>
+      <div class="relative z-10">
+        <h1 class="text-3xl font-bold line-clamp-1">{data.manga.meta.title}</h1>
+        <span class="mt-2 inline-block text-text-light">
+          {#each genres as genre, i}
+            <span
+              class={Number(i) !== 0
+                ? "before:content-['·'] before:text-text-lighter before:mx-2"
+                : ""}
+            >
+              {genre}
+            </span>
+          {/each}
+        </span>
+      </div>
 
       <!-- BG color..... Sorry! -->
-      <div
-        class="w-[300vw] -translate-x-1/2 h-96 bg-bg mt-6 -z-10 relative"
-      ></div>
+      <div class="absolute w-[300vw] -translate-x-1/2 h-96 bg-bg mt-6"></div>
+      <div class="h-6"></div>
+
+      <!-- Back to your regularly scheduled content, now -->
+      <div class="relative z-10 mt-4.5 text-text-light">
+        <p>{data.manga.meta.description}</p>
+      </div>
     </div>
   </div>
 </Container>
