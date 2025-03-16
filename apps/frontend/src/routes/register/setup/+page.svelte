@@ -5,26 +5,30 @@
   import { api } from "$lib/hooks/fetch.js";
   import { useAsync } from "$lib/hooks/useAsync.svelte.js";
 
-	const { data } = $props();
-  let username = $state(data.registration.usernameSuggestion ?? '');
+  const { data } = $props();
+  let username = $state(data.registration.usernameSuggestion ?? "");
 
   type TokenDto = {
-    type: 'auth';
+    type: "auth";
     token: string;
   };
 
   const accountReq = useAsync({
-    async run(payload: { username: string, token: string | null }) {
+    async run(payload: { username: string; token: string | null }) {
       if (!payload.token) throw new Error("Registration is no longer valid");
-      const result = await api.useFetch<TokenDto>(fetch, '/api/v1/auth/register', {
-        method: 'POST',
-        body: {
-          token: payload.token,
-          username: payload.username,
+      const result = await api.useFetch<TokenDto>(
+        fetch,
+        "/api/v1/auth/register",
+        {
+          method: "POST",
+          body: {
+            token: payload.token,
+            username: payload.username,
+          },
         },
-      });
+      );
       setAuth(result.token);
-    }
+    },
   });
 
   function makeAccount() {

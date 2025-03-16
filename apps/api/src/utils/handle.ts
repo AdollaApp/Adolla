@@ -16,6 +16,8 @@ import type { ResolveFastifyReplyReturnType } from 'fastify/types/type-provider'
 import type { AuthContext } from './auth/context';
 import { makeAuthContext } from './auth/context';
 
+export const DONT_REPLY = Symbol('dont-reply');
+
 export type RequestContext<
   RawServer extends RawServerBase = RawServerDefault,
   RawRequest extends
@@ -121,7 +123,8 @@ export function handle<
       auth: await makeAuthContext(req),
     });
     if (result instanceof Promise) result = await result;
-    if (result !== undefined) res.send(result);
+    if (result === DONT_REPLY) return res;
+    res.send(result);
   };
   return reqHandler;
 }

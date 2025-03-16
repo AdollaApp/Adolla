@@ -9,6 +9,7 @@ import { listsRouter } from '@/routes/lists/lists';
 import { listItemRouter } from '@/routes/lists/list-items';
 import { progressRouter } from '@/routes/progress';
 import { searchRouter } from '@/routes/search';
+import { proxyRouter } from '@/routes/proxy';
 
 export async function setupRoutes(app: FastifyInstance) {
   await app.register(indexRouter.register);
@@ -21,4 +22,5 @@ export async function setupRoutes(app: FastifyInstance) {
   await app.register(listItemRouter.register);
   await app.register(progressRouter.register);
   await app.register(searchRouter.register);
+  await app.register(proxyRouter.register);
 }

@@ -7,6 +7,7 @@ html, body {
 }
 
 @theme {
+  --color-stroke-50: #f5f9fb;
   --color-stroke-100: #E6E8E9;
   --color-stroke-200: #D8D7DD;
   /** These aren't actually 100-200 in the traditional sense, I just need more than one stroke type lol */

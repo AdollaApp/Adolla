@@ -1,4 +1,4 @@
-import { handle } from '@/utils/handle';
+import { DONT_REPLY, handle } from '@/utils/handle';
 import { makeRouter } from '@/utils/router';
 import { ofetch } from 'ofetch';
 import { z } from 'zod';
@@ -57,7 +57,7 @@ export const authCallbackRouter = makeRouter((app) => {
       const [existingUser] = await db.select().from(users).where(eq(users.discordId, user.id));
       if (existingUser) {
         res.redirect(await createAfterLoginUrl(existingUser.id), 307);
-        return res;
+        return DONT_REPLY;
       }
 
       const [registration] = await db.insert(registrations).values({
@@ -67,7 +67,7 @@ export const authCallbackRouter = makeRouter((app) => {
         usernameSuggestion: user.global_name ?? user.username,
       }).returning();
       res.redirect(createRegisterCompletionUrl(registration.id), 307);
-      return res;
+      return DONT_REPLY;
     }),
   );
 });

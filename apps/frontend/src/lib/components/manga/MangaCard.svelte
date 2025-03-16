@@ -3,6 +3,7 @@
   import Badge from "../util/Badge.svelte";
 
   // These props are temporary
+  export let id = "mangadex:dfe5b356-a684-4bc0-a2d9-8d5794420af1";
   export let title;
   export let image;
   export let isNew;
@@ -14,12 +15,14 @@
 <div
   class="relative grid grid-cols-[100px_1fr] grid-rows-[1fr_auto_auto_1fr] gap-x-4 md:gap-x-0 md:grid-cols-1 md:grid-rows-[auto_1fr_auto] items-center"
 >
-  <div
-    class="pb-[150%] rounded-xl border border-stroke-100 shadow-custom row-span-4 md:row-span-1"
-    style={`background-image: url(${image}); background-size: cover; background-position: center;`}
-  ></div>
+  <a
+    aria-label={title}
+    href={`/series/${id}`}
+    class="pb-[150%] rounded-xl border border-stroke-100 shadow-custom row-span-4 md:row-span-1 bg-cover bg-center"
+    style={`background-image: url(${image});`}
+  ></a>
   <div class="block md:hidden"></div>
-  <div>
+  <a href={`/series/${id}`}>
     <h3
       class="font-bold mt-2 text-[20px] md:text-[18px] leading-6 line-clamp-2"
     >
@@ -30,7 +33,7 @@
       />
       {title}
     </h3>
-  </div>
+  </a>
   <a
     href="/snoop"
     class="text-text-light hover:text-text group transition-colors duration-150 md:text-[14px] mt-2.5 block p-1 px-2 -mx-2 rounded-md hover:bg-hover-bg/8"

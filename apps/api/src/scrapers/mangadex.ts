@@ -1,3 +1,4 @@
+import { createProxyUrl } from '@/utils/proxy';
 import type { Chapter, MangaMeta, MangaStatus, Volume } from '@/utils/scraping/scraper';
 import { makeScraper, mangaStatus } from '@/utils/scraping/scraper';
 import { ofetch } from 'ofetch';
@@ -97,7 +98,7 @@ function makeMetaFromDetails(details: MangaDetails): MangaMeta {
     id: details.id,
     description: [getBestLanguage(details.attributes.description)],
     nsfw: details.attributes.contentRating !== 'safe',
-    posterUrl: coverArt ? `https://uploads.mangadex.org/covers/${details.id}/${coverArt.attributes.fileName}.512.jpg` : undefined,
+    posterUrl: coverArt ? createProxyUrl(`https://uploads.mangadex.org/covers/${details.id}/${coverArt.attributes.fileName}.512.jpg`) : undefined,
     title: getBestLanguageFromMany(details.attributes.altTitles),
     status: getStatus(details.attributes.status),
   };
@@ -158,7 +159,7 @@ export const mangadex = makeScraper({
       chapter: makeChapterMetaFromChapter(chapter.data),
       content: content.chapter.data.map(fileName => ({
         id: fileName,
-        url: `${content.baseUrl}/data/${content.chapter.hash}/${fileName}`,
+        url: createProxyUrl(`${content.baseUrl}/data/${content.chapter.hash}/${fileName}`),
       })),
     };
   },

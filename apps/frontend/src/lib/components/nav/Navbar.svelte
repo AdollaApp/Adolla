@@ -10,24 +10,12 @@
   import { page } from "$app/state";
 
   let header: HTMLElement | null = null;
-  let headerHeight = $state(0);
+  let headerHeight = $state(79);
   let scrollY = $state(0);
-  let borderTop = 16;
   const user = page.data.user;
 
   function updateHeaderHeight() {
-    if (header) {
-      headerHeight = header.offsetHeight;
-
-      // ? TODO !!!!
-      // const d = document.createElement("div");
-      // d.style.height = `env(safe-area-inset-top)`;
-      // getComputedStyle(d);
-      // borderTop = d.offsetHeight;
-      // if (isNaN(borderTop) || borderTop === 0) {
-      //   borderTop = 16;
-      // }
-    }
+    if (header) headerHeight = header.offsetHeight;
   }
 
   function onScroll() {
@@ -48,14 +36,14 @@
 
 <!-- BG gradient -->
 <div
-  class="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-header-gradient-start/15 to-transparent -z-10"
+  class="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-header-gradient-start/15 to-transparent z-0"
 ></div>
 
 <!-- Main header -->
 <header
   class={[
-    "border-t-4 border-t-accent py-2 md:py-4 fixed top-0 left-0 w-full z-20 bg-bg border-b transition-colors duration-100",
-    scrollY > 0 ? "border-b-stroke-100" : "border-b-transparent",
+    "[border-top-width:calc(env(safe-area-inset-top)+4px)] border-t-accent py-2 md:py-4 fixed top-0 left-0 w-full z-20 border-b transition-colors duration-200",
+    scrollY > 0 ? "border-b-stroke-100 bg-bg" : "border-b-transparent",
   ].join(" ")}
   bind:this={header}
 >
@@ -63,7 +51,7 @@
     <div class="grid justify-center md:grid-cols-[1fr_300px_1fr] gap-4">
       <a class="flex items-center gap-4 md:text-[20px] font-bold" href="/">
         <Logo />
-        Adolla {headerHeight}px
+        Adolla
       </a>
       <div class="hidden md:flex justify-center items-center">
         <SearchBox />
