@@ -65,7 +65,7 @@ export const progressItems = pgTable('progress_items', {
   userId: varchar('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   currentPage: integer('current_page').notNull(),
   totalPages: integer('total_pages').notNull(),
-  mangaMeta: varchar('manga_meta').notNull(),
+  mangaMetaId: varchar('manga_meta_id').references(() => mangaMetas.id, { onDelete: 'restrict' }),
 }, t => [
   unique().on(t.userId, t.chapterId, t.mangaId),
 ]);
@@ -98,7 +98,7 @@ export const listItems = pgTable('list_items', {
   id: varchar().primaryKey(),
   listId: varchar('list_id').notNull().references(() => lists.id, { onDelete: 'cascade' }),
   mangaId: varchar('mangda_id').notNull(),
-  mangaMeta: varchar('manga_meta').notNull(),
+  mangaMetaId: varchar('manga_meta_id').references(() => mangaMetas.id, { onDelete: 'restrict' }),
 });
 
 export const listItemRelation = relations(listItems, ({ one }) => ({
@@ -109,3 +109,10 @@ export const listItemRelation = relations(listItems, ({ one }) => ({
 }));
 
 export type ListItem = InferSelectModel<typeof listItems>;
+
+export const mangaMetas = pgTable('manga_metas', {
+  id: varchar().primaryKey(),
+  data: varchar().notNull(),
+});
+
+export type MangaMetaDb = InferSelectModel<typeof mangaMetas>;

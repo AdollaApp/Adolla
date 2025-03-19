@@ -1,6 +1,6 @@
-import type { List, ListItem } from '@/modules/db/schema';
-import type { MangaCacheItemDto } from './cache';
-import { mapMangaCacheItem } from './cache';
+import type { List, ListItem, MangaMetaDb } from '@/modules/db/schema';
+import type { MangaMetaDbDto } from './meta';
+import { mapMangaMetaDb } from './meta';
 
 export type ListDto = {
   id: string;
@@ -16,7 +16,7 @@ export type ListItemDto = {
   id: string;
   listId: string;
   mangaId: string;
-  manga: MangaCacheItemDto;
+  mangaMeta: MangaMetaDbDto;
 };
 
 export function mapList(list: List): ListDto {
@@ -27,18 +27,18 @@ export function mapList(list: List): ListDto {
   };
 }
 
-export function mapListWithItems(list: List, items: ListItem[]): ListWithItemDto {
+export function mapListWithItems(list: List, items: (ListItem & { mangaMeta: MangaMetaDb })[]): ListWithItemDto {
   return {
     ...mapList(list),
-    items: items.map(v => mapListItem(v)),
+    items: items.map(v => mapListItem(v, v.mangaMeta)),
   };
 }
 
-export function mapListItem(item: ListItem): ListItemDto {
+export function mapListItem(item: ListItem, meta: MangaMetaDb): ListItemDto {
   return {
     id: item.id,
     listId: item.listId,
     mangaId: item.mangaId,
-    manga: mapMangaCacheItem(JSON.parse(item.mangaMeta)),
+    mangaMeta: mapMangaMetaDb(meta),
   };
 }

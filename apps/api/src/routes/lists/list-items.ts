@@ -1,14 +1,11 @@
 import { mapListItem } from '@/mappings/list';
 import { mapSuccess } from '@/mappings/success';
 import { db } from '@/modules/db';
-import { listItems, lists } from '@/modules/db/schema';
+import { listItems, lists, mangaMetas } from '@/modules/db/schema';
 import { NotFoundError } from '@/utils/error';
 import { handle } from '@/utils/handle';
 import { getId } from '@/utils/id';
 import { makeRouter } from '@/utils/router';
-import { buildMangaMetaCache } from '@/utils/scraping/cache';
-import { decodeMangaId } from '@/utils/scraping/manga-id';
-import { getScraper } from '@/utils/scraping/run';
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 
@@ -23,7 +20,6 @@ export const listItemRouter = makeRouter((app) => {
         }),
         body: z.object({
           mangaId: z.string(),
-          scraperId: z.string(),
         }),
       },
     },
@@ -35,17 +31,15 @@ export const listItemRouter = makeRouter((app) => {
       if (!list) throw new NotFoundError();
       auth.check(c => c.isUser(list.userId));
 
-      const ids = decodeMangaId(body.mangaId);
-      if (!ids) throw new Error('Invalid ID');
-      const scraper = getScraper(ids.scraperId);
-      if (!scraper) throw new Error('Invalid scraper');
-      const result = await scraper.getManga(ids.id);
+      const [mangaMeta] = await db.select().from(mangaMetas)
+        .where(eq(mangaMetas.id, body.mangaId));
+      if (!mangaMeta) throw new Error('No meta exists for this manga ID');
 
       const [newItem] = await db.insert(listItems).values({
         id: getId('ltm'),
         listId: list.id,
         mangaId: body.mangaId,
-        mangaMeta: JSON.stringify(buildMangaMetaCache(ids.scraperId, result.meta)),
+        mangaMetaId: mangaMeta.id,
       }).returning();
 
       return mapListItem(newItem);
