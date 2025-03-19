@@ -6,6 +6,9 @@ import { NotFoundError } from '@/utils/error';
 import { handle } from '@/utils/handle';
 import { getId } from '@/utils/id';
 import { makeRouter } from '@/utils/router';
+import { buildMangaMetaCache } from '@/utils/scraping/cache';
+import { decodeMangaId } from '@/utils/scraping/manga-id';
+import { getScraper } from '@/utils/scraping/run';
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 
@@ -77,6 +80,12 @@ export const progressRouter = makeRouter((app) => {
       const uid = auth.data.resolveUserParam(params.uid);
       auth.check(c => c.isUser(uid));
 
+      const ids = decodeMangaId(params.mid);
+      if (!ids) throw new Error('Invalid ID');
+      const scraper = getScraper(ids.scraperId);
+      if (!scraper) throw new Error('Invalid scraper');
+      const result = await scraper.getManga(ids.id);
+
       const [existingItem] = await db.select().from(progressItems)
         .where(and(eq(progressItems.mangaId, params.mid), eq(progressItems.userId, uid), eq(progressItems.chapterId, params.cid)));
 
@@ -89,6 +98,7 @@ export const progressRouter = makeRouter((app) => {
           userId: uid,
           currentPage: body.currentPage,
           totalPages: body.totalPages,
+          mangaMeta: JSON.stringify(buildMangaMetaCache(ids.scraperId, result.meta)),
         }).returning();
         return mapProgressItem(newItem);
       }

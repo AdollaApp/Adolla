@@ -65,7 +65,7 @@ export const progressItems = pgTable('progress_items', {
   userId: varchar('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   currentPage: integer('current_page').notNull(),
   totalPages: integer('total_pages').notNull(),
-  // TODO add manga metadata
+  mangaMeta: varchar('manga_meta').notNull(),
 }, t => [
   unique().on(t.userId, t.chapterId, t.mangaId),
 ]);
@@ -98,7 +98,7 @@ export const listItems = pgTable('list_items', {
   id: varchar().primaryKey(),
   listId: varchar('list_id').notNull().references(() => lists.id, { onDelete: 'cascade' }),
   mangaId: varchar('mangda_id').notNull(),
-  // TODO add manga metadata
+  mangaMeta: varchar('manga_meta').notNull(),
 });
 
 export const listItemRelation = relations(listItems, ({ one }) => ({

@@ -1,4 +1,6 @@
 import type { List, ListItem } from '@/modules/db/schema';
+import type { MangaCacheItemDto } from './cache';
+import { mapMangaCacheItem } from './cache';
 
 export type ListDto = {
   id: string;
@@ -14,6 +16,7 @@ export type ListItemDto = {
   id: string;
   listId: string;
   mangaId: string;
+  manga: MangaCacheItemDto;
 };
 
 export function mapList(list: List): ListDto {
@@ -36,5 +39,6 @@ export function mapListItem(item: ListItem): ListItemDto {
     id: item.id,
     listId: item.listId,
     mangaId: item.mangaId,
+    manga: mapMangaCacheItem(JSON.parse(item.mangaMeta)),
   };
 }

@@ -1,4 +1,6 @@
 import type { ProgressItem } from '@/modules/db/schema';
+import type { MangaCacheItemDto } from './cache';
+import { mapMangaCacheItem } from './cache';
 
 export type ProgressItemDto = {
   id: string;
@@ -8,6 +10,7 @@ export type ProgressItemDto = {
   updatedAt: string;
   currentPage: number;
   totalPages: number;
+  manga: MangaCacheItemDto;
 };
 
 export function mapProgressItem(item: ProgressItem): ProgressItemDto {
@@ -19,5 +22,6 @@ export function mapProgressItem(item: ProgressItem): ProgressItemDto {
     updatedAt: item.updatedAt.toISOString(),
     currentPage: item.currentPage,
     totalPages: item.totalPages,
+    manga: mapMangaCacheItem(JSON.parse(item.mangaMeta)),
   };
 }
