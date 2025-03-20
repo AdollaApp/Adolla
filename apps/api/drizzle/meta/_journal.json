@@ -43,6 +43,13 @@
       "when": 1741628910095,
       "tag": "0005_add-mangdaid-to-list-item",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1742501913030,
+      "tag": "0006_add-cache-and-manga-meta",
+      "breakpoints": true
     }
   ]
 }
