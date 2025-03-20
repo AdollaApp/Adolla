@@ -25,9 +25,10 @@ export const progressRouter = makeRouter((app) => {
       const uid = auth.data.resolveUserParam(params.uid);
       auth.check(c => c.isUser(uid));
       const items = await db.select().from(progressItems)
-        .where(and(eq(progressItems.mangaId, params.mid), eq(progressItems.userId, uid)));
+        .where(and(eq(progressItems.mangaId, params.mid), eq(progressItems.userId, uid)))
+        .leftJoin(mangaMetas, eq(progressItems.mangaMetaId, mangaMetas.id));
 
-      return items.map(v => mapProgressItem(v));
+      return items.map(v => mapProgressItem(v.progress_items, v.manga_metas));
     }),
   );
 
@@ -48,12 +49,13 @@ export const progressRouter = makeRouter((app) => {
       auth.check(c => c.isUser(uid));
 
       const [item] = await db.select().from(progressItems)
-        .where(and(eq(progressItems.mangaId, params.mid), eq(progressItems.userId, uid), eq(progressItems.chapterId, params.cid)));
+        .where(and(eq(progressItems.mangaId, params.mid), eq(progressItems.userId, uid), eq(progressItems.chapterId, params.cid)))
+        .leftJoin(mangaMetas, eq(progressItems.mangaMetaId, mangaMetas.id));
 
-      if (!item)
+      if (!item.progress_items)
         throw new NotFoundError();
 
-      return mapProgressItem(item);
+      return mapProgressItem(item.progress_items, item.manga_metas);
     }),
   );
 
@@ -80,11 +82,11 @@ export const progressRouter = makeRouter((app) => {
       const [existingItem] = await db.select().from(progressItems)
         .where(and(eq(progressItems.mangaId, params.mid), eq(progressItems.userId, uid), eq(progressItems.chapterId, params.cid)));
 
-      if (!existingItem) {
-        const [mangaMeta] = await db.select().from(mangaMetas)
-          .where(eq(mangaMetas.id, params.mid));
-        if (!mangaMeta) throw new Error('No meta exists for this manga ID');
+      const [mangaMeta] = await db.select().from(mangaMetas)
+        .where(eq(mangaMetas.id, params.mid));
+      if (!mangaMeta) throw new Error('No meta exists for this manga ID');
 
+      if (!existingItem) {
         const [newItem] = await db.insert(progressItems).values({
           id: getId('prg'),
           chapterId: params.cid,
@@ -95,7 +97,7 @@ export const progressRouter = makeRouter((app) => {
           totalPages: body.totalPages,
           mangaMetaId: mangaMeta.id,
         }).returning();
-        return mapProgressItem(newItem);
+        return mapProgressItem(newItem, mangaMeta);
       }
 
       const [newItem] = await db.update(progressItems).set({
@@ -104,7 +106,7 @@ export const progressRouter = makeRouter((app) => {
         updatedAt: new Date(),
       }).where(eq(progressItems.id, existingItem.id)).returning();
 
-      return mapProgressItem(newItem);
+      return mapProgressItem(newItem, mangaMeta);
     }),
   );
 

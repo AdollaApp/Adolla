@@ -1,8 +1,8 @@
 import { mapList, mapListWithItems } from '@/mappings/list';
 import { mapSuccess } from '@/mappings/success';
 import { db } from '@/modules/db';
-import type { ListItem } from '@/modules/db/schema';
-import { listItems, lists } from '@/modules/db/schema';
+import type { ListItem, MangaMetaDb } from '@/modules/db/schema';
+import { listItems, lists, mangaMetas } from '@/modules/db/schema';
 import { NotFoundError } from '@/utils/error';
 import { handle } from '@/utils/handle';
 import { getId } from '@/utils/id';
@@ -32,12 +32,15 @@ export const listsRouter = makeRouter((app) => {
       const total = await db.$count(baseQuery);
 
       const listIds = lstQuery.map(v => v.id);
-      const listItemsQuery = await db.select().from(listItems).where(inArray(listItems.listId, listIds));
+      const listItemsQuery = await db.select().from(listItems).where(inArray(listItems.listId, listIds)).leftJoin(mangaMetas, eq(listItems.mangaMetaId, mangaMetas.id));
       const mappedListItems = listItemsQuery.reduce((a, v) => {
-        if (!a[v.listId]) a[v.listId] = [];
-        a[v.listId].push(v);
+        if (!a[v.list_items.listId]) a[v.list_items.listId] = [];
+        a[v.list_items.listId].push({
+          ...v.list_items,
+          mangaMeta: v.manga_metas,
+        });
         return a;
-      }, {} as Record<string, ListItem[]>);
+      }, {} as Record<string, (ListItem & { mangaMeta: MangaMetaDb | null })[]>);
 
       return mapPage(query, lstQuery.map(v => mapListWithItems(v, mappedListItems[v.id] ?? [])), total);
     }),
@@ -121,8 +124,8 @@ export const listsRouter = makeRouter((app) => {
 
       auth.check(c => c.isUser(list.userId));
 
-      const listItemsQuery = await db.select().from(listItems).where(eq(listItems.listId, list.id));
-      return mapListWithItems(list, listItemsQuery);
+      const listItemsQuery = await db.select().from(listItems).where(eq(listItems.listId, list.id)).leftJoin(mangaMetas, eq(listItems.mangaMetaId, mangaMetas.id));
+      return mapListWithItems(list, listItemsQuery.map(v => ({ ...v.list_items, mangaMeta: v.manga_metas })));
     }),
   );
 

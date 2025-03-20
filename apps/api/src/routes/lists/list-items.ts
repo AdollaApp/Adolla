@@ -42,7 +42,7 @@ export const listItemRouter = makeRouter((app) => {
         mangaMetaId: mangaMeta.id,
       }).returning();
 
-      return mapListItem(newItem);
+      return mapListItem(newItem, mangaMeta);
     }),
   );
 

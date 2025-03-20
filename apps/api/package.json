@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node dist/main.js",
-    "build": "tsup",
+    "build": "tsup && tsc --noEmit",
     "dev": "tsup --watch --onSuccess 'node dist/main.js'",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."

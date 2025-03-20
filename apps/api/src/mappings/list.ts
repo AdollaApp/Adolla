@@ -16,7 +16,7 @@ export type ListItemDto = {
   id: string;
   listId: string;
   mangaId: string;
-  mangaMeta: MangaMetaDbDto;
+  mangaMeta: MangaMetaDbDto | null;
 };
 
 export function mapList(list: List): ListDto {
@@ -27,18 +27,18 @@ export function mapList(list: List): ListDto {
   };
 }
 
-export function mapListWithItems(list: List, items: (ListItem & { mangaMeta: MangaMetaDb })[]): ListWithItemDto {
+export function mapListWithItems(list: List, items: (ListItem & { mangaMeta: MangaMetaDb | null })[]): ListWithItemDto {
   return {
     ...mapList(list),
     items: items.map(v => mapListItem(v, v.mangaMeta)),
   };
 }
 
-export function mapListItem(item: ListItem, meta: MangaMetaDb): ListItemDto {
+export function mapListItem(item: ListItem, meta: MangaMetaDb | null): ListItemDto {
   return {
     id: item.id,
     listId: item.listId,
     mangaId: item.mangaId,
-    mangaMeta: mapMangaMetaDb(meta),
+    mangaMeta: meta ? mapMangaMetaDb(meta) : null,
   };
 }

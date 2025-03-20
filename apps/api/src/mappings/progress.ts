@@ -10,10 +10,10 @@ export type ProgressItemDto = {
   updatedAt: string;
   currentPage: number;
   totalPages: number;
-  mangaMeta: MangaMetaDbDto;
+  mangaMeta: MangaMetaDbDto | null;
 };
 
-export function mapProgressItem(item: ProgressItem, meta: MangaMetaDb): ProgressItemDto {
+export function mapProgressItem(item: ProgressItem, meta: MangaMetaDb | null): ProgressItemDto {
   return {
     id: item.id,
     userId: item.userId,
@@ -22,6 +22,6 @@ export function mapProgressItem(item: ProgressItem, meta: MangaMetaDb): Progress
     updatedAt: item.updatedAt.toISOString(),
     currentPage: item.currentPage,
     totalPages: item.totalPages,
-    mangaMeta: mapMangaMetaDb(meta),
+    mangaMeta: meta ? mapMangaMetaDb(meta) : null,
   };
 }

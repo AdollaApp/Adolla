@@ -15,6 +15,6 @@ export function mapMangaMetaDb(item: MangaMetaDb): MangaMetaDbDto {
   return {
     id: item.id,
     scraper: mapScraper(ids.scraperId),
-    meta: mapMangaMeta(JSON.parse(item.data)),
+    meta: mapMangaMeta(JSON.parse(item.data).meta),
   };
 }

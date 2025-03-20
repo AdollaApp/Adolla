@@ -6,7 +6,7 @@ import { grantCodes, sessions, users } from '@/modules/db/schema';
 import { makeAuthToken } from '@/utils/auth/header';
 import { createSession } from '@/utils/auth/session';
 import { ApiError } from '@/utils/error';
-import { handle } from '@/utils/handle';
+import { DONT_REPLY, handle } from '@/utils/handle';
 import { makeRouter } from '@/utils/router';
 import { and, eq, gte } from 'drizzle-orm';
 import { z } from 'zod';
@@ -22,6 +22,7 @@ export const authRouter = makeRouter((app) => {
       url.searchParams.append('client_id', conf.auth.discord.clientId);
       url.searchParams.append('redirect_uri', discordRedirectUrl);
       res.redirect(url.toString(), 307);
+      return DONT_REPLY;
     }),
   );
 
