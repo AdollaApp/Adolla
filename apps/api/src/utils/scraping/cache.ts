@@ -20,6 +20,7 @@ export function buildMangaMetaCache(scraperId: string, meta: MangaMeta): MangaMe
 }
 
 export async function saveMetaData(scraperId: string, meta: MangaMeta) {
+  // TODO this stores the proxied image url, maybe it should store raw
   const dataStr = JSON.stringify(buildMangaMetaCache(scraperId, meta));
   await db.insert(mangaMetas).values({
     id: makeMangaId(scraperId, meta.id),
