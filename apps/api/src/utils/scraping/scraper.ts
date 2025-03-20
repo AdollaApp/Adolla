@@ -1,4 +1,5 @@
 import type { EnumType } from '../types';
+import { saveMetaData } from './cache';
 
 export type ChapterContent = {
   id: string;
@@ -70,5 +71,13 @@ export type Scraper = {
 };
 
 export function makeScraper(input: Scraper): Scraper {
-  return input;
+  return {
+    ...input,
+
+    async getManga(mid) {
+      const output = await input.getManga(mid);
+      await saveMetaData(input.id, output.meta);
+      return output;
+    },
+  };
 }

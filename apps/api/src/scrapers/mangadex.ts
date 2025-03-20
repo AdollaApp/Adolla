@@ -1,4 +1,5 @@
 import { createProxyUrl } from '@/utils/proxy';
+import { cacheTypes, chapterContentCacheTimeMs, chapterListCacheTimeMs, getFromCache, mangaMetaCacheTimeMs, saveToCache } from '@/utils/scraping/cache';
 import type { Chapter, MangaMeta, MangaStatus, Volume } from '@/utils/scraping/scraper';
 import { makeScraper, mangaStatus } from '@/utils/scraping/scraper';
 import { ofetch } from 'ofetch';
@@ -151,12 +152,19 @@ export const mangadex = makeScraper({
   id: 'mangadex',
   name: 'Mangadex',
   imagePath: '/scrapers/mangadex.png',
-  async getChapter(_mid, cid) {
-    const chapter = await getChapterMeta(cid);
-    const content = await getContentFromChapter(cid);
+  async getChapter(mid, cid) {
+    let chapterData = await getFromCache<{ chapter: MdChapter; content: ChapterContent }>([cacheTypes.chapterContent, mid, cid]);
+    if (!chapterData) {
+      chapterData = {
+        chapter: (await getChapterMeta(cid)).data,
+        content: await getContentFromChapter(cid),
+      };
+      await saveToCache([cacheTypes.chapterContent, mid, cid], chapterData, chapterContentCacheTimeMs);
+    }
 
+    const { chapter, content } = chapterData;
     return {
-      chapter: makeChapterMetaFromChapter(chapter.data),
+      chapter: makeChapterMetaFromChapter(chapter),
       content: content.chapter.data.map(fileName => ({
         id: fileName,
         url: createProxyUrl(`${content.baseUrl}/data/${content.chapter.hash}/${fileName}`),
@@ -164,8 +172,18 @@ export const mangadex = makeScraper({
     };
   },
   async getManga(mid) {
-    const { data: manga } = await getMangaDetails(mid);
-    const chapters = await getChapters(mid);
+    let manga = await getFromCache<MangaDetails>([cacheTypes.mangaMeta, mid]);
+    if (!manga) {
+      const detailsRes = await getMangaDetails(mid);
+      manga = detailsRes.data;
+      await saveToCache([cacheTypes.mangaMeta, mid], manga, mangaMetaCacheTimeMs);
+    }
+
+    let chapters = await getFromCache<MdChapter[]>([cacheTypes.chapterList, mid]);
+    if (!chapters) {
+      chapters = await getChapters(mid);
+      await saveToCache([cacheTypes.chapterList, mid], chapters, chapterListCacheTimeMs);
+    }
 
     // TODO take chapters from best publishers
 

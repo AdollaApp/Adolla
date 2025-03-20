@@ -116,3 +116,9 @@ export const mangaMetas = pgTable('manga_metas', {
 });
 
 export type MangaMetaDb = InferSelectModel<typeof mangaMetas>;
+
+export const cacheItems = pgTable('cache_items', {
+  key: varchar().primaryKey(),
+  expiresAt: timestamp('expires_at').notNull(),
+  data: varchar().notNull(),
+});
