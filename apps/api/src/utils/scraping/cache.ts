@@ -1,8 +1,10 @@
 import { db } from '@/modules/db';
 import type { MangaMeta } from './scraper';
 import { cacheItems, mangaMetas } from '@/modules/db/schema';
-import { eq } from 'drizzle-orm';
+import { and, eq, gte } from 'drizzle-orm';
 import { makeMangaId } from './manga-id';
+
+// TODO expiry cache items on schedule
 
 // bump this number if you make changes to the format of any cache item
 const cacheVersion = 1;
@@ -26,7 +28,7 @@ export async function saveMetaData(scraperId: string, meta: MangaMeta) {
     id: makeMangaId(scraperId, meta.id),
     data: dataStr,
   }).onConflictDoUpdate({
-    target: cacheItems.key,
+    target: mangaMetas.id,
     set: {
       data: dataStr,
     },
@@ -64,7 +66,7 @@ export async function saveToCache<T>(key: string[], data: T, expiryMs: number): 
 }
 
 export async function getFromCache<T>(key: string[]): Promise<T | null> {
-  const [item] = await db.select().from(cacheItems).where(eq(cacheItems.key, makeKey(key)));
+  const [item] = await db.select().from(cacheItems).where(and(eq(cacheItems.key, makeKey(key)), gte(cacheItems.expiresAt, new Date())));
   if (!item?.data) return null;
   return JSON.parse(item.data) as T;
 }
