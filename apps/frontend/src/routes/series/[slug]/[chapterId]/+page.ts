@@ -13,5 +13,6 @@ export const load: PageLoad = async ({ params }) => {
     slug,
     chapterId,
     chapter: scrapeResult,
+    skipRootLayout: true
   };
 };

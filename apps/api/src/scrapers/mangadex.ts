@@ -51,6 +51,7 @@ type MdChapter = EntityData<'chapter', {
   chapter: string;
   title: string | null;
   pages: number;
+  translatedLanguage: string;
   publishAt: string;
   readableAt: string;
 }, Array<EntityData<'manga'>>>;
@@ -95,12 +96,13 @@ function getStatus(status: string): MangaStatus {
 
 function makeMetaFromDetails(details: MangaDetails): MangaMeta {
   const coverArt = details.relationships.find(v => v.type === 'cover_art');
+  console.log(details.attributes);
   return {
     id: details.id,
     description: [getBestLanguage(details.attributes.description)],
     nsfw: details.attributes.contentRating !== 'safe',
     posterUrl: coverArt ? createProxyUrl(`https://uploads.mangadex.org/covers/${details.id}/${coverArt.attributes.fileName}.512.jpg`) : undefined,
-    title: getBestLanguageFromMany(details.attributes.altTitles),
+    title: getBestLanguage(details.attributes.title) || getBestLanguageFromMany(details.attributes.altTitles),
     status: getStatus(details.attributes.status),
   };
 }
@@ -130,8 +132,9 @@ async function getChapters(mid: string) {
       },
     });
     allChapters = [...allChapters, ...newChapters.data];
-    if (newChapters.offset + newChapters.limit >= newChapters.total)
+    if (newChapters.offset + newChapters.limit >= newChapters.total) {
       return allChapters;
+    }
     offset += limit;
   }
 }
@@ -204,6 +207,7 @@ export const mangadex = makeScraper({
 
     const alreadyDoneChapters = new Set();
     const dedupedChapters = chapters.filter((c) => {
+      if (c.attributes.translatedLanguage !== 'en') return; // TODO Jvs wants to look at this later
       const hasChapter = alreadyDoneChapters.has(c.attributes.chapter);
       if (hasChapter) return false;
       alreadyDoneChapters.add(c.attributes.chapter);
