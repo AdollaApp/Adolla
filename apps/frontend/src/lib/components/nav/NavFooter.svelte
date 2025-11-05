@@ -8,7 +8,7 @@
 </script>
 
 <footer
-  class="bg-bg py-2 fixed bottom-[env(safe-area-inset-bottom)] left-0 m-[10px] w-[calc(100%-20px)] md:hidden z-10 border border-stroke-100 rounded-xl shadow-custom flex items-center justify-around"
+  class="bg-bg py-2 fixed bottom-[env(safe-area-inset-bottom)] left-0 m-[10px] w-[calc(100%-20px)] md:hidden z-10 border border-stroke-100 rounded-xl shadow-custom flex items-center justify-around z-100"
 >
   <FooterLink href="/">
     <HomeIcon />

@@ -25,7 +25,7 @@ html, body {
   --color-accent-hover: #2f52c3;
   --color-text-on-accent: white;
 
-  --color-secondary-bg: #F1F3F6;
+  /* --color-secondary-bg: #F1F3F6; */
   --color-text-on-secondary: #706E7B;
 
   --color-text: #191828;
@@ -35,6 +35,8 @@ html, body {
 
   --color-bg: white;
   --color-hover-bg: #3D4198;
+
+  --color-secondary-bg: #FBFAFA;
 
   --shadow-custom: 0 3px 8px var(--color-shadow);
   --shadow-custom-input: 0 1px 2px var(--color-shadow-2);

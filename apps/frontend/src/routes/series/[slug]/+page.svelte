@@ -1,15 +1,14 @@
 <script lang="ts">
   import FolderPlusIcon from "$lib/components/icons/FolderPlus.svelte";
-  import OpenBook from "$lib/components/icons/OpenBook.svelte";
   import OpenBookIcon from "$lib/components/icons/OpenBook.svelte";
+  import SecondaryHeading from "$lib/components/text/SecondaryHeading.svelte";
 
   import Button from "$lib/components/util/Button.svelte";
   import Container from "$lib/components/util/Container.svelte";
 
   const { data } = $props();
 
-  console.log(data);
-  console.log(data.manga.chapters.sort((a, b) => a.chapterNum - b.chapterNum));
+  data.manga.chapters.sort((b, a) => a.chapterNum - b.chapterNum);
 
   const genres = ["Romance", "Smut", "The Smuttiest Smut of all Time"];
 </script>
@@ -27,7 +26,7 @@
 </div>
 
 <Container>
-  <div class="grid grid-cols-[300px_1fr] gap-4">
+  <div class="grid grid-cols-[300px_1fr] gap-4 pb-20 lg:pb-8">
     <div class="mt-[1rem] relative z-10">
       <div
         aria-label={data.manga.meta.title}
@@ -50,7 +49,9 @@
     </div>
     <div class="mt-[7rem]">
       <div class="relative z-10">
-        <h1 class="text-3xl font-bold line-clamp-1">{data.manga.meta.title}</h1>
+        <h1 class="text-3xl font-bold line-clamp-1">
+          {data.manga.meta.title || "No title? Dang. Wild."}
+        </h1>
         <span class="mt-2 inline-block text-text-light">
           {#each genres as genre, i}
             <span
@@ -71,6 +72,30 @@
       <!-- Back to your regularly scheduled content, now -->
       <div class="relative z-10 mt-4.5 text-text-light">
         <p>{data.manga.meta.description}</p>
+      </div>
+
+      <div class="relative z-10 mt-8">
+        <!-- Chapters -->
+        <SecondaryHeading>Chapters</SecondaryHeading>
+        <div class="border border-stroke-100 rounded-lg bg-secondary-bg">
+          {#each data.manga.chapters as chapter, i}
+            {#if i !== 0}
+              <hr class="w-full h-px border-0 bg-stroke-100 m-0" />
+            {/if}
+            <a
+              class="flex justify-between items-center p-3"
+              href={`/series/${data.slug}/${chapter.id}`}
+            >
+              <div class="flex gap-4 items-center">
+                <div class="w-2 h-2 rounded-full bg-black/20"></div>
+                <span>Chapter {chapter.chapterNum}</span>
+              </div>
+              <span class="text-text-light">
+                {chapter.publishedAt.split("T")[0]}
+              </span>
+            </a>
+          {/each}
+        </div>
       </div>
     </div>
   </div>
