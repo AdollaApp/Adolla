@@ -36,7 +36,7 @@
 
 <!-- BG gradient -->
 <div
-  class="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-header-gradient-start/15 to-transparent z-0"
+  class="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-header-gradient-start/15 to-transparent z-0 pointer-events-none"
 ></div>
 
 <!-- Main header -->

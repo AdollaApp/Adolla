@@ -20,8 +20,13 @@ html, body {
   --color-header-gradient-start: #B5B2F9;
 
   --color-logo-accent: #1A3836;
-  --color-accent: #4babce;
+  /* --color-accent: #4babce; */
+  --color-accent: #3C65EB;
+  --color-accent-hover: #2f52c3;
   --color-text-on-accent: white;
+
+  --color-secondary-bg: #F1F3F6;
+  --color-text-on-secondary: #706E7B;
 
   --color-text: #191828;
   --color-text-light: #737A94;
