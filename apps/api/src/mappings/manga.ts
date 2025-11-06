@@ -23,6 +23,7 @@ export type MangaMetaDto = {
   title: string;
   description: string[];
   nsfw: boolean;
+  tags: string[];
 };
 
 export type MangaDetailsDto = {
@@ -48,6 +49,7 @@ export function mapMangaMeta(data: MangaMeta): MangaMetaDto {
     status: data.status,
     title: data.title,
     bannerUrl: data.bannerUrl,
+    tags: data.tags,
   };
 }
 

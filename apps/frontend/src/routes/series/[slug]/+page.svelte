@@ -10,7 +10,7 @@
 
   data.manga.chapters.sort((b, a) => a.chapterNum - b.chapterNum);
 
-  const genres = ["Romance", "Smut", "The Smuttiest Smut of all Time"];
+  const genres = data.manga.meta.tags || ["No tags"];
 </script>
 
 <div class="w-full">

@@ -50,6 +50,7 @@ export type MangaMetaDto = {
   title: string;
   description: string[];
   nsfw: boolean;
+  tags: string[]
 };
 
 export type MangaDetailsDto = {

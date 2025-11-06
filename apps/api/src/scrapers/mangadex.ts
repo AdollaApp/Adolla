@@ -96,9 +96,9 @@ function getStatus(status: string): MangaStatus {
 
 function makeMetaFromDetails(details: MangaDetails): MangaMeta {
   const coverArt = details.relationships.find(v => v.type === 'cover_art');
-  console.log(details.attributes);
   return {
     id: details.id,
+    tags: [], // TODO tags
     description: [getBestLanguage(details.attributes.description)],
     nsfw: details.attributes.contentRating !== 'safe',
     posterUrl: coverArt ? createProxyUrl(`https://uploads.mangadex.org/covers/${details.id}/${coverArt.attributes.fileName}.512.jpg`) : undefined,

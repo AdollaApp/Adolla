@@ -8,7 +8,7 @@ export type ChapterContent = {
 
 export type Chapter = {
   id: string;
-  volumeId: string;
+  volumeId?: string;
   chapterNum: number;
   name: string;
   publishedAt: Date;
@@ -34,6 +34,7 @@ export type MangaMeta = {
   title: string;
   description: string[];
   nsfw: boolean;
+  tags: string[];
 };
 
 export const mangaStatus = {
@@ -41,6 +42,7 @@ export const mangaStatus = {
   ongoing: 'ongoing',
   finished: 'finished',
   cancelled: 'cancelled',
+  unknown: 'unknown',
 } as const;
 export type MangaStatus = EnumType<typeof mangaStatus>;
 

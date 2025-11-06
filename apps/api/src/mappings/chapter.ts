@@ -7,7 +7,7 @@ export type ChapterContentDto = {
 
 export type ChapterDto = {
   id: string;
-  volumeId: string;
+  volumeId?: string;
   chapterNum: number;
   name: string;
   publishedAt: string;
