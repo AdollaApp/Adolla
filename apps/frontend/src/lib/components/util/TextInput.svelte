@@ -1,6 +1,7 @@
 <script lang="ts">
   let isFocused = $state(false);
   let inputElement: HTMLInputElement;
+  let formElement: HTMLFormElement;
 
   let {
     children = null,
@@ -13,6 +14,10 @@
     disabled = false,
     readonly = false,
   } = $props();
+
+  function submit() {
+    if (name && value.length > 0) formElement.requestSubmit();
+  }
 </script>
 
 <button
@@ -31,18 +36,21 @@
       {@render children()}
     </div>
   {/if}
-  <input
-    {type}
-    {name}
-    {id}
-    {placeholder}
-    bind:value
-    {required}
-    {disabled}
-    {readonly}
-    class="focus:outline-0 w-full"
-    onfocus={() => (isFocused = true)}
-    onblur={() => (isFocused = false)}
-    bind:this={inputElement}
-  />
+  <form bind:this={formElement} data-sveltekit-keepfocus action="/search?q=">
+    <input
+      {type}
+      {name}
+      {id}
+      {placeholder}
+      bind:value
+      {required}
+      {disabled}
+      {readonly}
+      oninput={submit}
+      class="focus:outline-0 w-full"
+      onfocus={() => (isFocused = true)}
+      onblur={() => (isFocused = false)}
+      bind:this={inputElement}
+    />
+  </form>
 </button>

@@ -176,8 +176,33 @@ export const weebcentral = makeScraper({
     };
   },
   async search(ops) {
-    console.log(ops);
-    // TODO search
-    return [];
+    const htmlResponse = await ofetch<string>(`search/simple?location=main`, {
+      baseURL: 'https://weebcentral.com/',
+      method: 'POST',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+      },
+      body: `text=${encodeURIComponent(ops.query)}`,
+    });
+    const document = getDocumentFromHtml(htmlResponse);
+
+    const results: WcMangaDetails[] = Array.from(document.querySelectorAll('div > a')).map((resultEl) => {
+      return {
+        title: resultEl.querySelector('.text-left.text-ellipsis')?.textContent.trim() || 'No title',
+        chapters: [],
+        description: '',
+        mid: resultEl.getAttribute('href')?.split('/')?.slice(0, -1).pop() || '',
+        tags: [],
+        posterUrl: resultEl.querySelector('picture img')?.getAttribute('src') || '',
+        status: 'unknown',
+      };
+    });
+
+    return results.map((result) => {
+      return {
+        id: result.mid,
+        meta: makeMetaFromDetails(result),
+      };
+    });
   },
 });

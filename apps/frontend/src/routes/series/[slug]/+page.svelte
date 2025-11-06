@@ -5,6 +5,7 @@
 
   import Button from "$lib/components/util/Button.svelte";
   import Container from "$lib/components/util/Container.svelte";
+  import StatusTag from "$lib/components/util/StatusTag.svelte";
 
   const { data } = $props();
 
@@ -47,9 +48,10 @@
         Add to List
       </Button>
     </div>
-    <div class="mt-[7rem]">
+    <div class="mt-[4rem]">
       <div class="relative z-10">
-        <h1 class="text-3xl font-bold line-clamp-1">
+        <StatusTag status={"finished"} />
+        <h1 class="text-3xl font-bold line-clamp-1 mt-2">
           {data.manga.meta.title || "No title? Dang. Wild."}
         </h1>
         <span class="mt-2 inline-block text-text-light">
