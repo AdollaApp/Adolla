@@ -118,7 +118,7 @@
             >
               <div class="flex gap-4 items-center">
                 <div class="w-2 h-2 rounded-full bg-black/20"></div>
-                <span>Chapter {chapter.chapterNum}</span>
+                <span>{chapter.name}</span>
               </div>
 
               <div class="flex gap-4">

@@ -110,7 +110,7 @@ function makeMetaFromDetails(details: MangaDetails): MangaMeta {
 function makeChapterMetaFromChapter(c: MdChapter): Chapter {
   return {
     id: c.id,
-    chapterNum: Number(c.attributes.chapter),
+    chapterNum: Number(c.attributes.volume + '0000' + c.attributes.chapter),
     name: c.attributes.title ? c.attributes.title : c.attributes.chapter,
     publishedAt: new Date(c.attributes.publishAt),
     volumeId: c.attributes.volume,
