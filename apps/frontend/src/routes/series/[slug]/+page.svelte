@@ -18,7 +18,9 @@
 </script>
 
 <div class="w-full">
-  <div class="bg-stroke-50 absolute top-0 left-0 inset-0 h-[330px]">
+  <div
+    class="bg-stroke-50 absolute top-0 left-0 inset-0 h-[200px] lg:h-[330px]"
+  >
     <div
       class="bg-cover bg-center absolute inset-0"
       style={`background-image: url('${data.manga.meta.posterUrl}')`}
@@ -30,28 +32,35 @@
 </div>
 
 <Container>
-  <div class="grid grid-cols-[300px_1fr] gap-4 pb-20 lg:pb-8">
-    <div class="mt-[1rem] relative z-10">
-      <div
-        aria-label={data.manga.meta.title}
-        class="pb-[150%] rounded-xl border border-stroke-100 shadow-custom row-span-4 md:row-span-1 bg-stroke-50 bg-cover bg-center"
-        style={`background-image: url(${data.manga.meta.posterUrl});`}
-      ></div>
-
-      <Button on:click={() => alert(1)} classes="w-full mt-2">
-        <OpenBookIcon />
-        Start reading
-      </Button>
-      <Button
-        on:click={() => alert(1)}
-        classes="w-full mt-2"
-        buttonStyle="secondary"
-      >
-        <FolderPlusIcon />
-        Add to List
-      </Button>
+  <div class="grid lg:grid-cols-[300px_1fr] gap-4 pb-20 lg:pb-8">
+    <div
+      class="mt-[1rem] relative z-10 grid lg:block grid-cols-[auto_1fr] flex-end gap-4 lg:gap-0"
+    >
+      <div class="float-left lg:float-none lg:row-span-1 row-span-3">
+        <div
+          aria-label={data.manga.meta.title}
+          class="w-30 lg:w-full pb-[150%] rounded-xl border border-stroke-100 shadow-custom row-span-4 md:row-span-1 bg-stroke-50 bg-cover bg-center"
+          style={`background-image: url(${data.manga.meta.posterUrl});`}
+        ></div>
+      </div>
+      <div class="lg:hidden"></div>
+      <div class="lg:hidden"></div>
+      <div class="grid gap-0 lg:row-span-1 hidden lg:block">
+        <Button on:click={() => alert(1)} classes="w-full mt-2">
+          <OpenBookIcon />
+          Start reading
+        </Button>
+        <Button
+          on:click={() => alert(1)}
+          classes="w-full mt-2"
+          buttonStyle="secondary"
+        >
+          <FolderPlusIcon />
+          Add to List
+        </Button>
+      </div>
     </div>
-    <div class="mt-[4rem]">
+    <div class="lg:mt-[4rem]">
       <div class="relative z-10">
         <StatusTag status={data.manga.meta.status} />
         <h1 class="text-3xl font-bold line-clamp-1 mt-2">
@@ -68,6 +77,18 @@
             </span>
           {/each}
         </span>
+        <Button on:click={() => alert(1)} classes="w-full mt-4 lg:hidden">
+          <OpenBookIcon />
+          Start reading
+        </Button>
+        <Button
+          on:click={() => alert(1)}
+          classes="w-full mt-2 lg:hidden"
+          buttonStyle="secondary"
+        >
+          <FolderPlusIcon />
+          Add to List
+        </Button>
       </div>
 
       <!-- BG color..... Sorry! -->
