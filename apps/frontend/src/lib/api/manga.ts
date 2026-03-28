@@ -67,6 +67,7 @@ export type MangaSearchResultDto = {
 
 export type ProgressItemDto = {
   chapterId: string;
+  chapterName: string;
   currentPage: number;
   id: string;
   mangaId: string;

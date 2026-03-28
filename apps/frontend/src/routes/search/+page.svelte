@@ -12,13 +12,13 @@
     <MangaGrid>
       {#each data.searchResults as result}
         <MangaCard
+          id={result.mangaId}
           title={result.meta.title}
           image={result.meta.posterUrl}
-          chapterName="Idk lol"
           isNsfw={result.meta.nsfw}
-          id={result.mangaId}
           isNew={false}
           lang="EN-US"
+          allProgress={data.progressItems}
         />
       {/each}
     </MangaGrid>

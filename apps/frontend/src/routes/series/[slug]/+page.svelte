@@ -50,7 +50,7 @@
     </div>
     <div class="mt-[4rem]">
       <div class="relative z-10">
-        <StatusTag status={"finished"} />
+        <StatusTag status={data.manga.meta.status} />
         <h1 class="text-3xl font-bold line-clamp-1 mt-2">
           {data.manga.meta.title || "No title? Dang. Wild."}
         </h1>

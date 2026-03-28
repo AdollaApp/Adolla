@@ -75,7 +75,7 @@ async function getMangaDetails(mid: string) {
 }
 
 function getStatus(status: string): MangaStatus {
-  if (status === 'Completed') return mangaStatus.finished;
+  if (status === 'Completed' || status === 'Complete') return mangaStatus.finished;
   if (status === 'Ongoing') return mangaStatus.ongoing;
   if (status === 'Cancelled') return mangaStatus.cancelled;
   if (status === 'Hiatus') return mangaStatus.hiatus;
@@ -127,7 +127,7 @@ export const weebcentral = makeScraper({
   name: 'Weebcentral',
   imagePath: '/scrapers/weebcentral.png',
   async getChapter(mid, cid) {
-    let manga: WcMangaDetails = await getFromCache<any>([cacheTypes.mangaMeta, mid]);
+    let manga = await getFromCache<WcMangaDetails>([cacheTypes.mangaMeta, mid]);
     if (!manga) {
       const detailsRes = await getMangaDetails(mid);
       manga = detailsRes;

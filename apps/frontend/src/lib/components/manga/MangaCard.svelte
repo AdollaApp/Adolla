@@ -1,15 +1,35 @@
 <script lang="ts">
   import ChevronsRight from "../icons/ChevronsRight.svelte";
   import Badge from "../util/Badge.svelte";
+  import { page } from "$app/state";
+  import type { ProgressItemDto } from "$lib/api/manga";
 
-  // These props are temporary
-  export let id = "weebcentral:01J76XYBH76K1K39JBQQWDAX32";
-  export let title;
-  export let image;
-  export let isNew;
-  export let chapterName;
-  export let isNsfw;
-  export let lang;
+  type Props = {
+    id: string;
+    title: string;
+    image: string | undefined;
+    isNew: boolean;
+    isNsfw: boolean;
+    lang: string;
+    allProgress: ProgressItemDto[];
+  };
+  const { id, title, image, isNew, isNsfw, lang, allProgress }: Props =
+    $props();
+
+  let chapterName = $state("Not started");
+  let chapterLink = $state(`/series/${id}`);
+  function updateChapterName() {
+    const thisMangaInProgressItems = allProgress.find(
+      (progressItem) => progressItem.mangaId === id,
+    );
+    if (thisMangaInProgressItems) {
+      chapterName = `${thisMangaInProgressItems.chapterName} (${Math.round((thisMangaInProgressItems.currentPage / thisMangaInProgressItems.totalPages) * 100)}%)`;
+      chapterLink = `/series/${id}/${thisMangaInProgressItems.chapterId}`;
+    }
+  }
+
+  updateChapterName();
+  $effect(updateChapterName);
 </script>
 
 <div
@@ -35,7 +55,7 @@
     </h3>
   </a>
   <a
-    href="/snoop"
+    href={chapterLink}
     class="text-text-light hover:text-text group transition-colors duration-150 md:text-[14px] mt-2.5 block p-1 px-2 -mx-2 rounded-md hover:bg-hover-bg/8"
   >
     <h4 class="flex justify-between items-center gap-2">

@@ -7,6 +7,7 @@ export type ProgressItemDto = {
   userId: string;
   mangaId: string;
   chapterId: string;
+  chapterName: string;
   updatedAt: string;
   currentPage: number;
   totalPages: number;
@@ -19,6 +20,7 @@ export function mapProgressItem(item: ProgressItem, meta: MangaMetaDb | null): P
     userId: item.userId,
     mangaId: item.mangaId,
     chapterId: item.chapterId,
+    chapterName: item.chapterName,
     updatedAt: item.updatedAt.toISOString(),
     currentPage: item.currentPage,
     totalPages: item.totalPages,

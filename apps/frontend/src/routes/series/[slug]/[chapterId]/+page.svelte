@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getAuth } from "$lib/hooks/auth.js";
   import { api } from "$lib/hooks/fetch.js";
-
+  1;
   const { data } = $props();
   if (data.user && getAuth()) {
     api.useFetch(
