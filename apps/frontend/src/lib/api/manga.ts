@@ -71,7 +71,11 @@ export type ProgressItemDto = {
   currentPage: number;
   id: string;
   mangaId: string;
-  mangaMeta: MangaMetaDto;
+  mangaMeta: {
+    mangaId: string;
+    scraper: ScraperDto;
+    meta: MangaMetaDto;
+  };
   totalPages: number;
   updatedAt: string;
   userId: string;
