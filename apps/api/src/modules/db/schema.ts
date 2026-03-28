@@ -61,6 +61,7 @@ export const progressItems = pgTable('progress_items', {
   id: varchar().primaryKey(),
   mangaId: varchar('manga_id').notNull(),
   chapterId: varchar('chapter_id').notNull(),
+  chapterName: varchar('chapter_name').notNull(),
   updatedAt: timestamp('expires_at').notNull(),
   userId: varchar('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   currentPage: integer('current_page').notNull(),

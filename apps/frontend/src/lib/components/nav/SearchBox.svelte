@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import SearchIcon from "../icons/Search.svelte";
   import TextInput from "../util/TextInput.svelte";
 

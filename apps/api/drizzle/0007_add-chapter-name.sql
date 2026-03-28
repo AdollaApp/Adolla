@@ -1,0 +1,1 @@
+ALTER TABLE "progress_items" ADD COLUMN "chapter_name" varchar NOT NULL;

@@ -7,7 +7,7 @@
 
 <Container pageContainer={true}>
   <LargeHeading>Continue Reading</LargeHeading>
-  <MangaGrid>
+  <!-- <MangaGrid>
     <MangaCard
       title="Karakai Jouzu no (Moto) Takagi-san"
       image="https://uploads.mangadex.org/covers/ddcebfa2-05a0-4fcd-9cd4-60d779c38f2c/d1ae5186-f108-4983-ac17-b2dbe6a38ae3.jpg.512.jpg"
@@ -42,5 +42,5 @@
         lang="English"
       />
     {/each}
-  </MangaGrid>
+  </MangaGrid> -->
 </Container>

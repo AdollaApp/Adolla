@@ -11,6 +11,33 @@ import { z } from 'zod';
 
 export const progressRouter = makeRouter((app) => {
   app.get(
+    '/api/v1/users/:uid/progress',
+    {
+      schema: {
+        description: 'Get all manga progress for user',
+        params: z.object({
+          uid: z.string(),
+        }),
+      },
+    },
+    handle(async ({ auth, params }) => {
+      const uid = auth.data.resolveUserParam(params.uid);
+      auth.check(c => c.isUser(uid));
+      const items = await db
+        .select()
+        .from(progressItems)
+        .where(eq(progressItems.userId, uid))
+        .leftJoin(mangaMetas, eq(progressItems.mangaMetaId, mangaMetas.id));
+
+      // TODO probably optimise this lol
+      // TODO as in, sort by last read & filter by unique manga
+      // TODO essentially only get the most recent progress item for each manga
+
+      return items.map(v => mapProgressItem(v.progress_items, v.manga_metas));
+    }),
+  );
+
+  app.get(
     '/api/v1/users/:uid/progress/:mid',
     {
       schema: {
@@ -24,8 +51,15 @@ export const progressRouter = makeRouter((app) => {
     handle(async ({ auth, params }) => {
       const uid = auth.data.resolveUserParam(params.uid);
       auth.check(c => c.isUser(uid));
-      const items = await db.select().from(progressItems)
-        .where(and(eq(progressItems.mangaId, params.mid), eq(progressItems.userId, uid)))
+      const items = await db
+        .select()
+        .from(progressItems)
+        .where(
+          and(
+            eq(progressItems.mangaId, params.mid),
+            eq(progressItems.userId, uid),
+          ),
+        )
         .leftJoin(mangaMetas, eq(progressItems.mangaMetaId, mangaMetas.id));
 
       return items.map(v => mapProgressItem(v.progress_items, v.manga_metas));
@@ -48,12 +82,19 @@ export const progressRouter = makeRouter((app) => {
       const uid = auth.data.resolveUserParam(params.uid);
       auth.check(c => c.isUser(uid));
 
-      const [item] = await db.select().from(progressItems)
-        .where(and(eq(progressItems.mangaId, params.mid), eq(progressItems.userId, uid), eq(progressItems.chapterId, params.cid)))
+      const [item] = await db
+        .select()
+        .from(progressItems)
+        .where(
+          and(
+            eq(progressItems.mangaId, params.mid),
+            eq(progressItems.userId, uid),
+            eq(progressItems.chapterId, params.cid),
+          ),
+        )
         .leftJoin(mangaMetas, eq(progressItems.mangaMetaId, mangaMetas.id));
 
-      if (!item.progress_items)
-        throw new NotFoundError();
+      if (!item.progress_items) throw new NotFoundError();
 
       return mapProgressItem(item.progress_items, item.manga_metas);
     }),
@@ -72,6 +113,7 @@ export const progressRouter = makeRouter((app) => {
         body: z.object({
           totalPages: z.number().min(1),
           currentPage: z.number().min(1),
+          chapterName: z.string().min(4),
         }),
       },
     },
@@ -79,32 +121,50 @@ export const progressRouter = makeRouter((app) => {
       const uid = auth.data.resolveUserParam(params.uid);
       auth.check(c => c.isUser(uid));
 
-      const [existingItem] = await db.select().from(progressItems)
-        .where(and(eq(progressItems.mangaId, params.mid), eq(progressItems.userId, uid), eq(progressItems.chapterId, params.cid)));
+      const [existingItem] = await db
+        .select()
+        .from(progressItems)
+        .where(
+          and(
+            eq(progressItems.mangaId, params.mid),
+            eq(progressItems.userId, uid),
+            eq(progressItems.chapterId, params.cid),
+          ),
+        );
 
-      const [mangaMeta] = await db.select().from(mangaMetas)
+      const [mangaMeta] = await db
+        .select()
+        .from(mangaMetas)
         .where(eq(mangaMetas.id, params.mid));
       if (!mangaMeta) throw new Error('No meta exists for this manga ID');
 
       if (!existingItem) {
-        const [newItem] = await db.insert(progressItems).values({
-          id: getId('prg'),
-          chapterId: params.cid,
-          mangaId: params.mid,
-          updatedAt: new Date(),
-          userId: uid,
-          currentPage: body.currentPage,
-          totalPages: body.totalPages,
-          mangaMetaId: mangaMeta.id,
-        }).returning();
+        const [newItem] = await db
+          .insert(progressItems)
+          .values({
+            id: getId('prg'),
+            chapterId: params.cid,
+            chapterName: body.chapterName,
+            mangaId: params.mid,
+            updatedAt: new Date(),
+            userId: uid,
+            currentPage: body.currentPage,
+            totalPages: body.totalPages,
+            mangaMetaId: mangaMeta.id,
+          })
+          .returning();
         return mapProgressItem(newItem, mangaMeta);
       }
 
-      const [newItem] = await db.update(progressItems).set({
-        currentPage: body.currentPage,
-        totalPages: body.totalPages,
-        updatedAt: new Date(),
-      }).where(eq(progressItems.id, existingItem.id)).returning();
+      const [newItem] = await db
+        .update(progressItems)
+        .set({
+          currentPage: body.currentPage,
+          totalPages: body.totalPages,
+          updatedAt: new Date(),
+        })
+        .where(eq(progressItems.id, existingItem.id))
+        .returning();
 
       return mapProgressItem(newItem, mangaMeta);
     }),
@@ -126,13 +186,23 @@ export const progressRouter = makeRouter((app) => {
       const uid = auth.data.resolveUserParam(params.uid);
       auth.check(c => c.isUser(uid));
 
-      const [existingItem] = await db.select().from(progressItems)
-        .where(and(eq(progressItems.mangaId, params.mid), eq(progressItems.userId, uid), eq(progressItems.chapterId, params.cid)));
+      const [existingItem] = await db
+        .select()
+        .from(progressItems)
+        .where(
+          and(
+            eq(progressItems.mangaId, params.mid),
+            eq(progressItems.userId, uid),
+            eq(progressItems.chapterId, params.cid),
+          ),
+        );
 
-      if (!existingItem)
-        throw new NotFoundError();
+      if (!existingItem) throw new NotFoundError();
 
-      await db.delete(progressItems).where(eq(progressItems.id, existingItem.id)).returning();
+      await db
+        .delete(progressItems)
+        .where(eq(progressItems.id, existingItem.id))
+        .returning();
 
       return mapSuccess();
     }),

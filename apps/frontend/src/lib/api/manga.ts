@@ -1,13 +1,12 @@
 export type EnumType<E extends Record<string, string>> = E[keyof E];
 
 export const mangaStatus = {
-  hiatus: 'hiatus',
-  ongoing: 'ongoing',
-  finished: 'finished',
-  cancelled: 'cancelled',
+  hiatus: "hiatus",
+  ongoing: "ongoing",
+  finished: "finished",
+  cancelled: "cancelled",
 } as const;
 export type MangaStatus = EnumType<typeof mangaStatus>;
-
 
 export type ChapterContentDto = {
   id: string;
@@ -27,7 +26,6 @@ export type ChapterViewDto = {
   chapter: ChapterDto;
   content: ChapterContentDto[];
 };
-
 
 export type ScraperDto = {
   id: string;
@@ -50,7 +48,7 @@ export type MangaMetaDto = {
   title: string;
   description: string[];
   nsfw: boolean;
-  tags: string[]
+  tags: string[];
 };
 
 export type MangaDetailsDto = {
@@ -65,4 +63,15 @@ export type MangaSearchResultDto = {
   mangaId: string;
   scraper: ScraperDto;
   meta: MangaMetaDto;
+};
+
+export type ProgressItemDto = {
+  chapterId: string;
+  currentPage: number;
+  id: string;
+  mangaId: string;
+  mangaMeta: MangaMetaDto;
+  totalPages: number;
+  updatedAt: string;
+  userId: string;
 };

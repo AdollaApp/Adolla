@@ -19,7 +19,7 @@
 		"lint:fix": "eslint --fix ."
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-node": "^5.2.12",
+		"@sveltejs/adapter-node": "^5.5.4",
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@tailwindcss/vite": "^4.0.0",

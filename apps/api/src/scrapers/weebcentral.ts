@@ -176,25 +176,23 @@ export const weebcentral = makeScraper({
     };
   },
   async search(ops) {
-    const htmlResponse = await ofetch<string>(`search/simple?location=main`, {
+    // https://weebcentral.com/search/data?author=&text=Oshi%20No%20Ko&sort=Best%20Match&order=Descending&official=Any&anime=Any&adult=Any&display_mode=Full%20Display
+    const htmlResponse = await ofetch<string>(`search/data?text=${encodeURIComponent(ops.query)}&sort=Best%20Match&order=Descending&official=Any&anime=Any&adult=Any&display_mode=Full%20Display`, {
       baseURL: 'https://weebcentral.com/',
-      method: 'POST',
-      headers: {
-        'content-type': 'application/x-www-form-urlencoded',
-      },
-      body: `text=${encodeURIComponent(ops.query)}`,
     });
     const document = getDocumentFromHtml(htmlResponse);
 
-    const results: WcMangaDetails[] = Array.from(document.querySelectorAll('div > a')).map((resultEl) => {
+    const tagBlocks = Array.from(document.querySelectorAll('.opacity-70'));
+
+    const results: WcMangaDetails[] = Array.from(document.querySelectorAll('article.bg-base-300')).map((resultEl) => {
       return {
-        title: resultEl.querySelector('.text-left.text-ellipsis')?.textContent.trim() || 'No title',
+        title: resultEl.querySelector('.line-clamp-1.link')?.textContent.trim() || 'Unknown title',
         chapters: [],
         description: '',
-        mid: resultEl.getAttribute('href')?.split('/')?.slice(0, -1).pop() || '',
-        tags: [],
+        mid: resultEl.querySelector('a[href]')?.getAttribute('href')?.split('/')?.slice(-2, -1).pop() || '',
+        tags: Array.from(tagBlocks.find(block => block.textContent.includes('Tag(s):'))?.querySelectorAll('span') || []).slice(1).map(t => t.textContent.slice(0, -1)),
         posterUrl: resultEl.querySelector('picture img')?.getAttribute('src') || '',
-        status: 'unknown',
+        status: tagBlocks.find(block => block.textContent.includes('Status'))?.querySelectorAll('span')[1]?.textContent,
       };
     });
 

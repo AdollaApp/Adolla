@@ -50,6 +50,13 @@
       "when": 1742501913030,
       "tag": "0006_add-cache-and-manga-meta",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1774706148794,
+      "tag": "0007_add-chapter-name",
+      "breakpoints": true
     }
   ]
 }
