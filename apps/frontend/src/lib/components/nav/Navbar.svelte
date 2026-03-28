@@ -42,7 +42,7 @@
 <!-- Main header -->
 <header
   class={[
-    "[border-top-width:calc(env(safe-area-inset-top)+4px)] border-t-accent py-2 md:py-4 fixed top-0 left-0 w-full z-20 border-b transition-colors duration-200",
+    "[border-top-width:clamp(4px,env(safe-area-inset-top),env(safe-area-inset-top))] border-t-accent py-2 md:py-4 fixed top-0 left-0 w-full z-20 border-b transition-colors duration-200",
     scrollY > 0 ? "border-b-stroke-100 bg-bg" : "border-b-transparent",
   ].join(" ")}
   bind:this={header}

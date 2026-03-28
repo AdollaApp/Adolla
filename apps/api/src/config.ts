@@ -39,9 +39,9 @@ const schema = z.object({
 export const fragments: Record<string, PartialDeep<z.infer<typeof schema>>> = {
   docker: {
     server: {
-      cors: 'http://localhost:3000 http://localhost:5173',
-      frontendBaseUrl: 'http://localhost:5173/',
-      backendBaseUrl: 'http://localhost:8080/',
+      cors: 'http://192.168.1.150:3000 http://192.168.1.150:5173',
+      frontendBaseUrl: 'http://192.168.1.150:5173/',
+      backendBaseUrl: 'http://192.168.1.150:8080/',
     },
     database: {
       connection: 'postgres://postgres:postgres@localhost:5432/postgres',

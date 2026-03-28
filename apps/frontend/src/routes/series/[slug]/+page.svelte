@@ -18,34 +18,53 @@
 </script>
 
 <div class="w-full">
-  <div
-    class="bg-stroke-50 absolute top-0 left-0 inset-0 h-[200px] lg:h-[330px]"
-  >
+  <div class="-mt-30 relative bg-stroke-50 w-full">
     <div
-      class="bg-cover bg-center absolute inset-0"
+      class="absolute bg-cover bg-center w-full h-full"
       style={`background-image: url('${data.manga.meta.posterUrl}')`}
     ></div>
     <div
-      class="bg-gradient-to-b from-[#DBDEFF]/90 via-bg/70 to-bg/90 absolute inset-0"
-    ></div>
+      class="relative top-0 left-0 inset-0 bg-gradient-to-b from-[#DBDEFF]/90 via-bg/70 to-bg/90"
+    >
+      <Container>
+        <div
+          class="block lg:grid lg:grid-cols-[300px_1fr] gap-6 pt-[calc(190px-env(safe-area-inset-top)*0.25)] lg:pt-60 pb-5"
+        >
+          <div></div>
+          <div>
+            <StatusTag status={data.manga.meta.status} />
+            <h1 class="text-3xl font-bold mt-2">
+              {data.manga.meta.title || "No title? Dang. Wild."}
+            </h1>
+            <span class="mt-2 inline-block text-text-light break-words">
+              {#each genres as genre, i}
+                <span
+                  class={Number(i) !== 0
+                    ? "before:content-['·'] before:text-text-lighter before:mx-2"
+                    : ""}
+                >
+                  &ThinSpace;{genre}
+                </span>
+              {/each}
+            </span>
+          </div>
+        </div>
+      </Container>
+    </div>
   </div>
 </div>
 
 <Container>
-  <div class="grid lg:grid-cols-[300px_1fr] gap-4 pb-20 lg:pb-8">
-    <div
-      class="mt-[1rem] relative z-10 grid lg:block grid-cols-[auto_1fr] flex-end gap-4 lg:gap-0"
-    >
+  <div class="grid lg:grid-cols-[300px_1fr] gap-6 pb-20 lg:pb-8">
+    <div class="hidden lg:block -mt-35 relative z-10">
       <div class="float-left lg:float-none lg:row-span-1 row-span-3">
         <div
           aria-label={data.manga.meta.title}
-          class="w-30 lg:w-full pb-[150%] rounded-xl border border-stroke-100 shadow-custom row-span-4 md:row-span-1 bg-stroke-50 bg-cover bg-center"
+          class="w-30 hidden lg:block lg:w-full pb-[150%] rounded-xl border border-stroke-100 shadow-custom row-span-4 md:row-span-1 bg-stroke-50 bg-cover bg-center"
           style={`background-image: url(${data.manga.meta.posterUrl});`}
         ></div>
       </div>
-      <div class="lg:hidden"></div>
-      <div class="lg:hidden"></div>
-      <div class="grid gap-0 lg:row-span-1 hidden lg:block">
+      <div class="block">
         <Button on:click={() => alert(1)} classes="w-full mt-2">
           <OpenBookIcon />
           Start reading
@@ -60,23 +79,14 @@
         </Button>
       </div>
     </div>
-    <div class="lg:mt-[4rem]">
+
+    <div class="mt-6 lg:mt-[1.5rem]">
+      <!-- Back to your regularly scheduled content, now -->
+      <div class="relative z-10 text-text-light">
+        <p>{data.manga.meta.description}</p>
+      </div>
+
       <div class="relative z-10">
-        <StatusTag status={data.manga.meta.status} />
-        <h1 class="text-3xl font-bold line-clamp-1 mt-2">
-          {data.manga.meta.title || "No title? Dang. Wild."}
-        </h1>
-        <span class="mt-2 inline-block text-text-light">
-          {#each genres as genre, i}
-            <span
-              class={Number(i) !== 0
-                ? "before:content-['·'] before:text-text-lighter before:mx-2"
-                : ""}
-            >
-              {genre}
-            </span>
-          {/each}
-        </span>
         <Button on:click={() => alert(1)} classes="w-full mt-4 lg:hidden">
           <OpenBookIcon />
           Start reading
@@ -89,15 +99,6 @@
           <FolderPlusIcon />
           Add to List
         </Button>
-      </div>
-
-      <!-- BG color..... Sorry! -->
-      <div class="absolute w-[300vw] -translate-x-1/2 h-96 bg-bg mt-6"></div>
-      <div class="h-6"></div>
-
-      <!-- Back to your regularly scheduled content, now -->
-      <div class="relative z-10 mt-4.5 text-text-light">
-        <p>{data.manga.meta.description}</p>
       </div>
 
       <div class="relative z-10 mt-8">
