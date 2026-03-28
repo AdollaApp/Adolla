@@ -12,6 +12,9 @@
   data.manga.chapters.sort((b, a) => a.chapterNum - b.chapterNum);
 
   const genres = data.manga.meta.tags || ["No tags"];
+  const lastReadChapterId = data.progressItems?.toSorted((a, b) => {
+    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+  })?.[0]?.chapterId;
 </script>
 
 <div class="w-full">
@@ -81,6 +84,9 @@
         <SecondaryHeading>Chapters</SecondaryHeading>
         <div class="border border-stroke-100 rounded-lg bg-secondary-bg">
           {#each data.manga.chapters as chapter, i}
+            {@const chapterProgressData = data.progressItems?.find((pr) => {
+              return pr.chapterId === chapter.id;
+            })}
             {#if i !== 0}
               <hr class="w-full h-px border-0 bg-stroke-100 m-0" />
             {/if}
@@ -92,9 +98,25 @@
                 <div class="w-2 h-2 rounded-full bg-black/20"></div>
                 <span>Chapter {chapter.chapterNum}</span>
               </div>
-              <span class="text-text-light">
-                {chapter.publishedAt.split("T")[0]}
-              </span>
+
+              <div class="flex gap-4">
+                {#if chapterProgressData}
+                  <span
+                    class={lastReadChapterId == chapter.id
+                      ? "text-accent"
+                      : "text-text-light"}
+                  >
+                    {Math.round(
+                      (chapterProgressData.currentPage /
+                        chapterProgressData.totalPages) *
+                        100,
+                    )}%
+                  </span>
+                {/if}
+                <span class="text-text-light">
+                  {chapter.publishedAt.split("T")[0]}
+                </span>
+              </div>
             </a>
           {/each}
         </div>
