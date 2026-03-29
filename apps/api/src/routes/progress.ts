@@ -94,7 +94,7 @@ export const progressRouter = makeRouter((app) => {
         )
         .leftJoin(mangaMetas, eq(progressItems.mangaMetaId, mangaMetas.id));
 
-      if (!item.progress_items) throw new NotFoundError();
+      if (!item?.progress_items) throw new NotFoundError();
 
       return mapProgressItem(item.progress_items, item.manga_metas);
     }),
