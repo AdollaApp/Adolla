@@ -106,7 +106,6 @@ function makeChapterMeta(chapter: WcChapter): Chapter {
   const cid = chapter.cid;
   const chapterName = chapter.title;
   const volumeId = chapterName.match(/S(\d+)/)?.[1];
-  console.log(chapterName);
   return {
     id: cid as string,
     chapterNum: Number(chapterName.split(' ').filter(t => !isNaN(Number(t.replace(/\D/g, '') || NaN))).map(t => t.padStart(4, '0')).join('0').replace(/\D/g, '')),

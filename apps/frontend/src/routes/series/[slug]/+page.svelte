@@ -54,8 +54,8 @@
   </div>
 </div>
 
-<Container>
-  <div class="grid lg:grid-cols-[300px_1fr] gap-6 pb-20 lg:pb-8">
+<Container pageContainer>
+  <div class="grid lg:grid-cols-[300px_1fr] gap-6">
     <div class="hidden lg:block -mt-35 relative z-10">
       <div class="float-left lg:float-none lg:row-span-1 row-span-3">
         <div
