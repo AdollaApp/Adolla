@@ -24,7 +24,7 @@
       style={`background-image: url('${data.manga.meta.posterUrl}')`}
     ></div>
     <div
-      class="relative top-0 left-0 inset-0 bg-gradient-to-b from-[#DBDEFF]/90 via-bg/70 to-bg/90"
+      class="relative top-0 left-0 inset-0 bg-gradient-to-b from-bg/90 via-bg/70 to-bg/90"
     >
       <Container>
         <div

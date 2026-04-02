@@ -28,6 +28,6 @@ export const load: PageLoad = async ({ params, fetch, parent, url }) => {
     skipRootLayout: true,
     progressItem,
     manga: mangaResult,
-    pageOverride: Number(url.searchParams.get('p')) ?? null
+    pageOverride: url.searchParams.get('p')
   };
 };

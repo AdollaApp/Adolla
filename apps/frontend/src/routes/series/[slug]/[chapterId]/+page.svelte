@@ -21,7 +21,8 @@
       let desiredElement = scrollableElement?.querySelector(
         `[data-page="${data.pageOverride ?? data.progressItem?.currentPage}"]`,
       );
-      if (data.pageOverride === -1) {
+      console.log(desiredElement, data.pageOverride);
+      if (data.pageOverride === "-1") {
         desiredElement = Array.from(
           scrollableElement?.querySelectorAll("img.page") || [],
         ).pop();

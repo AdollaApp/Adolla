@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
-html, body {
+html,
+body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: 'Ubuntu', sans-serif;
@@ -41,4 +42,19 @@ html, body {
 
   --shadow-custom: 0 3px 8px var(--color-shadow);
   --shadow-custom-input: 0 1px 2px var(--color-shadow-2);
+}
+
+@media(prefers-color-scheme: dark) {
+  body {
+    --color-bg: black;
+    --color-hover-bg: #191919;
+    --color-secondary-bg: #15151a;
+
+    --color-text: ghostwhite;
+    --color-text-light: #737A94;
+    --color-text-lighter: #737A94;
+
+    --color-stroke-100: black;
+    --color-stroke-200: black;
+  }
 }
