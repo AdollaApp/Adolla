@@ -2,7 +2,7 @@ import type { ChapterViewDto, MangaDetailsDto, ProgressItemDto } from "$lib/api/
 import { api } from "$lib/hooks/fetch";
 import type { PageLoad } from "./$types";
 
-export const load: PageLoad = async ({ params, fetch, parent }) => {
+export const load: PageLoad = async ({ params, fetch, parent, url }) => {
   const { slug, chapterId } = params;
   // Get images and other chapter details
   const chapterResult = await api.useFetch<ChapterViewDto>(
@@ -27,6 +27,7 @@ export const load: PageLoad = async ({ params, fetch, parent }) => {
     chapter: chapterResult,
     skipRootLayout: true,
     progressItem,
-    manga: mangaResult
+    manga: mangaResult,
+    pageOverride: Number(url.searchParams.get('p')) ?? null
   };
 };
