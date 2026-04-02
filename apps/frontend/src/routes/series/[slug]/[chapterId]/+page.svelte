@@ -213,7 +213,7 @@
 
   <!-- Bottom bit -->
   <div
-    class="fixed bottom-8 left-8 lg:left-2 lg:bottom-2 bg-white p-2 py-1 rounded border border-stroke-100 tabular-nums space-x-2"
+    class="fixed bottom-8 left-8 lg:left-2 lg:bottom-2 bg-bg p-2 py-1 rounded border border-stroke-200 tabular-nums space-x-2"
   >
     <span>
       {currentPage.toString().padStart(totalPages.toString().length, "0")} / {totalPages}
