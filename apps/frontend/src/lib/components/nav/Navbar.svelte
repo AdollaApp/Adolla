@@ -27,6 +27,7 @@
   onMount(() => {
     window.addEventListener("resize", updateHeaderHeight);
     window.addEventListener("scroll", onScroll);
+    onScroll();
     return () => {
       window.removeEventListener("resize", updateHeaderHeight);
       window.removeEventListener("scroll", onScroll);

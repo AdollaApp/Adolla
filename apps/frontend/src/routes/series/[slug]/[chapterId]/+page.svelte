@@ -24,6 +24,15 @@
 
   const { data } = $props();
 
+  // const uniqueVolumeCount = $derived(() => {
+  //   return Array.from(new Set(data.manga.chapters.map((ch) => ch.volumeId)))
+  //     .length;
+  // });
+
+  // const chapterInChapterList = $derived(() => {
+  //   return data.manga.chapters.find((ch) => ch.id === data.chapterId);
+  // });
+
   function getCurrentPage() {
     if (!settings) return;
     const content = scrollableElement?.querySelectorAll("img.page");
@@ -84,6 +93,10 @@
     const { totalPages, currentPage } = pageData;
     setProgress(currentPage, totalPages);
   }
+
+  function cleanChapterName(name: string) {
+    return name.replaceAll(/Chapter/g, "Ch");
+  }
 </script>
 
 <!-- Images -->
@@ -109,8 +122,24 @@
   {/if}
 
   <!-- Bottom bit -->
-  <div class="fixed bottom-2 left-1/2 -translate-x-1/2 bg-white">
-    {currentPage} / {totalPages}
+  <div
+    class="fixed bottom-8 left-8 lg:left-2 lg:bottom-2 bg-white p-2 py-1 rounded border border-stroke-100 tabular-nums space-x-2"
+  >
+    <span>
+      {currentPage.toString().padStart(totalPages.toString().length, "0")} / {totalPages}
+    </span>
+    <!-- <span>
+      {#if uniqueVolumeCount() > 0}
+        {#if chapterInChapterList()}
+          Vol {chapterInChapterList()?.volumeId}
+        {/if}
+      {/if}
+      Ch {data.chapter.chapter.chapterNum}
+    </span> -->
+    <span class="opacity-50">•</span>
+    <span>
+      {cleanChapterName(data.chapter.chapter.name)}
+    </span>
   </div>
 {:else}
   Waiting for settings...

@@ -1,6 +1,5 @@
 import type { ChapterViewDto, MangaDetailsDto, ProgressItemDto } from "$lib/api/manga";
 import { api } from "$lib/hooks/fetch";
-import { unwrap } from "$lib/hooks/unwrap";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ params, fetch, parent }) => {
