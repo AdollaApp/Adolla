@@ -2,7 +2,7 @@
   const styles = {
     default:
       "border-stroke-accent text-text-accent bg-gradient-to-br from-gradient-start to-transparent",
-    red: "border-stroke-red text-red-800 bg-gradient-to-br from-red-100 to-transparent",
+    red: "border-stroke-red text-red-800 bg-gradient-to-br from-red-100 to-red-50",
   } as const;
 
   const {
@@ -16,7 +16,7 @@
 
 <div
   class={[
-    "uppercase font-semibold px-1.5 rounded-lg border",
+    "uppercase font-semibold px-1.5 rounded-lg border inline",
     styles[style] ?? "",
   ].join(" ")}
 >

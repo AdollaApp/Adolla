@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { mangaStatus } from "$lib/api/manga.js";
   import FolderPlusIcon from "$lib/components/icons/FolderPlus.svelte";
   import OpenBookIcon from "$lib/components/icons/OpenBook.svelte";
   import SecondaryHeading from "$lib/components/text/SecondaryHeading.svelte";
+  import Badge from "$lib/components/util/Badge.svelte";
 
   import Button from "$lib/components/util/Button.svelte";
   import Container from "$lib/components/util/Container.svelte";
@@ -37,6 +39,10 @@
               {data.manga.meta.title || "No title? Dang. Wild."}
             </h1>
             <span class="mt-2 inline-block text-text-light break-words">
+              {#if data.manga.meta.nsfw}
+                <Badge style="red">NSFW</Badge>
+                <span class="inline-block ml-2">·</span>
+              {/if}
               {#each genres as genre, i}
                 <span
                   class={Number(i) !== 0
