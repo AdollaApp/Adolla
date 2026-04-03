@@ -2,6 +2,7 @@
   import { goto, preloadData } from "$app/navigation";
   import TitleScreen from "$lib/components/reader/TitleScreen.svelte";
   import { getAuth } from "$lib/hooks/auth.js";
+  import { cleanChapterName } from "$lib/hooks/clean.js";
   import { api } from "$lib/hooks/fetch.js";
   import {
     getSettings,
@@ -159,10 +160,6 @@
     if (!pageData) return;
     const { totalPages, currentPage } = pageData;
     setProgress(currentPage, totalPages);
-  }
-
-  function cleanChapterName(name: string) {
-    return name.replaceAll(/Chapter/g, "Ch");
   }
 </script>
 
