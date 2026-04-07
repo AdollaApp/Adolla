@@ -2,8 +2,8 @@
   import type { MangaStatus } from "$lib/api/manga";
 
   const styles: Record<MangaStatus, string> = {
-    ongoing: "border-[#A0EDA8] bg-[#E3FFE9]/75 text-[#34AF26]",
-    finished: "border-[#A0EDA8] bg-[#E3FFE9]/75 text-[#34AF26]",
+    ongoing: "border-[#A0EDA8] bg-[#E3FFE9]/90 text-[#2E8424]",
+    finished: "border-[#A0EDA8] bg-[#E3FFE9]/90 text-[#2E8424]",
     cancelled:
       "border-stroke-red text-red-800 bg-gradient-to-br from-red-100 to-transparent",
     hiatus: "border-[#EDC9A0] bg-[#FFF2E3]/100 text-[#E88F29]",

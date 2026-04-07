@@ -38,9 +38,15 @@
   <a
     aria-label={title}
     href={`/series/${id}`}
-    class="pb-[150%] rounded-xl border border-stroke-100 shadow-custom row-span-4 md:row-span-1 bg-cover bg-center"
+    class="pb-[150%] rounded-xl border border-stroke-100 shadow-custom row-span-4 md:row-span-1 [background-size:calc(100%+5px)] bg-center relative"
     style={`background-image: url(${image});`}
-  ></a>
+  >
+    {#if isNsfw}
+      <div class="absolute top-2 left-2">
+        <Badge style="red">NSFW</Badge>
+      </div>
+    {/if}
+  </a>
   <div class="block md:hidden"></div>
   <a href={`/series/${id}`}>
     <h3

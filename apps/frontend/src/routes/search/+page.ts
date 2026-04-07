@@ -2,11 +2,13 @@ import { getSearchResults } from "$lib/hooks/search";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ url }) => {
-  const searchResults = await getSearchResults(
-    url.searchParams.get("q") || "",
+  const query = url.searchParams.get("q") || ""
+  const searchResults = query.length > 3 ? await getSearchResults(
+    query,
     "weebcentral",
-  );
+  ) : []
   return {
     searchResults,
+    query
   };
 };

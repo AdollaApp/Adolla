@@ -1,9 +1,8 @@
 <script lang="ts">
-  import FolderPlusIcon from "$lib/components/icons/FolderPlus.svelte";
-  import OpenBookIcon from "$lib/components/icons/OpenBook.svelte";
+  import MangaPageButtons from "$lib/components/manga/MangaPageButtons.svelte";
   import SecondaryHeading from "$lib/components/text/SecondaryHeading.svelte";
+  import Badge from "$lib/components/util/Badge.svelte";
 
-  import Button from "$lib/components/util/Button.svelte";
   import Container from "$lib/components/util/Container.svelte";
   import StatusTag from "$lib/components/util/StatusTag.svelte";
 
@@ -12,9 +11,10 @@
   data.manga.chapters.sort((b, a) => a.chapterNum - b.chapterNum);
 
   const genres = data.manga.meta.tags || ["No tags"];
-  const lastReadChapterId = data.progressItems?.toSorted((a, b) => {
+  const lastReadProgressItem = data.progressItems?.toSorted((a, b) => {
     return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
-  })?.[0]?.chapterId;
+  })?.[0];
+  const lastReadChapterId = lastReadProgressItem?.chapterId;
 </script>
 
 <div class="w-full">
@@ -24,7 +24,7 @@
       style={`background-image: url('${data.manga.meta.posterUrl}')`}
     ></div>
     <div
-      class="relative top-0 left-0 inset-0 bg-gradient-to-b from-[#DBDEFF]/90 via-bg/70 to-bg/90"
+      class="relative top-0 left-0 inset-0 bg-gradient-to-b from-bg/90 via-bg/70 to-bg/90"
     >
       <Container>
         <div
@@ -37,6 +37,10 @@
               {data.manga.meta.title || "No title? Dang. Wild."}
             </h1>
             <span class="mt-2 inline-block text-text-light break-words">
+              {#if data.manga.meta.nsfw}
+                <Badge style="red">NSFW</Badge>
+                <span class="inline-block ml-2">·</span>
+              {/if}
               {#each genres as genre, i}
                 <span
                   class={Number(i) !== 0
@@ -65,18 +69,10 @@
         ></div>
       </div>
       <div class="block">
-        <Button on:click={() => alert(1)} classes="w-full mt-2">
-          <OpenBookIcon />
-          Start reading
-        </Button>
-        <Button
-          on:click={() => alert(1)}
-          classes="w-full mt-2"
-          buttonStyle="secondary"
-        >
-          <FolderPlusIcon />
-          Add to List
-        </Button>
+        <MangaPageButtons
+          latestProgressItem={lastReadProgressItem}
+          chapters={data.manga.chapters}
+        />
       </div>
     </div>
 
@@ -86,19 +82,11 @@
         <p>{data.manga.meta.description}</p>
       </div>
 
-      <div class="relative z-10">
-        <Button on:click={() => alert(1)} classes="w-full mt-4 lg:hidden">
-          <OpenBookIcon />
-          Start reading
-        </Button>
-        <Button
-          on:click={() => alert(1)}
-          classes="w-full mt-2 lg:hidden"
-          buttonStyle="secondary"
-        >
-          <FolderPlusIcon />
-          Add to List
-        </Button>
+      <div class="relative z-10 block lg:hidden">
+        <MangaPageButtons
+          latestProgressItem={lastReadProgressItem}
+          chapters={data.manga.chapters}
+        />
       </div>
 
       <div class="relative z-10 mt-8">
