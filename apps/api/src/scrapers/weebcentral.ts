@@ -51,15 +51,15 @@ async function getMangaDetails(mid: string) {
   });
 
   // Find status
-  const sidebarListItems = Array.from(mainDoc.querySelectorAll('ul.flex.flex-col li'));
+  const sidebarListItems = Array.from(mainDoc.querySelectorAll<HTMLElement>('ul.flex.flex-col li'));
   const status = sidebarListItems.find((listItem) => {
-    return (listItem.textContent.includes('Status'));
-  })?.querySelector('a')?.textContent;
+    return (listItem.textContent?.includes('Status'));
+  })?.querySelector('a')?.textContent ?? undefined;
 
   // Find genres (Bruh)
   const genres = Array.from(sidebarListItems.find((listItem) => {
-    return listItem.textContent.includes('Tag');
-  })?.querySelectorAll('span') || []).map(t => t.textContent.replaceAll(',', '').trim());
+    return listItem.textContent?.includes('Tag');
+  })?.querySelectorAll('span') || []).map(t => (t.textContent ?? '').replaceAll(',', '').trim());
 
   // Build res
   const res: WcMangaDetails = {
@@ -186,13 +186,13 @@ export const weebcentral = makeScraper({
 
     const results: WcMangaDetails[] = Array.from(document.querySelectorAll('article.bg-base-300')).map((resultEl) => {
       return {
-        title: resultEl.querySelector('.line-clamp-1.link')?.textContent.trim() || 'Unknown title',
+        title: resultEl.querySelector('.line-clamp-1.link')?.textContent?.trim() ?? 'Unknown title',
         chapters: [],
         description: '',
         mid: resultEl.querySelector('a[href]')?.getAttribute('href')?.split('/')?.slice(-2, -1).pop() || '',
-        tags: Array.from(tagBlocks.find(block => block.textContent.includes('Tag(s):'))?.querySelectorAll('span') || []).slice(1).map(t => t.textContent.slice(0, -1)),
+        tags: Array.from(tagBlocks.find(block => block.textContent?.includes('Tag(s):'))?.querySelectorAll('span') || []).slice(1).map(t => (t.textContent ?? '').slice(0, -1)),
         posterUrl: resultEl.querySelector('picture img')?.getAttribute('src') || '',
-        status: tagBlocks.find(block => block.textContent.includes('Status'))?.querySelectorAll('span')[1]?.textContent,
+        status: tagBlocks.find(block => (block.textContent ?? '').includes('Status'))?.querySelectorAll('span')[1]?.textContent ?? undefined,
       };
     });
 
