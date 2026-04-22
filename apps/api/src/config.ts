@@ -50,6 +50,19 @@ export const fragments: Record<string, PartialDeep<z.infer<typeof schema>>> = {
       secret: '12345678901234567890123456789012',
     },
   },
+  dockerprod: {
+    server: {
+      cors: 'http://192.168.1.150:3000 http://192.168.1.150:5173 https://adolla.app',
+      frontendBaseUrl: 'https://adolla.app/',
+      backendBaseUrl: 'https://api.adolla.app/',
+    },
+    database: {
+      connection: 'postgres://postgres:postgres@localhost:5432/postgres',
+    },
+    crypto: {
+      secret: '12345678901234567890123456789012H',
+    },
+  },
 };
 
 // TODO get version not from env but from package.json file
