@@ -9,6 +9,7 @@
     type ReaderSettings,
   } from "$lib/hooks/readerSettings.js";
   import { onMount } from "svelte";
+  import ArrowLeftUpIcon from "$lib/components/icons/ArrowLeftUp.svelte";
 
   let settings = $state<ReaderSettings | null>(null);
   let scrollableElement = $state<Element | null>(null);
@@ -203,24 +204,32 @@
   {/if}
 
   <!-- Bottom bit -->
-  <div
-    class="fixed bottom-8 left-8 lg:left-2 lg:bottom-2 bg-bg p-2 py-1 rounded border border-stroke-200 tabular-nums space-x-2"
-  >
-    <span>
-      {currentPage.toString().padStart(totalPages.toString().length, "0")} / {totalPages}
-    </span>
-    <!-- <span>
-      {#if uniqueVolumeCount() > 0}
-        {#if chapterInChapterList()}
-          Vol {chapterInChapterList()?.volumeId}
+  <div class="fixed bottom-8 left-8 lg:left-2 lg:bottom-2 flex gap-2">
+    <a
+      href="./"
+      class="bg-bg px-1 rounded border border-stroke-200 tabular-nums text-text-light aspect-square flex justify-center items-center"
+    >
+      <ArrowLeftUpIcon />
+    </a>
+    <div
+      class=" bg-bg p-2 py-1 rounded border border-stroke-200 tabular-nums space-x-2"
+    >
+      <span>
+        {currentPage.toString().padStart(totalPages.toString().length, "0")} / {totalPages}
+      </span>
+      <!-- <span>
+        {#if uniqueVolumeCount() > 0}
+          {#if chapterInChapterList()}
+            Vol {chapterInChapterList()?.volumeId}
+          {/if}
         {/if}
-      {/if}
-      Ch {data.chapter.chapter.chapterNum}
-    </span> -->
-    <span class="opacity-50">•</span>
-    <span>
-      {cleanChapterName(data.chapter.chapter.name)}
-    </span>
+        Ch {data.chapter.chapter.chapterNum}
+      </span> -->
+      <span class="opacity-50">•</span>
+      <span>
+        {cleanChapterName(data.chapter.chapter.name)}
+      </span>
+    </div>
   </div>
 {:else}
   Waiting for settings...
