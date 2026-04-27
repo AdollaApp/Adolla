@@ -40,7 +40,8 @@ export async function fetchAuthContextData(
   if (payload?.type === 'session') {
     const session = await fetchSessionAndUpdateExpiry(payload.id);
     if (!session) {
-      throw ApiError.forCode('authInvalidToken');
+      return {};
+      // throw ApiError.forCode('authInvalidToken');
     }
     return {
       session,
