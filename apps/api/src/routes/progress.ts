@@ -113,7 +113,7 @@ export const progressRouter = makeRouter((app) => {
         body: z.object({
           totalPages: z.number().min(1),
           currentPage: z.number().min(1),
-          chapterName: z.string().min(4),
+          chapterName: z.string().min(1),
         }),
       },
     },
