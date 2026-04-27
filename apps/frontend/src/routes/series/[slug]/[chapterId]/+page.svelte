@@ -136,8 +136,6 @@
           preloadData(chId);
         }
       }, 200);
-    } else {
-      throw new Error("LOL!");
     }
   }
 
