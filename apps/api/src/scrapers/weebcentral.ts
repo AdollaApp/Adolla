@@ -108,7 +108,14 @@ function makeChapterMeta(chapter: WcChapter): Chapter {
   const volumeId = chapterName.match(/S(\d+)/)?.[1];
   return {
     id: cid as string,
-    chapterNum: Number(chapterName.split(' ').filter(t => !isNaN(Number(t.replace(/\D/g, '') || NaN))).map(t => t.padStart(4, '0')).join('0').replace(/\D/g, '')),
+    chapterNum: Number(
+      chapterName
+        .split(' ')
+        .filter(t => !isNaN(Number(t.replace(/[^0-9.]/g, '') || NaN)))
+        .map(t => t.padStart(4, '0'))
+        .join('0')
+        .replace(/[^0-9.]/g, ''),
+    ),
     name: chapterName,
     publishedAt: new Date(chapter.date || '1980-01-01'),
     volumeId,

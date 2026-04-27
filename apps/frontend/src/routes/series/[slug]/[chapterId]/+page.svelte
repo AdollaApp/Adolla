@@ -18,18 +18,23 @@
   function scrollToProgress() {
     console.log("DO SCROLL");
     requestAnimationFrame(() => {
-      console.log(data.pageOverride);
       let desiredElement = scrollableElement?.querySelector(
         `[data-page="${data.pageOverride ?? data.progressItem?.currentPage}"]`,
       );
-      console.log(desiredElement, data.pageOverride);
+
       if (data.pageOverride === "-1") {
         desiredElement = Array.from(
           scrollableElement?.querySelectorAll("img.page") || [],
         ).pop();
       }
+
+      // If there's no page override or other appropriate element, scroll to this:
+      // if (!desiredElement)
+      //   desiredElement = document.querySelector('[data-current="true"]');
       if (!desiredElement)
-        desiredElement = document.querySelector('[data-current="true"]');
+        desiredElement = document.querySelector('[data-page="1"]');
+
+      // Scroll into view
       desiredElement?.scrollIntoView();
       onScroll();
     });
@@ -47,15 +52,6 @@
   });
 
   const { data } = $props();
-
-  // const uniqueVolumeCount = $derived(() => {
-  //   return Array.from(new Set(data.manga.chapters.map((ch) => ch.volumeId)))
-  //     .length;
-  // });
-
-  const chapterInChapterList = $derived(() => {
-    return data.manga.chapters.find((ch) => ch.id === data.chapterId);
-  });
 
   function getCurrentPage() {
     if (!settings) return;
@@ -182,11 +178,11 @@
           p={-1}
         />
       {/if}
-      <TitleScreen
+      <!-- <TitleScreen
         name={chapterInChapterList()?.name || ""}
         mangaMeta={data.manga.meta}
         current
-      />
+      /> -->
       {#each data.chapter.content as imageData, i}
         <img
           class="page w-screen min-w-screen h-screen object-contain snap-center"

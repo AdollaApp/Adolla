@@ -4,7 +4,10 @@ import { api } from "$lib/hooks/fetch";
 import { unwrap } from "$lib/hooks/unwrap";
 import type { LayoutLoad } from "./$types";
 
-export const load: LayoutLoad = async ({ fetch }) => {
+export const load: LayoutLoad = async ({ fetch, route }) => {
+  // Invoke route.id for it to re-fetch on page change (like going to the home page after reading)
+  route.id
+
   const { data: user } = await unwrap(
     api.useFetch<UserDto>(fetch, "/api/v1/users/@me"),
   );
