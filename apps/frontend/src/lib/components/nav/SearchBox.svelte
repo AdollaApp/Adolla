@@ -12,6 +12,7 @@
   bind:value={s}
   placeholder="Fire Force"
   name="q"
+  action={`/search/${page.params.providerId}`}
   classes={props.mobile ? "py-2 px-3" : ""}
 >
   <SearchIcon />

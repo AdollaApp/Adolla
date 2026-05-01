@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { page } from "$app/state";
+
   let isFocused = $state(false);
   let inputElement: HTMLInputElement;
   let formElement: HTMLFormElement;
@@ -14,6 +16,7 @@
     disabled = false,
     readonly = false,
     classes = "",
+    action = null,
   } = $props();
 
   function submit() {
@@ -38,7 +41,12 @@
       {@render children()}
     </div>
   {/if}
-  <form bind:this={formElement} data-sveltekit-keepfocus action="/search?q=">
+  <form
+    bind:this={formElement}
+    data-sveltekit-keepfocus
+    {action}
+    class="w-full"
+  >
     <input
       {type}
       {name}

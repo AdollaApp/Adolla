@@ -9,10 +9,16 @@
     children: any;
   } = $props();
 
-  let isActive = $state(page.url.pathname === href);
+  console.log(href, page.url.pathname);
+  let isActive = $state(
+    page.url.pathname === href ||
+      (href === "/search" && page.url.pathname.startsWith("/search")),
+  );
 
   $effect(() => {
-    isActive = page.url.pathname === href;
+    isActive =
+      page.url.pathname === href ||
+      (href === "/search" && page.url.pathname.startsWith("/search"));
   });
 </script>
 
