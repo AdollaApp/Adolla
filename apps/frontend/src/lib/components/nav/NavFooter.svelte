@@ -32,6 +32,6 @@
   :global(body) {
     /* A footer link is 38px */
     /* + 1px for the border. The 8px is the padding on both sides, plus the safe area inset */
-    --footer-height: calc(8px + 8px + env(safe-area-inset-bottom) + 38px + 1px);
+    --footer-height: calc(8px + 8px + env(safe-area-inset-bottom) + 36px + 1px);
   }
 </style>

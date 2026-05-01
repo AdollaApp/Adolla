@@ -1,6 +1,7 @@
 <script lang="ts">
   import MangaGrid from "$lib/components/manga/Grid.svelte";
   import MangaCard from "$lib/components/manga/MangaCard.svelte";
+  import SearchBox from "$lib/components/nav/SearchBox.svelte";
   import Container from "$lib/components/util/Container.svelte";
   import type { PageProps } from "./$types";
 
@@ -8,6 +9,9 @@
 </script>
 
 <Container>
+  <div class="mb-4 lg:hidden">
+    <SearchBox mobile />
+  </div>
   {#if data.searchResults}
     <MangaGrid>
       {#each data.searchResults as result}

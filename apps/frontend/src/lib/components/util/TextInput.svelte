@@ -13,6 +13,7 @@
     required = false,
     disabled = false,
     readonly = false,
+    classes = "",
   } = $props();
 
   function submit() {
@@ -28,6 +29,7 @@
     isFocused
       ? "border-accent outline-2 outline-accent/20"
       : "border-stroke-200",
+    classes,
   ]}
   onclick={() => inputElement.focus()}
 >

@@ -23,6 +23,7 @@
   }
 
   $effect(updateHeaderHeight);
+  updateHeaderHeight();
 
   onMount(() => {
     window.addEventListener("resize", updateHeaderHeight);
