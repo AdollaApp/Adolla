@@ -19,7 +19,7 @@
 <a
   {href}
   class={[
-    "block py-1.5 px-4 rounded",
+    "block py-[7px] px-5 rounded",
     isActive && "bg-primary bg-accent text-text-on-accent",
   ].join(" ")}
 >

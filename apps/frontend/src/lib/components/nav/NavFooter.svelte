@@ -8,7 +8,7 @@
 </script>
 
 <footer
-  class="bg-bg py-2 fixed bottom-[env(safe-area-inset-bottom)] left-0 m-[10px] w-[calc(100%-20px)] md:hidden z-10 border border-stroke-100 rounded-xl shadow-custom flex items-center justify-around z-100"
+  class="bg-bg pt-[8px] pb-[calc(8px+env(safe-area-inset-bottom))] fixed left-0 w-full bottom-0 md:hidden border-t border-stroke-100 flex items-center justify-around px-5 z-100"
 >
   <FooterLink href="/">
     <HomeIcon />
@@ -23,3 +23,15 @@
     <UserSolidIcon />
   </FooterLink>
 </footer>
+
+<!-- <div
+  class="fixed bottom-0 z-[200] w-full h-[var(--footer-height)] bg-yellow-300"
+></div> -->
+
+<style>
+  :global(body) {
+    /* A footer link is 38px */
+    /* + 1px for the border. The 8px is the padding on both sides, plus the safe area inset */
+    --footer-height: calc(8px + 8px + env(safe-area-inset-bottom) + 38px + 1px);
+  }
+</style>
