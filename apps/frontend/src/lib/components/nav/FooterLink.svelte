@@ -9,7 +9,6 @@
     children: any;
   } = $props();
 
-  console.log(href, page.url.pathname);
   let isActive = $state(
     page.url.pathname === href ||
       (href === "/search" && page.url.pathname.startsWith("/search")),

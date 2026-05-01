@@ -3,6 +3,7 @@
   import MangaGrid from "$lib/components/manga/Grid.svelte";
   import MangaCard from "$lib/components/manga/MangaCard.svelte";
   import SearchBox from "$lib/components/nav/SearchBox.svelte";
+  import Button from "$lib/components/util/Button.svelte";
   import Container from "$lib/components/util/Container.svelte";
   import type { PageProps } from "./$types";
 
@@ -24,19 +25,19 @@
   }
 </script>
 
-<!-- Footer-adjacent source filter -->
+<!-- Mobile footer-adjacent source filter -->
 <div
-  class="fixed w-full py-2 bg-bg border-t border-stroke-100 bottom-[var(--footer-height)] z-100"
+  class="fixed w-full py-2 bg-bg border-t border-stroke-100 bottom-[var(--footer-height)] z-100 md:hidden"
 >
   <div class="flex gap-2 w-full px-4">
     {#each scrapers as scraper}
       <a
         href={makeScraperUrl(scraper.id)}
         class={[
-          "w-full py-2 text-center rounded border border-stroke-100",
+          "w-full py-2 text-center rounded-lg border",
           data.provider === scraper.id
-            ? "bg-accent text-text-on-accent"
-            : "bg-transparent",
+            ? "bg-accent text-text-on-accent border-accent"
+            : "bg-transparent border-stroke-100",
         ].join(" ")}>{scraper.name}</a
       >
     {/each}
@@ -45,9 +46,22 @@
 
 <!-- Page content -->
 <Container>
-  <div class="mb-4 lg:hidden">
+  <div class="mb-4 md:hidden">
     <SearchBox mobile />
   </div>
+  <!-- Desktop source filter -->
+  <div class="hidden md:flex gap-2 mb-4">
+    {#each scrapers as scraper}
+      <a href={makeScraperUrl(scraper.id)}>
+        <Button
+          buttonStyle={data.provider === scraper.id ? "primary" : "secondary"}
+        >
+          {scraper.name}
+        </Button>
+      </a>
+    {/each}
+  </div>
+  <!-- Search results -->
   {#if data.searchResults}
     <MangaGrid>
       {#each data.searchResults as result}

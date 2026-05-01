@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { page } from "$app/state";
-
   let isFocused = $state(false);
   let inputElement: HTMLInputElement;
   let formElement: HTMLFormElement;
