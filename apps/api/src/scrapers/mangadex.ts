@@ -111,7 +111,7 @@ function makeChapterMetaFromChapter(c: MdChapter): Chapter {
   return {
     id: c.id,
     chapterNum: Number((c.attributes.volume || '99999').toString().padStart(5, '0') + c.attributes.chapter.toString().padStart(5, '0')),
-    name: `Ch ${c.attributes.chapter}${c.attributes.title ? `: ${c.attributes.title}` : ''}`,
+    name: 'Chapter ' + c.attributes.chapter,
     publishedAt: new Date(c.attributes.publishAt),
     volumeId: c.attributes.volume,
   };

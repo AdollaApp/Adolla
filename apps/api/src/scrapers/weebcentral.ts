@@ -88,7 +88,7 @@ function makeMetaFromDetails(details: WcMangaDetails): MangaMeta {
   const coverArt = details.posterUrl ? createProxyUrl(details.posterUrl) : undefined;
   const isNsfw = details.tags.some((tag) => {
     const l = tag.toLowerCase();
-    return l === 'ecchi';
+    return l === 'ecchi' || l === 'harem';
   });
   return {
     title: details.title,
