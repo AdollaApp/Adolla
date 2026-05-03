@@ -17,6 +17,7 @@
           title={result.mangaMeta.meta.title}
           image={result.mangaMeta.meta.posterUrl}
           isNsfw={result.mangaMeta.meta.nsfw}
+          scraper={result.mangaMeta.scraper}
           isNew={false}
           lang="EN-US"
           allProgress={data.progressItems}

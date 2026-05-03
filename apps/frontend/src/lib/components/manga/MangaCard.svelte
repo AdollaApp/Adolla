@@ -2,7 +2,7 @@
   import ChevronsRight from "../icons/ChevronsRight.svelte";
   import Badge from "../util/Badge.svelte";
   import { page } from "$app/state";
-  import type { ProgressItemDto } from "$lib/api/manga";
+  import type { ScraperDto, ProgressItemDto } from "$lib/api/manga";
 
   type Props = {
     id: string;
@@ -12,8 +12,9 @@
     isNsfw: boolean;
     lang: string;
     allProgress: ProgressItemDto[];
+    scraper: ScraperDto;
   };
-  const { id, title, image, isNew, isNsfw, lang, allProgress }: Props =
+  const { id, title, image, isNew, isNsfw, lang, allProgress, scraper }: Props =
     $props();
 
   let chapterName = $state("Not started");
@@ -53,8 +54,8 @@
       class="font-bold mt-2 text-[20px] md:text-[18px] leading-6 line-clamp-2"
     >
       <img
-        alt="Mangasee"
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmV9SHT-qiohTt77FBMS6iky25BF0Q5GuVUA&s"
+        alt={scraper.name}
+        src={scraper.image}
         class="-mt-1 w-[20px] aspect-square inline bg-stroke-100 rounded"
       />
       {title}

@@ -71,6 +71,7 @@
           image={result.meta.posterUrl}
           isNsfw={result.meta.nsfw}
           isNew={false}
+          scraper={result.scraper}
           lang="EN-US"
           allProgress={data.progressItems}
         />
