@@ -17,7 +17,6 @@
   let currentPage = $state(0);
 
   function scrollToProgress() {
-    console.log("DO SCROLL");
     requestAnimationFrame(() => {
       let desiredElement = scrollableElement?.querySelector(
         `[data-page="${data.pageOverride ?? data.progressItem?.currentPage}"]`,
@@ -119,13 +118,11 @@
             };
           })
           .sort((a, b) => a.dist - b.dist);
-        console.log(titleScreensSorted);
         if (titleScreensSorted[0].dist < 100) {
           const chId = titleScreensSorted[0].el.getAttribute("data-chapter-id");
           const p = titleScreensSorted[0].el.getAttribute("data-p");
           if (!chId) return;
           goto(`${chId}?p=${p ?? 0}`);
-          console.log("GOING TO", chId);
         }
         if (titleScreensSorted[0].dist < 2000) {
           const chId = titleScreensSorted[0].el.getAttribute("data-chapter-id");
