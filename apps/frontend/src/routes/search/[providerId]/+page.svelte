@@ -18,6 +18,10 @@
       name: "MangaDex",
       id: "mangadex",
     },
+    /*{
+      name: "BatCave",
+      id: "batcave",
+    },*/
   ];
 
   function makeScraperUrl(scraperId: string) {
